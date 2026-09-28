@@ -6,6 +6,7 @@ import {
   formatMiningCompetitionPercentagePoints,
   miningCompetitionEmptyMessage,
   miningCompetitionProbabilitySummary,
+  miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
 
 test("formats delivered spawn competition units without converting percentage points twice", () => {
@@ -36,4 +37,11 @@ test("exposes all four delivered probability semantics to assistive technology",
 test("distinguishes selection-needed from unavailable source-group data", () => {
   assert.equal(miningCompetitionEmptyMessage(false), "Select exactly one material available at this location to inspect its source-group competition.");
   assert.equal(miningCompetitionEmptyMessage(true), "Source-group competition is unavailable for the selected material at this location.");
+});
+
+test("presents delivered competition source groups as user-facing mining pools", () => {
+  assert.equal(miningCompetitionSourceLabel("spaceship_surface"), "Surface-ship spawn pool");
+  assert.equal(miningCompetitionSourceLabel("ground_vehicle"), "Vehicle-mining spawn pool");
+  assert.equal(miningCompetitionSourceLabel("fps_hand"), "Hand-mining spawn pool");
+  assert.equal(miningCompetitionSourceLabel("unknown_source"), "unknown source");
 });

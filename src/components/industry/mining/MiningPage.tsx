@@ -132,6 +132,7 @@ export default function MiningModule() {
     return new Set(canonical);
   });
   const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set());
+  const [focusedMaterialKey, setFocusedMaterialKey] = useState<string | null>(null);
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
@@ -181,6 +182,10 @@ export default function MiningModule() {
 
   const buildQueueMaterials = useMemo(() => new Set(miningRequiredMaterials.map(materialKeyOf)), [miningRequiredMaterials]);
   const buildQueueMaterialsKey = [...buildQueueMaterials].sort().join(",");
+  useEffect(() => {
+    if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
+    queueMicrotask(() => setFocusedMaterialKey((current) => current && buildQueueMaterials.has(current) ? current : [...buildQueueMaterials][0] ?? null));
+  }, [buildQueueMaterials, buildQueueMaterialsKey, buildQueueSelectionActive]);
   useEffect(() => {
     if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
     queueMicrotask(() => setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])));
@@ -427,6 +432,7 @@ export default function MiningModule() {
   function toggleMaterial(id: string) {
     const key = canonicalMiningMaterialKey(id);
     if (availableMaterialKeysForSelectedSystem && !availableMaterialKeysForSelectedSystem.has(key)) return;
+    setFocusedMaterialKey(key);
     setSelectedMaterials((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); if (next.size === 0) setBuildQueueSelectionActive(false); return next; });
   }
   function toggleSystem(sys: string) {
@@ -437,7 +443,7 @@ export default function MiningModule() {
     });
   }
   function selectBuildQueueMaterials() {
-    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
+    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); setFocusedMaterialKey([...buildQueueMaterials][0] ?? null); return true; });
   }
   function selectExploreMode() {
     setBuildQueueSelectionActive(false);
@@ -448,11 +454,13 @@ export default function MiningModule() {
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setLocationSearch("");
     setSelectedMaterials(new Set());
+    setFocusedMaterialKey(null);
     setSelectedSystems(new Set());
   }
   function clearSelectedMaterials() {
     setBuildQueueSelectionActive(false);
     setSelectedMaterials(new Set());
+    setFocusedMaterialKey(null);
   }
   function toggleSelectedLocation(locationKey: string) {
     if (!isMobileViewport) {
@@ -507,10 +515,11 @@ export default function MiningModule() {
             onClick={() => setMobileFiltersOpen(true)}
           >
             <span>Filters</span>
-            <strong>{effectiveMaterialFilterKeys.size ? `${effectiveMaterialFilterKeys.size} materials` : selectedSystemName ?? miningScopeLabel}</strong>
+            <strong>{(buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size) ? `${buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size} materials` : selectedSystemName ?? miningScopeLabel}</strong>
           </button>
 
           <div className="mining-shell">
+            <div className="mining-browser-column">
             <MobileFilterSheet
               open={mobileFiltersOpen}
               title="Mining filters"
@@ -519,10 +528,40 @@ export default function MiningModule() {
               footer={<><button type="button" className="mining-sheet-clear" onClick={clearAllFilters}>Clear filters</button><button type="button" className="mining-sheet-apply" onClick={() => setMobileFiltersOpen(false)}>Show {searchFilteredLocations.length} locations</button></>}
             >
             <aside className="mining-filter-panel" aria-label="Mining filters and constraints">
-              <div className="mining-panel-heading">Survey controls</div>
+              <div className="mining-panel-heading">
+                <span>Survey control deck</span>
+                <span>{searchFilteredLocations.length} ranked locations / {buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size} active materials</span>
+              </div>
               <div className="mining-control-deck">
+                <label className="mining-location-search mining-location-search--primary">
+                  <span className="sr-only">Search mining locations</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="6" />
+                    <path d="m16 16 4 4" />
+                  </svg>
+                  <input
+                    type="search"
+                    value={locationSearch}
+                    onChange={(event) => setLocationSearch(event.target.value)}
+                    placeholder="Search mining locations"
+                    aria-label="Search mining locations"
+                  />
+                  {locationSearch && (
+                    <button type="button" onClick={() => setLocationSearch("")} aria-label="Clear location search">&#215;</button>
+                  )}
+                </label>
+                <div className="mining-scope-section">
+                  <MiningScopeActions
+                    exploreActive={!buildQueueSelectionActive && !planner.filters.showOnlyStarred}
+                    buildQueueSelectionActive={buildQueueSelectionActive}
+                    buildQueueMaterials={buildQueueMaterials}
+                    showOnlyStarred={planner.filters.showOnlyStarred}
+                    onSelectExplore={selectExploreMode}
+                    onSelectBuildQueueMaterials={selectBuildQueueMaterials}
+                    onToggleStarred={() => planner.toggleShowOnlyStarred()}
+                  />
+                </div>
                 <div className="mine-browse-section">
-                  <span className="mine-browse-section-label">System</span>
                   <div className="mine-system-selector" role="group" aria-label="System filters">
                     {orderedSystemFilters.map((sys) => (
                       <button
@@ -537,22 +576,15 @@ export default function MiningModule() {
                     ))}
                   </div>
                 </div>
-                <div className="mining-scope-section">
-                  <span className="mine-browse-section-label">Route scope</span>
-                  <MiningScopeActions
-                    exploreActive={!buildQueueSelectionActive && !planner.filters.showOnlyStarred}
-                    buildQueueSelectionActive={buildQueueSelectionActive}
-                    buildQueueMaterials={buildQueueMaterials}
-                    showOnlyStarred={planner.filters.showOnlyStarred}
-                    onSelectExplore={selectExploreMode}
-                    onSelectBuildQueueMaterials={selectBuildQueueMaterials}
-                    onToggleStarred={() => planner.toggleShowOnlyStarred()}
-                  />
-                </div>
               </div>
               <MiningFilterBar
-                selectedMaterials={effectiveSelectedMaterials}
+                selectedMaterials={buildQueueSelectionActive ? buildQueueMaterials : effectiveSelectedMaterials}
                 visibleResourceGroups={visibleResourceGroups}
+                compactSelectedOnly={buildQueueSelectionActive}
+                label={buildQueueSelectionActive ? "Queue materials" : "Materials"}
+                focusedMaterialKey={focusedMaterialKey}
+                selectionLocked={buildQueueSelectionActive}
+                onFocusMaterial={(id) => setFocusedMaterialKey(canonicalMiningMaterialKey(id))}
                 onToggleMaterial={toggleMaterial}
                 onClearMaterials={clearSelectedMaterials}
               />
@@ -562,38 +594,31 @@ export default function MiningModule() {
             <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
               <div className="mlist-header">
                 <div className="mlist-header-line">
-                  <span className="mlist-header-label">Route locations</span>
-                  <span className="mlist-header-count">{searchFilteredLocations.length}</span>
+                  <span className="mlist-header-label">Ranked route solution</span>
+                  <span className="mlist-header-count">Complete set / {searchFilteredLocations.length} locations</span>
                 </div>
-                <label className="mining-location-search">
-                  <span className="sr-only">Search mining locations</span>
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="11" cy="11" r="6" />
-                    <path d="m16 16 4 4" />
-                  </svg>
-                  <input
-                    type="search"
-                    value={locationSearch}
-                    onChange={(event) => setLocationSearch(event.target.value)}
-                    placeholder="Search locations..."
-                    aria-label="Search mining locations"
-                  />
-                  {locationSearch && (
-                    <button type="button" onClick={() => setLocationSearch("")} aria-label="Clear location search">&#215;</button>
-                  )}
-                </label>
-              </div>
-              <div className="mlist-browser-section">
-                <div className="mlist-header-rank">
-                  {!buildQueueSelectionActive && (
-                    <div className="mlist-mode-hint">
-                      <span className="mlist-mode-hint-tip">Click a location to view details</span>
-                    </div>
-                  )}
+                <div className="mlist-tools-row">
+                  <label className="mining-location-search">
+                    <span className="sr-only">Search within route solution</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="6" />
+                      <path d="m16 16 4 4" />
+                    </svg>
+                    <input
+                      type="search"
+                      value={locationSearch}
+                      onChange={(event) => setLocationSearch(event.target.value)}
+                      placeholder="Search within route solution"
+                      aria-label="Search within route solution"
+                    />
+                    {locationSearch && (
+                      <button type="button" onClick={() => setLocationSearch("")} aria-label="Clear location search">&#215;</button>
+                    )}
+                  </label>
                   {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
                     <label className="mlist-focus-control">
-                      <span>Priority Focus</span>
-                      <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)}>
+                      <span className="sr-only">Priority focus</span>
+                      <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)} aria-label="Priority focus">
                         <option value="">All queue items</option>
                         {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
                       </select>
@@ -601,10 +626,7 @@ export default function MiningModule() {
                   )}
                   {buildQueueSelectionActive && (
                     <div className="mlist-route-strategy">
-                      <div className="mlist-route-strategy-head">
-                        <span>Route Strategy</span>
-                        <span>Hover or focus for help</span>
-                      </div>
+                      <span className="sr-only">Route strategy</span>
                       <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
                         {MINING_COVERAGE_MODES.map((mode) => (
                           <CoverageModeButton key={mode.value} mode={mode} active={coverageMode === mode.value} onSelect={() => setCoverageMode(mode.value)} />
@@ -613,6 +635,8 @@ export default function MiningModule() {
                     </div>
                   )}
                 </div>
+              </div>
+              <div className="mlist-browser-section">
                 <div className="mlist-items">
                   {mobileQueueDemandEmpty ? (
                     <div className="mine-empty-state mine-empty-state--queue-covered">
@@ -652,6 +676,7 @@ export default function MiningModule() {
                                 entry={entry}
                                 activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
                                 buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                                focusedMaterialKey={focusedMaterialKey}
                                 locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
                                 staticMiningIndex={staticMiningIndex}
                                 staticIndexStatus={staticIndexStatus}
@@ -683,6 +708,7 @@ export default function MiningModule() {
                 </footer>
               </div>
             </aside>
+            </div>
 
             <div className="mdet-col mining-detail-column">
               {!isMobileViewport && effectiveSelectedEntry ? (
@@ -690,6 +716,7 @@ export default function MiningModule() {
                   entry={effectiveSelectedEntry}
                   activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
                   buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                  focusedMaterialKey={focusedMaterialKey}
                   locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
                   staticMiningIndex={staticMiningIndex}
                   staticIndexStatus={staticIndexStatus}

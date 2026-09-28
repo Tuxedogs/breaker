@@ -37,6 +37,7 @@ import {
   formatMiningCompetitionPercentagePoints,
   miningCompetitionEmptyMessage,
   miningCompetitionProbabilitySummary,
+  miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
 import { miningMethodPresentation, type MiningMethodIconKey } from "./miningMethodPresentation";
 import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
@@ -217,19 +218,19 @@ function TraceMaterialList({ row, mobile = false }: { row: DemandRow | ResourceR
 function MiningMaterialCell({ row }: { row: DemandRow | ResourceRow }) {
   return (
     <div className="mdet-material-cell" title={row.name}>
-      <MaterialNameCell name={row.name} miningMethod={row.miningType} />
+      <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={25} />
       <TraceMaterialList row={row} />
     </div>
   );
 }
 
-function MiningMethodCell({ row, value }: { row: DemandRow | ResourceRow; value: string }) {
+function MiningMethodCell({ value }: { row: DemandRow | ResourceRow; value: string }) {
+  const label = miningMethodBadge(value)?.label ?? value;
+  const presentation = miningMethodPresentation(value);
   return (
     <div className="mdet-method-cell">
-      <MiningMethodDemandCell value={value} />
-      {row.occurrence.mode === "probability" && (
-        <span className="mdet-method-availability">{row.occurrence.methodAvailabilityLabel} available</span>
-      )}
+      {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <MiningMethodDemandCell value={presentation.visibleLabel} />}
+      {presentation.iconKey && <span className="sr-only">{label}</span>}
     </div>
   );
 }
@@ -250,7 +251,6 @@ function CompetitionMember({ member, target }: { member: MiningSpawnCompetitionM
     <li className={`mdet-competition-member${target ? " is-target" : ""}`} title={probabilitySummary} aria-label={`${member.materialName}. ${probabilitySummary}. ${target ? "Target" : "Competing material"}.`}>
       <MaterialNameCell name={member.materialName} iconSize={15} />
       <strong>{formatMiningCompetitionPercentagePoints(member.relativeProbability)}</strong>
-      <span>{target ? "Target" : "Competing material"}</span>
     </li>
   );
 }
@@ -258,15 +258,30 @@ function CompetitionMember({ member, target }: { member: MiningSpawnCompetitionM
 function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
   return (
     <div className="mdet-competition-pool">
-      <div className="mdet-competition-pool-head">
-        <div><span>Source group</span><strong>{pool.sourceGroup}</strong></div>
-        <p><strong>{pool.competitorCount}</strong> direct competitor{pool.competitorCount === 1 ? "" : "s"}</p>
+      <div className="mdet-competition-copy">
+        <span>Direct spawn competition</span>
+        <div className="mdet-competition-target" title={`Source group: ${pool.sourceGroup}`}>
+          <MaterialNameCell name={pool.target.materialName} iconSize={27} />
+          <small>{miningCompetitionSourceLabel(pool.sourceGroup)}</small>
+        </div>
+        <strong>{pool.competitorCount} competing resource{pool.competitorCount === 1 ? "" : "s"}</strong>
+        <p>{pool.members.length} primary materials share this source pool.</p>
       </div>
-      <ul className="mdet-competition-members">
-        {pool.members.map((member) => (
-          <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} />
-        ))}
-      </ul>
+      <div className="mdet-competition-readout">
+        <div className="mdet-competition-bar" aria-hidden="true">
+          {pool.members.map((member) => {
+            const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
+              ? Math.max(member.relativeProbability, 0)
+              : 0;
+            return <span key={`${pool.sourceGroup}:${member.materialKey}:bar`} className={member === pool.target ? "is-target" : ""} style={{ flexGrow: share }} />;
+          })}
+        </div>
+        <ul className="mdet-competition-members">
+          {pool.members.map((member) => (
+            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -375,6 +390,7 @@ export function LocationDetail({
   entry,
   activeDemandMaterials,
   buildQueueMaterialKeys,
+  focusedMaterialKey,
   locationMaterialKeys,
   staticMiningIndex,
   staticIndexStatus,
@@ -386,6 +402,7 @@ export function LocationDetail({
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
+  focusedMaterialKey?: string | null;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
   staticIndexStatus: "loading" | "loaded" | "error";
@@ -455,6 +472,9 @@ export function LocationDetail({
   }, [entry, staticMiningIndex, staticResourceRows]);
 
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
+  const locationTitleMatch = locationDisplayName.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+  const locationTitle = locationTitleMatch?.[1] ?? locationDisplayName;
+  const locationSubtitle = locationTitleMatch?.[2] ?? null;
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap ?? null, locationDisplayName) ?? getPlanetAsset(planetAssetMap ?? null, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
@@ -472,14 +492,18 @@ export function LocationDetail({
     [entry, staticMiningIndex],
   );
   const competitionTarget = useMemo(() => {
-    if (buildQueueMaterialKeys.size !== 1) return null;
-    const [selectedKey] = [...buildQueueMaterialKeys];
+    const selectedKey = focusedMaterialKey
+      ? canonicalMiningMaterialKey(focusedMaterialKey)
+      : buildQueueMaterialKeys.size === 1
+        ? canonicalMiningMaterialKey([...buildQueueMaterialKeys][0])
+        : null;
+    if (!selectedKey || !buildQueueMaterialKeys.has(selectedKey)) return null;
     const matchingRows = staticResourceRows.filter(
       (row) => canonicalMiningMaterial({ materialId: row.materialId, materialName: row.materialName }).key === canonicalMiningMaterialKey(selectedKey),
     );
     if (matchingRows.length === 0) return null;
     return canonicalMiningMaterialKey(selectedKey);
-  }, [buildQueueMaterialKeys, staticResourceRows]);
+  }, [buildQueueMaterialKeys, focusedMaterialKey, staticResourceRows]);
   const competitionPools = useMemo(
     () => competitionTarget ? buildMiningSpawnCompetitionPools(staticResourceRows, competitionTarget) : [],
     [competitionTarget, staticResourceRows],
@@ -504,76 +528,80 @@ export function LocationDetail({
   const materialProfileTitle = hasBuildQueueTarget ? "Other materials at this location" : "Material profile";
   return (
     <div className={`mdet-panel${hideHeader ? " mdet-panel--inline-mobile" : ""}`}>
-      {!hideHeader && (
-        <div className="mdet-header">
-          <div className="mdet-thumb" aria-hidden="true">
-            {planetAsset ? (
-              <img
-                src={planetAsset.main}
-                srcSet={`${planetAsset.main2x} 2x`}
-                alt=""
-                className="mdet-thumb-img"
-              />
-            ) : (
-              <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
-            )}
-          </div>
-          <div className="mdet-header-left">
-            <div className="mdet-label">Location Profile</div>
-            <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
-              {locationDisplayName}
-            </div>
-            <div className="mdet-meta">
-              {!isLagrangeChildGroup && (
-                <span className="mdet-system-text">{entry.systemName} <span>system</span></span>
+      <div className={`mdet-survey-stage${hideHeader ? " mdet-survey-stage--inline" : ""}`}>
+        {!hideHeader && (
+          <div className="mdet-header">
+            <div className="mdet-stage-top">
+              <span>Location profile</span>
+              {onToggleStar && (
+                <>
+                  <button
+                    type="button"
+                    className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
+                    onClick={onToggleStar}
+                    aria-pressed={starred}
+                    aria-label={starred ? "Remove saved" : "Save"}
+                    aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
+                    {...bookmarkTooltip.triggerProps}
+                  >
+                    <MiningBookmarkIcon />
+                  </button>
+                  {bookmarkTooltip.tooltip}
+                </>
               )}
-              <StantonLagrangeChildrenSummary entry={entry} compact />
+            </div>
+            <div className="mdet-thumb" aria-hidden="true">
+              {planetAsset ? (
+                <img
+                  src={planetAsset.main}
+                  srcSet={`${planetAsset.main2x} 2x`}
+                  alt=""
+                  className="mdet-thumb-img"
+                />
+              ) : (
+                <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
+              )}
+            </div>
+            <span className="mdet-scan-reticle" aria-hidden="true" />
+            <div className="mdet-header-left">
+              <div className="mdet-label">{entry.systemName} system</div>
+              <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
+                {locationTitle}
+                {locationSubtitle && <small>{locationSubtitle}</small>}
+              </div>
+              {isLagrangeChildGroup && <div className="mdet-meta">
+                <StantonLagrangeChildrenSummary entry={entry} compact />
+              </div>}
             </div>
           </div>
-          {onToggleStar && (
-            <>
-              <button
-                type="button"
-                className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
-                onClick={onToggleStar}
-                aria-pressed={starred}
-                aria-label={starred ? "Remove saved" : "Save"}
-                aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
-                {...bookmarkTooltip.triggerProps}
-              >
-                <MiningBookmarkIcon />
-              </button>
-              {bookmarkTooltip.tooltip}
-            </>
-          )}
-        </div>
-      )}
+        )}
 
-      <section className="mdet-survey-readout" aria-label="Survey conditions and mining methods">
-        <div className="mdet-environment">
-          <div className="mdet-survey-heading">Environment and flight conditions</div>
-          <div className="mdet-environment-grid">
-            {([['Atmosphere', environment.atmosphere], ['Climate', environment.climate], ['Habitability', environment.habitability]] as const).map(([label, value]) => (
-              <div className="mdet-environment-item" key={label}>
-                <span>{label}</span><strong>{value ?? "Unavailable"}</strong>
-              </div>
-            ))}
+        <section className="mdet-survey-readout" aria-label="Survey conditions and mining methods">
+          <div className="mdet-environment">
+            <div className="mdet-survey-heading">Environment and flight conditions</div>
+            <div className="mdet-environment-grid">
+              {([['Atmosphere', environment.atmosphere], ['Climate', environment.climate], ['Habitability', environment.habitability]] as const).map(([label, value]) => (
+                <div className="mdet-environment-item" key={label}>
+                  <span>{label}</span><strong>{value ?? "Unavailable"}</strong>
+                </div>
+              ))}
+            </div>
+            {!environment.sourceText && <p className="mdet-environment-note">No source-backed location description is available for these conditions.</p>}
           </div>
-          {!environment.sourceText && <p className="mdet-environment-note">No source-backed location description is available for these conditions.</p>}
-        </div>
-        <div className="mdet-method-rack" aria-label="Location mining method availability">
-          <span className="mdet-survey-heading">Mining methods</span>
-          {locationMethodMixItems.length > 0 ? locationMethodMixItems.map((item) => {
-            const label = miningMethodBadge(item.method)?.label ?? item.method;
-            const presentation = miningMethodPresentation(item.method);
-            return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
-              {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
-              {presentation.iconKey && <span className="sr-only">{label}</span>}
-              <strong>{formatMiningProbability(item.share)}</strong>
-            </div>;
-          }) : <span className="mdet-unavailable">Unavailable</span>}
-        </div>
-      </section>
+          <div className="mdet-method-rack" aria-label="Location mining method availability">
+            <span className="mdet-survey-heading">Mining methods</span>
+            {locationMethodMixItems.length > 0 ? locationMethodMixItems.map((item) => {
+              const label = miningMethodBadge(item.method)?.label ?? item.method;
+              const presentation = miningMethodPresentation(item.method);
+              return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+                {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
+                {presentation.iconKey && <span className="sr-only">{label}</span>}
+                <strong>{formatMiningProbability(item.share)}</strong>
+              </div>;
+            }) : <span className="mdet-unavailable">Unavailable</span>}
+          </div>
+        </section>
+      </div>
 
       {staticIndexStatus === "loading" && (
         <p className="mdet-reference-note" role="status">
@@ -587,7 +615,6 @@ export function LocationDetail({
       )}
 
       <section className="mdet-competition" aria-label="Direct spawn competition">
-        <div className="mdet-competition-heading"><span>Direct spawn competition</span><small>Pool shares remain source-backed and distinct by source group.</small></div>
         {competitionPools.length > 0
           ? competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)
           : <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(Boolean(competitionTarget))}</p>}

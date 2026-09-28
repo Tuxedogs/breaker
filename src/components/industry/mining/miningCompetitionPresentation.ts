@@ -27,3 +27,11 @@ export function miningCompetitionEmptyMessage(targetResolved: boolean): string {
     ? "Source-group competition is unavailable for the selected material at this location."
     : "Select exactly one material available at this location to inspect its source-group competition.";
 }
+
+export function miningCompetitionSourceLabel(sourceGroup: string): string {
+  const normalized = sourceGroup.trim().toLowerCase();
+  if (normalized.includes("spaceship")) return "Surface-ship spawn pool";
+  if (normalized.includes("ground") || normalized.includes("vehicle")) return "Vehicle-mining spawn pool";
+  if (normalized.includes("fps") || normalized.includes("hand")) return "Hand-mining spawn pool";
+  return sourceGroup.replace(/[_-]+/g, " ");
+}
