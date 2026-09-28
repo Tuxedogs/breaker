@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { getPlanetAsset, type PlanetAsset } from "../../../features/mining/planetAssets";
@@ -14,7 +14,7 @@ import {
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import {
-  buildMiningEnvironmentPresentation,
+  buildMiningLocationSurveyPresentation,
   buildMiningSpawnCompetitionPools,
   type MiningSpawnCompetitionMember,
   type MiningSpawnCompetitionPool,
@@ -39,10 +39,8 @@ import {
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
-import { miningMethodPresentation, type MiningMethodIconKey } from "./miningMethodPresentation";
-import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
-import surfaceShipMiningIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
-import vehicleMiningExosuitIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
+import { miningMethodPresentation } from "./miningMethodPresentation";
+import MiningMethodIcon from "./MiningMethodIcon";
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -235,20 +233,52 @@ function MiningMethodCell({ value }: { row: DemandRow | ResourceRow; value: stri
   );
 }
 
-const MINING_METHOD_ICON_ASSETS = {
-  hand: handMiningMultitoolIcon,
-  ship: surfaceShipMiningIcon,
-  vehicle: vehicleMiningExosuitIcon,
+const COMPETITION_MEMBER_COLORS = {
+  default: "#71818a",
+  even: "#9bb7bf",
+  third: "#bba268",
+  fourth: "#887e96",
+  target: "#c66a38",
 } as const;
 
-function MiningMethodIcon({ methodKey }: { methodKey: MiningMethodIconKey }) {
-  return <img className={`mdet-method-icon mdet-method-icon--${methodKey}`} src={MINING_METHOD_ICON_ASSETS[methodKey]} alt="" aria-hidden="true" />;
+function competitionMemberColor(index: number, target: boolean) {
+  if (target) return COMPETITION_MEMBER_COLORS.target;
+  const position = index + 1;
+  if (position % 4 === 0) return COMPETITION_MEMBER_COLORS.fourth;
+  if (position % 3 === 0) return COMPETITION_MEMBER_COLORS.third;
+  if (position % 2 === 0) return COMPETITION_MEMBER_COLORS.even;
+  return COMPETITION_MEMBER_COLORS.default;
 }
 
-function CompetitionMember({ member, target }: { member: MiningSpawnCompetitionMember; target: boolean }) {
+type CompetitionLinkProps = {
+  active: boolean;
+  accentColor: string;
+  onBlur: (relatedTarget: EventTarget | null) => void;
+  onFocus: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: (relatedTarget: EventTarget | null) => void;
+};
+
+function competitionAccentStyle(accentColor: string): CSSProperties {
+  return { "--mdet-competition-color": accentColor } as CSSProperties;
+}
+
+function CompetitionMember({ member, target, link }: { member: MiningSpawnCompetitionMember; target: boolean; link: CompetitionLinkProps }) {
   const probabilitySummary = miningCompetitionProbabilitySummary(member);
   return (
-    <li className={`mdet-competition-member${target ? " is-target" : ""}`} title={probabilitySummary} aria-label={`${member.materialName}. ${probabilitySummary}. ${target ? "Target" : "Competing material"}.`}>
+    <li
+      className={`mdet-competition-member${target ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+      data-competition-material-key={member.materialKey}
+      data-linked-active={link.active ? "true" : undefined}
+      style={competitionAccentStyle(link.accentColor)}
+      title={probabilitySummary}
+      aria-label={`${member.materialName}. ${probabilitySummary}. ${target ? "Target" : "Competing material"}.`}
+      tabIndex={0}
+      onMouseEnter={link.onMouseEnter}
+      onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
+      onFocus={link.onFocus}
+      onBlur={(event) => link.onBlur(event.relatedTarget)}
+    >
       <MaterialNameCell name={member.materialName} iconSize={15} />
       <strong>{formatMiningCompetitionPercentagePoints(member.relativeProbability)}</strong>
     </li>
@@ -256,6 +286,26 @@ function CompetitionMember({ member, target }: { member: MiningSpawnCompetitionM
 }
 
 function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
+  const [activeMaterialKey, setActiveMaterialKey] = useState<string | null>(null);
+  const linkProps = (member: MiningSpawnCompetitionMember, index: number): CompetitionLinkProps => {
+    const materialKey = member.materialKey;
+    const clearUnlessLinked = (relatedTarget: EventTarget | null) => {
+      const linkedKey = typeof HTMLElement !== "undefined" && relatedTarget instanceof HTMLElement
+        ? relatedTarget.dataset.competitionMaterialKey
+        : undefined;
+      if (linkedKey === materialKey) return;
+      setActiveMaterialKey((current) => current === materialKey ? null : current);
+    };
+    return {
+      active: activeMaterialKey === materialKey,
+      accentColor: competitionMemberColor(index, member === pool.target),
+      onBlur: clearUnlessLinked,
+      onFocus: () => setActiveMaterialKey(materialKey),
+      onMouseEnter: () => setActiveMaterialKey(materialKey),
+      onMouseLeave: clearUnlessLinked,
+    };
+  };
+
   return (
     <div className="mdet-competition-pool">
       <div className="mdet-competition-copy">
@@ -268,17 +318,35 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
         <p>{pool.members.length} primary materials share this source pool.</p>
       </div>
       <div className="mdet-competition-readout">
-        <div className="mdet-competition-bar" aria-hidden="true">
-          {pool.members.map((member) => {
+        <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${pool.target.materialName}`}>
+          {pool.members.map((member, index) => {
             const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
               ? Math.max(member.relativeProbability, 0)
               : 0;
-            return <span key={`${pool.sourceGroup}:${member.materialKey}:bar`} className={member === pool.target ? "is-target" : ""} style={{ flexGrow: share }} />;
+            const link = linkProps(member, index);
+            const probabilitySummary = miningCompetitionProbabilitySummary(member);
+            return (
+              <span
+                key={`${pool.sourceGroup}:${member.materialKey}:bar`}
+                className={`mdet-competition-segment${member === pool.target ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+                role="listitem"
+                tabIndex={0}
+                data-competition-material-key={member.materialKey}
+                data-linked-active={link.active ? "true" : undefined}
+                style={{ ...competitionAccentStyle(link.accentColor), flexGrow: share }}
+                title={`${member.materialName}. ${probabilitySummary}`}
+                aria-label={`${member.materialName}. ${probabilitySummary}. ${member === pool.target ? "Target" : "Competing material"}.`}
+                onMouseEnter={link.onMouseEnter}
+                onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
+                onFocus={link.onFocus}
+                onBlur={(event) => link.onBlur(event.relatedTarget)}
+              />
+            );
           })}
         </div>
         <ul className="mdet-competition-members">
-          {pool.members.map((member) => (
-            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} />
+          {pool.members.map((member, index) => (
+            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} link={linkProps(member, index)} />
           ))}
         </ul>
       </div>
@@ -478,19 +546,16 @@ export function LocationDetail({
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap ?? null, locationDisplayName) ?? getPlanetAsset(planetAssetMap ?? null, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
-  const locationMethodMixItems = useMemo(
-    () => getStaticMethodBiasForLocation(entry, staticMiningIndex)
-      .filter((item) => Number.isFinite(item.share) && item.share > 0)
-      .sort((a, b) => b.share - a.share),
+  const survey = useMemo(
+    () => buildMiningLocationSurveyPresentation(
+      getStaticLocationDescription(entry, staticMiningIndex),
+      getStaticMethodBiasForLocation(entry, staticMiningIndex),
+    ),
     [entry, staticMiningIndex],
   );
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
   const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
-  const environment = useMemo(
-    () => buildMiningEnvironmentPresentation(getStaticLocationDescription(entry, staticMiningIndex)),
-    [entry, staticMiningIndex],
-  );
   const competitionTarget = useMemo(() => {
     const selectedKey = focusedMaterialKey
       ? canonicalMiningMaterialKey(focusedMaterialKey)
@@ -578,25 +643,23 @@ export function LocationDetail({
 
         <section className="mdet-survey-readout" aria-label="Survey conditions and mining methods">
           <div className="mdet-environment">
-            <div className="mdet-survey-heading">Environment and flight conditions</div>
             <div className="mdet-environment-grid">
-              {([['Atmosphere', environment.atmosphere], ['Climate', environment.climate], ['Habitability', environment.habitability]] as const).map(([label, value]) => (
-                <div className="mdet-environment-item" key={label}>
-                  <span>{label}</span><strong>{value ?? "Unavailable"}</strong>
+              {survey.conditions.map((condition) => (
+                <div className={`mdet-environment-item mdet-environment-item--${condition.key}`} key={condition.key}>
+                  <span>{condition.label}</span><strong>{condition.value ?? "Unavailable"}</strong>
                 </div>
               ))}
             </div>
-            {!environment.sourceText && <p className="mdet-environment-note">No source-backed location description is available for these conditions.</p>}
+            {!survey.environment.sourceText && <p className="mdet-environment-note">No source-backed location description is available for these conditions.</p>}
           </div>
-          <div className="mdet-method-rack" aria-label="Location mining method availability">
-            <span className="mdet-survey-heading">Mining methods</span>
-            {locationMethodMixItems.length > 0 ? locationMethodMixItems.map((item) => {
+          <div className="mdet-method-rack mdet-method-rack--prominent" aria-label="Location mining method availability">
+            {survey.methods.length > 0 ? survey.methods.map((item) => {
               const label = miningMethodBadge(item.method)?.label ?? item.method;
               const presentation = miningMethodPresentation(item.method);
               return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
                 {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
                 {presentation.iconKey && <span className="sr-only">{label}</span>}
-                <strong>{formatMiningProbability(item.share)}</strong>
+                <strong className="mdet-method-rack-value">{formatMiningProbability(item.share)}</strong>
               </div>;
             }) : <span className="mdet-unavailable">Unavailable</span>}
           </div>

@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   buildMiningEnvironmentPresentation,
+  buildMiningLocationSurveyPresentation,
   buildMiningSpawnCompetitionPools,
 } from "./miningPresentationModels";
 import type { StaticLocationDistributionRow, StaticLocationMaterialRow } from "./staticMiningIndex";
@@ -66,6 +67,30 @@ test("retains a full explicit multi-word climate phrase instead of truncating it
     sourceText: "The colder than average climate makes the surface difficult to traverse.",
   });
   assert.equal(environment.climate, "Colder than average");
+});
+
+test("builds one shared source-backed survey projection for location cards and detail", () => {
+  const survey = buildMiningLocationSurveyPresentation(
+    {
+      sourceKey: "@Pyro6_desc",
+      sourceText: "A barely-habitable world with a frigid climate and methane-laced atmosphere.",
+    },
+    [
+      { method: "Surface Ship", share: 0.8 },
+      { method: "Hand", share: 0.2 },
+      { method: "Unknown", share: 0 },
+    ],
+  );
+
+  assert.deepEqual(survey.conditions, [
+    { key: "atmosphere", label: "Atmosphere", compactLabel: "Atmo", value: "Methane-laced" },
+    { key: "climate", label: "Climate", compactLabel: "Climate", value: "Frigid" },
+    { key: "habitability", label: "Habitability", compactLabel: "Habitability", value: "Barely habitable" },
+  ]);
+  assert.deepEqual(survey.methods, [
+    { method: "Surface Ship", share: 0.8 },
+    { method: "Hand", share: 0.2 },
+  ]);
 });
 
 test("builds the source-backed Copper Pyro VI SpaceShip_Mineables pool", () => {

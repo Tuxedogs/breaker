@@ -1,6 +1,7 @@
 import type {
   StaticLocationDescription,
   StaticLocationMaterialRow,
+  StaticMethodBiasItem,
 } from "./staticMiningIndex";
 
 type DeliveredProbability = number | null | undefined;
@@ -11,6 +12,19 @@ export type MiningEnvironmentPresentation = {
   atmosphere: string | null;
   climate: string | null;
   habitability: string | null;
+};
+
+export type MiningEnvironmentConditionPresentation = {
+  key: "atmosphere" | "climate" | "habitability";
+  label: "Atmosphere" | "Climate" | "Habitability";
+  compactLabel: "Atmo" | "Climate" | "Habitability";
+  value: string | null;
+};
+
+export type MiningLocationSurveyPresentation = {
+  environment: MiningEnvironmentPresentation;
+  conditions: MiningEnvironmentConditionPresentation[];
+  methods: StaticMethodBiasItem[];
 };
 
 export type MiningSpawnCompetitionMember = {
@@ -124,6 +138,28 @@ export function buildMiningEnvironmentPresentation(
     atmosphere: displayDescriptionPhrase(extractDescriptionPhrase(sourceText, /\b(?:an?\s+)?([a-z][a-z-]*)\s+atmosphere\b/i)),
     climate: displayDescriptionPhrase(explicitClimate),
     habitability: explicitHabitability ? `${displayDescriptionPhrase(explicitHabitability)} habitable` : null,
+  };
+}
+
+/**
+ * Keeps the compact location cards and full location detail on the same
+ * source-backed environment and method projection. Method shares are already
+ * normalized at the static index boundary; this layer only removes unusable
+ * presentation rows and retains their delivered order.
+ */
+export function buildMiningLocationSurveyPresentation(
+  description: StaticLocationDescription | null,
+  methodBiasItems: StaticMethodBiasItem[],
+): MiningLocationSurveyPresentation {
+  const environment = buildMiningEnvironmentPresentation(description);
+  return {
+    environment,
+    conditions: [
+      { key: "atmosphere", label: "Atmosphere", compactLabel: "Atmo", value: environment.atmosphere },
+      { key: "climate", label: "Climate", compactLabel: "Climate", value: environment.climate },
+      { key: "habitability", label: "Habitability", compactLabel: "Habitability", value: environment.habitability },
+    ],
+    methods: methodBiasItems.filter((item) => Number.isFinite(item.share) && item.share > 0),
   };
 }
 

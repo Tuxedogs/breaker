@@ -1,28 +1,21 @@
 import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 import type { PublicLocationEntry } from "../../../features/mining/types";
 import {
+  getStaticLocationDescription,
   getStaticLocationDisplayName,
   getStaticMethodBiasForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
+import { buildMiningLocationSurveyPresentation } from "../../../features/mining/miningPresentationModels";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
-import { miningMethodBadge } from "./miningFormatters";
+import { formatMiningProbability, miningMethodBadge, systemBadgeClass } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
+import MiningMethodIcon from "./MiningMethodIcon";
+import { miningMethodPresentation } from "./miningMethodPresentation";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
-import handMiningMethodIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
-import shipMiningMethodIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
-import vehicleMiningMethodIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
-
-const METHOD_ICON_BY_LABEL: Record<string, string> = {
-  Ship: shipMiningMethodIcon,
-  "Surface Ship": shipMiningMethodIcon,
-  Vehicle: vehicleMiningMethodIcon,
-  "Surface Vehicle": vehicleMiningMethodIcon,
-  Hand: handMiningMethodIcon,
-};
 
 export function LocationListItem({
   rank,
@@ -66,8 +59,11 @@ export function LocationListItem({
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
-  const methodMixItems = useMemo(
-    () => getStaticMethodBiasForLocation(entry, staticMiningIndex).filter((item) => item.share > 0),
+  const survey = useMemo(
+    () => buildMiningLocationSurveyPresentation(
+      getStaticLocationDescription(entry, staticMiningIndex),
+      getStaticMethodBiasForLocation(entry, staticMiningIndex),
+    ),
     [entry, staticMiningIndex],
   );
 
@@ -79,12 +75,9 @@ export function LocationListItem({
   };
 
   const demandBar = totalRelevant > 0 ? coveragePct : null;
-  const methodLabel = methodMixItems.length > 0
-    ? methodMixItems.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
+  const methodLabel = survey.methods.length > 0
+    ? survey.methods.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
     : entry.locationKind || entry.spawnType || "Unavailable";
-  const methodIcons = methodMixItems
-    .map((item) => miningMethodBadge(item.method)?.label ?? item.method)
-    .filter((label, index, labels) => Boolean(METHOD_ICON_BY_LABEL[label]) && labels.indexOf(label) === index);
 
   return (
     <div
@@ -117,18 +110,38 @@ export function LocationListItem({
         </div>
         <div className="mlist-item-sub">
           {!isLagrangeChildGroup && (
-            <span className="mlist-system-text">{entry.systemName}</span>
+            <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
-          {methodIcons.length > 0 ? (
-            <span className="mlist-method-icons" role="img" aria-label={`${methodLabel} mining available`}>
-              {methodIcons.map((label) => (
-                <img key={label} src={METHOD_ICON_BY_LABEL[label]} alt="" title={`${label} mining`} />
-              ))}
-            </span>
-          ) : (
-            <span className="mlist-method-text">{methodLabel}</span>
-          )}
+        </div>
+        <div className="mlist-survey-summary">
+          <div className="mlist-method-availability" aria-label={`${methodLabel} mining available`}>
+            {survey.methods.length > 0 ? survey.methods.map((item) => {
+              const label = miningMethodBadge(item.method)?.label ?? item.method;
+              const presentation = miningMethodPresentation(item.method);
+              return (
+                <span className="mlist-method-availability-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+                  {presentation.iconKey ? (
+                    <MiningMethodIcon methodKey={presentation.iconKey} className="mlist-method-icon" />
+                  ) : (
+                    <span className="mlist-method-fallback">{presentation.visibleLabel}</span>
+                  )}
+                  {presentation.iconKey && <span className="sr-only">{label}</span>}
+                  <strong>{formatMiningProbability(item.share)}</strong>
+                </span>
+              );
+            }) : <span className="mlist-method-text">{methodLabel}</span>}
+          </div>
+          <div className="mlist-environment-summary" aria-label="Location conditions">
+            {survey.conditions.map((condition) => (
+              <span className={`mlist-environment-item mlist-environment-item--${condition.key}`} key={condition.key}>
+                <span>{condition.compactLabel}</span>
+                <strong title={`${condition.label}: ${condition.value ?? "Unavailable"}`}>
+                  {condition.value ?? "Unavailable"}
+                </strong>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       {demandBar !== null && (

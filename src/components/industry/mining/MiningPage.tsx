@@ -568,6 +568,7 @@ export default function MiningModule() {
                         key={sys}
                         type="button"
                         className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
+                        data-system={sys.toLowerCase()}
                         aria-pressed={selectedSystemName === sys}
                         onClick={() => toggleSystem(sys)}
                       >
@@ -581,7 +582,6 @@ export default function MiningModule() {
                 selectedMaterials={buildQueueSelectionActive ? buildQueueMaterials : effectiveSelectedMaterials}
                 visibleResourceGroups={visibleResourceGroups}
                 compactSelectedOnly={buildQueueSelectionActive}
-                label={buildQueueSelectionActive ? "Queue materials" : "Materials"}
                 focusedMaterialKey={focusedMaterialKey}
                 selectionLocked={buildQueueSelectionActive}
                 onFocusMaterial={(id) => setFocusedMaterialKey(canonicalMiningMaterialKey(id))}
@@ -592,39 +592,22 @@ export default function MiningModule() {
             </MobileFilterSheet>
 
             <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
-              <div className="mlist-header">
+              <div className={`mlist-header${buildQueueSelectionActive ? " mlist-header--with-tools" : ""}`}>
                 <div className="mlist-header-line">
                   <span className="mlist-header-label">Ranked route solution</span>
                   <span className="mlist-header-count">Complete set / {searchFilteredLocations.length} locations</span>
                 </div>
-                <div className="mlist-tools-row">
-                  <label className="mining-location-search">
-                    <span className="sr-only">Search within route solution</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <circle cx="11" cy="11" r="6" />
-                      <path d="m16 16 4 4" />
-                    </svg>
-                    <input
-                      type="search"
-                      value={locationSearch}
-                      onChange={(event) => setLocationSearch(event.target.value)}
-                      placeholder="Search within route solution"
-                      aria-label="Search within route solution"
-                    />
-                    {locationSearch && (
-                      <button type="button" onClick={() => setLocationSearch("")} aria-label="Clear location search">&#215;</button>
+                {buildQueueSelectionActive && (
+                  <div className="mlist-tools-row">
+                    {queueFocusOptions.length > 0 && (
+                      <label className="mlist-focus-control">
+                        <span className="sr-only">Priority focus</span>
+                        <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)} aria-label="Priority focus">
+                          <option value="">All queue items</option>
+                          {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
+                        </select>
+                      </label>
                     )}
-                  </label>
-                  {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
-                    <label className="mlist-focus-control">
-                      <span className="sr-only">Priority focus</span>
-                      <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)} aria-label="Priority focus">
-                        <option value="">All queue items</option>
-                        {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
-                      </select>
-                    </label>
-                  )}
-                  {buildQueueSelectionActive && (
                     <div className="mlist-route-strategy">
                       <span className="sr-only">Route strategy</span>
                       <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
@@ -633,8 +616,8 @@ export default function MiningModule() {
                         ))}
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               <div className="mlist-browser-section">
                 <div className="mlist-items">

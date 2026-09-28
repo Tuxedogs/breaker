@@ -76,7 +76,6 @@ export function MiningFilterBar({
   selectedMaterials,
   visibleResourceGroups,
   compactSelectedOnly = false,
-  label = "Materials",
   focusedMaterialKey = null,
   selectionLocked = false,
   onFocusMaterial,
@@ -86,7 +85,6 @@ export function MiningFilterBar({
   selectedMaterials: Set<string>;
   visibleResourceGroups: ResourceGroups;
   compactSelectedOnly?: boolean;
-  label?: string;
   focusedMaterialKey?: string | null;
   selectionLocked?: boolean;
   onFocusMaterial?: (id: string) => void;
@@ -134,6 +132,18 @@ export function MiningFilterBar({
     </div>
   );
 
+  const clearMaterialsButton = (
+    <button
+      type="button"
+      className="mining-material-clear-button"
+      disabled={selectedMaterials.size === 0}
+      aria-disabled={selectedMaterials.size === 0}
+      onClick={onClearMaterials}
+    >
+      Clear all
+    </button>
+  );
+
   return (
     <div
       className={[
@@ -145,38 +155,31 @@ export function MiningFilterBar({
       <div className="scintel-filter-body mining-filter-drawer">
         {allMaterialChips.length > 0 && (
           <div className="mining-filter-chip-block">
-            <div className="mining-material-index-head">
-              <span>{label}</span>
-              <div className="mining-material-selection-summary">
-                <span>
-                  <strong>{selectedMaterials.size}</strong> selected
-                  {!compactSelectedOnly && <> · {allMaterialChips.length} total</>}
-                </span>
-                <button
-                  type="button"
-                  className="mining-material-clear-button"
-                  disabled={selectedMaterials.size === 0}
-                  aria-disabled={selectedMaterials.size === 0}
-                  onClick={onClearMaterials}
-                >
-                  Clear all
-                </button>
-              </div>
-            </div>
             <div className="mining-material-strip">
               {compactSelectedOnly
-                ? renderMaterialChips(selectedMaterialChips, "Selected queue materials")
-                : renderMaterialChips(shipAndHarvestable, "Ship material filters")}
+                ? (
+                  <div className="mining-material-selected-row">
+                    {renderMaterialChips(selectedMaterialChips, "Selected queue materials")}
+                    {clearMaterialsButton}
+                  </div>
+                )
+                : (
+                  <div className="mining-material-subgroup mining-material-subgroup--ship">
+                    <span className="mining-material-subgroup-label">Ship</span>
+                    {renderMaterialChips(shipAndHarvestable, "Ship material filters")}
+                  </div>
+                )}
               {!compactSelectedOnly && vehicle.length > 0 && (
-                <div className="mining-material-subgroup">
-                  <span className="mining-material-subgroup-label">Vehicle minables</span>
+                <div className="mining-material-subgroup mining-material-subgroup--vehicle">
+                  <span className="mining-material-subgroup-label">Vehicle</span>
                   {renderMaterialChips(vehicle, "Vehicle-minable material filters")}
                 </div>
               )}
               {!compactSelectedOnly && handFiltered.length > 0 && (
-                <div className="mining-material-subgroup">
-                  <span className="mining-material-subgroup-label">Hand minables</span>
+                <div className="mining-material-subgroup mining-material-subgroup--hand">
+                  <span className="mining-material-subgroup-label">Hand</span>
                   {renderMaterialChips(handFiltered, "Hand-minable material filters")}
+                  {clearMaterialsButton}
                 </div>
               )}
             </div>
