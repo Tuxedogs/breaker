@@ -1,5 +1,5 @@
 import type {
-  StaticLocationDescription,
+  StaticLocationEnvironment,
   StaticLocationMaterialRow,
   StaticMethodBiasItem,
 } from "./staticMiningIndex";
@@ -7,23 +7,13 @@ import type {
 type DeliveredProbability = number | null | undefined;
 
 export type MiningEnvironmentPresentation = {
-  sourceKey?: string | null;
-  sourceText?: string | null;
-  atmosphere: string | null;
-  climate: string | null;
-  habitability: string | null;
-};
-
-export type MiningEnvironmentConditionPresentation = {
-  key: "atmosphere" | "climate" | "habitability";
-  label: "Atmosphere" | "Climate" | "Habitability";
-  compactLabel: "Atmo" | "Climate" | "Habitability";
-  value: string | null;
+  breathability: "breathable" | "non-breathable" | "unknown";
+  temperature: "optimal" | "hot" | "cold" | "unknown";
+  temperatureCelsius: number | null;
 };
 
 export type MiningLocationSurveyPresentation = {
   environment: MiningEnvironmentPresentation;
-  conditions: MiningEnvironmentConditionPresentation[];
   methods: StaticMethodBiasItem[];
 };
 
@@ -110,34 +100,20 @@ function selectUniqueMembers(rows: StaticLocationMaterialRow[], sourceGroup: str
   return members;
 }
 
-function extractDescriptionPhrase(text: string | null | undefined, pattern: RegExp): string | null {
-  if (typeof text !== "string") return null;
-  const match = text.match(pattern);
-  return match?.[1] ?? null;
-}
-
-function displayDescriptionPhrase(value: string | null): string | null {
-  return value ? `${value[0].toLocaleUpperCase()}${value.slice(1)}` : null;
-}
-
-/**
- * Projects only language explicitly present in the delivered location text.
- * It intentionally does not infer hazards, density, or any undocumented
- * environmental condition.
- */
 export function buildMiningEnvironmentPresentation(
-  description: StaticLocationDescription | null,
+  environment: StaticLocationEnvironment | null,
 ): MiningEnvironmentPresentation {
-  const sourceText = description?.sourceText;
-  const explicitClimate = extractDescriptionPhrase(sourceText, /\b([a-z][a-z-]*(?:\s+than\s+[a-z][a-z-]*)?)\s+climate\b/i)
-    ?? extractDescriptionPhrase(sourceText, /\bis\s+(?:an?\s+)?([a-z][a-z-]*),\s+[a-z][a-z-]*-habitable\s+(?:planet|world|moon)\b/i);
-  const explicitHabitability = extractDescriptionPhrase(sourceText, /\b([a-z][a-z-]*)-habitable\b/i);
+  const temperature = environment?.temperatureClassification;
   return {
-    sourceKey: description?.sourceKey,
-    sourceText,
-    atmosphere: displayDescriptionPhrase(extractDescriptionPhrase(sourceText, /\b(?:an?\s+)?([a-z][a-z-]*)\s+atmosphere\b/i)),
-    climate: displayDescriptionPhrase(explicitClimate),
-    habitability: explicitHabitability ? `${displayDescriptionPhrase(explicitHabitability)} habitable` : null,
+    breathability: environment?.breathable === true
+      ? "breathable"
+      : environment?.breathable === false
+        ? "non-breathable"
+        : "unknown",
+    temperature: temperature === "optimal" || temperature === "hot" || temperature === "cold" ? temperature : "unknown",
+    temperatureCelsius: typeof environment?.temperatureCelsius === "number" && Number.isFinite(environment.temperatureCelsius)
+      ? environment.temperatureCelsius
+      : null,
   };
 }
 
@@ -148,17 +124,11 @@ export function buildMiningEnvironmentPresentation(
  * presentation rows and retains their delivered order.
  */
 export function buildMiningLocationSurveyPresentation(
-  description: StaticLocationDescription | null,
+  environment: StaticLocationEnvironment | null,
   methodBiasItems: StaticMethodBiasItem[],
 ): MiningLocationSurveyPresentation {
-  const environment = buildMiningEnvironmentPresentation(description);
   return {
-    environment,
-    conditions: [
-      { key: "atmosphere", label: "Atmosphere", compactLabel: "Atmo", value: environment.atmosphere },
-      { key: "climate", label: "Climate", compactLabel: "Climate", value: environment.climate },
-      { key: "habitability", label: "Habitability", compactLabel: "Habitability", value: environment.habitability },
-    ],
+    environment: buildMiningEnvironmentPresentation(environment),
     methods: methodBiasItems.filter((item) => Number.isFinite(item.share) && item.share > 0),
   };
 }

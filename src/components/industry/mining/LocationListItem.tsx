@@ -1,7 +1,7 @@
 import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 import type { PublicLocationEntry } from "../../../features/mining/types";
 import {
-  getStaticLocationDescription,
+  getStaticLocationEnvironment,
   getStaticLocationDisplayName,
   getStaticMethodBiasForLocation,
   type StaticMiningIndex,
@@ -16,6 +16,7 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import MiningMethodIcon from "./MiningMethodIcon";
 import { miningMethodPresentation } from "./miningMethodPresentation";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
 
 export function LocationListItem({
   rank,
@@ -61,7 +62,7 @@ export function LocationListItem({
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
   const survey = useMemo(
     () => buildMiningLocationSurveyPresentation(
-      getStaticLocationDescription(entry, staticMiningIndex),
+      getStaticLocationEnvironment(entry, staticMiningIndex),
       getStaticMethodBiasForLocation(entry, staticMiningIndex),
     ),
     [entry, staticMiningIndex],
@@ -132,16 +133,7 @@ export function LocationListItem({
               );
             }) : <span className="mlist-method-text">{methodLabel}</span>}
           </div>
-          <div className="mlist-environment-summary" aria-label="Location conditions">
-            {survey.conditions.map((condition) => (
-              <span className={`mlist-environment-item mlist-environment-item--${condition.key}`} key={condition.key}>
-                <span>{condition.compactLabel}</span>
-                <strong title={`${condition.label}: ${condition.value ?? "Unavailable"}`}>
-                  {condition.value ?? "Unavailable"}
-                </strong>
-              </span>
-            ))}
-          </div>
+          <MiningEnvironmentStatus environment={survey.environment} />
         </div>
       </div>
       {demandBar !== null && (

@@ -6,7 +6,7 @@ import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../fe
 import {
   getStaticEncounterRankingRow,
   getStaticLocationAttemptedJoinKeys,
-  getStaticLocationDescription,
+  getStaticLocationEnvironment,
   getStaticLocationDisplayName,
   getStaticMaterialQualityRow,
   getStaticMethodBiasForLocation,
@@ -33,6 +33,7 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
 import {
   formatMiningCompetitionPercentagePoints,
   miningCompetitionEmptyMessage,
@@ -532,7 +533,7 @@ export function LocationDetail({
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
   const survey = useMemo(
     () => buildMiningLocationSurveyPresentation(
-      getStaticLocationDescription(entry, staticMiningIndex),
+      getStaticLocationEnvironment(entry, staticMiningIndex),
       getStaticMethodBiasForLocation(entry, staticMiningIndex),
     ),
     [entry, staticMiningIndex],
@@ -627,14 +628,7 @@ export function LocationDetail({
 
         <section className="mdet-survey-readout" aria-label="Survey conditions and mining methods">
           <div className="mdet-environment">
-            <div className="mdet-environment-grid">
-              {survey.conditions.map((condition) => (
-                <div className={`mdet-environment-item mdet-environment-item--${condition.key}`} key={condition.key}>
-                  <span>{condition.label}</span><strong>{condition.value ?? "Unavailable"}</strong>
-                </div>
-              ))}
-            </div>
-            {!survey.environment.sourceText && <p className="mdet-environment-note">No source-backed location description is available for these conditions.</p>}
+            <MiningEnvironmentStatus environment={survey.environment} />
           </div>
           <div className="mdet-method-rack mdet-method-rack--prominent" aria-label="Location mining method availability">
             {survey.methods.length > 0 ? survey.methods.map((item) => {

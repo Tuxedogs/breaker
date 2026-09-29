@@ -85,6 +85,13 @@ export type StaticLocationDistributionRow = {
   locationDisplayName?: string;
   locationDescriptionKey?: string | null;
   locationShortDescription?: string | null;
+  /**
+   * Optional location-environment fields delivered by the canonical mining
+   * index. They deliberately remain nullable because coverage is incomplete.
+   */
+  breathable?: boolean | null;
+  temperatureClassification?: "optimal" | "hot" | "cold" | null;
+  temperatureCelsius?: number | null;
   resolvedMineableClass?: string;
   mineableClass?: string;
   miningMethod?: string;
@@ -152,10 +159,10 @@ export type StaticMiningIndex = {
   locationHierarchy: StaticLocationHierarchyIndex | null;
 };
 
-export type StaticLocationDescription = {
-  sourceKey?: string | null;
-  sourceText?: string | null;
-};
+export type StaticLocationEnvironment = Pick<
+  StaticLocationDistributionRow,
+  "breathable" | "temperatureClassification" | "temperatureCelsius"
+>;
 
 const LOCATION_INDEX_URL = "/api/mining/location-materials";
 const MATERIAL_RANKINGS_URL = "/api/mining/encounter-rankings";
@@ -570,23 +577,19 @@ export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry, i
   return getEntryJoinKeys(entry, index);
 }
 
-/**
- * Returns the delivered location description for a resolved location without
- * substituting system text or manufacturing a fallback. `null` means the
- * location itself was not found; an omitted, null, or empty sourceText remains
- * distinguishable for a matched location.
- */
-export function getStaticLocationDescription(
+/** Returns only canonical location-environment fields for a resolved location. */
+export function getStaticLocationEnvironment(
   entry: PublicLocationEntry,
   index: StaticMiningIndex | null | undefined,
-): StaticLocationDescription | null {
+): StaticLocationEnvironment | null {
   if (!index) return null;
   for (const key of getEntryJoinKeys(entry, index)) {
     const row = index.distributionByLocationJoinKey.get(key)?.[0];
     if (!row) continue;
     return {
-      sourceKey: row.locationDescriptionKey,
-      sourceText: row.locationShortDescription,
+      breathable: row.breathable,
+      temperatureClassification: row.temperatureClassification,
+      temperatureCelsius: row.temperatureCelsius,
     };
   }
   return null;

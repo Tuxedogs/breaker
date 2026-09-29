@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  getStaticLocationDescription,
+  getStaticLocationEnvironment,
   getStaticLocationDisplayName,
   type StaticMiningIndex,
 } from "./staticMiningIndex";
@@ -30,15 +30,16 @@ test("Lagrange group display names are not replaced by a physical child name", (
   assert.equal(getStaticLocationDisplayName(entry, index), "Lagrange D");
 });
 
-test("location descriptions resolve through canonical Pyro aliases without treating empty text as missing", () => {
+test("location environment resolves through canonical Pyro aliases without substituting missing fields", () => {
   const entry = {
     locationKey: "Pyro6",
     locationName: "Terminus",
     systemName: "Pyro",
   } as PublicLocationEntry;
   const distributionRow = {
-    locationDescriptionKey: "@Pyro6_desc",
-    locationShortDescription: "",
+    breathable: false,
+    temperatureClassification: "cold",
+    temperatureCelsius: null,
   };
   const index = {
     distributionByLocationJoinKey: new Map([
@@ -47,9 +48,10 @@ test("location descriptions resolve through canonical Pyro aliases without treat
     locationKeysByDisplayName: new Map(),
   } as unknown as StaticMiningIndex;
 
-  assert.deepEqual(getStaticLocationDescription(entry, index), {
-    sourceKey: "@Pyro6_desc",
-    sourceText: "",
+  assert.deepEqual(getStaticLocationEnvironment(entry, index), {
+    breathable: false,
+    temperatureClassification: "cold",
+    temperatureCelsius: null,
   });
 });
 

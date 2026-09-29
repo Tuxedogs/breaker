@@ -1399,50 +1399,21 @@
 
 .mine-page.mine-page--v2 .mlist-survey-summary {
   display: grid;
-  grid-template-columns: minmax(132px, max-content) minmax(0, 1fr);
-  align-items: end;
-  gap: 22px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
 }
 
-.mine-page.mine-page--v2 .mlist-environment-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  min-width: 0;
-  border-top: 1px solid rgba(125, 211, 252, 0.08);
-}
-
-.mine-page.mine-page--v2 .mlist-environment-item {
-  display: grid;
-  min-width: 0;
-  gap: 1px;
-  padding: 4px 5px 0;
-  border-left: 1px solid rgba(125, 211, 252, 0.08);
-}
-
-.mine-page.mine-page--v2 .mlist-environment-item:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-
-.mine-page.mine-page--v2 .mlist-environment-item > span {
-  color: #708491;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.mine-page.mine-page--v2 .mlist-environment-item > strong {
-  overflow: hidden;
-  color: var(--mine-intel-copy-secondary);
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1.15;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+.mine-page.mine-page--v2 .mining-environment-status { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 4px; }
+.mine-page.mine-page--v2 .mining-environment-status-icon { display: grid; width: 21px; height: 21px; place-items: center; color: #73818a; }
+.mine-page.mine-page--v2 .mining-environment-status-icon.is-breathable,
+.mine-page.mine-page--v2 .mining-environment-status-icon.is-optimal { color: #73b58d; }
+.mine-page.mine-page--v2 .mining-environment-status-icon.is-non-breathable,
+.mine-page.mine-page--v2 .mining-environment-status-icon.is-hot { color: #c36f6f; }
+.mine-page.mine-page--v2 .mining-environment-status-icon.is-cold { color: #78a7c4; }
+.mine-page.mine-page--v2 .mining-environment-oxygen { font-family: "Roboto Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: -.09em; line-height: 1; }
+.mine-page.mine-page--v2 .mining-environment-status-icon svg { width: 16px; height: 16px; }
 
 .mine-page.mine-page--v2 .mlist-method-availability {
   display: flex;
@@ -1748,13 +1719,7 @@
   box-shadow: none;
 }
 
-.mine-page.mine-page--v2 .mdet-environment { position: absolute; bottom: 98px; left: 24px; width: min(440px, calc(100% - 390px)); min-width: 310px; padding: 10px 12px; border: 1px solid var(--mine-intel-border-soft); border-top-color: rgba(255, 178, 26, 0.4); background: rgba(8, 12, 16, 0.9); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.32); }
-.mine-page.mine-page--v2 .mdet-environment-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
-.mine-page.mine-page--v2 .mdet-environment-item { display: grid; gap: 3px; min-width: 0; padding: 0 10px; border-left: 1px solid var(--mine-intel-border-soft); }
-.mine-page.mine-page--v2 .mdet-environment-item:first-child { padding-left: 0; border-left: 0; }
-.mine-page.mine-page--v2 .mdet-environment-item span { color: var(--mine-intel-copy-muted); font-size: var(--app-text-kicker); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
-.mine-page.mine-page--v2 .mdet-environment-item strong { overflow: hidden; color: var(--mine-intel-copy); font-size: var(--app-text-meta); line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
-.mine-page.mine-page--v2 .mdet-environment-note { margin: 7px 0 0; color: var(--mine-intel-copy-muted); font-size: 10px; }
+.mine-page.mine-page--v2 .mdet-environment { position: absolute; bottom: 108px; left: 26px; display: inline-flex; width: auto; min-width: 0; }
 
 .mine-page.mine-page--v2 .mdet-method-rack { position: absolute; bottom: 14px; left: 24px; display: flex; min-width: 236px; align-items: center; justify-content: flex-start; gap: 0; padding: 0; border: 1px solid var(--mine-intel-border-soft); border-top-color: rgba(66, 185, 223, 0.38); background: rgba(8, 12, 16, 0.92); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.32); }
 .mine-page.mine-page--v2 .mdet-method-rack-item { display: grid; min-width: 78px; min-height: 70px; place-items: center; align-content: center; gap: 3px; padding: 5px 9px; border-right: 1px solid var(--mine-intel-border-soft); color: var(--mine-intel-copy-secondary); }
@@ -2281,19 +2246,6 @@
     width: auto;
     min-width: 0;
     box-shadow: none;
-  }
-
-  .mine-page.mine-page--v2 .mdet-environment-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 7px;
-  }
-
-  .mine-page.mine-page--v2 .mdet-environment-item,
-  .mine-page.mine-page--v2 .mdet-environment-item:first-child {
-    grid-template-columns: 92px minmax(0, 1fr);
-    align-items: baseline;
-    padding: 0;
-    border: 0;
   }
 
   .mine-page.mine-page--v2 .mdet-method-rack {

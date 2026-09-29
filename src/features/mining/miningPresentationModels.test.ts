@@ -1,6 +1,4 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import test from "node:test";
 
 import {
@@ -8,72 +6,44 @@ import {
   buildMiningLocationSurveyPresentation,
   buildMiningSpawnCompetitionPools,
 } from "./miningPresentationModels";
-import type { StaticLocationDistributionRow, StaticLocationMaterialRow } from "./staticMiningIndex";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import type { StaticLocationMaterialRow } from "./staticMiningIndex";
 
-const distributionRows = JSON.parse(
-  readFileSync(resolve("server-data/mining/indexes/location-distribution.json"), "utf8"),
-) as StaticLocationDistributionRow[];
-const materialRows = JSON.parse(
-  readFileSync(resolve("server-data/mining/indexes/location-material.json"), "utf8"),
-) as StaticLocationMaterialRow[];
+const materialRows = JSON.parse(readFileSync(resolve("server-data/mining/indexes/location-material.json"), "utf8")) as StaticLocationMaterialRow[];
 
-test("projects the exact delivered Pyro VI environment language", () => {
-  const row = distributionRows.find((candidate) => candidate.locationDisplayName === "Pyro VI (Terminus)");
-  assert.ok(row);
-  const environment = buildMiningEnvironmentPresentation({
-    sourceKey: row.locationDescriptionKey,
-    sourceText: row.locationShortDescription,
-  });
-
-  assert.deepEqual(environment, {
-    sourceKey: "@Pyro6_desc",
-    sourceText: row.locationShortDescription,
-    atmosphere: "Methane-laced",
-    climate: "Frigid",
-    habitability: "Barely habitable",
-  });
-});
-
-test("keeps missing and null descriptions unavailable without manufacturing a value", () => {
+test("keeps missing or null environment fields visibly unknown without manufacturing a value", () => {
   assert.deepEqual(buildMiningEnvironmentPresentation(null), {
-    sourceKey: undefined,
-    sourceText: undefined,
-    atmosphere: null,
-    climate: null,
-    habitability: null,
+    breathability: "unknown",
+    temperature: "unknown",
+    temperatureCelsius: null,
   });
-  assert.deepEqual(buildMiningEnvironmentPresentation({ sourceKey: null, sourceText: null }), {
-    sourceKey: null,
-    sourceText: null,
-    atmosphere: null,
-    climate: null,
-    habitability: null,
+  assert.deepEqual(buildMiningEnvironmentPresentation({ breathable: null, temperatureClassification: null, temperatureCelsius: null }), {
+    breathability: "unknown",
+    temperature: "unknown",
+    temperatureCelsius: null,
   });
 });
 
-test("does not infer environment values when the delivered description has no supported phrase", () => {
+test("uses only canonical environment fields and retains useful temperature detail", () => {
   const environment = buildMiningEnvironmentPresentation({
-    sourceKey: "@neutral",
-    sourceText: "A rocky world containing rare deposits.",
+    breathable: false,
+    temperatureClassification: "cold",
+    temperatureCelsius: -42,
   });
-  assert.equal(environment.atmosphere, null);
-  assert.equal(environment.climate, null);
-  assert.equal(environment.habitability, null);
-});
-
-test("retains a full explicit multi-word climate phrase instead of truncating it", () => {
-  const environment = buildMiningEnvironmentPresentation({
-    sourceKey: "@climate",
-    sourceText: "The colder than average climate makes the surface difficult to traverse.",
+  assert.deepEqual(environment, {
+    breathability: "non-breathable",
+    temperature: "cold",
+    temperatureCelsius: -42,
   });
-  assert.equal(environment.climate, "Colder than average");
 });
 
 test("builds one shared source-backed survey projection for location cards and detail", () => {
   const survey = buildMiningLocationSurveyPresentation(
     {
-      sourceKey: "@Pyro6_desc",
-      sourceText: "A barely-habitable world with a frigid climate and methane-laced atmosphere.",
+      breathable: true,
+      temperatureClassification: "optimal",
+      temperatureCelsius: 22,
     },
     [
       { method: "Surface Ship", share: 0.8 },
@@ -82,11 +52,7 @@ test("builds one shared source-backed survey projection for location cards and d
     ],
   );
 
-  assert.deepEqual(survey.conditions, [
-    { key: "atmosphere", label: "Atmosphere", compactLabel: "Atmo", value: "Methane-laced" },
-    { key: "climate", label: "Climate", compactLabel: "Climate", value: "Frigid" },
-    { key: "habitability", label: "Habitability", compactLabel: "Habitability", value: "Barely habitable" },
-  ]);
+  assert.deepEqual(survey.environment, { breathability: "breathable", temperature: "optimal", temperatureCelsius: 22 });
   assert.deepEqual(survey.methods, [
     { method: "Surface Ship", share: 0.8 },
     { method: "Hand", share: 0.2 },
