@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 import test from "node:test";
+import sharp from "sharp";
 
 import {
   FALLBACK_MATERIAL_COLOR,
@@ -68,4 +71,43 @@ test("maps Corundum to the second red-rock asset and safely falls back for unkno
     iconSrc: null,
     isCanonical: false,
   });
+});
+
+test("keeps every supplied icon as one centered transparent 256px WebP asset", async () => {
+  const assetDirectory = path.resolve("public/assets/materials");
+  const assets = (await readdir(assetDirectory)).filter((asset) => asset.endsWith(".webp")).sort();
+  assert.deepEqual(assets, [...expectedIcons.values()].sort());
+
+  for (const asset of assets) {
+    const { data, info } = await sharp(path.join(assetDirectory, asset)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const metadata = await sharp(path.join(assetDirectory, asset)).metadata();
+    assert.equal(metadata.format, "webp", asset);
+    assert.equal(metadata.hasAlpha, true, asset);
+    assert.equal(info.width, 256, asset);
+    assert.equal(info.height, 256, asset);
+
+    let transparentPixels = 0;
+    let opaquePixels = 0;
+    let minX = info.width;
+    let minY = info.height;
+    let maxX = -1;
+    let maxY = -1;
+    for (let y = 0; y < info.height; y += 1) {
+      for (let x = 0; x < info.width; x += 1) {
+        const alpha = data[(y * info.width + x) * info.channels + 3];
+        if (alpha === 0) {
+          transparentPixels += 1;
+          continue;
+        }
+        opaquePixels += 1;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+    assert.ok(transparentPixels > 0, `${asset} must retain transparency`);
+    assert.ok(opaquePixels > 0, `${asset} must retain one material`);
+    assert.ok(minX > 0 && minY > 0 && maxX < info.width - 1 && maxY < info.height - 1, `${asset} must retain transparent breathing room`);
+  }
 });

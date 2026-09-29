@@ -145,9 +145,10 @@ export default function MaterialIcon({ materialName, miningMethod, materialState
     );
   }
 
-  const variant = getIconVariant(materialName);
-  const shape = getIconShape(materialName, miningMethod, variant);
-  const isRefinedOre = materialState === 'refined' && !isGemMineable(materialName, miningMethod);
+  const resolvedName = presentation.isCanonical ? presentation.displayName : materialName;
+  const variant = getIconVariant(resolvedName);
+  const shape = getIconShape(resolvedName, miningMethod, variant);
+  const isRefinedOre = materialState === 'refined' && !isGemMineable(resolvedName, miningMethod);
   const fallbackAccent = presentation.isCanonical ? presentation.color : getFallbackAccent(materialName);
 
   const palette: Record<IconVariant, { base: string; dark: string; accent: string; highlight: string }> = {

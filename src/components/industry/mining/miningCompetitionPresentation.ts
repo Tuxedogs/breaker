@@ -1,5 +1,6 @@
 import { formatMiningProbability } from "./miningFormatters";
 import type { MiningSpawnCompetitionMember } from "../../../features/mining/miningPresentationModels";
+import { resolveMaterialPresentation } from "../../../lib/materialPresentation";
 
 export function formatMiningCompetitionPercentagePoints(value: number | null | undefined): string {
   return value === null || value === undefined || !Number.isFinite(value)
@@ -34,4 +35,8 @@ export function miningCompetitionSourceLabel(sourceGroup: string): string {
   if (normalized.includes("ground") || normalized.includes("vehicle")) return "Vehicle-mining spawn pool";
   if (normalized.includes("fps") || normalized.includes("hand")) return "Hand-mining spawn pool";
   return sourceGroup.replace(/[_-]+/g, " ");
+}
+
+export function miningCompetitionMaterialColor(materialIdentity: string): string {
+  return resolveMaterialPresentation(materialIdentity).color;
 }

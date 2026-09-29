@@ -36,6 +36,7 @@ import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import {
   formatMiningCompetitionPercentagePoints,
   miningCompetitionEmptyMessage,
+  miningCompetitionMaterialColor,
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
@@ -233,23 +234,6 @@ function MiningMethodCell({ value }: { row: DemandRow | ResourceRow; value: stri
   );
 }
 
-const COMPETITION_MEMBER_COLORS = {
-  default: "#71818a",
-  even: "#9bb7bf",
-  third: "#bba268",
-  fourth: "#887e96",
-  target: "#c66a38",
-} as const;
-
-function competitionMemberColor(index: number, target: boolean) {
-  if (target) return COMPETITION_MEMBER_COLORS.target;
-  const position = index + 1;
-  if (position % 4 === 0) return COMPETITION_MEMBER_COLORS.fourth;
-  if (position % 3 === 0) return COMPETITION_MEMBER_COLORS.third;
-  if (position % 2 === 0) return COMPETITION_MEMBER_COLORS.even;
-  return COMPETITION_MEMBER_COLORS.default;
-}
-
 type CompetitionLinkProps = {
   active: boolean;
   accentColor: string;
@@ -287,7 +271,7 @@ function CompetitionMember({ member, target, link }: { member: MiningSpawnCompet
 
 function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
   const [activeMaterialKey, setActiveMaterialKey] = useState<string | null>(null);
-  const linkProps = (member: MiningSpawnCompetitionMember, index: number): CompetitionLinkProps => {
+  const linkProps = (member: MiningSpawnCompetitionMember): CompetitionLinkProps => {
     const materialKey = member.materialKey;
     const clearUnlessLinked = (relatedTarget: EventTarget | null) => {
       const linkedKey = typeof HTMLElement !== "undefined" && relatedTarget instanceof HTMLElement
@@ -298,7 +282,7 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
     };
     return {
       active: activeMaterialKey === materialKey,
-      accentColor: competitionMemberColor(index, member === pool.target),
+      accentColor: miningCompetitionMaterialColor(member.materialKey || member.materialName),
       onBlur: clearUnlessLinked,
       onFocus: () => setActiveMaterialKey(materialKey),
       onMouseEnter: () => setActiveMaterialKey(materialKey),
@@ -319,11 +303,11 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
       </div>
       <div className="mdet-competition-readout">
         <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${pool.target.materialName}`}>
-          {pool.members.map((member, index) => {
+          {pool.members.map((member) => {
             const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
               ? Math.max(member.relativeProbability, 0)
               : 0;
-            const link = linkProps(member, index);
+            const link = linkProps(member);
             const probabilitySummary = miningCompetitionProbabilitySummary(member);
             return (
               <span
@@ -345,8 +329,8 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
           })}
         </div>
         <ul className="mdet-competition-members">
-          {pool.members.map((member, index) => (
-            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} link={linkProps(member, index)} />
+          {pool.members.map((member) => (
+            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} link={linkProps(member)} />
           ))}
         </ul>
       </div>

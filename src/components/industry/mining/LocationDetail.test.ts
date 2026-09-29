@@ -5,6 +5,7 @@ import {
   formatMiningCompetitionDecimalProbability,
   formatMiningCompetitionPercentagePoints,
   miningCompetitionEmptyMessage,
+  miningCompetitionMaterialColor,
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
@@ -44,4 +45,11 @@ test("presents delivered competition source groups as user-facing mining pools",
   assert.equal(miningCompetitionSourceLabel("ground_vehicle"), "Vehicle-mining spawn pool");
   assert.equal(miningCompetitionSourceLabel("fps_hand"), "Hand-mining spawn pool");
   assert.equal(miningCompetitionSourceLabel("unknown_source"), "unknown source");
+});
+
+test("derives competition colors from canonical material identity instead of member order", () => {
+  assert.equal(miningCompetitionMaterialColor("Iron"), "#A89A8D");
+  assert.equal(miningCompetitionMaterialColor("Corundum"), "#A54857");
+  assert.equal(miningCompetitionMaterialColor("Carinite"), "#C45A7A");
+  assert.equal(miningCompetitionMaterialColor("Bexalite"), "#71818A");
 });
