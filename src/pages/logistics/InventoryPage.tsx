@@ -1,19 +1,15 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { createInventoryEntryDraft, type InventorySyncState, type InventoryUiState, useLogisticsStore } from '../../stores/logisticsStore';
 import type { BuildQueueItem, InventoryEntry, InventoryItemKind, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
-import type { SortKey } from '../../components/logistics/InventoryTable';
 import InventoryTransferDialog from '../../components/logistics/InventoryTransferDialog';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import InventoryAddModal from '../../components/logistics/InventoryAddModal';
-import InventoryHierarchy, { type InventoryAddContext } from '../../components/logistics/InventoryHierarchy';
-import MaterialIcon from '../../components/logistics/MaterialIcon';
+import InventoryWorkspace from '../../components/logistics/InventoryWorkspace';
+import { getInventoryRecordPresentation } from '../../components/logistics/inventoryRecordPresentation';
 import {
-  formatEntryQuantity,
-  formatInventoryQuantity,
   getActiveInventoryEntries,
   resolveInventoryItemName,
-  resolveInventoryUnitType,
 } from '../../lib/logistics/inventory';
 import {
   getInventoryFreshnessBlockReason,
@@ -45,7 +41,6 @@ import {
   resolveInventoryCsvUnit,
 } from '../../lib/logistics/inventoryCsvImport';
 import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
-import { buildInventoryHierarchy } from '../../lib/logistics/inventoryHierarchy';
 import { getReservedAmountForInventoryLot } from '../../lib/logistics/buildQueueReservations';
 import QualityTierBadge from '../../components/shared/QualityTierBadge';
 import MobileFilterSheet from '../../components/shared/MobileFilterSheet';
@@ -53,8 +48,13 @@ import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
-type ViewMode = 'location' | 'item' | 'list';
-
+type SortKey = 'material' | 'quality' | 'quantity' | 'location';
+type InventoryAddContext = {
+  locationId?: string;
+  materialId?: string;
+  displayName?: string;
+  quality?: number;
+};
 export type InventoryPageFixture = {
   entries: InventoryEntry[];
   locations: InventoryLocation[];
@@ -83,102 +83,6 @@ type UnknownRecord = Record<string, unknown>;
 type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_locations' | 'replace_all';
 
 const INVENTORY_SYNC_FAILED_LABEL = 'Sync failed, retry';
-
-type ReservedLotInfo = { quantity: number; owners: Set<string> };
-
-const WINDOW_GROUP_SIZE = 4;
-const WINDOW_STACK_CHUNK_SIZE = 25;
-const QUALITY_GROUP_BOX_PREVIEW = 4;
-
-type DrawerEntryRow = {
-  id: string;
-  materialId: string;
-  materialName: string;
-  entry: InventoryEntry;
-  kind: 'ore' | 'refined' | 'personal' | 'unknown';
-  kindLabel: string;
-  quantityLabel: string;
-  containerLabel: string;
-};
-
-type QualityLotGroup = {
-  quality: number | null;
-  qualityBand?: number | null;
-  kind: DrawerEntryRow['kind'];
-  kindLabel: string;
-  totalQuantity: number;
-  unitType: 'scu' | 'unit';
-  totalLabel: string;
-  boxCount: number;
-  lots: Array<DrawerEntryRow & { originalIndex: number }>;
-};
-
-type LocationGroup = {
-  id: string;
-  name: string;
-  type: string;
-  subtitle: string;
-  isManual: boolean;
-  entries: InventoryEntry[];
-  uniqueItems: number;
-  totalScu: number;
-  totalUnits: number;
-  highestQuality: number | null;
-  premiumCount: number;
-};
-
-type DrawerMaterialGroup = {
-  id: string;
-  name: string;
-  entries: DrawerEntryRow[];
-  total: number;
-  unitType: 'scu' | 'unit';
-  totalLabel: string;
-  kindLabels: string[];
-  stackCount: number;
-  stackRangeLabel?: string;
-};
-
-function groupLotsByQuality(
-  rows: DrawerEntryRow[],
-  unitType: 'scu' | 'unit',
-  separateByKind: boolean,
-): QualityLotGroup[] {
-  const groups = new Map<string, QualityLotGroup>();
-  const order: string[] = [];
-  rows.forEach((row, originalIndex) => {
-    const key = `${row.entry.quality ?? 'none'}:${separateByKind ? row.kind : 'all'}`;
-    const current = groups.get(key);
-    if (current) {
-      current.totalQuantity += row.entry.quantity;
-      current.boxCount += 1;
-      current.lots.push({ ...row, originalIndex });
-    } else {
-      order.push(key);
-      groups.set(key, {
-        quality: row.entry.quality ?? null,
-        qualityBand: row.entry.qualityBand,
-        kind: row.kind,
-        kindLabel: row.kindLabel,
-        totalQuantity: row.entry.quantity,
-        unitType,
-        totalLabel: '',
-        boxCount: 1,
-        lots: [{ ...row, originalIndex }],
-      });
-    }
-  });
-  return order.map((key) => {
-    const group = groups.get(key)!;
-    group.totalLabel = formatInventoryQuantity(group.totalQuantity, group.unitType);
-    return group;
-  }).sort((left, right) => (right.quality ?? -1) - (left.quality ?? -1));
-}
-
-function estimateQualityGroupHeight(group: QualityLotGroup): number {
-  const previewCount = Math.min(QUALITY_GROUP_BOX_PREVIEW, group.lots.length);
-  return 34 + Math.ceil(previewCount / 4) * 52 + (group.lots.length > QUALITY_GROUP_BOX_PREVIEW ? 24 : 0);
-}
 
 type CsvRawRow = Record<string, string>;
 
@@ -277,68 +181,9 @@ function asString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
-function titleCase(value: string): string {
-  return value
-    .replace(/[_-]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/\b\w/g, (match) => match.toUpperCase());
-}
-
-function getLocationName(location: unknown): string {
-  const loc = toRecord(location);
-  return asString(loc.name) ?? asString(loc.displayName) ?? asString(loc.label) ?? 'Unknown Location';
-}
-
-function getLocationType(location: unknown): string {
-  const loc = toRecord(location);
-  const raw = asString(loc.type) ?? asString(loc.locationType) ?? asString(loc.kind) ?? asString(loc.category) ?? 'Custom';
-  return titleCase(raw);
-}
-
-function getLocationSubtitle(location: unknown): string {
-  const loc = toRecord(location);
-  const system = asString(loc.system) ?? asString(loc.systemName) ?? asString(loc.parentSystem);
-  const parent = asString(loc.parent) ?? asString(loc.parentName) ?? asString(loc.zone);
-  return [system, parent].filter(Boolean).join(' / ') || 'Stored inventory location';
-}
-
-function isManuallyAddedLocation(location: unknown): boolean {
-  const loc = toRecord(location);
-  const category = asString(loc.category)?.toLowerCase();
-  const source = asString(loc.source)?.toLowerCase();
-  return loc.isManual === true || loc.userCreated === true || category === 'manual' || source === 'manual';
-}
-
 function getEntryLocationId(entry: InventoryEntry): string {
   const rec = toRecord(entry);
   return asString(rec.locationId) ?? '__unassigned__';
-}
-
-function getEntryMaterialId(entry: InventoryEntry): string {
-  const rec = toRecord(entry);
-  return asString(rec.materialId) ?? asString(rec.itemId) ?? asString(rec.customName) ?? entry.id;
-}
-
-function getEntryKind(entry: InventoryEntry, material: unknown): 'ore' | 'refined' | 'personal' | 'unknown' {
-  const entryRec = toRecord(entry);
-  const materialRec = toRecord(material);
-  const raw = [
-    asString(entryRec.kind),
-    asString(entryRec.itemKind),
-    asString(entryRec.type),
-    asString(entryRec.sourceType),
-    asString(materialRec.kind),
-    asString(materialRec.itemKind),
-    asString(materialRec.type),
-    asString(materialRec.category),
-    Array.isArray(materialRec.sourceGroups) ? materialRec.sourceGroups.join(' ') : undefined,
-  ].filter(Boolean).join(' ').toLowerCase();
-
-  if (raw.includes('refined')) return 'refined';
-  if (raw.includes('ore') || raw.includes('raw') || raw.includes('mining') || raw.includes('mineable')) return 'ore';
-  if (raw.includes('personal') || raw.includes('custom')) return 'personal';
-  return 'unknown';
 }
 
 function normalizeLookup(value: string): string {
@@ -1104,505 +949,6 @@ function CsvImportModal({
   );
 }
 
-function QualityPill({ quality, qualityBand }: { quality?: number | null; qualityBand?: number | null }) {
-  return <QualityTierBadge quality={quality} qualityBand={qualityBand} />;
-}
-
-function ManageSelectIcon() {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
-      <path d="M9 11l3 3L22 4" />
-      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-    </svg>
-  );
-}
-
-function CargoBoxIcon() {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
-      <path d="M4 8.5 12 4l8 4.5v7L12 20l-8-4.5v-7Z" />
-      <path d="M12 12v8M4 8.5 12 13l8-4.5" />
-    </svg>
-  );
-}
-
-function RowActionIcon({ kind }: { kind: 'edit' | 'delete' | 'transfer' }) {
-  if (kind === 'edit') {
-    return (
-      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-      </svg>
-    );
-  }
-  if (kind === 'delete') {
-    return (
-      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-        <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" />
-      </svg>
-    );
-  }
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  );
-}
-
-type InventoryLotReserveProps = {
-  reservedByLotId: Map<string, ReservedLotInfo>;
-};
-
-type InventoryBoxTileProps = InventoryLotReserveProps & {
-  row: DrawerEntryRow;
-  manageMode: boolean;
-  isSelected: boolean;
-  showQuickActions: boolean;
-  onToggleSelect: (entryId: string) => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onQuickDelete: () => void;
-  onQuickTransfer: () => void;
-};
-
-const InventoryBoxTile = memo(function InventoryBoxTile({
-  row,
-  manageMode,
-  isSelected,
-  showQuickActions,
-  reservedByLotId,
-  onToggleSelect,
-  onEdit,
-  onQuickDelete,
-  onQuickTransfer,
-}: InventoryBoxTileProps) {
-  const reserve = reservedByLotId.get(row.id);
-  const reservedQuantity = reserve?.quantity ?? 0;
-  const isReserved = reservedQuantity > 0;
-  const isFullyReserved = isReserved && reservedQuantity >= row.entry.quantity;
-  const reserveTitle = isReserved
-    ? `Reserved ${formatInventoryQuantity(reservedQuantity, resolveInventoryUnitType(row.entry))}${reserve?.owners.size ? ` by ${Array.from(reserve.owners).join(', ')}` : ''}`
-    : undefined;
-
-  return (
-    <div
-      className={[
-        'logi-inv-box-tile',
-        manageMode ? 'logi-inv-row--selectable' : '',
-        isSelected ? 'logi-inv-row--selected' : '',
-        isReserved ? 'logi-inv-box-tile--reserved' : '',
-        isFullyReserved ? 'logi-inv-box-tile--unavailable' : '',
-      ].filter(Boolean).join(' ')}
-      onClick={manageMode ? () => onToggleSelect(row.id) : undefined}
-      onDoubleClick={!manageMode ? () => onEdit(row.entry) : undefined}
-      onKeyDown={manageMode ? (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          onToggleSelect(row.id);
-        }
-      } : undefined}
-      tabIndex={manageMode ? 0 : undefined}
-      role={manageMode ? 'checkbox' : undefined}
-      aria-checked={manageMode ? isSelected : undefined}
-      aria-label={manageMode ? `Select ${row.materialName} box ${row.quantityLabel}` : `${row.materialName} box ${row.quantityLabel}`}
-      title={reserveTitle}
-    >
-      {manageMode && (
-        <input
-          type="checkbox"
-          className="logi-inv-box-tile-checkbox logi-inv-row-checkbox"
-          checked={isSelected}
-          onChange={() => onToggleSelect(row.id)}
-          onClick={(event) => event.stopPropagation()}
-          tabIndex={-1}
-          aria-hidden
-        />
-      )}
-      <span className="logi-inv-box-tile-body">
-        <span className="logi-inv-box-tile-icon" aria-hidden>
-          <CargoBoxIcon />
-        </span>
-        <span className="logi-inv-box-tile-qty">{row.quantityLabel}</span>
-      </span>
-      {isReserved && <span className="logi-inv-box-tile-reserve-dot" aria-hidden />}
-      {showQuickActions && (
-        <span className="logi-inv-box-tile-actions">
-          <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onEdit(row.entry); }} aria-label={`Edit ${row.materialName}`}>
-            <RowActionIcon kind="edit" />
-          </button>
-          <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onQuickTransfer(); }} aria-label={`Transfer ${row.materialName}`}>
-            <RowActionIcon kind="transfer" />
-          </button>
-          <button type="button" className="logi-inv-row-icon-btn is-delete" onClick={(event) => { event.stopPropagation(); onQuickDelete(); }} aria-label={`Delete ${row.materialName}`}>
-            <RowActionIcon kind="delete" />
-          </button>
-        </span>
-      )}
-    </div>
-  );
-});
-
-type InventoryQualityGroupSectionProps = InventoryLotReserveProps & {
-  qualityGroup: QualityLotGroup;
-  showKindLabel: boolean;
-  manageMode: boolean;
-  selectedIds: Set<string>;
-  singleSelectedId: string | null;
-  onToggleSelect: (entryId: string) => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onQuickDelete: () => void;
-  onQuickTransfer: () => void;
-};
-
-const InventoryQualityGroupSection = memo(function InventoryQualityGroupSection({
-  qualityGroup,
-  showKindLabel,
-  manageMode,
-  selectedIds,
-  singleSelectedId,
-  reservedByLotId,
-  onToggleSelect,
-  onEdit,
-  onQuickDelete,
-  onQuickTransfer,
-}: InventoryQualityGroupSectionProps) {
-  const [expanded, setExpanded] = useState(false);
-  const hiddenCount = Math.max(0, qualityGroup.lots.length - QUALITY_GROUP_BOX_PREVIEW);
-  const visibleLots = expanded ? qualityGroup.lots : qualityGroup.lots.slice(0, QUALITY_GROUP_BOX_PREVIEW);
-  const boxCountLabel = `${qualityGroup.boxCount} ${qualityGroup.boxCount === 1 ? 'box' : 'boxes'}`;
-
-  return (
-    <section className="logi-inv-quality-group" aria-label={`Quality ${qualityGroup.quality ?? 'unknown'} group`}>
-      <div className="logi-inv-quality-group-head">
-        <QualityPill quality={qualityGroup.quality} qualityBand={qualityGroup.qualityBand} />
-        <span className="logi-inv-quality-group-total">{qualityGroup.totalLabel}</span>
-        <span className="logi-inv-quality-group-count">{boxCountLabel}</span>
-        {showKindLabel && (
-          <span className={`logi-location-kind logi-location-kind--${qualityGroup.kind}`}>{qualityGroup.kindLabel}</span>
-        )}
-      </div>
-
-      <div className="logi-inv-box-tile-grid">
-        {visibleLots.map((row) => (
-          <InventoryBoxTile
-            key={row.id}
-            row={row}
-            manageMode={manageMode}
-            isSelected={selectedIds.has(row.id)}
-            showQuickActions={manageMode && singleSelectedId === row.id}
-            reservedByLotId={reservedByLotId}
-            onToggleSelect={onToggleSelect}
-            onEdit={onEdit}
-            onQuickDelete={onQuickDelete}
-            onQuickTransfer={onQuickTransfer}
-          />
-        ))}
-      </div>
-
-      {hiddenCount > 0 && !expanded && (
-        <button
-          type="button"
-          className="logi-inv-quality-group-expand"
-          onClick={() => setExpanded(true)}
-          aria-expanded={false}
-        >
-          +{hiddenCount} more
-        </button>
-      )}
-      {expanded && hiddenCount > 0 && (
-        <button
-          type="button"
-          className="logi-inv-quality-group-expand"
-          onClick={() => setExpanded(false)}
-          aria-expanded
-        >
-          Show less
-        </button>
-      )}
-    </section>
-  );
-});
-
-type InventoryMaterialGroupProps = InventoryLotReserveProps & {
-  group: DrawerMaterialGroup;
-  manageMode: boolean;
-  selectedIds: Set<string>;
-  singleSelectedId: string | null;
-  onToggleSelect: (entryId: string) => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onQuickDelete: () => void;
-  onQuickTransfer: () => void;
-};
-
-const InventoryMaterialCard = memo(function InventoryMaterialCard({
-  group,
-  manageMode,
-  selectedIds,
-  singleSelectedId,
-  reservedByLotId,
-  onToggleSelect,
-  onEdit,
-  onQuickDelete,
-  onQuickTransfer,
-}: InventoryMaterialGroupProps) {
-  const separateByKind = group.kindLabels.length > 1;
-  const qualityGroups = useMemo(
-    () => groupLotsByQuality(group.entries, group.unitType, separateByKind),
-    [group.entries, group.unitType, separateByKind],
-  );
-
-  return (
-    <article className="logi-location-material-card">
-      <div className="logi-location-material-card-head">
-        <div className="logi-location-material-card-title">
-          <MaterialIcon
-            materialName={group.name}
-            materialState={group.entries.every((row) => row.kind === 'refined') ? 'refined' : 'raw'}
-            size={18}
-          />
-          <h3>{group.name}</h3>
-          <span className="logi-location-material-card-total">{group.totalLabel}</span>
-        </div>
-        <div className="logi-location-material-card-badges" aria-label="Item types">
-          {group.kindLabels.map((label) => (
-            <span key={label} className="logi-location-kind">{label}</span>
-          ))}
-        </div>
-      </div>
-
-      <div className="logi-location-material-card-groups">
-        {qualityGroups.map((qualityGroup) => (
-          <InventoryQualityGroupSection
-            key={`${qualityGroup.quality ?? 'none'}:${qualityGroup.kind}`}
-            qualityGroup={qualityGroup}
-            showKindLabel={separateByKind}
-            manageMode={manageMode}
-            selectedIds={selectedIds}
-            singleSelectedId={singleSelectedId}
-            reservedByLotId={reservedByLotId}
-            onToggleSelect={onToggleSelect}
-            onEdit={onEdit}
-            onQuickDelete={onQuickDelete}
-            onQuickTransfer={onQuickTransfer}
-          />
-        ))}
-      </div>
-    </article>
-  );
-});
-
-type LocationCardProps = {
-  group: LocationGroup;
-  isSelected: boolean;
-  onToggle: (locationId: string) => void;
-  detailId: string;
-};
-
-export const InventoryLocationCard = memo(function InventoryLocationCard({
-  group,
-  isSelected,
-  onToggle,
-  detailId,
-}: LocationCardProps) {
-  return (
-    <article className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}${isSelected ? ' logi-location-card--selected' : ''}`}>
-      <div className="logi-location-card-head">
-        <div>
-          <div className="logi-location-card-kicker">{group.subtitle}</div>
-          <h2>{group.name}</h2>
-        </div>
-        <div className="logi-location-card-badges">
-          {isSelected && <span className="logi-location-active-badge">Active</span>}
-          <span className="logi-location-type-badge">{group.type}</span>
-        </div>
-      </div>
-
-      <div className="logi-location-stat-grid">
-        <div><span>Unique</span><strong>{group.uniqueItems}</strong></div>
-        <div>
-          <span>Total</span>
-          <strong>{[
-            group.totalScu > 0 ? formatInventoryQuantity(group.totalScu, 'scu') : '',
-            group.totalUnits > 0 ? formatInventoryQuantity(group.totalUnits, 'unit') : '',
-          ].filter(Boolean).join(' / ') || '0'}</strong>
-        </div>
-        <div><span>Best</span><strong>{group.highestQuality ?? '—'}</strong></div>
-        <div><span>900+</span><strong>{group.premiumCount}</strong></div>
-      </div>
-
-
-      <div className="logi-location-card-actions">
-        <button
-          type="button"
-          className="logi-location-details-btn"
-          onClick={() => onToggle(group.id)}
-          aria-expanded={isSelected}
-          aria-controls={detailId}
-        >
-          {isSelected ? 'Collapse' : 'View Details'}
-        </button>
-      </div>
-    </article>
-  );
-});
-
-function splitLargeMaterialGroups(groups: DrawerMaterialGroup[]): DrawerMaterialGroup[] {
-  return groups.flatMap((group) => {
-    if (group.entries.length <= WINDOW_STACK_CHUNK_SIZE) return group;
-    const chunks: DrawerMaterialGroup[] = [];
-    for (let index = 0; index < group.entries.length; index += WINDOW_STACK_CHUNK_SIZE) {
-      chunks.push({
-        ...group,
-        id: `${group.id}:${index}`,
-        entries: group.entries.slice(index, index + WINDOW_STACK_CHUNK_SIZE),
-        stackRangeLabel: `${index + 1}-${Math.min(index + WINDOW_STACK_CHUNK_SIZE, group.stackCount)} of ${group.stackCount}`,
-      });
-    }
-    return chunks;
-  });
-}
-
-function chunkGroups(groups: DrawerMaterialGroup[]): DrawerMaterialGroup[][] {
-  const chunks: DrawerMaterialGroup[][] = [];
-  for (let index = 0; index < groups.length; index += WINDOW_GROUP_SIZE) {
-    chunks.push(groups.slice(index, index + WINDOW_GROUP_SIZE));
-  }
-  return chunks;
-}
-
-function estimateWindowHeight(groups: DrawerMaterialGroup[]): number {
-  return groups.reduce((height, group) => {
-    const qualityGroups = groupLotsByQuality(group.entries, group.unitType, group.kindLabels.length > 1);
-    const groupsHeight = qualityGroups.reduce((sum, qualityGroup) => sum + estimateQualityGroupHeight(qualityGroup), 0);
-    return height + 178 + groupsHeight;
-  }, 0);
-}
-
-type WindowedGroupBlockProps = InventoryLotReserveProps & {
-  groups: DrawerMaterialGroup[];
-  root: HTMLDivElement | null;
-  initiallyVisible: boolean;
-  manageMode: boolean;
-  selectedIds: Set<string>;
-  singleSelectedId: string | null;
-  onToggleSelect: (entryId: string) => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onQuickDelete: () => void;
-  onQuickTransfer: () => void;
-};
-
-const WindowedGroupBlock = memo(function WindowedGroupBlock({
-  groups,
-  root,
-  initiallyVisible,
-  manageMode,
-  selectedIds,
-  singleSelectedId,
-  reservedByLotId,
-  onToggleSelect,
-  onEdit,
-  onQuickDelete,
-  onQuickTransfer,
-}: WindowedGroupBlockProps) {
-  const blockRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(initiallyVisible || typeof IntersectionObserver === 'undefined');
-  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
-  const estimatedHeight = useMemo(() => estimateWindowHeight(groups), [groups]);
-
-  useEffect(() => {
-    const block = blockRef.current;
-    if (!block || !root || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { root, rootMargin: '560px 0px' },
-    );
-    observer.observe(block);
-    return () => observer.disconnect();
-  }, [root]);
-
-  useEffect(() => {
-    const block = blockRef.current;
-    if (!block || !isVisible || typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(([entry]) => {
-      const height = Math.ceil(entry.contentRect.height);
-      if (height > 0) setMeasuredHeight(height);
-    });
-    observer.observe(block);
-    return () => observer.disconnect();
-  }, [isVisible]);
-
-  return (
-    <div
-      ref={blockRef}
-      className="logi-location-window-block logi-location-window-block--cards"
-      style={!isVisible ? { minHeight: measuredHeight ?? estimatedHeight } : undefined}
-    >
-      {isVisible && groups.map((group) => (
-        <InventoryMaterialCard
-          key={group.id}
-          group={group}
-          manageMode={manageMode}
-          selectedIds={selectedIds}
-          singleSelectedId={singleSelectedId}
-          reservedByLotId={reservedByLotId}
-          onToggleSelect={onToggleSelect}
-          onEdit={onEdit}
-          onQuickDelete={onQuickDelete}
-          onQuickTransfer={onQuickTransfer}
-        />
-      ))}
-    </div>
-  );
-});
-
-type WindowedMaterialGroupsProps = InventoryLotReserveProps & {
-  groups: DrawerMaterialGroup[];
-  manageMode: boolean;
-  selectedIds: Set<string>;
-  singleSelectedId: string | null;
-  onToggleSelect: (entryId: string) => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onQuickDelete: () => void;
-  onQuickTransfer: () => void;
-};
-
-const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
-  groups,
-  manageMode,
-  selectedIds,
-  singleSelectedId,
-  reservedByLotId,
-  onToggleSelect,
-  onEdit,
-  onQuickDelete,
-  onQuickTransfer,
-}: WindowedMaterialGroupsProps) {
-  const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
-  const blocks = useMemo(() => chunkGroups(splitLargeMaterialGroups(groups)), [groups]);
-
-  return (
-    <div
-      ref={setScrollRoot}
-      className="logi-location-stack-table-wrap logi-location-stack-table-wrap--cards"
-    >
-      {blocks.map((block, index) => (
-        <WindowedGroupBlock
-          key={block[0]?.id ?? index}
-          groups={block}
-          root={scrollRoot}
-          initiallyVisible={index === 0}
-          manageMode={manageMode}
-          selectedIds={selectedIds}
-          singleSelectedId={singleSelectedId}
-          reservedByLotId={reservedByLotId}
-          onToggleSelect={onToggleSelect}
-          onEdit={onEdit}
-          onQuickDelete={onQuickDelete}
-          onQuickTransfer={onQuickTransfer}
-        />
-      ))}
-    </div>
-  );
-});
-
 function InventoryBulkDeleteDialog({
   count,
   onConfirm,
@@ -1635,122 +981,6 @@ function InventoryBulkDeleteDialog({
   );
 }
 
-type SelectedLocationDetailProps = InventoryLotReserveProps & {
-  selectedLocation: LocationGroup;
-  drawerMaterialGroups: DrawerMaterialGroup[];
-  manageMode: boolean;
-  selectedEntryIds: Set<string>;
-  onCollapse: (locationId: string) => void;
-  onToggleManageMode: () => void;
-  onToggleSelect: (entryId: string) => void;
-  onClearSelection: () => void;
-  onExitManageMode: () => void;
-  onEdit: (entry: InventoryEntry) => void;
-  onBulkDeleteRequest: () => void;
-  onTransferRequest: () => void;
-  hideHeader?: boolean;
-  detailId?: string;
-};
-
-export const SelectedLocationDetail = memo(function SelectedLocationDetail({
-  selectedLocation,
-  drawerMaterialGroups,
-  manageMode,
-  selectedEntryIds,
-  reservedByLotId,
-  onCollapse,
-  onToggleManageMode,
-  onToggleSelect,
-  onClearSelection,
-  onExitManageMode,
-  onEdit,
-  onBulkDeleteRequest,
-  onTransferRequest,
-  hideHeader = false,
-  detailId = 'inventory-location-detail',
-}: SelectedLocationDetailProps) {
-  const selectedCount = selectedEntryIds.size;
-  const singleSelectedId = selectedCount === 1 ? Array.from(selectedEntryIds)[0] : null;
-
-  return (
-    <section
-      id={detailId}
-      className={`logi-location-detail${hideHeader ? ' logi-location-detail--inline-mobile' : ''}`}
-      aria-label={`${selectedLocation.name} inventory details`}
-    >
-      {!hideHeader && (
-        <div className="logi-location-detail-head">
-          <div>
-            <div className="logi-location-detail-title-row">
-              <h2>{selectedLocation.name}</h2>
-              <button
-                type="button"
-                className={`logi-inv-manage-btn${manageMode ? ' is-active' : ''}`}
-                onClick={onToggleManageMode}
-                title={manageMode ? 'Exit manage mode' : 'Manage inventory'}
-                aria-label={manageMode ? 'Exit manage mode' : 'Manage inventory'}
-                aria-pressed={manageMode}
-              >
-                <ManageSelectIcon />
-              </button>
-              <span className="logi-location-active-badge">Active</span>
-            </div>
-          </div>
-          <button type="button" className="logi-location-collapse-btn" onClick={() => onCollapse(selectedLocation.id)}>Collapse</button>
-        </div>
-      )}
-
-      {hideHeader && (
-        <div className="logi-location-detail-head logi-location-detail-head--inline-manage">
-          <button
-            type="button"
-            className={`logi-inv-manage-btn${manageMode ? ' is-active' : ''}`}
-            onClick={onToggleManageMode}
-            title={manageMode ? 'Exit manage mode' : 'Manage inventory'}
-            aria-label={manageMode ? 'Exit manage mode' : 'Manage inventory'}
-            aria-pressed={manageMode}
-          >
-            <ManageSelectIcon />
-            <span>{manageMode ? 'Managing' : 'Select items'}</span>
-          </button>
-        </div>
-      )}
-
-      {manageMode && (
-        <div className="logi-inv-manage-toolbar" role="toolbar" aria-label="Inventory selection actions">
-          <span className="logi-inv-manage-count">{selectedCount} selected</span>
-          <button type="button" disabled={selectedCount === 0} onClick={onTransferRequest}>Transfer</button>
-          <button type="button" className="is-delete" disabled={selectedCount === 0} onClick={onBulkDeleteRequest}>Delete</button>
-          <button type="button" disabled={selectedCount === 0} onClick={onClearSelection}>Clear selection</button>
-          <button type="button" onClick={onExitManageMode}>Done</button>
-        </div>
-      )}
-
-      {drawerMaterialGroups.length > 0 ? (
-        <WindowedMaterialGroups
-          groups={drawerMaterialGroups}
-          manageMode={manageMode}
-          selectedIds={selectedEntryIds}
-          singleSelectedId={singleSelectedId}
-          reservedByLotId={reservedByLotId}
-          onToggleSelect={onToggleSelect}
-          onEdit={onEdit}
-          onQuickDelete={onBulkDeleteRequest}
-          onQuickTransfer={onTransferRequest}
-        />
-      ) : (
-        <div className="logi-location-stack-table-wrap logi-location-stack-table-wrap--cards">
-          <div className="logi-location-detail-empty">
-            {selectedLocation.id === '__unassigned__'
-              ? 'No stacks without assigned location.'
-              : 'No stacks recorded at this location.'}
-          </div>
-        </div>
-      )}
-    </section>
-  );
-});
-
 export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixture } = {}) {
   const isFixture = fixture !== undefined;
   const [searchParams] = useSearchParams();
@@ -1758,7 +988,8 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const accessToken = session?.access_token ?? null;
   const authenticatedUserId = user?.id ?? null;
   const storeEntries = useLogisticsStore((state) => state.inventoryEntries);
-  const entries = fixture?.entries ?? storeEntries;
+  const [fixtureEntries, setFixtureEntries] = useState(() => fixture?.entries ?? []);
+  const entries = fixture ? fixtureEntries : storeEntries;
   const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
   const storeMaterials = useLogisticsStore((state) => state.materialTemplates);
   const materials = fixture?.materials ?? storeMaterials;
@@ -1811,20 +1042,14 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const [search, setSearch] = useState(() => inventoryUi.searchQuery);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [materialFilter, setMaterialFilter] = useState(() => inventoryUi.materialFilter);
-  const [locationFilter, setLocationFilter] = useState(() => inventoryUi.locationFilter);
-  const effectiveLocationFilter = queryLocationId || locationFilter;
   const [qualityMin, setQualityMin] = useState(() => inventoryUi.qualityMin);
   const [sortKey, setSortKey] = useState<SortKey>(() => inventoryUi.sortKey);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(() => inventoryUi.sortDir);
-  const [viewMode, setViewMode] = useState<ViewMode>(() => inventoryUi.viewMode);
-  const [listGroupBy, setListGroupBy] = useState<'location' | 'item'>(() => inventoryUi.listGroupBy);
   // Do not write the default local state over a persisted selection before hydration finishes.
   const [isInventoryUiReady, setIsInventoryUiReady] = useState(() => isFixture || inventorySync.hasHydratedPersist);
-  const [expandedHierarchyKeys, setExpandedHierarchyKeys] = useState<Set<string>>(
-    () => new Set([...inventoryUi.expandedCards, ...inventoryUi.expandedQualityRows]),
-  );
   const [addContext, setAddContext] = useState<InventoryAddContext | null>(null);
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(() => inventoryUi.selectedLocationId);
+  const [selectedLotId, setSelectedLotId] = useState<string | null>(null);
   const [manageLocationId, setManageLocationId] = useState<string | null>(null);
   const [selectedEntryIds, setSelectedEntryIds] = useState<Set<string>>(() => new Set());
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
@@ -1833,9 +1058,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const [successNotice, setSuccessNotice] = useState<InventorySuccessNotice | null>(null);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
   const [, setSyncLabelTick] = useState(0);
-  const freshnessBlockReason = isFixture
-    ? 'Inventory fixture is read-only.'
-    : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
+  const freshnessBlockReason = isFixture ? null : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
   const syncLabel = isFixture ? 'Preview data' : formatInventorySyncLabel(inventorySync);
   const syncTone = isFixture ? 'synced' : getInventorySyncTone(inventorySync);
 
@@ -1934,13 +1157,9 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     if (isFixture || !inventorySync.hasHydratedPersist || isInventoryUiReady) return;
     setSearch(inventoryUi.searchQuery);
     setMaterialFilter(inventoryUi.materialFilter);
-    setLocationFilter(inventoryUi.locationFilter);
     setQualityMin(inventoryUi.qualityMin);
     setSortKey(inventoryUi.sortKey);
     setSortDir(inventoryUi.sortDir);
-    setViewMode(inventoryUi.viewMode);
-    setListGroupBy(inventoryUi.listGroupBy);
-    setExpandedHierarchyKeys(new Set([...inventoryUi.expandedCards, ...inventoryUi.expandedQualityRows]));
     setSelectedLocationId(inventoryUi.selectedLocationId);
     setIsInventoryUiReady(true);
   }, [inventorySync.hasHydratedPersist, inventoryUi, isFixture, isInventoryUiReady]);
@@ -1951,17 +1170,16 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       selectedLocationId,
       searchQuery: search,
       materialFilter,
-      locationFilter,
+      locationFilter: '',
       qualityMin,
       sortKey,
       sortDir,
-      viewMode,
-      listGroupBy,
-      expandedCards: Array.from(expandedHierarchyKeys),
+      viewMode: 'location',
+      listGroupBy: 'location',
+      expandedCards: [],
       expandedQualityRows: [],
     });
   }, [
-    locationFilter,
     materialFilter,
     qualityMin,
     search,
@@ -1969,9 +1187,6 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     setInventoryUi,
     sortDir,
     sortKey,
-    viewMode,
-    listGroupBy,
-    expandedHierarchyKeys,
     inventorySync.hasHydratedPersist,
     isFixture,
     isInventoryUiReady,
@@ -1993,23 +1208,12 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [panel]);
 
-  function handleSort(key: SortKey) {
-    if (key === sortKey) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDir('desc');
-    }
-  }
-  void handleSort;
-
   const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
   const locationById = useMemo(() => new Map(locations.map((location) => [location.id, location])), [locations]);
 
   const filtered = useMemo(() => {
     const data = activeEntries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
-      if (effectiveLocationFilter && getEntryLocationId(e) !== effectiveLocationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
         const mat = e.materialId ? materialById.get(e.materialId) : undefined;
@@ -2051,202 +1255,34 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     });
 
     return data;
-  }, [activeEntries, effectiveLocationFilter, materialById, locationById, materialFilter, qualityMin, search, sortDir, sortKey]);
+  }, [activeEntries, materialById, locationById, materialFilter, qualityMin, search, sortDir, sortKey]);
 
-  const unassignedCount = useMemo(
-    () => activeEntries.filter((entry) => getEntryLocationId(entry) === '__unassigned__').length,
-    [activeEntries],
-  );
-
-  const locationGroups = useMemo<LocationGroup[]>(() => {
-    const map = new Map<string, LocationGroup>();
-
-    for (const location of locations) {
-      map.set(location.id, {
-        id: location.id,
-        name: getLocationName(location),
-        type: getLocationType(location),
-        subtitle: getLocationSubtitle(location),
-        isManual: isManuallyAddedLocation(location),
-        entries: [],
-        uniqueItems: 0,
-        totalScu: 0,
-        totalUnits: 0,
-        highestQuality: null,
-        premiumCount: 0,
-      });
-    }
-
-    map.set('__unassigned__', {
-      id: '__unassigned__',
-      name: 'Unassigned Stock',
-      type: 'Unassigned',
-      subtitle: 'Stacks without a storage location',
-      isManual: false,
-      entries: [],
-      uniqueItems: 0,
-      totalScu: 0,
-      totalUnits: 0,
-      highestQuality: null,
-      premiumCount: 0,
-    });
-
-    for (const entry of filtered) {
-      const locId = getEntryLocationId(entry);
-      const group = map.get(locId) ?? map.get('__unassigned__');
-      if (!group) continue;
-      group.entries.push(entry);
-    }
-
-    for (const group of map.values()) {
-      const uniqueMaterialIds = new Set<string>();
-      for (const entry of group.entries) {
-        uniqueMaterialIds.add(getEntryMaterialId(entry));
-        const material = entry.materialId ? materialById.get(entry.materialId) : undefined;
-        if (resolveInventoryUnitType(entry, material) === 'scu') group.totalScu += entry.quantity;
-        else group.totalUnits += entry.quantity;
-        if (entry.quality != null) {
-          group.highestQuality = group.highestQuality == null ? entry.quality : Math.max(group.highestQuality, entry.quality);
-          if (entry.quality >= 900) group.premiumCount += 1;
-        }
-      }
-      group.uniqueItems = uniqueMaterialIds.size;
-    }
-
-    return [...map.values()]
-      .filter((group) => group.entries.length > 0 || group.isManual || group.id === '__unassigned__')
-      .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.entries.length - a.entries.length || a.name.localeCompare(b.name));
-  }, [filtered, locations, materialById]);
-
-  const selectedLocation = useMemo(
-    () => locationGroups.find((group) => group.id === selectedLocationId) ?? null,
-    [locationGroups, selectedLocationId],
-  );
-
-  const selectedLocationRows = useMemo<DrawerEntryRow[]>(() => {
-    if (!selectedLocation) return [];
-    return selectedLocation.entries.map((entry) => {
-      const materialId = asString(toRecord(entry).materialId);
-      const material = materialId ? materialById.get(materialId) : undefined;
-      const kind = getEntryKind(entry, material);
-
-      return {
-        id: entry.id,
-        materialId: getEntryMaterialId(entry),
-        materialName: resolveInventoryItemName(entry, material),
-        entry,
-        kind,
-        kindLabel: kind === 'ore' ? 'Raw' : titleCase(kind),
-        quantityLabel: formatEntryQuantity(entry, material),
-        containerLabel: entry.container || '-',
-      };
-    });
-  }, [selectedLocation, materialById]);
-
-  const drawerRows = useMemo(() => {
-    return [...selectedLocationRows].sort(
-      (a, b) => ((b.entry.quality ?? -1) - (a.entry.quality ?? -1)) || a.materialName.localeCompare(b.materialName),
-    );
-  }, [selectedLocationRows]);
-
-  const drawerMaterialGroups = useMemo(() => {
-    const groups = new Map<string, DrawerMaterialGroup>();
-    for (const row of drawerRows) {
-      const existing = groups.get(row.materialId);
-      if (existing) {
-        existing.entries.push(row);
-        existing.total += row.entry.quantity;
-        existing.stackCount += 1;
-        if (!existing.kindLabels.includes(row.kindLabel)) existing.kindLabels.push(row.kindLabel);
-      } else {
-        const materialId = asString(toRecord(row.entry).materialId);
-        const unitType = resolveInventoryUnitType(row.entry, materialId ? materialById.get(materialId) : undefined);
-        groups.set(row.materialId, {
-          id: row.materialId,
-          name: row.materialName,
-          entries: [row],
-          total: row.entry.quantity,
-          unitType,
-          totalLabel: formatInventoryQuantity(row.entry.quantity, unitType),
-          kindLabels: [row.kindLabel],
-          stackCount: 1,
-        });
-      }
-    }
-    return [...groups.values()].map((group) => ({
-      ...group,
-      totalLabel: formatInventoryQuantity(group.total, group.unitType),
-    }));
-  }, [drawerRows, materialById]);
-  void drawerMaterialGroups;
-
-  const reservedByLotId = useMemo(() => getReservedInventoryMap(buildQueue), [buildQueue]);
-
-  const hierarchyAxis = viewMode === 'item'
-    ? 'item'
-    : viewMode === 'list'
-      ? listGroupBy
-      : 'location';
-  const hierarchyFolders = useMemo(
-    () => buildInventoryHierarchy(filtered, materials, locations, hierarchyAxis),
-    [filtered, hierarchyAxis, locations, materials],
-  );
-
-  const toggleHierarchyKey = useCallback((key: string) => {
-    setExpandedHierarchyKeys((current) => {
-      const next = new Set(current);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  }, []);
+  const workspaceLocations = useMemo<InventoryLocation[]>(() => {
+    const hasUnassigned = activeEntries.some((entry) => !entry.locationId);
+    return hasUnassigned
+      ? [...locations, { id: '__unassigned__', name: 'Unassigned Stock', category: 'unassigned' }]
+      : locations;
+  }, [activeEntries, locations]);
 
   useEffect(() => {
-    if (!queryLocationId || viewMode !== 'location') return;
-    setExpandedHierarchyKeys((current) => new Set(current).add(`location:${queryLocationId}`));
-  }, [queryLocationId, viewMode]);
+    const locationIds = new Set(workspaceLocations.map((location) => location.id));
+    const requested = queryLocationId && locationIds.has(queryLocationId) ? queryLocationId : null;
+    if (requested && requested !== selectedLocationId) {
+      setSelectedLocationId(requested);
+      setSelectedLotId(null);
+      return;
+    }
+    if (selectedLocationId && locationIds.has(selectedLocationId)) return;
+    const firstPopulated = workspaceLocations.find((location) =>
+      activeEntries.some((entry) => getEntryLocationId(entry) === location.id));
+    setSelectedLocationId(firstPopulated?.id ?? workspaceLocations[0]?.id ?? null);
+    setSelectedLotId(null);
+  }, [activeEntries, queryLocationId, selectedLocationId, workspaceLocations]);
 
-  const toggleLocationDrawer = useCallback((locationId: string) => {
-    setSelectedLocationId((current) => current === locationId ? null : locationId);
+  const selectLocation = useCallback((locationId: string) => {
+    setSelectedLocationId(locationId);
+    setSelectedLotId(null);
     setManageLocationId(null);
-    setSelectedEntryIds(new Set());
-    setBulkDeleteOpen(false);
-    setTransferOpen(false);
-  }, []);
-
-  const exitManageMode = useCallback(() => {
-    setManageLocationId(null);
-    setSelectedEntryIds(new Set());
-    setBulkDeleteOpen(false);
-    setTransferOpen(false);
-  }, []);
-
-  const toggleManageMode = useCallback((locationId: string) => {
-    setManageLocationId((current) => {
-      if (current === locationId) {
-        setSelectedEntryIds(new Set());
-        setBulkDeleteOpen(false);
-        setTransferOpen(false);
-        return null;
-      }
-      setSelectedEntryIds(new Set());
-      setBulkDeleteOpen(false);
-      setTransferOpen(false);
-      return locationId;
-    });
-  }, []);
-  void toggleManageMode;
-
-  const toggleEntrySelection = useCallback((entryId: string) => {
-    setSelectedEntryIds((current) => {
-      const next = new Set(current);
-      if (next.has(entryId)) next.delete(entryId);
-      else next.add(entryId);
-      return next;
-    });
-  }, []);
-
-  const clearSelection = useCallback(() => {
     setSelectedEntryIds(new Set());
     setBulkDeleteOpen(false);
     setTransferOpen(false);
@@ -2257,11 +1293,19 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   }, []);
 
   const performUndo = useCallback(async () => {
-    if (isFixture) return;
     if (!undoLedger) return;
     const action = undoLedger.action;
     try {
-      if (action.kind === 'delete') {
+      if (isFixture) {
+        if (action.kind === 'delete') {
+          setFixtureEntries((current) => [...current, ...action.entries]);
+        } else if (action.kind === 'transfer') {
+          const originals = new Map(action.moves.map((move) => [move.snapshot.id, move.snapshot]));
+          setFixtureEntries((current) => current.map((entry) => originals.get(entry.id) ?? entry));
+        } else if (action.kind === 'add') {
+          setFixtureEntries((current) => current.filter((entry) => !action.entryIds.includes(entry.id)));
+        }
+      } else if (action.kind === 'delete') {
         addInventoryEntries(action.entries);
       } else if (action.kind === 'transfer') {
         for (const move of action.moves) {
@@ -2292,18 +1336,11 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     setPanel({ mode: 'edit', entry });
   }, []);
 
-  const handleBulkDeleteRequest = useCallback(() => {
-    if (selectedEntryIds.size === 0) return;
-    setTransferOpen(false);
-    setBulkDeleteOpen(true);
-  }, [selectedEntryIds.size]);
-
   const handleBulkDeleteCancel = useCallback(() => {
     setBulkDeleteOpen(false);
   }, []);
 
   const handleBulkDeleteConfirm = useCallback(() => {
-    if (isFixture) return;
     if (freshnessBlockReason) {
       setInventoryGuardMessage(freshnessBlockReason);
       return;
@@ -2317,36 +1354,50 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       setSelectedEntryIds(new Set());
       return;
     }
-    for (const id of ids) {
-      deleteInventoryEntry(id);
-    }
+    if (isFixture) setFixtureEntries((current) => current.filter((entry) => !ids.includes(entry.id)));
+    else for (const id of ids) deleteInventoryEntry(id);
     pushUndoLedger({
       id: createNewInventoryId(),
-      label: `Deleted ${snapshots.length} stack${snapshots.length === 1 ? '' : 's'}`,
+      label: `Deleted ${snapshots.length} box${snapshots.length === 1 ? '' : 'es'}`,
       action: { kind: 'delete', entries: snapshots },
     });
     setInventoryGuardMessage('');
     setBulkDeleteOpen(false);
     setSelectedEntryIds(new Set());
+    setSelectedLotId(null);
     setPanel((current) => (
       current?.mode === 'edit' && ids.includes(current.entry.id) ? null : current
     ));
   }, [deleteInventoryEntry, entries, freshnessBlockReason, isFixture, pushUndoLedger, selectedEntryIds]);
 
-  const handleTransferRequest = useCallback(() => {
-    if (selectedEntryIds.size === 0) return;
-    setBulkDeleteOpen(false);
-    setTransferOpen(true);
-  }, [selectedEntryIds.size]);
-
   const handleTransferCancel = useCallback(() => {
     setTransferOpen(false);
   }, []);
 
-  const handleTransferConfirm = useCallback(async (targetLocationId: string) => {
+  const moveInventoryLots = useCallback(async (
+    entryIds: string[],
+    sourceLocationId: string,
+    targetLocationId: string,
+  ) => {
+    if (freshnessBlockReason) throw new Error(freshnessBlockReason);
     if (isFixture) {
-      throw new Error('Inventory fixture is read-only.');
+      const snapshots = entries.filter((entry) => entryIds.includes(entry.id));
+      if (snapshots.length !== entryIds.length) throw new Error('One or more selected boxes are no longer in inventory.');
+      if (snapshots.some((entry) => getEntryLocationId(entry) !== sourceLocationId)) {
+        throw new Error('One or more selected boxes are no longer at the source location.');
+      }
+      if (targetLocationId === 'port-tressler' && snapshots.some((entry) => entry.id === 'fixture-transfer-failure')) {
+        throw new Error('Transfer failed. The source location is unchanged. Retry when inventory sync is available.');
+      }
+      const movedAt = new Date().toISOString();
+      setFixtureEntries((current) => current.map((entry) =>
+        entryIds.includes(entry.id) ? { ...entry, locationId: targetLocationId, updatedAt: movedAt } : entry));
+      return { moves: snapshots.map((snapshot) => ({ snapshot, fromLocationId: sourceLocationId })) };
     }
+    return transferInventoryStacksAsync({ entryIds, sourceLocationId, targetLocationId });
+  }, [entries, freshnessBlockReason, isFixture, transferInventoryStacksAsync]);
+
+  const handleTransferConfirm = useCallback(async (targetLocationId: string) => {
     if (!manageLocationId) {
       throw new Error('No source location selected.');
     }
@@ -2354,19 +1405,13 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       throw new Error('Source and target location must be different.');
     }
     if (selectedEntryIds.size === 0) {
-      throw new Error('No stacks selected for transfer.');
-    }
-    if (freshnessBlockReason) {
-      throw new Error(freshnessBlockReason);
+      throw new Error('No boxes selected for transfer.');
     }
 
-    const sourceName = locations.find((location) => location.id === manageLocationId)?.name ?? 'source location';
-    const targetName = locations.find((location) => location.id === targetLocationId)?.name ?? 'target location';
-    const { moves } = await transferInventoryStacksAsync({
-      entryIds: Array.from(selectedEntryIds),
-      sourceLocationId: manageLocationId,
-      targetLocationId,
-    });
+    const sourceName = workspaceLocations.find((location) => location.id === manageLocationId)?.name ?? 'source location';
+    const targetName = workspaceLocations.find((location) => location.id === targetLocationId)?.name ?? 'target location';
+    const movedIds = Array.from(selectedEntryIds);
+    const { moves } = await moveInventoryLots(movedIds, manageLocationId, targetLocationId);
 
     pushUndoLedger({
       id: createNewInventoryId(),
@@ -2379,18 +1424,41 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     setInventoryGuardMessage('');
     setTransferOpen(false);
     setSelectedEntryIds(new Set());
+    setSelectedLocationId(targetLocationId);
+    setSelectedLotId(movedIds.length === 1 ? movedIds[0] : null);
   }, [
-    freshnessBlockReason,
-    locations,
     manageLocationId,
+    moveInventoryLots,
     pushUndoLedger,
     selectedEntryIds,
-    transferInventoryStacksAsync,
-    isFixture,
+    workspaceLocations,
   ]);
+
+  const handleWorkspaceMove = useCallback(async (entry: InventoryEntry, targetLocationId: string) => {
+    const sourceLocationId = getEntryLocationId(entry);
+    const targetName = workspaceLocations.find((location) => location.id === targetLocationId)?.name ?? 'target location';
+    const recordPresentation = getInventoryRecordPresentation(entry);
+    setSuccessNotice(null);
+    const { moves } = await moveInventoryLots([entry.id], sourceLocationId, targetLocationId);
+    pushUndoLedger({
+      id: createNewInventoryId(),
+      label: `Move ${resolveInventoryItemName(entry, entry.materialId ? materialById.get(entry.materialId) : undefined)} to ${targetName}`,
+      action: { kind: 'transfer', moves },
+    });
+    setSuccessNotice({ message: `Moved one ${recordPresentation.moveNoun} to ${targetName}.` });
+    setSelectedLocationId(targetLocationId);
+    setSelectedLotId(entry.id);
+    setInventoryGuardMessage('');
+  }, [materialById, moveInventoryLots, pushUndoLedger, workspaceLocations]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     if (isFixture) {
+      setFixtureEntries((current) => {
+        const updates = new Map(updatedEntries.map((entry) => [entry.id, entry]));
+        const next = current.map((entry) => updates.get(entry.id) ?? entry);
+        for (const entry of updatedEntries) if (!current.some((candidate) => candidate.id === entry.id)) next.push(entry);
+        return next;
+      });
       setPanel(null);
       return;
     }
@@ -2405,18 +1473,19 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       addInventoryEntries(additions);
       pushUndoLedger({
         id: createNewInventoryId(),
-        label: `Added ${additions.length} stack${additions.length === 1 ? '' : 's'}`,
+        label: `Added ${additions.length} box${additions.length === 1 ? '' : 'es'}`,
         action: { kind: 'add', entryIds: additions.map((entry) => entry.id) },
       });
     }
     setInventoryGuardMessage('');
 
     if (panel?.mode === 'edit') setPanel(null);
-    // In new mode, keep the drawer open so users can add multiple stacks quickly.
+    // In new mode, keep the drawer open so users can add multiple boxes quickly.
   }
 
   const handleAddSave = useCallback(async (updatedEntries: InventoryEntry[]) => {
     if (isFixture) {
+      setFixtureEntries((current) => [...current, ...updatedEntries]);
       setAddContext(null);
       return;
     }
@@ -2431,21 +1500,10 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       message: `Added ${updatedEntries.length} inventory box${updatedEntries.length === 1 ? '' : 'es'}.`,
     });
     setInventoryGuardMessage('');
-    if (updatedEntries[0]) {
-      const row = updatedEntries[0];
-      const locationKey = row.locationId ?? '__unassigned__';
-      setExpandedHierarchyKeys((current) => new Set(current).add(`location:${locationKey}`));
-    }
+    if (updatedEntries[0]) setSelectedLocationId(getEntryLocationId(updatedEntries[0]));
     setAddContext(null);
   }, [addInventoryEntriesAsync, isFixture, pushUndoLedger]);
 
-  const startManageAtLocation = useCallback((locationId: string) => {
-    setManageLocationId(locationId);
-    setSelectedEntryIds(new Set());
-    setBulkDeleteOpen(false);
-    setTransferOpen(false);
-  }, []);
-  void toggleLocationDrawer;
   const requestSingleDelete = useCallback((entry: InventoryEntry) => {
     setManageLocationId(getEntryLocationId(entry));
     setSelectedEntryIds(new Set([entry.id]));
@@ -2559,12 +1617,12 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
 
         <button
           type="button"
-          className={`logi-inv-mobile-filter-trigger${materialFilter || effectiveLocationFilter || qualityMin ? ' is-active' : ''}`}
+          className={`logi-inv-mobile-filter-trigger${materialFilter || qualityMin ? ' is-active' : ''}`}
           aria-expanded={mobileFiltersOpen}
           onClick={() => setMobileFiltersOpen(true)}
         >
           Filters
-          {materialFilter || effectiveLocationFilter || qualityMin ? <span>Active</span> : null}
+          {materialFilter || qualityMin ? <span>Active</span> : null}
         </button>
 
         <MobileFilterSheet
@@ -2572,7 +1630,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           title="Inventory filters"
           onClose={() => setMobileFiltersOpen(false)}
           desktopContent
-          footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setLocationFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
+          footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
         >
 
         <label className="logi-inv-filter-field">
@@ -2587,22 +1645,6 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
             {materials.map((m) => (
               <option key={m.id} value={m.id}>{m.name}</option>
             ))}
-          </select>
-        </label>
-
-        <label className="logi-inv-filter-field">
-          <span className="logi-inv-filter-label">Location</span>
-          <select
-            className="logi-select"
-            value={effectiveLocationFilter}
-            onChange={(e) => setLocationFilter(e.target.value)}
-            aria-label="Filter by location"
-          >
-            <option value="">All Locations</option>
-            {locations.map((l) => (
-              <option key={l.id} value={l.id}>{l.name}</option>
-            ))}
-            {unassignedCount > 0 && <option value="__unassigned__">Unassigned Stock</option>}
           </select>
         </label>
 
@@ -2623,24 +1665,18 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           </span>
         </label>
 
-        <div className="logi-inv-filter-field logi-inv-filter-field--view">
-          <span className="logi-inv-filter-label">View</span>
-          <div className="logi-inv-view-toggle" role="group" aria-label="Inventory view mode">
-            <button type="button" className={viewMode === 'location' ? 'is-active' : ''} onClick={() => setViewMode('location')}>Location</button>
-            <button type="button" className={viewMode === 'item' ? 'is-active' : ''} onClick={() => setViewMode('item')}>Item</button>
-            <button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')}>List</button>
-          </div>
-        </div>
-
-        {viewMode === 'list' && (
-          <div className="logi-inv-filter-field logi-inv-filter-field--group">
-            <span className="logi-inv-filter-label">Group list by</span>
-            <div className="logi-inv-list-group-toggle" role="group" aria-label="Group list by">
-              <button type="button" className={listGroupBy === 'location' ? 'is-active' : ''} onClick={() => setListGroupBy('location')}>Location</button>
-              <button type="button" className={listGroupBy === 'item' ? 'is-active' : ''} onClick={() => setListGroupBy('item')}>Item</button>
-            </div>
-          </div>
-        )}
+        <label className="logi-inv-filter-field logi-inv-filter-field--sort">
+          <span className="logi-inv-filter-label">Sort boxes</span>
+          <select className="logi-select" value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)} aria-label="Sort inventory boxes">
+            <option value="material">Name</option>
+            <option value="quality">Quality</option>
+            <option value="quantity">Quantity</option>
+            <option value="location">Location</option>
+          </select>
+        </label>
+        <button type="button" className="logi-inv-sort-direction" onClick={() => setSortDir((current) => current === 'asc' ? 'desc' : 'asc')} aria-label={`Sort ${sortDir === 'asc' ? 'descending' : 'ascending'}`}>
+          {sortDir === 'asc' ? 'Ascending' : 'Descending'}
+        </button>
 
         <span className="logi-filter-count">
           <strong>{filtered.length}</strong>
@@ -2649,30 +1685,22 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
         </MobileFilterSheet>
       </div>
 
-      {manageLocationId !== null && (
-        <div className="logi-inv-manage-toolbar logi-inv-manage-toolbar--list" role="toolbar" aria-label="Inventory selection actions">
-          <span className="logi-inv-manage-count">{selectedEntryIds.size} selected</span>
-          <button type="button" disabled={selectedEntryIds.size === 0} onClick={handleTransferRequest}>Transfer</button>
-          <button type="button" className="is-delete" disabled={selectedEntryIds.size === 0} onClick={handleBulkDeleteRequest}>Delete</button>
-          <button type="button" disabled={selectedEntryIds.size === 0} onClick={clearSelection}>Clear selection</button>
-          <button type="button" onClick={exitManageMode}>Done</button>
-        </div>
-      )}
-
-      <InventoryHierarchy
-        folders={hierarchyFolders}
-        presentation={viewMode === 'list' ? 'list' : 'tree'}
-        expandedKeys={expandedHierarchyKeys}
-        reservedByLotId={reservedByLotId}
-        manageLocationId={manageLocationId}
-        selectedEntryIds={selectedEntryIds}
-        onToggleExpanded={toggleHierarchyKey}
-        onStartManage={startManageAtLocation}
-        onToggleSelect={toggleEntrySelection}
-        onAdd={setAddContext}
+      <InventoryWorkspace
+        entries={filtered}
+        locations={workspaceLocations}
+        materials={materials}
+        buildQueue={buildQueue}
+        selectedLocationId={selectedLocationId}
+        selectedLotId={selectedLotId}
+        readOnly={Boolean(freshnessBlockReason)}
+        hasActiveFilters={Boolean(search.trim() || materialFilter || qualityMin)}
+        onSelectLocation={selectLocation}
+        onSelectLot={setSelectedLotId}
         onEdit={handleEditDrawerEntry}
+        onMoveRequest={requestSingleTransfer}
         onDelete={requestSingleDelete}
-        onTransfer={requestSingleTransfer}
+        onMoveLot={handleWorkspaceMove}
+        onAddAtLocation={(locationId) => setAddContext({ locationId })}
       />
       </div>
 
@@ -2691,7 +1719,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           entries={entries}
           materials={materials}
           sourceLocationId={manageLocationId}
-          locations={locations}
+          locations={workspaceLocations.filter((location) => location.id !== '__unassigned__')}
           onConfirm={handleTransferConfirm}
           onCancel={handleTransferCancel}
         />

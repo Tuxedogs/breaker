@@ -2,96 +2,77 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { rarityCatalog } from "../../src/data/logistics/seed";
-import {
-  buildInventoryHierarchy,
-  groupReservableStacksByLocation,
-} from "../../src/lib/logistics/inventoryHierarchy";
-import type {
-  InventoryEntry,
-  InventoryLocation,
-  MaterialTemplate,
-} from "../../src/types/logistics";
+import { groupReservableStacksByLocation } from "../../src/lib/logistics/inventoryHierarchy";
+import type { InventoryStack } from "../../src/lib/logistics/inventory";
+import type { InventoryLocation, MaterialTemplate } from "../../src/types/logistics";
 
 const timestamp = "2026-07-25T00:00:00.000Z";
-const materials: MaterialTemplate[] = [
-  { id: "iron", name: "Iron", materialType: "refined", rarity: rarityCatalog.common },
-];
+const material: MaterialTemplate = {
+  id: "iron",
+  name: "Iron",
+  materialType: "refined",
+  rarity: rarityCatalog.common,
+};
 const locations: InventoryLocation[] = [
   { id: "loc-a", name: "Orbital A", system: "Pyro", type: "station" },
   { id: "loc-b", name: "Warehouse B", system: "Stanton", type: "city" },
 ];
 
-function entry(id: string, patch: Partial<InventoryEntry> = {}): InventoryEntry {
+function stack(id: string, patch: Partial<InventoryStack> = {}): InventoryStack {
   return {
     id,
     recordKind: "box",
-    materialId: "iron",
-    itemName: "Iron",
+    materialId: material.id,
+    itemName: material.name,
     itemKind: "refined",
     materialType: "refined",
     unitType: "scu",
     quality: 500,
     quantity: 1,
-    locationId: "loc-a",
+    locationId: locations[0].id,
     rarity: rarityCatalog.common,
     createdAt: timestamp,
     updatedAt: timestamp,
+    material,
+    location: locations[0],
     ...patch,
   };
 }
 
-describe("inventory hierarchy", () => {
-  it("inverts Location and Item views without combining SCU and units", () => {
-    const entries = [
-      entry("scu-a"),
-      entry("unit-a", { catalogItemId: "iron-unit", unitType: "unit", quantity: 3 }),
-      entry("scu-b", { locationId: "loc-b", quantity: 2 }),
-    ];
-
-    const byLocation = buildInventoryHierarchy(entries, materials, locations, "location");
-    assert.deepEqual(byLocation.map((folder) => folder.label), ["Orbital A", "Warehouse B"]);
-    assert.equal(byLocation[0].totalScu, 1);
-    assert.equal(byLocation[0].totalUnits, 3);
-    assert.equal(byLocation[0].secondaryFolders.length, 2);
-
-    const byItem = buildInventoryHierarchy(entries, materials, locations, "item");
-    assert.equal(byItem.length, 2);
-    assert.equal(byItem.find((folder) => folder.rows[0].unitType === "scu")?.secondaryFolders.length, 2);
-  });
-
-  it("keeps Quality 0 distinct from missing quality and preserves aggregate records", () => {
-    const folders = buildInventoryHierarchy([
-      entry("zero", { quality: 0 }),
-      entry("missing", { quality: undefined, recordKind: "aggregate" }),
-    ], materials, locations, "location");
-
-    const qualities = folders[0].secondaryFolders[0].qualityFolders;
-    assert.equal(qualities.length, 2);
-    assert.ok(qualities.some((folder) => folder.quality === 0));
-    assert.ok(qualities.some((folder) => folder.quality === null));
-    assert.equal(qualities.flatMap((folder) => folder.rows).find((row) => row.id === "missing")?.entry.recordKind, "aggregate");
-  });
-
-  it("uses safe labels for unassigned and unresolved locations", () => {
-    const folders = buildInventoryHierarchy([
-      entry("unassigned", { locationId: undefined }),
-      entry("unknown", { locationId: "missing-location" }),
-    ], materials, locations, "location");
-
-    assert.deepEqual(folders.map((folder) => folder.label), ["Unassigned Stock", "Unknown Location"]);
-    assert.ok(folders.every((folder) => !folder.label.includes("missing-location")));
-  });
-
-  it("preserves first-seen reservation order while nesting location and quality", () => {
+describe("Build Queue reservable inventory grouping", () => {
+  it("preserves first-seen location and quality order without collapsing physical records", () => {
     const stacks = [
-      { ...entry("first", { locationId: "loc-b", quality: 400 }), material: materials[0], location: locations[1] },
-      { ...entry("second", { locationId: "loc-a", quality: 900 }), material: materials[0], location: locations[0] },
-      { ...entry("third", { locationId: "loc-b", quality: 800 }), material: materials[0], location: locations[1] },
+      stack("first", { locationId: "loc-b", quality: 400, location: locations[1] }),
+      stack("second", { locationId: "loc-a", quality: 900, location: locations[0] }),
+      stack("third", { locationId: "loc-b", quality: 800, location: locations[1] }),
+      stack("fourth", { locationId: "loc-b", quality: 400, location: locations[1] }),
     ];
 
     const grouped = groupReservableStacksByLocation(stacks);
+
     assert.deepEqual(grouped.map((folder) => folder.key), ["loc-b", "loc-a"]);
     assert.deepEqual(grouped[0].qualities.map((folder) => folder.quality), [400, 800]);
-    assert.deepEqual(grouped[0].qualities.flatMap((folder) => folder.stacks.map((stack) => stack.id)), ["first", "third"]);
+    assert.deepEqual(grouped[0].qualities[0].stacks.map((entry) => entry.id), ["first", "fourth"]);
+    assert.deepEqual(grouped.flatMap((folder) => folder.stacks).map((entry) => entry.id), ["first", "third", "fourth", "second"]);
+  });
+
+  it("keeps Quality 0 distinct from missing quality", () => {
+    const grouped = groupReservableStacksByLocation([
+      stack("zero", { quality: 0 }),
+      stack("missing", { quality: undefined, recordKind: "aggregate" }),
+    ]);
+
+    assert.deepEqual(grouped[0].qualities.map((folder) => folder.quality), [0, null]);
+    assert.deepEqual(grouped[0].qualities.map((folder) => folder.key), ["0", "unknown"]);
+  });
+
+  it("uses safe user-facing labels for unassigned and unresolved locations", () => {
+    const grouped = groupReservableStacksByLocation([
+      stack("unassigned", { locationId: undefined, location: undefined }),
+      stack("unknown", { locationId: "missing-location", location: undefined }),
+    ]);
+
+    assert.deepEqual(grouped.map((folder) => folder.label), ["Unassigned Stock", "Unknown Location"]);
+    assert.ok(grouped.every((folder) => !folder.label.includes("missing-location")));
   });
 });

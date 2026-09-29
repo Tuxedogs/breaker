@@ -115,27 +115,25 @@ export function LocationListItem({
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
-        <div className="mlist-survey-summary">
-          <div className="mlist-method-availability" aria-label={`${methodLabel} mining available`}>
-            {survey.methods.length > 0 ? survey.methods.map((item) => {
-              const label = miningMethodBadge(item.method)?.label ?? item.method;
-              const presentation = miningMethodPresentation(item.method);
-              return (
-                <span className="mlist-method-availability-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
-                  {presentation.iconKey ? (
-                    <MiningMethodIcon methodKey={presentation.iconKey} className="mlist-method-icon" />
-                  ) : (
-                    <span className="mlist-method-fallback">{presentation.visibleLabel}</span>
-                  )}
-                  {presentation.iconKey && <span className="sr-only">{label}</span>}
-                  <strong>{formatMiningProbability(item.share)}</strong>
-                </span>
-              );
-            }) : <span className="mlist-method-text">{methodLabel}</span>}
-          </div>
-          <MiningEnvironmentStatus environment={survey.environment} />
-        </div>
       </div>
+      <div className="mlist-method-availability" aria-label={`${methodLabel} mining available`}>
+        {survey.methods.length > 0 ? survey.methods.map((item) => {
+          const label = miningMethodBadge(item.method)?.label ?? item.method;
+          const presentation = miningMethodPresentation(item.method);
+          return (
+            <span className="mlist-method-availability-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+              {presentation.iconKey ? (
+                <MiningMethodIcon methodKey={presentation.iconKey} className="mlist-method-icon" />
+              ) : (
+                <span className="mlist-method-fallback">{presentation.visibleLabel}</span>
+              )}
+              {presentation.iconKey && <span className="sr-only">{label}</span>}
+              <strong>{formatMiningProbability(item.share)}</strong>
+            </span>
+          );
+        }) : <span className="mlist-method-text">{methodLabel}</span>}
+      </div>
+      <MiningEnvironmentStatus environment={survey.environment} />
       {demandBar !== null && (
         <div className="mlist-item-coverage">
           <span className="mlist-bar-label"><strong>{primaryCovered.length}</strong> of {totalRelevant} </span>
