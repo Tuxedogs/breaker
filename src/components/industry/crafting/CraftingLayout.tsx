@@ -3,6 +3,7 @@ import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCardBrowserPage, type ComponentCardBrowserPage } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
+import CommandHeader from "@/components/shared/CommandHeader";
 import "./recipe-browser.css";
 
 export default function CraftingLayout() {
@@ -64,19 +65,18 @@ export default function CraftingLayout() {
       <div className="craft-page craft-planner-shell component-results-browser">
         <div className={`recipe-browser-page-body${isBrowserRoute ? " is-browser" : ""}${hasSelectedDetail ? " is-detail-preview" : ""}`}>
           {isBrowserRoute ? (
-            <header className="recipe-browser-command-header">
-              <span className="recipe-browser-command-icon" aria-hidden="true">
+            <CommandHeader
+              className="recipe-browser-command-header"
+              title="Crafting Intelligence"
+              description="Search components, compare recipes, materials, and crafting requirements."
+              icon={
                 <svg viewBox="0 0 24 24">
                   <path d="M5 4h14v16H5z" />
                   <path d="m8 9 4-3 4 3-4 3-4-3Z" />
                   <path d="M8 15h8" />
                 </svg>
-              </span>
-              <div className="recipe-browser-command-copy">
-                <h1>Crafting Intelligence</h1>
-                <p>Search components, compare recipes, materials, and crafting requirements.</p>
-              </div>
-            </header>
+              }
+            />
           ) : null}
           <div className="recipe-browser-content-shell">
             <div className="component-browser-body">

@@ -121,6 +121,8 @@ function LocationField({
   hasError,
   onLocationIdChange,
   onLocationSearchChange,
+  onCreateLocation,
+  isCreatingLocation,
 }: {
   locations: InventoryLocation[];
   locationId: string;
@@ -128,6 +130,8 @@ function LocationField({
   hasError: boolean;
   onLocationIdChange: (id: string) => void;
   onLocationSearchChange: (search: string) => void;
+  onCreateLocation: (name: string) => void;
+  isCreatingLocation: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const query = locationSearch.trim().toLowerCase();
@@ -143,6 +147,10 @@ function LocationField({
       })
       .slice(0, 12);
   }, [locations, query]);
+  const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
+  const canCreateCustomLocation = Boolean(
+    locationSearch.trim() && !resolveInventoryLocationByInput(locationSearch, locationLookup),
+  );
 
   return (
     <div className="logi-form-field bq-inv-quick-location">
@@ -162,7 +170,7 @@ function LocationField({
         placeholder="Search or type location..."
         autoComplete="off"
       />
-      {open && suggestions.length > 0 ? (
+      {open && (suggestions.length > 0 || canCreateCustomLocation) ? (
         <ul className="bq-inv-quick-location-list" role="listbox">
           {suggestions.map((location) => (
             <li key={location.id}>
@@ -178,10 +186,25 @@ function LocationField({
                 }}
               >
                 <span>{location.name}</span>
-                {location.system ? <em>{location.system}</em> : null}
+                {location.system ? <em>{location.system}</em> : location.source === 'custom' ? <em>Custom location</em> : null}
               </button>
             </li>
           ))}
+          {canCreateCustomLocation ? (
+            <li>
+              <button
+                type="button"
+                role="option"
+                className="bq-inv-quick-location-option"
+                disabled={isCreatingLocation}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => onCreateLocation(locationSearch.trim())}
+              >
+                <span>{isCreatingLocation ? 'Creating custom location…' : `Create “${locationSearch.trim()}” as custom location`}</span>
+                <em>Private to your account</em>
+              </button>
+            </li>
+          ) : null}
         </ul>
       ) : null}
     </div>
@@ -202,6 +225,7 @@ export default function InventoryAddModal({
 }: Props) {
   const materialIdentities = useMaterialIdentityIndex();
   const inventorySync = useLogisticsStore((state) => state.inventorySync);
+  const createCustomInventoryLocationAsync = useLogisticsStore((state) => state.createCustomInventoryLocationAsync);
   const [selectedMaterialId, setSelectedMaterialId] = useState(target?.materialId ?? '');
   const material = target?.material ?? materials.find((entry) => entry.id === selectedMaterialId);
   const displayName = target?.displayName ?? material?.name ?? '';
@@ -239,6 +263,7 @@ export default function InventoryAddModal({
   const [hasTriedSave, setHasTriedSave] = useState(false);
   const [errorMessage, setErrorMessage] = useState(fixture?.syncWarning ?? '');
   const [isSaving, setIsSaving] = useState(false);
+  const [isCreatingLocation, setIsCreatingLocation] = useState(false);
 
   const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
 
@@ -412,6 +437,22 @@ export default function InventoryAddModal({
     }
   }
 
+  async function handleCreateCustomLocation(name: string) {
+    if (isCreatingLocation || isSaving) return;
+    setErrorMessage('');
+    setIsCreatingLocation(true);
+    try {
+      const location = await createCustomInventoryLocationAsync(name);
+      setLocationId(location.id);
+      setLocationSearch(location.name);
+      setHasTriedSave(false);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsCreatingLocation(false);
+    }
+  }
+
   const qualityError = qualityGroups.some((group) => parseQuality(group.quality) === undefined);
   const quantityError = qualityGroups.some((group) => group.boxes.length === 0 || group.boxes.some((box) => {
     const parsed = Number(box.value);
@@ -434,7 +475,7 @@ export default function InventoryAddModal({
       className="bq-inv-quick-backdrop"
       role="presentation"
       onMouseDown={() => {
-        if (!isSaving) onCancel();
+        if (!isSaving && !isCreatingLocation) onCancel();
       }}
     >
       <div
@@ -442,7 +483,7 @@ export default function InventoryAddModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="bq-inv-quick-title"
-        aria-busy={isSaving}
+        aria-busy={isSaving || isCreatingLocation}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="bq-inv-quick-head">
@@ -463,6 +504,8 @@ export default function InventoryAddModal({
                 hasError={hasTriedSave && !resolvedLocationId}
                 onLocationIdChange={setLocationId}
                 onLocationSearchChange={setLocationSearch}
+                onCreateLocation={(name) => void handleCreateCustomLocation(name)}
+                isCreatingLocation={isCreatingLocation}
               />
               {hasTriedSave && !resolvedLocationId ? (
                 <span className="logi-form-error">Choose a known inventory location.</span>
@@ -637,12 +680,12 @@ export default function InventoryAddModal({
             {errorMessage ? <span className="logi-form-error">{errorMessage}</span> : null}
           </div>
           <div className="bq-inv-quick-action-buttons">
-            <button type="button" className="bq-btn" onClick={onCancel} disabled={isSaving}>Cancel</button>
+            <button type="button" className="bq-btn" onClick={onCancel} disabled={isSaving || isCreatingLocation}>Cancel</button>
             <button
               type="button"
               className="bq-btn bq-btn--confirm"
               onClick={() => void handleSave()}
-              disabled={isSaving}
+              disabled={isSaving || isCreatingLocation}
             >
               {isSaving ? 'Adding…' : 'Add to inventory'}
             </button>

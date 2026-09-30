@@ -6573,85 +6573,6 @@
     var(--craft-surface-canvas);
 }
 
-.component-results-browser .recipe-browser-command-header {
-  position: relative;
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  min-width: 0;
-  align-items: center;
-  gap: 11px;
-  min-height: 48px;
-  padding: 0 13px;
-  overflow: hidden;
-  border: 1px solid var(--craft-border-default);
-  border-radius: 2px;
-  background:
-    linear-gradient(90deg, rgba(103, 216, 255, 0.035), transparent 22%),
-    linear-gradient(180deg, #10161c, #0b1015);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 7px 22px rgba(0, 0, 0, 0.18);
-}
-
-.component-results-browser .recipe-browser-command-header::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  content: "";
-  background: linear-gradient(90deg, transparent, rgba(107, 217, 255, 0.32) 23%, rgba(107, 217, 255, 0.06) 64%, transparent);
-}
-
-.component-results-browser .recipe-browser-command-icon {
-  display: grid;
-  width: 25px;
-  height: 25px;
-  place-items: center;
-  flex: 0 0 25px;
-  border: 1px solid rgba(125, 211, 252, 0.26);
-  border-radius: 0;
-  background: #0b1218;
-  color: var(--craft-highlight-focus);
-}
-
-.component-results-browser .recipe-browser-command-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.45;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.component-results-browser .recipe-browser-command-copy {
-  display: flex;
-  min-width: 0;
-  align-items: baseline;
-  gap: 16px;
-}
-
-.component-results-browser .recipe-browser-command-copy h1 {
-  margin: 0;
-  color: var(--ui-text-primary);
-  font-family: var(--font-primary);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.1em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.component-results-browser .recipe-browser-command-copy p {
-  margin: 0;
-  overflow: hidden;
-  color: #778894;
-  font: 500 var(--recipe-text-kicker)/1.1 var(--font-primary, Rajdhani, sans-serif);
-  letter-spacing: 0.025em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .component-results-browser .recipe-browser-content-shell {
   display: flex;
   flex: 1 1 0;
@@ -8157,15 +8078,15 @@
     min-height: 52px;
   }
 
-  .component-results-browser .recipe-browser-command-copy {
+  .component-results-browser .app-command-header__copy {
     display: block;
   }
 
-  .component-results-browser .recipe-browser-command-copy h1 {
+  .component-results-browser .app-command-header__copy h1 {
     font-size: 14px;
   }
 
-  .component-results-browser .recipe-browser-command-copy p {
+  .component-results-browser .app-command-header__copy p {
     margin-top: 4px;
     font-size: var(--app-text-meta);
     white-space: normal;
@@ -8256,9 +8177,9 @@
     box-shadow: none;
   }
 
-  .component-results-browser .recipe-browser-command-icon { display: none; }
-  .component-results-browser .recipe-browser-command-copy { display: block; }
-  .component-results-browser .recipe-browser-command-copy h1 {
+  .component-results-browser .app-command-header__icon { display: none; }
+  .component-results-browser .app-command-header__copy { display: block; }
+  .component-results-browser .app-command-header__copy h1 {
     color: var(--craft-text, #edf7ff);
     font-family: var(--crafting-presentation-font);
     font-size: 0;
@@ -8267,18 +8188,18 @@
     line-height: 1;
     text-transform: none;
   }
-  .component-results-browser .recipe-browser-command-copy h1::before {
+  .component-results-browser .app-command-header__copy h1::before {
     content: "Crafting";
     font-size: 1.8rem;
   }
-  .component-results-browser .recipe-browser-command-copy p {
+  .component-results-browser .app-command-header__copy p {
     margin-top: 5px;
     color: var(--crafting-presentation-meta);
     font-family: var(--crafting-presentation-font);
     font-size: 0;
     white-space: normal;
   }
-  .component-results-browser .recipe-browser-command-copy p::before {
+  .component-results-browser .app-command-header__copy p::before {
     content: "Find and craft components from blueprints.";
     font-size: 0.88rem;
   }

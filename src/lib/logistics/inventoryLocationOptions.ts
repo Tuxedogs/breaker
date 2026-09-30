@@ -60,7 +60,11 @@ export function mergeCanonicalInventoryLocations(
   const extraLocations: InventoryLocation[] = [];
 
   for (const location of userLocations ?? []) {
-    const canonicalId = resolveCanonicalLocationIdByName(location.name);
+    // A user deliberately created this location. Keep its stable persisted UUID
+    // even if a later canonical catalog happens to introduce the same name.
+    const canonicalId = location.source === "custom"
+      ? undefined
+      : resolveCanonicalLocationIdByName(location.name);
     if (canonicalId) {
       if (location.id !== canonicalId) locationIdRemap.set(location.id, canonicalId);
       continue;

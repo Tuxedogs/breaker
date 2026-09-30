@@ -107,9 +107,7 @@ test.describe("Inventory workspace acceptance", () => {
     for (let index = 0; index < await lots.count(); index += 1) {
       const tile = lots.nth(index);
       await expect(tile.locator(".logi-inv-workspace-lot-name")).not.toBeEmpty();
-      await expect(tile.getByText("Quantity", { exact: true })).toBeVisible();
-      await expect(tile.getByText("Quality", { exact: true })).toBeVisible();
-      await expect(tile.locator(".logi-inv-workspace-lot-facts dd").nth(0)).not.toBeEmpty();
+      await expect(tile.locator(".logi-inv-workspace-lot-facts dd").nth(0)).toBeVisible();
       await expect(tile.locator(".logi-inv-workspace-lot-facts dd").nth(1)).toContainText("Quality");
     }
 
@@ -140,11 +138,27 @@ test.describe("Inventory workspace acceptance", () => {
     await expectNoHorizontalOverflow(page);
 
     await location(page, "levski").click();
-    await page.getByRole("searchbox", { name: "Search inventory" }).fill("no-matching-inventory-record");
+    const globalSearch = page.getByRole("searchbox", { name: "Search all inventory locations and items" });
+    await globalSearch.fill("900");
+    await expect(page.getByText("Quality ≥ 900", { exact: true })).toBeVisible();
+    const visibleQualityValues = await page.locator("[data-testid='inventory-lot-grid'] [data-quality]").evaluateAll((tiles) =>
+      tiles.map((tile) => Number(tile.getAttribute("data-quality"))),
+    );
+    expect(visibleQualityValues.every((quality) => quality >= 900)).toBe(true);
+    await expect(location(page, "levski")).toHaveAttribute("data-search-match", "true");
+    await globalSearch.fill("no-matching-inventory-record");
     await expect(page.getByTestId("inventory-empty-location")).toContainText("No physical inventory boxes match the current search or filters.");
     await page.screenshot({ path: path.join(screenshotDir, "inventory-workspace-empty-results-1920x1080.png"), fullPage: true });
-    await page.getByRole("searchbox", { name: "Search inventory" }).fill("");
+    await globalSearch.fill("");
     await expect(lots).toHaveCount(11);
+
+    await page.getByRole("button", { name: "List", exact: true }).click();
+    await expect(page.getByTestId("inventory-lot-grid")).toHaveAttribute("data-view-mode", "list");
+    await page.getByRole("button", { name: "Grouped", exact: true }).click();
+    await expect(page.getByTestId("inventory-lot-grid")).toHaveAttribute("data-view-mode", "grouped");
+    await expect(page.locator("[data-testid='inventory-lot-grid'] [data-lot-id]")).toHaveCount(11);
+    await page.getByRole("button", { name: "Grid", exact: true }).click();
+    await expect(page.getByTestId("inventory-lot-grid")).toHaveAttribute("data-view-mode", "grid");
 
     await activelyReserved.getByRole("button").click();
     const moveButton = inspector.getByRole("button", { name: "Move", exact: true });

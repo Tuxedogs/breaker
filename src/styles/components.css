@@ -14,6 +14,86 @@
     --app-sticky-top: 4.75rem;
   }
 
+  /* Compact cross-workflow page identity surface. Crafting is the visual owner. */
+  .app-command-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+    min-height: 48px;
+    padding: 0 13px;
+    overflow: hidden;
+    border: 1px solid var(--app-command-header-border, var(--craft-border-default, var(--ops-border-default)));
+    border-radius: 2px;
+    background:
+      linear-gradient(90deg, rgb(103 216 255 / .035), transparent 22%),
+      linear-gradient(180deg, #10161c, #0b1015);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .025), 0 7px 22px rgb(0 0 0 / .18);
+  }
+
+  .app-command-header::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    content: "";
+    background: linear-gradient(90deg, transparent, rgb(107 217 255 / .32) 23%, rgb(107 217 255 / .06) 64%, transparent);
+  }
+
+  .app-command-header__icon {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    place-items: center;
+    flex: 0 0 25px;
+    border: 1px solid rgb(125 211 252 / .26);
+    border-radius: 0;
+    background: #0b1218;
+    color: var(--app-command-header-accent, var(--craft-highlight-focus, var(--ops-highlight-color)));
+  }
+
+  .app-command-header__icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .app-command-header__copy {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .app-command-header__copy h1 {
+    margin: 0;
+    color: var(--app-command-header-text, var(--ui-text-primary, var(--text-primary)));
+    font-family: var(--font-primary);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: .1em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .app-command-header__copy p {
+    margin: 0;
+    overflow: hidden;
+    color: var(--app-command-header-copy-muted, #778894);
+    font: 500 var(--app-command-header-kicker, var(--recipe-text-kicker, var(--app-text-kicker)))/1.1 var(--font-primary, Rajdhani, sans-serif);
+    letter-spacing: .025em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .page-hero-shell {
     border: var(--border-panel);
     border-radius: 4px;

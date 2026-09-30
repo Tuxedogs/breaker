@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { createInventoryEntryDraft, type InventorySyncState, type InventoryUiState, useLogisticsStore } from '../../stores/logisticsStore';
 import type { BuildQueueItem, InventoryEntry, InventoryItemKind, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
 import InventoryTransferDialog from '../../components/logistics/InventoryTransferDialog';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import InventoryAddModal from '../../components/logistics/InventoryAddModal';
-import InventoryWorkspace from '../../components/logistics/InventoryWorkspace';
+import InventoryIcon from '../../assets/sidebar-icons/07-inventory.svg?react';
+import CommandHeader from '../../components/shared/CommandHeader';
+import InventoryWorkspace, { type InventoryWorkspaceViewMode } from '../../components/logistics/InventoryWorkspace';
 import { getInventoryRecordPresentation } from '../../components/logistics/inventoryRecordPresentation';
 import {
   getActiveInventoryEntries,
@@ -47,7 +49,7 @@ import MobileFilterSheet from '../../components/shared/MobileFilterSheet';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
-type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
+type PanelState = { mode: 'edit'; entry: InventoryEntry };
 type SortKey = 'material' | 'quality' | 'quantity' | 'location';
 type InventoryAddContext = {
   locationId?: string;
@@ -1045,6 +1047,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const [qualityMin, setQualityMin] = useState(() => inventoryUi.qualityMin);
   const [sortKey, setSortKey] = useState<SortKey>(() => inventoryUi.sortKey);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(() => inventoryUi.sortDir);
+  const [workspaceViewMode, setWorkspaceViewMode] = useState<InventoryWorkspaceViewMode>('grid');
   // Do not write the default local state over a persisted selection before hydration finishes.
   const [isInventoryUiReady, setIsInventoryUiReady] = useState(() => isFixture || inventorySync.hasHydratedPersist);
   const [addContext, setAddContext] = useState<InventoryAddContext | null>(null);
@@ -1210,20 +1213,27 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
 
   const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
   const locationById = useMemo(() => new Map(locations.map((location) => [location.id, location])), [locations]);
+  const trimmedGlobalSearch = search.trim();
+  const isNumericGlobalSearch = /^\d+$/.test(trimmedGlobalSearch);
+  const numericGlobalQuality = isNumericGlobalSearch ? Math.min(1000, Number(trimmedGlobalSearch)) : 0;
+  const textGlobalSearch = isNumericGlobalSearch ? '' : trimmedGlobalSearch.toLowerCase();
+  const effectiveQualityMin = Math.max(qualityMin, numericGlobalQuality);
 
   const filtered = useMemo(() => {
     const data = activeEntries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
-      if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
-      if (search) {
+      if (effectiveQualityMin > 0 && (e.quality ?? 0) < effectiveQualityMin) return false;
+      if (textGlobalSearch) {
         const mat = e.materialId ? materialById.get(e.materialId) : undefined;
         const loc = e.locationId ? locationById.get(e.locationId) : undefined;
-        const q = search.toLowerCase();
         const hit =
-          resolveInventoryItemName(e, mat).toLowerCase().includes(q) ||
-          (loc?.name.toLowerCase().includes(q) ?? false) ||
-          (e.container?.toLowerCase().includes(q) ?? false) ||
-          (e.notes?.toLowerCase().includes(q) ?? false);
+          resolveInventoryItemName(e, mat).toLowerCase().includes(textGlobalSearch) ||
+          (loc?.name.toLowerCase().includes(textGlobalSearch) ?? false) ||
+          (loc?.system?.toLowerCase().includes(textGlobalSearch) ?? false) ||
+          String(e.quality ?? '').includes(textGlobalSearch) ||
+          `quality ${e.quality ?? ''}`.includes(textGlobalSearch) ||
+          (e.container?.toLowerCase().includes(textGlobalSearch) ?? false) ||
+          (e.notes?.toLowerCase().includes(textGlobalSearch) ?? false);
         if (!hit) return false;
       }
       return true;
@@ -1255,7 +1265,24 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     });
 
     return data;
-  }, [activeEntries, materialById, locationById, materialFilter, qualityMin, search, sortDir, sortKey]);
+  }, [activeEntries, effectiveQualityMin, materialById, locationById, materialFilter, sortDir, sortKey, textGlobalSearch]);
+
+  const matchingLocationIds = useMemo(() => {
+    const matches = new Set<string>();
+    for (const entry of filtered) {
+      if (entry.locationId) matches.add(entry.locationId);
+    }
+    if (textGlobalSearch) {
+      for (const location of locations) {
+        const searchable = [location.name, location.system, location.category, location.type]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+        if (searchable.includes(textGlobalSearch)) matches.add(location.id);
+      }
+    }
+    return matches;
+  }, [filtered, locations, textGlobalSearch]);
 
   const workspaceLocations = useMemo<InventoryLocation[]>(() => {
     const hasUnassigned = activeEntries.some((entry) => !entry.locationId);
@@ -1480,7 +1507,6 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     setInventoryGuardMessage('');
 
     if (panel?.mode === 'edit') setPanel(null);
-    // In new mode, keep the drawer open so users can add multiple boxes quickly.
   }
 
   const handleAddSave = useCallback(async (updatedEntries: InventoryEntry[]) => {
@@ -1518,7 +1544,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     setTransferOpen(true);
   }, []);
 
-  const editingEntry = panel?.mode === 'edit' ? panel.entry : null;
+  const editingEntry = panel?.entry ?? null;
   const addMaterial = addContext?.materialId
     ? materials.find((material) => material.id === addContext.materialId)
     : undefined;
@@ -1527,16 +1553,11 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     <div className="logi-page logi-inv-page" data-inventory-fixture={isFixture ? 'layout' : undefined}>
       <div className="logi-inv-content">
       <div className="logi-page-header logi-inv-header page-compact-header">
-        <div>
-          <div className="logi-breadcrumb">
-            <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>
-            <span className="logi-breadcrumb-sep">/</span>
-            <span className="logi-breadcrumb-active">Inventory</span>
-          </div>
-          <h1 className="logi-page-title">Inventory</h1>
-          <p className="logi-page-subtitle">Track physical boxes, quality, availability, and storage location.</p>
-        </div>
-        <div className="logi-inv-header-actions">
+        <CommandHeader
+          title="Inventory"
+          description="Track physical boxes, quality, availability, and storage location."
+          icon={<InventoryIcon />}
+          actions={<div className="logi-inv-header-actions">
           {successNotice ? (
             <div className="logi-inv-success-banner" role="status">
               <span>{successNotice.message}</span>
@@ -1578,61 +1599,20 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
             </svg>
             Import CSV
           </button>
-          <button
-            type="button"
-            className="logi-btn-primary"
-            onClick={() => setPanel({ mode: 'new' })}
-            disabled={isFixture}
-          >
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Add Inventory
-          </button>
-        </div>
+          </div>}
+        />
       </div>
 
       {inventoryGuardMessage && (
         <div className="logi-inv-sync-alert" role="alert">{inventoryGuardMessage}</div>
       )}
 
-      <div className="logi-filter-bar logi-inv-filter-bar">
-        <label className="logi-inv-filter-field logi-inv-filter-field--search">
-          <span className="logi-inv-filter-label">Search inventory</span>
-          <span className="logi-search-wrap">
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="logi-search-icon">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-            <input
-              type="search"
-              className="logi-search-input"
-              placeholder="Material, location, or box name…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label="Search inventory"
-            />
-          </span>
-        </label>
-
-        <button
-          type="button"
-          className={`logi-inv-mobile-filter-trigger${materialFilter || qualityMin ? ' is-active' : ''}`}
-          aria-expanded={mobileFiltersOpen}
-          onClick={() => setMobileFiltersOpen(true)}
-        >
-          Filters
-          {materialFilter || qualityMin ? <span>Active</span> : null}
-        </button>
-
-        <MobileFilterSheet
-          open={mobileFiltersOpen}
-          title="Inventory filters"
-          onClose={() => setMobileFiltersOpen(false)}
-          desktopContent
-          footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
-        >
-
+      <MobileFilterSheet
+        open={mobileFiltersOpen}
+        title="Inventory filters"
+        onClose={() => setMobileFiltersOpen(false)}
+        footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
+      >
         <label className="logi-inv-filter-field">
           <span className="logi-inv-filter-label">Material</span>
           <select
@@ -1665,25 +1645,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           </span>
         </label>
 
-        <label className="logi-inv-filter-field logi-inv-filter-field--sort">
-          <span className="logi-inv-filter-label">Sort boxes</span>
-          <select className="logi-select" value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)} aria-label="Sort inventory boxes">
-            <option value="material">Name</option>
-            <option value="quality">Quality</option>
-            <option value="quantity">Quantity</option>
-            <option value="location">Location</option>
-          </select>
-        </label>
-        <button type="button" className="logi-inv-sort-direction" onClick={() => setSortDir((current) => current === 'asc' ? 'desc' : 'asc')} aria-label={`Sort ${sortDir === 'asc' ? 'descending' : 'ascending'}`}>
-          {sortDir === 'asc' ? 'Ascending' : 'Descending'}
-        </button>
-
-        <span className="logi-filter-count">
-          <strong>{filtered.length}</strong>
-          <span>shown / {activeEntries.length}</span>
-        </span>
-        </MobileFilterSheet>
-      </div>
+      </MobileFilterSheet>
 
       <InventoryWorkspace
         entries={filtered}
@@ -1694,6 +1656,17 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
         selectedLotId={selectedLotId}
         readOnly={Boolean(freshnessBlockReason)}
         hasActiveFilters={Boolean(search.trim() || materialFilter || qualityMin)}
+        globalSearch={search}
+        globalQualityMin={numericGlobalQuality}
+        matchingLocationIds={matchingLocationIds}
+        viewMode={workspaceViewMode}
+        sortKey={sortKey}
+        sortDir={sortDir}
+        onGlobalSearchChange={setSearch}
+        onViewModeChange={setWorkspaceViewMode}
+        onSortKeyChange={setSortKey}
+        onSortDirChange={() => setSortDir((current) => current === 'asc' ? 'desc' : 'asc')}
+        onOpenFilters={() => setMobileFiltersOpen(true)}
         onSelectLocation={selectLocation}
         onSelectLot={setSelectedLotId}
         onEdit={handleEditDrawerEntry}
@@ -1728,10 +1701,10 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       {panel && (
         <div className="logi-drawer-overlay" onClick={() => setPanel(null)} aria-hidden />
       )}
-      <div className={`logi-drawer logi-entry-modal${panel ? ' logi-drawer--open' : ''}`} role="dialog" aria-modal aria-label={panel?.mode === 'edit' ? 'Edit Inventory Item' : 'Add Inventory Item'}>
+      <div className={`logi-drawer logi-entry-modal${panel ? ' logi-drawer--open' : ''}`} role="dialog" aria-modal aria-label="Edit Inventory Item">
         {panel && (
           <InventoryEntryPanel
-            key={panel.mode === 'edit' ? panel.entry.id : 'new'}
+            key={panel.entry.id}
             entry={editingEntry}
             materials={materials}
             locations={locations}
