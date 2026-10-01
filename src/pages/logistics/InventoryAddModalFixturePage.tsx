@@ -7,6 +7,7 @@ import '../../components/logistics/build-queue.css';
 import { repairInventoryEntryIds } from '../../stores/logisticsStore';
 import type { InventoryEntry } from '../../types/logistics';
 import { buildQueueStatsFixture } from './buildQueueStatsFixture';
+import { canonicalInventoryLocations } from '../../data/logistics/inventoryLocationCatalog';
 
 const fixtureTimestamp = '2026-07-16T12:00:00.000Z';
 
@@ -16,13 +17,15 @@ export default function InventoryAddModalFixturePage() {
   const [emitted, setEmitted] = useState<InventoryEntry[]>([]);
   const [attempts, setAttempts] = useState<InventoryEntry[][]>([]);
   const failFirstSave = new URLSearchParams(window.location.search).get('fail-first') === '1';
+  const unlocked = new URLSearchParams(window.location.search).get('unlocked') === '1';
   const reloaded = useMemo(
     () => repairInventoryEntryIds(emitted.map((entry) => ({ ...entry }))),
     [emitted],
   );
   const material = buildQueueStatsFixture.materials.find((entry) => entry.id === 'iron')
     ?? buildQueueStatsFixture.materials[0];
-  const location = buildQueueStatsFixture.locations[0];
+  const location = canonicalInventoryLocations.find((entry) => entry.id === 'orbituary')
+    ?? canonicalInventoryLocations[0];
 
   async function handleSave(entries: InventoryEntry[]) {
     saveAttemptCount.current += 1;
@@ -40,11 +43,12 @@ export default function InventoryAddModalFixturePage() {
   return (
     <main className="bq-page" data-inventory-add-fixture="nested-boxes">
       <InventoryAddModal
-        target={{ materialId: material.id, displayName: material.name, material }}
+        target={unlocked ? undefined : { materialId: material.id, displayName: material.name, material }}
         materials={buildQueueStatsFixture.materials}
-        locations={buildQueueStatsFixture.locations}
+        locations={canonicalInventoryLocations}
         onSave={handleSave}
         onCancel={() => undefined}
+        lockMaterial={!unlocked}
         fixture={{
           locationId: location.id,
           qualityGroups: [

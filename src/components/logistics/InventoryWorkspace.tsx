@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState, type DragEvent } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
 import {
   formatEntryQuantity,
@@ -128,6 +128,9 @@ export default function InventoryWorkspace({
   const [draggedEntryId, setDraggedEntryId] = useState<string | null>(null);
   const [armedLocationId, setArmedLocationId] = useState<string | null>(null);
   const [moveState, setMoveState] = useState<MoveState | null>(null);
+  const [emptySlotCount, setEmptySlotCount] = useState(0);
+  const lotScrollRef = useRef<HTMLDivElement>(null);
+  const lotGridRef = useRef<HTMLDivElement>(null);
 
   const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
   const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
@@ -173,6 +176,43 @@ export default function InventoryWorkspace({
   const displayedEntryGroups = viewMode === 'grouped'
     ? groupedSelectedEntries
     : [{ name: '', entries: selectedEntries }];
+
+  useEffect(() => {
+    const scrollRegion = lotScrollRef.current;
+    const grid = lotGridRef.current;
+    if (!scrollRegion || !grid || viewMode !== 'grid' || selectedEntries.length === 0) {
+      setEmptySlotCount(0);
+      return;
+    }
+
+    const updateEmptySlotCount = () => {
+      const gridStyle = window.getComputedStyle(grid);
+      const firstLot = grid.querySelector<HTMLElement>(':scope > .logi-inv-workspace-lot');
+      const rowGap = Number.parseFloat(gridStyle.rowGap) || 0;
+      const columnGap = Number.parseFloat(gridStyle.columnGap) || 0;
+      const slotWidth = firstLot?.getBoundingClientRect().width ?? 0;
+      const rowHeight = firstLot?.getBoundingClientRect().height ?? Number.parseFloat(gridStyle.gridAutoRows);
+      const columnCount = slotWidth > 0
+        ? Math.max(1, Math.floor((grid.clientWidth + columnGap) / (slotWidth + columnGap)))
+        : 0;
+      if (!columnCount || !rowHeight) {
+        setEmptySlotCount(0);
+        return;
+      }
+
+      const visibleRowCount = Math.max(1, Math.ceil((scrollRegion.clientHeight + rowGap) / (rowHeight + rowGap)));
+      const occupiedRows = Math.ceil(selectedEntries.length / columnCount);
+      const requiredSlots = Math.max(columnCount * visibleRowCount, occupiedRows * columnCount);
+      setEmptySlotCount(Math.max(0, requiredSlots - selectedEntries.length));
+    };
+
+    updateEmptySlotCount();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(updateEmptySlotCount);
+    observer.observe(scrollRegion);
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, [selectedEntries.length, viewMode]);
 
   function endDrag() {
     setDraggedEntryId(null);
@@ -333,9 +373,10 @@ export default function InventoryWorkspace({
             Filters{hasActiveFilters ? ' active' : ''}
           </button>
         </div>
+        <div className="logi-inv-workspace-lot-scroll" ref={lotScrollRef}>
         {selectedLocation ? (
           selectedEntries.length ? (
-            <div className={`logi-inv-workspace-lot-grid is-${viewMode}-view`} data-testid="inventory-lot-grid" data-view-mode={viewMode}>
+            <div className={`logi-inv-workspace-lot-grid is-${viewMode}-view`} ref={lotGridRef} data-testid="inventory-lot-grid" data-view-mode={viewMode}>
               {displayedEntryGroups.map((group) => (
                 <Fragment key={group.name || 'all'}>
                   {viewMode === 'grouped' ? (
@@ -397,9 +438,13 @@ export default function InventoryWorkspace({
                   })}
                 </Fragment>
               ))}
+              {viewMode === 'grid' ? Array.from({ length: emptySlotCount }, (_, index) => (
+                <div className="logi-inv-workspace-empty-slot" key={`empty-slot-${index}`} aria-hidden="true" />
+              )) : null}
             </div>
           ) : <p className="logi-inv-workspace-empty" data-testid="inventory-empty-location">{hasActiveFilters ? 'No physical inventory boxes match the current search or filters.' : 'No physical inventory boxes are recorded here.'}</p>
         ) : <p className="logi-inv-workspace-empty">Choose a location to view its physical boxes and aggregate stock.</p>}
+        </div>
       </main>
 
       <aside

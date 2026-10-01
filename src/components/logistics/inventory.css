@@ -3766,7 +3766,6 @@
   padding: 8px;
   border-color: var(--ops-border-soft);
   border-radius: 8px;
-  background: #151f25b5;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
 }
 .logi-inv-page .logi-inv-workspace-lot:hover {
@@ -3858,6 +3857,78 @@
   .logi-inv-page .is-grid-view .logi-inv-workspace-lot-facts { bottom: 12px; left: 8px; }
   .logi-inv-page .is-grid-view .logi-inv-workspace-lot-state { right: 8px; bottom: 8px; }
   .logi-inv-page .is-grid-view .logi-inv-workspace-lot-quality-badge { right: -13px; bottom: -6px; }
+}
+
+/* Desktop workspace height follows the same definite-height chain as Mining.
+   Each pane owns its own vertical overflow below its persistent controls. */
+@media (min-width: 900px) {
+  .logi-inv-page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .logi-inv-page .logi-inv-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .logi-inv-page .logi-inv-header,
+  .logi-inv-page .logi-inv-sync-alert {
+    flex: 0 0 auto;
+  }
+
+  .logi-inv-page .logi-inv-workspace {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .logi-inv-page .logi-inv-workspace-location-rail,
+  .logi-inv-page .logi-inv-workspace-lots,
+  .logi-inv-page .logi-inv-workspace-inspector {
+    min-height: 0;
+    max-height: none;
+  }
+
+  .logi-inv-page .logi-inv-workspace-location-rail,
+  .logi-inv-page .logi-inv-workspace-lots {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .logi-inv-page .logi-inv-workspace-location-groups,
+  .logi-inv-page .logi-inv-workspace-lot-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .logi-inv-page .logi-inv-workspace-inspector {
+    align-self: stretch;
+    overflow-y: auto;
+  }
+
+  .logi-inv-page .logi-inv-workspace-lot-scroll {
+    scrollbar-gutter: stable;
+  }
+
+  .logi-inv-page .logi-inv-workspace-empty-slot {
+    min-width: 0;
+    min-height: 151px;
+    height: 151px;
+    border: 1px solid rgba(132, 151, 164, 0.2);
+    border-radius: 8px;
+    background: #151f255e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+    pointer-events: none;
+  }
 }
 
 /* Inventory's compact status and import controls live inside its command strip. */

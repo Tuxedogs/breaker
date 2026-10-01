@@ -9477,6 +9477,59 @@
   font-size: 1.2rem;
 }
 .bq-inv-quick-close:hover { border-color: rgba(125, 211, 252, .44); color: #e6f6ff; }
+
+/* Add Inventory is location -> item -> physical quality lots.  Keep this
+   local to the modal so Inventory's workspace remains untouched. */
+.bq-inv-add-modal { width: min(760px, calc(100vw - 48px)); }
+.bq-inv-add-body { display: grid; gap: 14px; }
+.bq-inv-add-location,
+.bq-inv-add-items { display: grid; gap: 7px; }
+.bq-inv-add-location-value { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 54px; padding: 9px 11px; border: 1px solid rgba(115, 151, 180, .28); border-radius: 4px; background: rgba(13, 25, 37, .78); }
+.bq-inv-add-location-value > div { display: grid; gap: 3px; min-width: 0; }
+.bq-inv-add-location-value strong { color: #e7f1fa; font-size: .84rem; }
+.bq-inv-add-location-value span { color: #8399af; font-size: .68rem; text-transform: capitalize; }
+.bq-inv-add-link { border: 0; padding: 3px 0; background: transparent; color: #90dcf7; font: inherit; font-size: .7rem; cursor: pointer; }
+.bq-inv-add-link:hover { color: #d2f4ff; }
+.bq-inv-add-location-picker { display: grid; gap: 7px; padding: 9px; border: 1px solid rgba(115, 151, 180, .28); border-radius: 4px; background: #0d1925; }
+.bq-inv-add-location-groups { max-height: 260px; overflow: auto; border-top: 1px solid rgba(115, 151, 180, .14); }
+.bq-inv-add-location-group { border-bottom: 1px solid rgba(115, 151, 180, .14); }
+.bq-inv-add-location-group-head,
+.bq-inv-add-location-option,
+.bq-inv-add-item-results button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; border: 0; background: transparent; color: #dbe8f5; text-align: left; cursor: pointer; }
+.bq-inv-add-location-group-head { min-height: 31px; color: #9fc6dc; font-size: .67rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.bq-inv-add-location-group-head em { color: #71879b; font-size: .61rem; font-style: normal; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.bq-inv-add-location-option { min-height: 40px; padding: 5px 7px; border-radius: 3px; }
+.bq-inv-add-location-option:hover,
+.bq-inv-add-location-option.is-selected { background: rgba(61, 143, 177, .16); }
+.bq-inv-add-location-option span { display: grid; gap: 2px; font-size: .75rem; }
+.bq-inv-add-location-option small { color: #72899e; font-size: .62rem; text-transform: capitalize; }
+.bq-inv-add-location-option em { color: #8ca9be; font-size: .63rem; font-style: normal; white-space: nowrap; }
+.bq-inv-add-create { justify-self: start; border: 0; padding: 3px 0; background: transparent; color: #90dcf7; font: inherit; font-size: .68rem; cursor: pointer; }
+.bq-inv-add-create:disabled { color: #738a9e; cursor: wait; }
+.bq-inv-add-section-head { display: flex; align-items: baseline; justify-content: space-between; }
+.bq-inv-add-section-head > span:last-child { color: #74899e; font-size: .63rem; text-transform: uppercase; }
+.bq-inv-add-item-block { display: grid; gap: 8px; padding: 10px; border: 1px solid rgba(115, 151, 180, .25); border-radius: 4px; background: rgba(12, 23, 34, .7); }
+.bq-inv-add-item-head { display: flex; align-items: center; justify-content: space-between; }
+.bq-inv-add-item-head strong { color: #b7cce0; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
+.bq-inv-add-remove-item { color: #e88792; }
+.bq-inv-add-item-search { position: relative; }
+.bq-inv-add-item-results { position: absolute; z-index: 3; top: calc(100% + 3px); right: 0; left: 0; max-height: 255px; overflow: auto; border: 1px solid rgba(115, 151, 180, .35); border-radius: 3px; background: #101e2b; box-shadow: 0 12px 30px rgba(0, 0, 0, .35); }
+.bq-inv-add-item-results button { min-height: 39px; padding: 6px 9px; border-bottom: 1px solid rgba(115, 151, 180, .14); }
+.bq-inv-add-item-results button:hover { background: rgba(61, 143, 177, .16); }
+.bq-inv-add-item-results strong { font-size: .72rem; }
+.bq-inv-add-item-results span { color: #8197ab; font-size: .61rem; }
+.bq-inv-add-item-results .bq-inv-add-custom-item { color: #9ee7ff; }
+.bq-inv-add-item-locked { display: grid; gap: 2px; min-height: 38px; padding: 7px 9px; border: 1px solid rgba(115, 151, 180, .2); border-radius: 3px; background: rgba(22, 38, 52, .62); }
+.bq-inv-add-item-locked strong { color: #e4edf6; font-size: .76rem; }
+.bq-inv-add-item-locked span { color: #7f96aa; font-size: .61rem; }
+.bq-inv-add-lots { display: grid; gap: 3px; }
+.bq-inv-add-lot-head,
+.bq-inv-add-lot-row { display: grid; grid-template-columns: minmax(110px, 1fr) minmax(130px, 1.2fr) 24px; gap: 8px; align-items: center; }
+.bq-inv-add-lot-head { color: #8299ad; font-size: .61rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.bq-inv-add-lot-row .logi-form-input { min-height: 32px; padding: 5px 8px; font-size: .75rem; }
+.bq-inv-add-another-item { justify-self: start; border: 1px dashed rgba(115, 151, 180, .4); border-radius: 3px; padding: 6px 9px; background: transparent; color: #a9def1; font: inherit; font-size: .68rem; cursor: pointer; }
+.bq-inv-add-another-item:hover { border-color: rgba(128, 215, 247, .65); color: #dcf6ff; }
+@media (max-width: 620px) { .bq-inv-add-modal { width: calc(100vw - 20px); } .bq-inv-add-location-value { align-items: flex-start; } }
 .bq-inv-quick-body {
   display: block;
   min-height: 0;
