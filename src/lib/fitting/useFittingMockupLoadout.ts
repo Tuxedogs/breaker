@@ -17,6 +17,7 @@ import {
   type SlotCompatibilityIndex,
 } from "./fittingSlotCompatibility";
 import { validationFailureForPort } from "./fittingSlotValidation";
+import { buildRackPayloadPatch } from "./fittingRackPayload";
 import {
   adaptLoadout,
   adaptShipDetail,
@@ -82,6 +83,11 @@ export type FittingMockupLoadoutState = {
     compatibilityIndex: SlotCompatibilityIndex,
   ) => Promise<{ ok: true } | { ok: false; reason: string }>;
   installTurretGroup: (
+    portIds: string[],
+    item: FittingComponentSummary,
+    compatibilityIndexes: Record<string, SlotCompatibilityIndex>,
+  ) => Promise<{ ok: true } | { ok: false; reason: string }>;
+  installRackPayload: (
     portIds: string[],
     item: FittingComponentSummary,
     compatibilityIndexes: Record<string, SlotCompatibilityIndex>,
@@ -324,6 +330,48 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     return { ok: true };
   }, [loadoutMap, portRows, selectedShipKey]);
 
+  const installRackPayload = useCallback(async (
+    portIds: string[],
+    item: FittingComponentSummary,
+    compatibilityIndexes: Record<string, SlotCompatibilityIndex>,
+  ): Promise<{ ok: true } | { ok: false; reason: string }> => {
+    if (!selectedShipKey) return { ok: false, reason: "No ship selected." };
+    const patch = buildRackPayloadPatch({ portIds, item, rows: portRows, compatibilityIndexes });
+    if (!patch.ok) return patch;
+    const nextLoadout = { ...loadoutMap, ...patch.patch };
+    const sequence = ++recalculationSequenceRef.current;
+    try {
+      const validation = await validateFittingLoadout({
+        shipId: selectedShipKey,
+        loadout: nextLoadout,
+        options: { compareToStock: true },
+      });
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      for (const portId of portIds) {
+        const failure = validationFailureForPort(validation, portId);
+        if (failure) return { ok: false, reason: failure };
+      }
+    } catch {
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      return { ok: false, reason: "Could not validate rack payload compatibility." };
+    }
+    setLoadoutMap(nextLoadout);
+    setCalculateState((previous) => ({ status: "loading", data: previous.data }));
+    try {
+      const result = await calculateFittingLoadout(
+        { shipId: selectedShipKey, loadout: nextLoadout, options: { compareToStock: true } },
+      );
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      setCalculateState({ status: "loaded", data: result });
+    } catch {
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      setLoadoutMap(loadoutMap);
+      setCalculateState((previous) => ({ status: "error", data: previous.data }));
+      return { ok: false, reason: "Rack payload failed to recalculate loadout stats." };
+    }
+    return { ok: true };
+  }, [loadoutMap, portRows, selectedShipKey]);
+
   const resetLoadout = useCallback(() => {
     if (!selectedShipKey) return;
     const sequence = ++recalculationSequenceRef.current;
@@ -368,6 +416,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     selectedPortId,
     installComponent,
     installTurretGroup,
+    installRackPayload,
     resetLoadout,
     resourceGroups,
   };
