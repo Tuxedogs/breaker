@@ -17,8 +17,7 @@
   /* Compact cross-workflow page identity surface. Crafting is the visual owner. */
   .app-command-header {
     position: relative;
-    display: grid;
-    grid-template-columns: 28px minmax(0, 1fr);
+    display: flex;
     min-width: 0;
     align-items: center;
     gap: 11px;
@@ -41,6 +40,38 @@
     height: 1px;
     content: "";
     background: linear-gradient(90deg, transparent, rgb(107 217 255 / .32) 23%, rgb(107 217 255 / .06) 64%, transparent);
+  }
+
+  .app-command-header__identity {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    min-width: 0;
+    align-items: center;
+    gap: 11px;
+  }
+
+  .app-command-header__actions {
+    display: flex;
+    min-width: 0;
+    margin-left: auto;
+  }
+
+  /* The shared command header keeps its default Crafting identity treatment,
+     while allowing workflows with a primary selector to center it against the
+     full workspace rather than the remaining space after page actions. */
+  .app-command-header--with-center {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 520px) minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .app-command-header--with-center .app-command-header__center {
+    min-width: 0;
+  }
+
+  .app-command-header--with-center .app-command-header__actions {
+    justify-self: end;
+    margin-left: 0;
   }
 
   .app-command-header__icon {
@@ -1190,4 +1221,16 @@ outline: 2px solid rgb(148 163 184 / 0.4);
   font-size: var(--app-text-title-sm, 0.95rem);
   font-weight: 700;
   letter-spacing: 0;
+}
+
+@media (max-width: 760px) {
+  .app-command-header--with-center {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding-block: 8px;
+  }
+
+  .app-command-header--with-center .app-command-header__actions {
+    justify-self: start;
+  }
 }

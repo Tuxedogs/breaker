@@ -10,7 +10,7 @@ import {
   type FittingCalculateResult,
 } from "./fittingApi";
 import { selectFittingResourceGroups } from "./fittingMockupSelectors";
-import type { FittingComponentSummary } from "./fittingApi";
+import type { FittingComponentDetail, FittingComponentSummary } from "./fittingApi";
 import { resolveLoadoutComponentId } from "./fittingItemIdentity";
 import {
   isItemCompatibleWithSlot,
@@ -67,6 +67,7 @@ export type FittingMockupLoadoutState = {
   calculateResult: FittingCalculateResult | null;
   componentLookup: Map<string, FittingComponentRecord>;
   statsById: EquippedComponentDetailsState["statsById"];
+  detailsById: Record<string, FittingComponentDetail | null>;
   mitigationById: EquippedComponentDetailsState["mitigationById"];
   equippedDetailsReady: boolean;
   loading: boolean;
@@ -356,6 +357,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     calculateResult: calculateState.data,
     componentLookup,
     statsById: equippedDetails.statsById,
+    detailsById: equippedDetails.detailsById,
     mitigationById: equippedDetails.mitigationById,
     equippedDetailsReady: equippedDetails.ready,
     loading: shipLoading || calculateState.status === "loading" || shipState.status === "loading",
