@@ -264,6 +264,17 @@ test("legacy persisted component detail is rejected after the response contract 
       spreadDecay: 0.05,
       powerCapacity: 900,
     },
+    engineering: {
+      stateResources: [],
+      thermalHeatGeneration: null,
+      relay: null,
+      emp: null,
+      quantumInterdiction: {
+        generator: { basePowerDrawFraction: { value: 0.2, unit: "fraction", unitKnown: true, unitUnknown: false } },
+        jammer: null,
+        pulse: null,
+      },
+    },
   };
   const persistence = createMemoryFittingComponentPersistentStorage([{
     key: cacheKey,
@@ -287,6 +298,7 @@ test("legacy persisted component detail is rejected after the response contract 
   assert.equal(loaded.stats.maxAmmoLoad, 25);
   assert.equal(loaded.stats.spreadMin, 0.4);
   assert.equal(loaded.stats.powerCapacity, 900);
+  assert.equal(loaded.engineering?.quantumInterdiction?.generator?.basePowerDrawFraction?.value, 0.2);
   assert.equal(
     (await persistence.get(cacheKey))?.status,
     "resolved",

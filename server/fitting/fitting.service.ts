@@ -23,6 +23,11 @@ const COMPONENT_FILES = [
   ["coolers.json", "cooler"],
   ["quantum_drives.json", "quantum_drive"],
   ["radars.json", "radar"],
+  ["relays.json", "relay"],
+  ["life_support.json", "life_support"],
+  ["batteries.json", "battery"],
+  ["emps.json", "emp"],
+  ["quantum_interdiction_generators.json", "quantum_interdiction_generator"],
   ["thrusters.json", "thruster"],
 ] as const;
 
@@ -183,6 +188,11 @@ export function componentType(row: Row, fallback: string): string {
     salvage_modifier: "salvage_modifier",
     salvagemodifier: "salvage_modifier",
     fuel_nozzle: "fuel_nozzle",
+    relay: "relay",
+    life_support: "life_support",
+    battery: "battery",
+    emp: "emp",
+    quantum_interdiction_generator: "quantum_interdiction_generator",
   };
   return aliases[raw] ?? "other";
 }
@@ -510,6 +520,88 @@ function componentCooler(row: Row, fallbackType: string): Record<string, unknown
   };
 }
 
+function engineeringAttributeMap(value: unknown): Record<string, Record<string, unknown>> | null {
+  const source = objectValue(value);
+  if (!source) return null;
+  const output: Record<string, Record<string, unknown>> = {};
+  for (const [name, raw] of Object.entries(source)) {
+    const field = objectValue(raw);
+    if (!field) continue;
+    output[name] = {
+      value: numberValue(field.value),
+      unit: text(field.unit),
+      unitKnown: nullableBooleanValue(field.unitKnown),
+      unitUnknown: nullableBooleanValue(field.unitUnknown),
+    };
+  }
+  return Object.keys(output).length > 0 ? output : null;
+}
+
+function engineeringStateResources(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((rawState) => {
+    const state = objectValue(rawState);
+    if (!state) return [];
+    const deltas = (arrayValue(state.deltas) ?? []).flatMap((rawDelta) => {
+      const delta = objectValue(rawDelta);
+      if (!delta) return [];
+      const resources = (arrayValue(delta.resources) ?? []).flatMap((rawResource) => {
+        const resource = objectValue(rawResource);
+        if (!resource) return [];
+        return [{
+          direction: text(resource.direction),
+          resource: text(resource.resource),
+          value: numberValue(resource.value),
+          unitType: text(resource.unitType),
+          unitKnown: nullableBooleanValue(resource.unitKnown),
+          unitUnknown: nullableBooleanValue(resource.unitUnknown),
+          unitConfidence: text(resource.unitConfidence),
+        }];
+      });
+      return [{
+        deltaNode: text(delta.deltaNode),
+        minimumConsumptionFraction: numberValue(delta.minimumConsumptionFraction),
+        noOverGeneration: nullableBooleanValue(delta.noOverGeneration),
+        storageDischarge: numberValue(delta.storageDischarge),
+        resources,
+      }];
+    });
+    return [{ stateName: text(state.stateName), deltas }];
+  });
+}
+
+function componentEngineering(row: Row): Record<string, unknown> | null {
+  const stateResources = engineeringStateResources(row.stateResourceDeltas);
+  const thermal = objectValue(row.thermalHeatGeneration);
+  const relay = objectValue(row.relayResourceNetwork);
+  const emp = engineeringAttributeMap(row.emp);
+  const rawQuantum = objectValue(row.quantumInterdiction);
+  const quantumInterdiction = rawQuantum ? {
+    generator: engineeringAttributeMap(rawQuantum.generator),
+    jammer: engineeringAttributeMap(rawQuantum.jammer),
+    pulse: engineeringAttributeMap(rawQuantum.pulse),
+  } : null;
+  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction) return null;
+  return {
+    stateResources,
+    thermalHeatGeneration: thermal ? {
+      resource: text(thermal.resource),
+      baselineTemperatureChange: numberValue(thermal.baselineTemperatureChange),
+      unitKnown: nullableBooleanValue(thermal.unitKnown),
+      unitUnknown: nullableBooleanValue(thermal.unitUnknown),
+    } : null,
+    relay: relay ? {
+      resourceNetworkItemType: text(relay.resourceNetworkItemType),
+      isResourceNetworked: nullableBooleanValue(relay.isResourceNetworked),
+      isRelay: nullableBooleanValue(relay.isRelay),
+      isConnectedToRoom: nullableBooleanValue(relay.isConnectedToRoom),
+      wirelessConnection: nullableBooleanValue(relay.wirelessConnection),
+      defaultPriority: numberValue(relay.defaultPriority),
+    } : null,
+    emp,
+    quantumInterdiction,
+  };
+}
+
 function armorMitigation(row: Row): Record<string, unknown> {
   return {
     health: numberValue(row.health),
@@ -826,6 +918,11 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "cooler",
     "quantum_drive",
     "radar",
+    "relay",
+    "life_support",
+    "battery",
+    "emp",
+    "quantum_interdiction_generator",
     "thruster",
     "other",
   ];
@@ -857,6 +954,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   if (weapon) data.weapon = weapon;
   const cooler = componentCooler(found.row, found.fallbackType);
   if (cooler) data.cooler = cooler;
+  const engineering = componentEngineering(found.row);
+  if (engineering) data.engineering = engineering;
   const ordnance = componentOrdnance(found.row, found.fallbackType);
   if (ordnance) data.ordnance = ordnance;
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);

@@ -25,6 +25,11 @@ const bombRackId = "99999999-9999-4999-8999-999999999999";
 const templateMissileId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const missileControllerId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
 const radarId = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
+const relayId = "f1111111-1111-4111-8111-111111111111";
+const lifeSupportId = "f2222222-2222-4222-8222-222222222222";
+const batteryId = "f3333333-3333-4333-8333-333333333333";
+const empId = "f4444444-4444-4444-8444-444444444444";
+const quantumInterdictionId = "f5555555-5555-4555-8555-555555555555";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -65,6 +70,7 @@ async function fixtureRoot(): Promise<string> {
       { id: "power/main", portId: "power/main", portName: "Power plant", portType: "PowerPlant", editable: true, children: [] },
       { id: "cooler/main", portId: "cooler/main", portName: "Cooler", portType: "Cooler", editable: true, children: [] },
       { id: "shield/main", portId: "shield/main", portName: "Shield", portType: "Shield", editable: true, children: [] },
+      { id: "life_support/main", portId: "life_support/main", portName: "Life support", portType: "LifeSupportGenerator", editable: true, children: [] },
       { id: "weapon/main", portId: "weapon/main", portName: "Main weapon", portType: "WeaponGun", editable: true, children: [], confidence: "high", resolvedDefaultComponentKey: componentId.replaceAll("-", "_") },
       { id: "missile/main", portId: "missile/main", portName: "Missile", portType: "Missile", editable: true, children: [] },
       {
@@ -334,6 +340,90 @@ async function fixtureRoot(): Promise<string> {
     aimAssistOutsideRangeBufferDistance: 25,
     confidence: "high",
   }];
+  records["relays.json"] = [{
+    entityClass: relayId,
+    componentKey: relayId,
+    name: "Test Relay",
+    displayName: "Test Relay",
+    componentType: "relay",
+    relayResourceNetwork: {
+      resourceNetworkItemType: "Relay",
+      isResourceNetworked: true,
+      isRelay: true,
+      isConnectedToRoom: false,
+      wirelessConnection: false,
+      defaultPriority: 50,
+      networkItemSourcePath: "private/relay/path",
+    },
+    confidence: "high",
+  }];
+  records["life_support.json"] = [{
+    entityClass: lifeSupportId,
+    componentKey: lifeSupportId,
+    name: "Test Life Support",
+    displayName: "Test Life Support",
+    componentType: "life_support",
+    powerInputMaximum: 1,
+    powerInputMinimum: 1,
+    powerInputUnitType: "PowerSegment",
+    stateResourceDeltas: [{
+      stateName: "Online",
+      stateSourcePath: "private/state/path",
+      deltas: [{
+        deltaNode: "ItemResourceDeltaConversion",
+        deltaSourcePath: "private/delta/path",
+        minimumConsumptionFraction: 1,
+        noOverGeneration: false,
+        storageDischarge: null,
+        resources: [
+          { direction: "consumption", resource: "Power", value: 1, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/power/path" },
+          { direction: "generation", resource: "LifeSupport", value: 0.5, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/life/path" },
+        ],
+      }],
+    }],
+    thermalHeatGeneration: { resource: "Power", baselineTemperatureChange: 0.8, unitKnown: false, unitUnknown: true, sourcePath: "private/thermal/path" },
+    confidence: "high",
+  }];
+  records["batteries.json"] = [{
+    entityClass: batteryId,
+    componentKey: batteryId,
+    name: "Test Battery",
+    displayName: "Test Battery",
+    componentType: "battery",
+    stateResourceDeltas: [{ stateName: "Online", deltas: [{
+      deltaNode: "ItemResourceDeltaStorage",
+      minimumConsumptionFraction: null,
+      noOverGeneration: null,
+      storageDischarge: 0,
+      resources: [
+        { direction: "consumption", resource: "Power", value: 2, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high" },
+        { direction: "generation", resource: "Power", value: 2, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high" },
+      ],
+    }] }],
+    confidence: "high",
+  }];
+  records["emps.json"] = [{
+    entityClass: empId,
+    componentKey: empId,
+    name: "Test EMP",
+    displayName: "Test EMP",
+    componentType: "emp",
+    emp: { chargeTime: { value: 26, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/emp/path", attribute: "chargeTime" } },
+    confidence: "high",
+  }];
+  records["quantum_interdiction_generators.json"] = [{
+    entityClass: quantumInterdictionId,
+    componentKey: quantumInterdictionId,
+    name: "Test Quantum Interdiction Generator",
+    displayName: "Test Quantum Interdiction Generator",
+    componentType: "quantum_interdiction_generator",
+    quantumInterdiction: {
+      generator: { basePowerDrawFraction: { value: 0.2, unit: "fraction", unitKnown: true, unitUnknown: false, sourcePath: "private/generator/path" } },
+      jammer: { jammerRange: { value: 5000, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/jammer/path" } },
+      pulse: { chargeTimeSecs: { value: 90, unit: "seconds", unitKnown: true, unitUnknown: false, sourcePath: "private/pulse/path" } },
+    },
+    confidence: "high",
+  }];
   records["ship_armors.json"] = [{
     entityClass: "33333333-3333-4333-8333-333333333333",
     componentKey: "33333333-3333-4333-8333-333333333333",
@@ -374,6 +464,11 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "bombs.json"));
     await unlink(path.join(fittingRoot, "bomb_racks.json"));
     await unlink(path.join(fittingRoot, "missile_controllers.json"));
+    await unlink(path.join(fittingRoot, "relays.json"));
+    await unlink(path.join(fittingRoot, "life_support.json"));
+    await unlink(path.join(fittingRoot, "batteries.json"));
+    await unlink(path.join(fittingRoot, "emps.json"));
+    await unlink(path.join(fittingRoot, "quantum_interdiction_generators.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
     assert.equal(meta?.status, 200, JSON.stringify(meta?.body));
@@ -381,6 +476,8 @@ test("older datasets remain readable when additive ordnance registries are absen
     assert.equal(JSON.stringify(meta?.body).includes("missiles"), false);
     assert.equal(JSON.stringify(meta?.body).includes("bombs"), false);
     assert.equal(JSON.stringify(meta?.body).includes("missile_controllers"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("life_support"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("quantum_interdiction_generators"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -508,6 +605,50 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     const radarStats = (radar?.body as { data: { stats: Record<string, number> } }).data.stats;
     assert.equal(radarStats.aimAssistMinAssignmentDistance, 100);
     assert.equal(radarStats.aimAssistOutsideRangeBufferDistance, 25);
+
+    const lifeSupport = await handleFittingRoute("GET", `/api/v1/fitting/components/${lifeSupportId}?${query}`, "test-request", root);
+    const lifeEngineering = (lifeSupport?.body as { data: { engineering: {
+      stateResources: Array<{ stateName: string; deltas: Array<{ resources: Array<{ direction: string; resource: string; value: number }> }> }>;
+      thermalHeatGeneration: { baselineTemperatureChange: number; unitUnknown: boolean };
+    } } }).data.engineering;
+    assert.equal(lifeEngineering.stateResources[0]?.stateName, "Online");
+    assert.deepEqual(
+      lifeEngineering.stateResources[0]?.deltas[0]?.resources.map(({ direction, resource, value }) => ({ direction, resource, value })),
+      [
+        { direction: "consumption", resource: "Power", value: 1 },
+        { direction: "generation", resource: "LifeSupport", value: 0.5 },
+      ],
+    );
+    assert.equal(lifeEngineering.thermalHeatGeneration.baselineTemperatureChange, 0.8);
+    assert.equal(lifeEngineering.thermalHeatGeneration.unitUnknown, true);
+    assert.equal(JSON.stringify(lifeSupport?.body).includes("sourcePath"), false);
+
+    const battery = await handleFittingRoute("GET", `/api/v1/fitting/components/${batteryId}?${query}`, "test-request", root);
+    const batteryDelta = (battery?.body as { data: { engineering: { stateResources: Array<{ deltas: Array<{ storageDischarge: number; resources: Array<{ direction: string }> }> }> } } }).data.engineering.stateResources[0]?.deltas[0];
+    assert.equal(batteryDelta?.storageDischarge, 0);
+    assert.deepEqual(batteryDelta?.resources.map(({ direction }) => direction), ["consumption", "generation"]);
+
+    const relay = await handleFittingRoute("GET", `/api/v1/fitting/components/${relayId}?${query}`, "test-request", root);
+    assert.equal((relay?.body as { data: { engineering: { relay: { isRelay: boolean; defaultPriority: number } } } }).data.engineering.relay.isRelay, true);
+    assert.equal((relay?.body as { data: { engineering: { relay: { defaultPriority: number } } } }).data.engineering.relay.defaultPriority, 50);
+
+    const emp = await handleFittingRoute("GET", `/api/v1/fitting/components/${empId}?${query}`, "test-request", root);
+    assert.equal((emp?.body as { data: { engineering: { emp: { chargeTime: { value: number; unitUnknown: boolean } } } } }).data.engineering.emp.chargeTime.value, 26);
+    assert.equal((emp?.body as { data: { engineering: { emp: { chargeTime: { unitUnknown: boolean } } } } }).data.engineering.emp.chargeTime.unitUnknown, true);
+
+    const quantumInterdiction = await handleFittingRoute("GET", `/api/v1/fitting/components/${quantumInterdictionId}?${query}`, "test-request", root);
+    const quantumEngineering = (quantumInterdiction?.body as { data: { engineering: { quantumInterdiction: {
+      generator: { basePowerDrawFraction: { value: number; unit: string } };
+      jammer: { jammerRange: { value: number; unitUnknown: boolean } };
+      pulse: { chargeTimeSecs: { value: number; unit: string } };
+    } } } }).data.engineering.quantumInterdiction;
+    assert.equal(quantumEngineering.generator.basePowerDrawFraction.unit, "fraction");
+    assert.equal(quantumEngineering.jammer.jammerRange.unitUnknown, true);
+    assert.equal(quantumEngineering.pulse.chargeTimeSecs.value, 90);
+
+    const lifeSupportList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=life_support&${query}`, "test-request", root);
+    assert.equal((lifeSupportList?.body as { data: Array<{ id: string; type: string }> }).data[0]?.id, lifeSupportId);
+    assert.equal((lifeSupportList?.body as { data: Array<{ type: string }> }).data[0]?.type, "life_support");
 
     const shieldData = (shield?.body as {
       data: {
@@ -694,6 +835,28 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     assert.equal(simulation.weaponsSummary.totalDamage.value, 6000);
     assert.equal(simulation.weaponsSummary.dps.value, 100);
     assert.equal(JSON.stringify(simulated?.body).includes("sourceFile"), false);
+
+    const lifeSupportSimulated = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId,
+      loadout: {
+        "power/main": powerPlantId,
+        "life_support/main": lifeSupportId,
+      },
+      options: { compareToStock: false },
+      simulation: {
+        modelVersion: "fitting-simulation-v1",
+        durationSeconds: 60,
+        powerAllocation: { weapons: 0, engines: 0, quantum: 0, radar: 0, shields: 0, lifeSupport: 1, cooler1: 0, cooler2: 0 },
+      },
+    });
+    assert.equal(lifeSupportSimulated?.status, 200);
+    const lifeSupportSimulation = (lifeSupportSimulated?.body as {
+      data: { simulation: { power: { allocatedSegments: { value: number | null } }; missingInputs: Array<{ componentId: string; path: string }> } };
+    }).data.simulation;
+    assert.equal(lifeSupportSimulation.power.allocatedSegments.value, null);
+    assert.ok(lifeSupportSimulation.missingInputs.some(
+      (entry) => entry.componentId === lifeSupportId && entry.path === "powerCategory",
+    ));
 
     const turretSimulated = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
       shipId,

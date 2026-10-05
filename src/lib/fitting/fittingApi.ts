@@ -791,12 +791,63 @@ export type FittingOrdnanceDetail = {
   ports: Array<{ name: string | null; minSize: number | null; maxSize: number | null }>;
 };
 
+export type FittingEngineeringAttribute = {
+  value: number | null;
+  unit: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+};
+
+export type FittingEngineeringResource = {
+  direction: string | null;
+  resource: string | null;
+  value: number | null;
+  unitType: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+  unitConfidence: string | null;
+};
+
+export type FittingEngineeringDetail = {
+  stateResources: Array<{
+    stateName: string | null;
+    deltas: Array<{
+      deltaNode: string | null;
+      minimumConsumptionFraction: number | null;
+      noOverGeneration: boolean | null;
+      storageDischarge: number | null;
+      resources: FittingEngineeringResource[];
+    }>;
+  }>;
+  thermalHeatGeneration: {
+    resource: string | null;
+    baselineTemperatureChange: number | null;
+    unitKnown: boolean | null;
+    unitUnknown: boolean | null;
+  } | null;
+  relay: {
+    resourceNetworkItemType: string | null;
+    isResourceNetworked: boolean | null;
+    isRelay: boolean | null;
+    isConnectedToRoom: boolean | null;
+    wirelessConnection: boolean | null;
+    defaultPriority: number | null;
+  } | null;
+  emp: Record<string, FittingEngineeringAttribute> | null;
+  quantumInterdiction: {
+    generator: Record<string, FittingEngineeringAttribute> | null;
+    jammer: Record<string, FittingEngineeringAttribute> | null;
+    pulse: Record<string, FittingEngineeringAttribute> | null;
+  } | null;
+};
+
 export type FittingComponentDetail = FittingComponentSummary & {
   stats: FittingComponentStats;
   mitigation: FittingComponentMitigation | null;
   weapon?: FittingWeaponDetail;
   cooler?: FittingCoolerDetail;
   ordnance?: FittingOrdnanceDetail;
+  engineering?: FittingEngineeringDetail;
 };
 
 export type FittingPortConstraint = {

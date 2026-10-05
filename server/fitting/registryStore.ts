@@ -30,6 +30,11 @@ export const PUBLIC_REGISTRIES = [
   "coolers.json",
   "quantum_drives.json",
   "radars.json",
+  "relays.json",
+  "life_support.json",
+  "batteries.json",
+  "emps.json",
+  "quantum_interdiction_generators.json",
   "thrusters.json",
   "compatible_items_by_port.json",
   "compatibility_rules.json",
@@ -42,6 +47,11 @@ export const OPTIONAL_PUBLIC_REGISTRIES = new Set<(typeof PUBLIC_REGISTRIES)[num
   "bombs.json",
   "bomb_racks.json",
   "missile_controllers.json",
+  "relays.json",
+  "life_support.json",
+  "batteries.json",
+  "emps.json",
+  "quantum_interdiction_generators.json",
 ]);
 
 function registryPath(selection: DatasetSelection, fileName: string): string {

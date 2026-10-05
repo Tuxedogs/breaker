@@ -181,6 +181,11 @@ async function componentLookup(selection: DatasetSelection): Promise<ComponentLo
     ["coolers.json", "cooler"],
     ["quantum_drives.json", "quantum_drive"],
     ["radars.json", "radar"],
+    ["relays.json", "relay"],
+    ["life_support.json", "life_support"],
+    ["batteries.json", "battery"],
+    ["emps.json", "emp"],
+    ["quantum_interdiction_generators.json", "quantum_interdiction_generator"],
     ["thrusters.json", "thruster"],
   ] as const;
   const byId = new Map<string, { row: Row; fallbackType: string }>();
