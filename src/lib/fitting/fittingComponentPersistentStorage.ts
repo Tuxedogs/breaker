@@ -1,6 +1,6 @@
 import type { FittingComponentCacheEntry } from "./fittingComponentStore";
 
-export const FITTING_COMPONENT_IDB_SCHEMA_VERSION = 2;
+export const FITTING_COMPONENT_IDB_SCHEMA_VERSION = 3;
 export const FITTING_COMPONENT_IDB_NAME = "scintel-fitting-component-cache";
 export const FITTING_COMPONENT_IDB_STORE = "entries";
 

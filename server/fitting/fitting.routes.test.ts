@@ -24,6 +24,7 @@ const bombId = "88888888-8888-4888-8888-888888888888";
 const bombRackId = "99999999-9999-4999-8999-999999999999";
 const templateMissileId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const missileControllerId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
+const radarId = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -99,6 +100,15 @@ async function fixtureRoot(): Promise<string> {
     coolingGenerated: 10,
     powerInputMaximum: 1,
     powerInputMinimum: 0.5,
+    minimumPowerRequired: 0.5,
+    minimumPowerRequiredPips: 1,
+    maximumPowerRequired: 1,
+    maximumPowerRequiredPips: 2,
+    powerInputMinimumFraction: 0.5,
+    coolingCapacity: 20,
+    coolingGenerationRate: 10,
+    heatSink: 40,
+    transferRate: 3,
     powerDraw: 1,
     electromagneticEmission: 250,
     emSignatureNominal: 250,
@@ -117,7 +127,7 @@ async function fixtureRoot(): Promise<string> {
     coolingGeneratedPowerFormulaConfidence: "source_backed_for_coolers",
     confidence: "high",
   }];
-  records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, confidence: "high" }];
+  records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, powerOutput: 12, powerCapacity: 20, powerGenerationRate: 11, confidence: "high" }];
   records["quantum_drives.json"] = [{
     entityClass: quantumDriveId,
     componentKey: quantumDriveId.replaceAll("-", "_"),
@@ -136,6 +146,15 @@ async function fixtureRoot(): Promise<string> {
     maxCalibrationRequirement: 10000,
     quantumStageOneAccelRate: 376000,
     quantumStageTwoAccelRate: 11200000,
+    rangeEfficiency: 0.8,
+    splineCooldown: 8,
+    splineJumpSpeed: 9000,
+    calibrationProcessAngleLimit: 15,
+    calibrationWarningAngleLimit: 30,
+    travellingEmSignature: 14,
+    travellingIrSignature: 7,
+    engageSpeed: 250,
+    interdictionEffectTime: 5,
     confidence: "high",
   }];
   records["ship_weapons.json"] = [{
@@ -294,11 +313,25 @@ async function fixtureRoot(): Promise<string> {
       { pips: 1, value: 5 },
       { pips: 2, value: 12 },
     ],
+    hardeningFactor: 0.2,
+    reservePoolRegenRate: 2,
+    reservePoolRegenTime: 8,
     powerInputMaximum: 2,
     powerInputUnitType: "PowerSegment",
     powerDraw: 1,
     shieldResistanceByDamageType: { physical: { min: 0, max: 0.25, confidence: "high", sourcePath: "shield/resistance" } },
     shieldAbsorptionByDamageType: { physical: { min: 0, max: 0.45, confidence: "high", sourcePath: "shield/absorption" } },
+    confidence: "high",
+  }];
+  records["radars.json"] = [{
+    entityClass: radarId,
+    componentKey: radarId.replaceAll("-", "_"),
+    name: "Test Radar",
+    displayName: "Test Radar",
+    componentType: "radar",
+    aimAssistMinAssignmentDistance: 100,
+    aimAssistMaxAssignmentDistance: 1000,
+    aimAssistOutsideRangeBufferDistance: 25,
     confidence: "high",
   }];
   records["ship_armors.json"] = [{
@@ -375,6 +408,11 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     const coolerStats = (cooler?.body as { data: { stats: Record<string, number> } }).data.stats;
     assert.equal(coolerStats.powerInputMaximum, 1);
     assert.equal(coolerStats.powerInputMinimum, 0.5);
+    assert.equal(coolerStats.minimumPowerRequired, 0.5);
+    assert.equal(coolerStats.maximumPowerRequiredPips, 2);
+    assert.equal(coolerStats.powerInputMinimumFraction, 0.5);
+    assert.equal(coolerStats.coolingCapacity, 20);
+    assert.equal(coolerStats.transferRate, 3);
     assert.equal(coolerStats.emSignatureDecayRate, 0.15);
     assert.equal(coolerStats.selfRepairTime, 25.5);
     assert.equal(coolerStats.selfRepairBaselineHp, 28);
@@ -392,6 +430,12 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal("privateSourcePath" in (coolerData.coolingGeneratedByPowerPip[0] ?? {}), false);
     assert.equal(coolerData.coolingGeneratedPowerFormula, "maximumOutput * allocation");
     assert.equal(coolerData.coolingGeneratedPowerFormulaConfidence, "source_backed_for_coolers");
+
+    const powerPlant = await handleFittingRoute("GET", `/api/v1/fitting/components/${powerPlantId}?${query}`, "test-request", root);
+    const powerPlantStats = (powerPlant?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(powerPlantStats.powerOutput, 12);
+    assert.equal(powerPlantStats.powerCapacity, 20);
+    assert.equal(powerPlantStats.powerGenerationRate, 11);
 
     const armor = await handleFittingRoute("GET", `/api/v1/fitting/components/33333333-3333-4333-8333-333333333333?${query}`, "test-request", root);
     assert.equal((armor?.body as { data: { type: string; mitigation: { kind: string; deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.type, "armor");
@@ -454,6 +498,16 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal(quantumStats.maxCalibrationRequirement, 10000);
     assert.equal(quantumStats.quantumStageOneAccelRate, 376000);
     assert.equal(quantumStats.quantumStageTwoAccelRate, 11200000);
+    assert.equal(quantumStats.rangeEfficiency, 0.8);
+    assert.equal(quantumStats.splineCooldown, 8);
+    assert.equal(quantumStats.calibrationWarningAngleLimit, 30);
+    assert.equal(quantumStats.travellingEmSignature, 14);
+    assert.equal(quantumStats.interdictionEffectTime, 5);
+
+    const radar = await handleFittingRoute("GET", `/api/v1/fitting/components/${radarId}?${query}`, "test-request", root);
+    const radarStats = (radar?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(radarStats.aimAssistMinAssignmentDistance, 100);
+    assert.equal(radarStats.aimAssistOutsideRangeBufferDistance, 25);
 
     const shieldData = (shield?.body as {
       data: {
@@ -464,6 +518,10 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
         };
       };
     }).data.mitigation;
+    const shieldStats = (shield?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(shieldStats.hardeningFactor, 0.2);
+    assert.equal(shieldStats.reservePoolRegenRate, 2);
+    assert.equal(shieldStats.reservePoolRegenTime, 8);
     assert.equal(shieldData.damagedRegenDelay, 4);
     assert.equal(shieldData.downedRegenDelay, 8);
     assert.deepEqual(shieldData.regenByPowerPip.map(({ pips, value }) => ({ pips, value })), [

@@ -262,6 +262,7 @@ test("legacy persisted component detail is rejected after the response contract 
       spreadFirstAttack: 0.025,
       spreadPerAttack: 0.025,
       spreadDecay: 0.05,
+      powerCapacity: 900,
     },
   };
   const persistence = createMemoryFittingComponentPersistentStorage([{
@@ -285,6 +286,7 @@ test("legacy persisted component detail is rejected after the response contract 
   assert.equal(loaded.stats.sustainedDps60, 403.3476);
   assert.equal(loaded.stats.maxAmmoLoad, 25);
   assert.equal(loaded.stats.spreadMin, 0.4);
+  assert.equal(loaded.stats.powerCapacity, 900);
   assert.equal(
     (await persistence.get(cacheKey))?.status,
     "resolved",
