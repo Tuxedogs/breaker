@@ -28,6 +28,9 @@ const COMPONENT_FILES = [
   ["batteries.json", "battery"],
   ["emps.json", "emp"],
   ["quantum_interdiction_generators.json", "quantum_interdiction_generator"],
+  ["fuel_tanks.json", "fuel_tank"],
+  ["fuel_intakes.json", "fuel_intake"],
+  ["personal_storage.json", "personal_storage"],
   ["thrusters.json", "thruster"],
 ] as const;
 
@@ -193,6 +196,9 @@ export function componentType(row: Row, fallback: string): string {
     battery: "battery",
     emp: "emp",
     quantum_interdiction_generator: "quantum_interdiction_generator",
+    fuel_tank: "fuel_tank",
+    fuel_intake: "fuel_intake",
+    personal_storage: "personal_storage",
   };
   return aliases[raw] ?? "other";
 }
@@ -569,6 +575,56 @@ function engineeringStateResources(value: unknown): Array<Record<string, unknown
   });
 }
 
+function engineeringCapacity(value: unknown): Record<string, unknown> | null {
+  const capacity = objectValue(value);
+  if (!capacity) return null;
+  return {
+    value: numberValue(capacity.value),
+    unitNode: text(capacity.unitNode),
+    unitField: text(capacity.unitField),
+    unitKnown: nullableBooleanValue(capacity.unitKnown),
+    unitUnknown: nullableBooleanValue(capacity.unitUnknown),
+  };
+}
+
+function engineeringReferences(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const row = objectValue(raw);
+    if (!row) return [];
+    return [{ reference: text(row.reference) }];
+  });
+}
+
+function engineeringComposition(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const row = objectValue(raw);
+    if (!row) return [];
+    return [{ entry: text(row.entry), weight: numberValue(row.weight) }];
+  });
+}
+
+function engineeringInternalPorts(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const port = objectValue(raw);
+    if (!port) return [];
+    const acceptedTypes = (arrayValue(port.acceptedTypes) ?? []).flatMap((rawAccepted) => {
+      const accepted = objectValue(rawAccepted);
+      if (!accepted) return [];
+      return [{
+        type: text(accepted.type),
+        subTypes: (arrayValue(accepted.subTypes) ?? []).flatMap((subType) => text(subType) ?? []),
+      }];
+    });
+    return [{
+      name: text(port.name),
+      displayName: text(port.displayName),
+      minSize: numberValue(port.minSize),
+      maxSize: numberValue(port.maxSize),
+      acceptedTypes,
+    }];
+  });
+}
+
 function componentEngineering(row: Row): Record<string, unknown> | null {
   const stateResources = engineeringStateResources(row.stateResourceDeltas);
   const thermal = objectValue(row.thermalHeatGeneration);
@@ -580,7 +636,29 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     jammer: engineeringAttributeMap(rawQuantum.jammer),
     pulse: engineeringAttributeMap(rawQuantum.pulse),
   } : null;
-  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction) return null;
+  const fuelTankParams = engineeringAttributeMap(row.fuelTankParams);
+  const resourceContainerCapacity = engineeringCapacity(row.resourceContainerCapacity);
+  const inclusiveResources = engineeringReferences(row.inclusiveResources);
+  const defaultComposition = engineeringComposition(row.defaultComposition);
+  const fuelIntakeParams = engineeringAttributeMap(row.fuelIntakeParams);
+  const rawInventoryContainer = objectValue(row.inventoryContainer);
+  const inventoryCapacity = engineeringCapacity(row.inventoryCapacity);
+  const internalPorts = engineeringInternalPorts(row.internalPorts);
+  const personalStorage = rawInventoryContainer || inventoryCapacity || internalPorts.length > 0 ? {
+    inventoryContainer: rawInventoryContainer ? {
+      containerParamsRef: text(rawInventoryContainer.containerParamsRef),
+      canAutoStoreRestrictedItems: nullableBooleanValue(rawInventoryContainer.canAutoStoreRestrictedItems),
+    } : null,
+    capacity: inventoryCapacity,
+    internalPorts,
+  } : null;
+  const fuelTank = fuelTankParams || resourceContainerCapacity || inclusiveResources.length > 0 || defaultComposition.length > 0 ? {
+    params: fuelTankParams,
+    capacity: resourceContainerCapacity,
+    inclusiveResources,
+    defaultComposition,
+  } : null;
+  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage) return null;
   return {
     stateResources,
     thermalHeatGeneration: thermal ? {
@@ -599,6 +677,9 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     } : null,
     emp,
     quantumInterdiction,
+    fuelTank,
+    fuelIntake: fuelIntakeParams,
+    personalStorage,
   };
 }
 
@@ -923,6 +1004,9 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "battery",
     "emp",
     "quantum_interdiction_generator",
+    "fuel_tank",
+    "fuel_intake",
+    "personal_storage",
     "thruster",
     "other",
   ];

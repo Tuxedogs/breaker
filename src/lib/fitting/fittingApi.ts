@@ -808,6 +808,14 @@ export type FittingEngineeringResource = {
   unitConfidence: string | null;
 };
 
+export type FittingEngineeringCapacity = {
+  value: number | null;
+  unitNode: string | null;
+  unitField: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+};
+
 export type FittingEngineeringDetail = {
   stateResources: Array<{
     stateName: string | null;
@@ -838,6 +846,27 @@ export type FittingEngineeringDetail = {
     generator: Record<string, FittingEngineeringAttribute> | null;
     jammer: Record<string, FittingEngineeringAttribute> | null;
     pulse: Record<string, FittingEngineeringAttribute> | null;
+  } | null;
+  fuelTank: {
+    params: Record<string, FittingEngineeringAttribute> | null;
+    capacity: FittingEngineeringCapacity | null;
+    inclusiveResources: Array<{ reference: string | null }>;
+    defaultComposition: Array<{ entry: string | null; weight: number | null }>;
+  } | null;
+  fuelIntake: Record<string, FittingEngineeringAttribute> | null;
+  personalStorage: {
+    inventoryContainer: {
+      containerParamsRef: string | null;
+      canAutoStoreRestrictedItems: boolean | null;
+    } | null;
+    capacity: FittingEngineeringCapacity | null;
+    internalPorts: Array<{
+      name: string | null;
+      displayName: string | null;
+      minSize: number | null;
+      maxSize: number | null;
+      acceptedTypes: Array<{ type: string | null; subTypes: string[] }>;
+    }>;
   } | null;
 };
 

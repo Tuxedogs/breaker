@@ -30,6 +30,9 @@ const lifeSupportId = "f2222222-2222-4222-8222-222222222222";
 const batteryId = "f3333333-3333-4333-8333-333333333333";
 const empId = "f4444444-4444-4444-8444-444444444444";
 const quantumInterdictionId = "f5555555-5555-4555-8555-555555555555";
+const fuelTankId = "f6666666-6666-4666-8666-666666666666";
+const fuelIntakeId = "f7777777-7777-4777-8777-777777777777";
+const personalStorageId = "f8888888-8888-4888-8888-888888888888";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -71,6 +74,7 @@ async function fixtureRoot(): Promise<string> {
       { id: "cooler/main", portId: "cooler/main", portName: "Cooler", portType: "Cooler", editable: true, children: [] },
       { id: "shield/main", portId: "shield/main", portName: "Shield", portType: "Shield", editable: true, children: [] },
       { id: "life_support/main", portId: "life_support/main", portName: "Life support", portType: "LifeSupportGenerator", editable: true, children: [] },
+      { id: "fuel/main", portId: "fuel/main", portName: "Fuel tank", portType: "FuelTank", editable: true, children: [] },
       { id: "weapon/main", portId: "weapon/main", portName: "Main weapon", portType: "WeaponGun", editable: true, children: [], confidence: "high", resolvedDefaultComponentKey: componentId.replaceAll("-", "_") },
       { id: "missile/main", portId: "missile/main", portName: "Missile", portType: "Missile", editable: true, children: [] },
       {
@@ -95,6 +99,7 @@ async function fixtureRoot(): Promise<string> {
   records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: {
     "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true },
     "missile/main": { portId: "missile/main", compatibilityStatus: "known", compatibleComponentKeys: [missileId, templateMissileId], portType: "Missile", editable: true },
+    "fuel/main": { portId: "fuel/main", compatibilityStatus: "known", compatibleComponentKeys: [fuelTankId], portType: "FuelTank", editable: true },
   } }];
   records["coolers.json"] = [{
     entityClass: componentId,
@@ -424,6 +429,59 @@ async function fixtureRoot(): Promise<string> {
     },
     confidence: "high",
   }];
+  records["fuel_tanks.json"] = [{
+    entityClass: fuelTankId,
+    componentKey: fuelTankId,
+    name: "Test Hydrogen Tank",
+    displayName: "Test Hydrogen Tank",
+    componentType: "fuel_tank",
+    itemType: "FuelTank",
+    stateResourceDeltas: [{ stateName: "Online", deltas: [{
+      deltaNode: "ItemResourceDeltaStorage",
+      storageDischarge: 0,
+      resources: [
+        { direction: "consumption", resource: "Fuel", value: 10, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/fuel/consumption" },
+        { direction: "generation", resource: "Fuel", value: 10, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/fuel/generation" },
+      ],
+    }] }],
+    fuelTankParams: {
+      hydrogenMaxFlowMultiplier: { value: 1, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/tank/params" },
+    },
+    resourceContainerCapacity: { value: 0.8, unitNode: "SStandardCargoUnit", unitField: "standardCargoUnits", unitKnown: false, unitUnknown: true, sourcePath: "private/tank/capacity" },
+    inclusiveResources: [{ reference: "de9f4d03-6b60-429d-9b26-9f2308bae973", sourcePath: "private/tank/resource" }],
+    defaultComposition: [{ entry: "de9f4d03-6b60-429d-9b26-9f2308bae973", weight: 1, sourcePath: "private/tank/composition" }],
+    confidence: "high",
+  }];
+  records["fuel_intakes.json"] = [{
+    entityClass: fuelIntakeId,
+    componentKey: fuelIntakeId,
+    name: "Test Fuel Intake",
+    displayName: "Test Fuel Intake",
+    componentType: "fuel_intake",
+    fuelIntakeParams: {
+      fuelPushRate: { value: 50, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/intake/rate" },
+      minimumRate: { value: 0.2, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/intake/minimum" },
+    },
+    confidence: "high",
+  }];
+  records["personal_storage.json"] = [{
+    entityClass: personalStorageId,
+    componentKey: personalStorageId,
+    name: "Test Personal Storage",
+    displayName: "Test Personal Storage",
+    componentType: "personal_storage",
+    inventoryContainer: { containerParamsRef: "c5efc6cb-bbed-4e9c-a42b-623b30417ab0", canAutoStoreRestrictedItems: false, sourcePath: "private/storage/container" },
+    inventoryCapacity: { value: 343, unitNode: "SCentiCargoUnit", unitField: "centiSCU", unitKnown: false, unitUnknown: true, sourcePath: "private/storage/capacity" },
+    internalPorts: [{
+      name: "IP_Button",
+      displayName: "@LOC_EMPTY",
+      minSize: 0,
+      maxSize: 1,
+      acceptedTypes: [{ type: "ControlPanel", subTypes: ["DoorPart"], sourcePath: "private/storage/accepted" }],
+      sourcePath: "private/storage/port",
+    }],
+    confidence: "high",
+  }];
   records["ship_armors.json"] = [{
     entityClass: "33333333-3333-4333-8333-333333333333",
     componentKey: "33333333-3333-4333-8333-333333333333",
@@ -469,6 +527,9 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "batteries.json"));
     await unlink(path.join(fittingRoot, "emps.json"));
     await unlink(path.join(fittingRoot, "quantum_interdiction_generators.json"));
+    await unlink(path.join(fittingRoot, "fuel_tanks.json"));
+    await unlink(path.join(fittingRoot, "fuel_intakes.json"));
+    await unlink(path.join(fittingRoot, "personal_storage.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
     assert.equal(meta?.status, 200, JSON.stringify(meta?.body));
@@ -478,6 +539,8 @@ test("older datasets remain readable when additive ordnance registries are absen
     assert.equal(JSON.stringify(meta?.body).includes("missile_controllers"), false);
     assert.equal(JSON.stringify(meta?.body).includes("life_support"), false);
     assert.equal(JSON.stringify(meta?.body).includes("quantum_interdiction_generators"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("fuel_tanks"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("personal_storage"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -645,6 +708,59 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal(quantumEngineering.generator.basePowerDrawFraction.unit, "fraction");
     assert.equal(quantumEngineering.jammer.jammerRange.unitUnknown, true);
     assert.equal(quantumEngineering.pulse.chargeTimeSecs.value, 90);
+
+    const fuelTank = await handleFittingRoute("GET", `/api/v1/fitting/components/${fuelTankId}?${query}`, "test-request", root);
+    const fuelTankEngineering = (fuelTank?.body as { data: { engineering: {
+      fuelTank: {
+        params: { hydrogenMaxFlowMultiplier: { value: number; unitUnknown: boolean } };
+        capacity: { value: number; unitNode: string; unitField: string; unitUnknown: boolean };
+        inclusiveResources: Array<{ reference: string }>;
+        defaultComposition: Array<{ entry: string; weight: number }>;
+      };
+    } } }).data.engineering.fuelTank;
+    assert.equal(fuelTankEngineering.params.hydrogenMaxFlowMultiplier.value, 1);
+    assert.equal(fuelTankEngineering.params.hydrogenMaxFlowMultiplier.unitUnknown, true);
+    assert.deepEqual(fuelTankEngineering.capacity, {
+      value: 0.8,
+      unitNode: "SStandardCargoUnit",
+      unitField: "standardCargoUnits",
+      unitKnown: false,
+      unitUnknown: true,
+    });
+    assert.equal(fuelTankEngineering.inclusiveResources[0]?.reference, "de9f4d03-6b60-429d-9b26-9f2308bae973");
+    assert.equal(fuelTankEngineering.defaultComposition[0]?.weight, 1);
+
+    const fuelIntake = await handleFittingRoute("GET", `/api/v1/fitting/components/${fuelIntakeId}?${query}`, "test-request", root);
+    const fuelIntakeEngineering = (fuelIntake?.body as { data: { engineering: { fuelIntake: {
+      fuelPushRate: { value: number; unitUnknown: boolean };
+      minimumRate: { value: number; unitUnknown: boolean };
+    } } } }).data.engineering.fuelIntake;
+    assert.equal(fuelIntakeEngineering.fuelPushRate.value, 50);
+    assert.equal(fuelIntakeEngineering.minimumRate.unitUnknown, true);
+
+    const personalStorage = await handleFittingRoute("GET", `/api/v1/fitting/components/${personalStorageId}?${query}`, "test-request", root);
+    const personalStorageEngineering = (personalStorage?.body as { data: { engineering: { personalStorage: {
+      inventoryContainer: { containerParamsRef: string; canAutoStoreRestrictedItems: boolean };
+      capacity: { value: number; unitNode: string; unitUnknown: boolean };
+      internalPorts: Array<{ name: string; acceptedTypes: Array<{ type: string; subTypes: string[] }> }>;
+    } } } }).data.engineering.personalStorage;
+    assert.equal(personalStorageEngineering.inventoryContainer.canAutoStoreRestrictedItems, false);
+    assert.equal(personalStorageEngineering.capacity.value, 343);
+    assert.equal(personalStorageEngineering.capacity.unitNode, "SCentiCargoUnit");
+    assert.deepEqual(personalStorageEngineering.internalPorts[0]?.acceptedTypes[0]?.subTypes, ["DoorPart"]);
+    assert.equal(JSON.stringify(fuelTank?.body).includes("sourcePath"), false);
+    assert.equal(JSON.stringify(personalStorage?.body).includes("private/storage"), false);
+
+    const fuelTankCalculated = await handleFittingRoute("POST", `/api/v1/fitting/calculate?${query}`, "test-request", root, {
+      shipId,
+      loadout: { "fuel/main": fuelTankId },
+      options: { compareToStock: false },
+    });
+    assert.equal(fuelTankCalculated?.status, 200);
+    assert.equal(
+      (fuelTankCalculated?.body as { data: { componentCountsByType: Record<string, number> } }).data.componentCountsByType.fuel_tank,
+      1,
+    );
 
     const lifeSupportList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=life_support&${query}`, "test-request", root);
     assert.equal((lifeSupportList?.body as { data: Array<{ id: string; type: string }> }).data[0]?.id, lifeSupportId);
