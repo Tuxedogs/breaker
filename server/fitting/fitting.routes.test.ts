@@ -33,6 +33,10 @@ const quantumInterdictionId = "f5555555-5555-4555-8555-555555555555";
 const fuelTankId = "f6666666-6666-4666-8666-666666666666";
 const fuelIntakeId = "f7777777-7777-4777-8777-777777777777";
 const personalStorageId = "f8888888-8888-4888-8888-888888888888";
+const miningModifierId = "f9999999-9999-4999-8999-999999999999";
+const thrusterId = "fa111111-1111-4111-8111-111111111111";
+const legacyVtolThrusterId = "fa222222-2222-4222-8222-222222222222";
+const legacyNonVtolThrusterId = "fa333333-3333-4333-8333-333333333333";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -57,7 +61,7 @@ async function fixtureRoot(): Promise<string> {
     { entityClass: shipId, shipKey: shipId, name: "Test Ship", displayName: "Test Ship", vehicleType: "Spaceship", isGroundVehicle: false, confidence: "high", sourceFile: "D:/private/foundry/test-ship.xml" },
     { entityClass: "11111111-1111-4111-8111-111111111111", shipKey: "11111111-1111-4111-8111-111111111111", name: "Second Ship", displayName: "Second Ship", vehicleType: "Spaceship", isGroundVehicle: false, confidence: "high" },
   ];
-  records["ship_performance.json"] = [{ shipKey: shipId, scmSpeed: 200, confidence: "high" }];
+  records["ship_performance.json"] = [{ shipKey: shipId, scmSpeed: 200, boostRegenDelayAfterUse: 0.2, confidence: "high" }];
   records["ship_hardpoints.json"] = [{
     shipKey: shipId,
     confidence: "high",
@@ -482,6 +486,50 @@ async function fixtureRoot(): Promise<string> {
     }],
     confidence: "high",
   }];
+  records["mining_modifiers.json"] = [{
+    entityClass: miningModifierId,
+    componentKey: miningModifierId,
+    name: "Test Mining Module",
+    displayName: "Test Mining Module",
+    componentType: "mining_modifier",
+    durationSeconds: 60,
+    shatterDamageModifier: -30,
+    instabilityModifier: 0.8,
+    resistanceModifier: 15.5,
+    fractureWindowSizeModifier: 1.2,
+    optimalChargeRateModifier: 1.25,
+    catastrophicChargeRateModifier: 0.75,
+    isOptimalRateGood: 1,
+    sourceFile: "private/mining/module.xml",
+    confidence: "high",
+  }];
+  records["thrusters.json"] = [{
+    entityClass: thrusterId,
+    componentKey: thrusterId,
+    name: "Test VTOL Thruster",
+    displayName: "Test VTOL Thruster",
+    componentType: "thruster",
+    thrustCapacity: 100,
+    onlyActiveInVtol: true,
+    onlyActiveInVtolProvenance: { sourcePath: "private/thruster/path", attribute: "onlyActiveInVTOL", confidence: "high" },
+    confidence: "high",
+  }, {
+    entityClass: legacyVtolThrusterId,
+    componentKey: legacyVtolThrusterId,
+    name: "Legacy VTOL Thruster",
+    displayName: "Legacy VTOL Thruster",
+    componentType: "thruster",
+    vtol: "true",
+    confidence: "high",
+  }, {
+    entityClass: legacyNonVtolThrusterId,
+    componentKey: legacyNonVtolThrusterId,
+    name: "Legacy Non-VTOL Thruster",
+    displayName: "Legacy Non-VTOL Thruster",
+    componentType: "thruster",
+    vtol: "false",
+    confidence: "high",
+  }];
   records["ship_armors.json"] = [{
     entityClass: "33333333-3333-4333-8333-333333333333",
     componentKey: "33333333-3333-4333-8333-333333333333",
@@ -530,6 +578,7 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "fuel_tanks.json"));
     await unlink(path.join(fittingRoot, "fuel_intakes.json"));
     await unlink(path.join(fittingRoot, "personal_storage.json"));
+    await unlink(path.join(fittingRoot, "mining_modifiers.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
     assert.equal(meta?.status, 200, JSON.stringify(meta?.body));
@@ -541,6 +590,7 @@ test("older datasets remain readable when additive ordnance registries are absen
     assert.equal(JSON.stringify(meta?.body).includes("quantum_interdiction_generators"), false);
     assert.equal(JSON.stringify(meta?.body).includes("fuel_tanks"), false);
     assert.equal(JSON.stringify(meta?.body).includes("personal_storage"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("mining_modifiers"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -556,6 +606,7 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
 
     const ship = await handleFittingRoute("GET", `/api/v1/fitting/ships/${shipId}?${query}`, "test-request", root);
     assert.equal((ship?.body as { data: { mitigation: { hullHp: number | null } } }).data.mitigation.hullHp, null);
+    assert.equal((ship?.body as { data: { performance: { boostRegenDelayAfterUse: number | null } } }).data.performance.boostRegenDelayAfterUse, 0.2);
     assert.equal(JSON.stringify(ship?.body).includes("sourceFile"), false);
     assert.equal(JSON.stringify(ship?.body).includes(root), false);
 
@@ -750,6 +801,27 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.deepEqual(personalStorageEngineering.internalPorts[0]?.acceptedTypes[0]?.subTypes, ["DoorPart"]);
     assert.equal(JSON.stringify(fuelTank?.body).includes("sourcePath"), false);
     assert.equal(JSON.stringify(personalStorage?.body).includes("private/storage"), false);
+
+    const miningModifier = await handleFittingRoute("GET", `/api/v1/fitting/components/${miningModifierId}?${query}`, "test-request", root);
+    const miningModifierData = (miningModifier?.body as { data: { type: string; stats: Record<string, number> } }).data;
+    assert.equal(miningModifierData.type, "mining_modifier");
+    assert.equal(miningModifierData.stats.durationSeconds, 60);
+    assert.equal(miningModifierData.stats.shatterDamageModifier, -30);
+    assert.equal(miningModifierData.stats.fractureWindowSizeModifier, 1.2);
+    assert.equal(miningModifierData.stats.isOptimalRateGood, 1);
+    assert.equal(JSON.stringify(miningModifier?.body).includes("sourceFile"), false);
+
+    const miningModifierList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=mining_modifier&${query}`, "test-request", root);
+    assert.equal((miningModifierList?.body as { data: Array<{ id: string; type: string }> }).data[0]?.id, miningModifierId);
+
+    const thruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${thrusterId}?${query}`, "test-request", root);
+    assert.equal((thruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, true);
+    assert.equal(JSON.stringify(thruster?.body).includes("onlyActiveInVtolProvenance"), false);
+    assert.equal(JSON.stringify(thruster?.body).includes("private/thruster"), false);
+    const legacyVtolThruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${legacyVtolThrusterId}?${query}`, "test-request", root);
+    const legacyNonVtolThruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${legacyNonVtolThrusterId}?${query}`, "test-request", root);
+    assert.equal((legacyVtolThruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, true);
+    assert.equal((legacyNonVtolThruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, false);
 
     const fuelTankCalculated = await handleFittingRoute("POST", `/api/v1/fitting/calculate?${query}`, "test-request", root, {
       shipId,

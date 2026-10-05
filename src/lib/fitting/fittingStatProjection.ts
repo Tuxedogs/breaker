@@ -417,6 +417,30 @@ function buildMiningLaserStatRows(detail: FittingComponentDetail): ComponentCard
   return rows;
 }
 
+function buildMiningModifierStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const { stats } = detail;
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Duration", formatCompactNumber(stats.durationSeconds, "s"));
+  pushMetric(rows, "Shatter Damage Modifier", formatCompactNumber(stats.shatterDamageModifier));
+  pushMetric(rows, "Instability Modifier", formatCompactNumber(stats.instabilityModifier));
+  pushMetric(rows, "Resistance Modifier", formatCompactNumber(stats.resistanceModifier));
+  pushMetric(rows, "Fracture Window Size Modifier", formatCompactNumber(stats.fractureWindowSizeModifier));
+  pushMetric(rows, "Optimal Charge Rate Modifier", formatCompactNumber(stats.optimalChargeRateModifier));
+  pushMetric(rows, "Catastrophic Charge Rate Modifier", formatCompactNumber(stats.catastrophicChargeRateModifier));
+  pushMetric(rows, "Optimal Rate Good Flag", formatCompactNumber(stats.isOptimalRateGood));
+  rows.push(...buildUtilityStatTail(stats));
+  return rows;
+}
+
+function buildThrusterStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const rows: ComponentCardMetric[] = [];
+  const onlyActiveInVtol = detail.thruster?.onlyActiveInVtol;
+  pushMetric(rows, "VTOL Only", onlyActiveInVtol == null ? null : onlyActiveInVtol ? "Yes" : "No");
+  pushMetric(rows, "Thrust Capacity", formatCompactNumber(detail.stats.thrustCapacity));
+  rows.push(...buildUtilityStatTail(detail.stats));
+  return rows;
+}
+
 function buildSalvageHeadStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
   const { stats } = detail;
   const rows: ComponentCardMetric[] = [];
@@ -561,6 +585,10 @@ export function buildDetailStatRowsFromFitting(detail: FittingComponentDetail): 
       return buildRadarStatRows(detail);
     case "mining_laser":
       return buildMiningLaserStatRows(detail);
+    case "mining_modifier":
+      return buildMiningModifierStatRows(detail);
+    case "thruster":
+      return buildThrusterStatRows(detail);
     case "salvage_head":
       return buildSalvageHeadStatRows(detail);
     case "salvage_modifier":

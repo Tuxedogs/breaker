@@ -23,6 +23,7 @@ export type FittingShipSummary = {
   scmSpeed?: number | null;
   boostCapacity?: number | null;
   boostRegen?: number | null;
+  boostRegenDelayAfterUse?: number | null;
   cargoCapacityScu?: number | null;
 };
 
@@ -132,6 +133,7 @@ export function adaptShipDetail(ship: ApiFittingShipDetail): FittingShipDetail {
       rollRate: ship.performance.rollRate,
       boostCapacity: ship.performance.boostCapacity,
       boostRegen: ship.performance.boostRegen,
+      boostRegenDelayAfterUse: ship.performance.boostRegenDelayAfterUse,
     },
     hullHP: ship.hullHP,
     mitigation: ship.mitigation ?? null,

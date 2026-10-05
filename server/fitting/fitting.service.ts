@@ -14,6 +14,7 @@ const COMPONENT_FILES = [
   ["bomb_racks.json", "bomb_rack"],
   ["missile_controllers.json", "missile_controller"],
   ["mining_lasers.json", "mining_laser"],
+  ["mining_modifiers.json", "mining_modifier"],
   ["salvage_heads.json", "salvage_head"],
   ["salvage_modifiers.json", "salvage_modifier"],
   ["fuel_nozzles.json", "fuel_nozzle"],
@@ -47,6 +48,15 @@ function booleanValue(value: unknown): boolean {
 
 function nullableBooleanValue(value: unknown): boolean | null {
   return typeof value === "boolean" ? value : null;
+}
+
+function legacyBooleanValue(value: unknown): boolean | null {
+  if (typeof value === "boolean") return value;
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true" || normalized === "1") return true;
+  if (normalized === "false" || normalized === "0") return false;
+  return null;
 }
 
 function objectValue(value: unknown): Record<string, unknown> | null {
@@ -186,6 +196,8 @@ export function componentType(row: Row, fallback: string): string {
     thruster: "thruster",
     mining_laser: "mining_laser",
     weaponmining: "mining_laser",
+    mining_modifier: "mining_modifier",
+    miningmodifier: "mining_modifier",
     salvage_head: "salvage_head",
     salvagehead: "salvage_head",
     salvage_modifier: "salvage_modifier",
@@ -367,6 +379,12 @@ export function componentStats(row: Row): Record<string, number | null> {
     extractionPower: "extractionPower",
     instabilityModifier: "instabilityModifier",
     resistanceModifier: "resistanceModifier",
+    isOptimalRateGood: "isOptimalRateGood",
+    durationSeconds: "durationSeconds",
+    shatterDamageModifier: "shatterDamageModifier",
+    fractureWindowSizeModifier: "fractureWindowSizeModifier",
+    optimalChargeRateModifier: "optimalChargeRateModifier",
+    catastrophicChargeRateModifier: "catastrophicChargeRateModifier",
     fractureWindowSize: "fractureWindowSize",
     optimalChargeRate: "optimalChargeRate",
     laserRange: "laserRange",
@@ -523,6 +541,13 @@ function componentCooler(row: Row, fallbackType: string): Record<string, unknown
     coolingGeneratedByPowerPip: powerCurvePoints(row.coolingGeneratedByPowerPip),
     coolingGeneratedPowerFormula: text(row.coolingGeneratedPowerFormula),
     coolingGeneratedPowerFormulaConfidence: text(row.coolingGeneratedPowerFormulaConfidence),
+  };
+}
+
+function componentThruster(row: Row, fallbackType: string): Record<string, unknown> | null {
+  if (componentType(row, fallbackType) !== "thruster") return null;
+  return {
+    onlyActiveInVtol: nullableBooleanValue(row.onlyActiveInVtol) ?? legacyBooleanValue(row.vtol),
   };
 }
 
@@ -862,6 +887,7 @@ export async function getShip(selection: DatasetSelection, shipIdInput: string, 
       boostSpeedBackward: numberValue(performanceRow.boostSpeedBackward),
       boostCapacity: numberValue(performanceRow.boostCapacity),
       boostRegen: numberValue(performanceRow.boostRegen),
+      boostRegenDelayAfterUse: numberValue(performanceRow.boostRegenDelayAfterUse),
     },
   };
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(row);
@@ -990,6 +1016,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "bomb_rack",
     "missile_controller",
     "mining_laser",
+    "mining_modifier",
     "salvage_head",
     "salvage_modifier",
     "fuel_nozzle",
@@ -1038,6 +1065,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   if (weapon) data.weapon = weapon;
   const cooler = componentCooler(found.row, found.fallbackType);
   if (cooler) data.cooler = cooler;
+  const thruster = componentThruster(found.row, found.fallbackType);
+  if (thruster) data.thruster = thruster;
   const engineering = componentEngineering(found.row);
   if (engineering) data.engineering = engineering;
   const ordnance = componentOrdnance(found.row, found.fallbackType);

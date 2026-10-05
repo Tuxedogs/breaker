@@ -202,6 +202,7 @@ export type FittingShipDetail = FittingShipSummary & {
     boostSpeedBackward?: number | null;
     boostCapacity?: number | null;
     boostRegen?: number | null;
+    boostRegenDelayAfterUse?: number | null;
   };
 };
 
@@ -692,6 +693,12 @@ export type FittingComponentStats = {
   extractionPower?: number | null;
   instabilityModifier?: number | null;
   resistanceModifier?: number | null;
+  isOptimalRateGood?: number | null;
+  durationSeconds?: number | null;
+  shatterDamageModifier?: number | null;
+  fractureWindowSizeModifier?: number | null;
+  optimalChargeRateModifier?: number | null;
+  catastrophicChargeRateModifier?: number | null;
   fractureWindowSize?: number | null;
   optimalChargeRate?: number | null;
   laserRange?: number | null;
@@ -816,6 +823,10 @@ export type FittingEngineeringCapacity = {
   unitUnknown: boolean | null;
 };
 
+export type FittingThrusterDetail = {
+  onlyActiveInVtol: boolean | null;
+};
+
 export type FittingEngineeringDetail = {
   stateResources: Array<{
     stateName: string | null;
@@ -875,6 +886,7 @@ export type FittingComponentDetail = FittingComponentSummary & {
   mitigation: FittingComponentMitigation | null;
   weapon?: FittingWeaponDetail;
   cooler?: FittingCoolerDetail;
+  thruster?: FittingThrusterDetail;
   ordnance?: FittingOrdnanceDetail;
   engineering?: FittingEngineeringDetail;
 };

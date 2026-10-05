@@ -176,6 +176,7 @@ async function componentLookup(selection: DatasetSelection): Promise<ComponentLo
     ["bombs.json", "bomb"],
     ["bomb_racks.json", "bomb_rack"],
     ["missile_controllers.json", "missile_controller"],
+    ["mining_modifiers.json", "mining_modifier"],
     ["shields.json", "shield"],
     ["power_plants.json", "power_plant"],
     ["coolers.json", "cooler"],

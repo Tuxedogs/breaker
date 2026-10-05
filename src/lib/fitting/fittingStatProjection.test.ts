@@ -88,6 +88,42 @@ test("buildDetailStatRowsFromFitting omits null fitting fields", () => {
   assert.equal(labels.includes("Distortion Damage"), false);
 });
 
+test("buildDetailStatRowsFromFitting projects source-backed mining modifier fields", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "mining_modifier",
+    stats: {
+      durationSeconds: 60,
+      shatterDamageModifier: -30,
+      instabilityModifier: 0.8,
+      resistanceModifier: 15.5,
+      fractureWindowSizeModifier: 1.2,
+      optimalChargeRateModifier: 1.25,
+      catastrophicChargeRateModifier: 0.75,
+      isOptimalRateGood: 1,
+    },
+  });
+
+  const values = Object.fromEntries(rows.map((row) => [row.label, row.value]));
+  assert.equal(values.Duration, "60s");
+  assert.equal(values["Shatter Damage Modifier"], "-30");
+  assert.equal(values["Fracture Window Size Modifier"], "1.2");
+  assert.equal(values["Optimal Rate Good Flag"], "1");
+});
+
+test("buildDetailStatRowsFromFitting projects the source-backed VTOL-only thruster flag", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "thruster",
+    stats: { thrustCapacity: 100 },
+    thruster: { onlyActiveInVtol: true },
+  });
+
+  const values = Object.fromEntries(rows.map((row) => [row.label, row.value]));
+  assert.equal(values["VTOL Only"], "Yes");
+  assert.equal(values["Thrust Capacity"], "100");
+});
+
 test("buildDetailStatRowsFromFitting projects live weapon stat labels and grouping fields", () => {
   const rows = buildDetailStatRowsFromFitting({
     ...coolerDetail(),
