@@ -249,6 +249,9 @@ function buildShieldStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "Regen Rate", formatCompactNumber(stats.regenRate ?? shieldMitigation?.maxShieldRegen, "/s"));
   pushMetric(rows, "Regen Delay", formatCompactNumber(shieldMitigation?.damagedRegenDelay, "s"));
   pushMetric(rows, "Downed Regen Delay", formatCompactNumber(shieldMitigation?.downedRegenDelay, "s"));
+  pushMetric(rows, "Reserve Pool Regen Rate (derived)", formatCompactNumber(stats.reservePoolRegenRate));
+  pushMetric(rows, "Reserve Pool Regen Time (derived)", formatCompactNumber(stats.reservePoolRegenTime));
+  pushMetric(rows, "Hardening Factor", formatCompactNumber(stats.hardeningFactor));
   pushMetric(rows, "Regen by Power", formatPowerCurve(shieldMitigation?.regenByPowerPip, "/s"));
   pushMetric(
     rows,
@@ -340,6 +343,12 @@ function buildQuantumStatRows(detail: FittingComponentDetail): ComponentCardMetr
   pushMetric(rows, "Calibration Minimum", formatCompactNumber(stats.minCalibrationRequirement));
   pushMetric(rows, "Calibration Maximum", formatCompactNumber(stats.maxCalibrationRequirement));
   pushMetric(rows, "Calibration Time (derived)", formatCompactNumber(stats.calibrationTime, "s"));
+  pushMetric(rows, "Spline Cooldown", formatCompactNumber(stats.splineCooldown));
+  pushMetric(rows, "Spline Jump Speed", formatCompactNumber(stats.splineJumpSpeed));
+  pushMetric(rows, "Calibration Process Angle Limit", formatCompactNumber(stats.calibrationProcessAngleLimit));
+  pushMetric(rows, "Calibration Warning Angle Limit", formatCompactNumber(stats.calibrationWarningAngleLimit));
+  pushMetric(rows, "Travelling EM Signature", formatCompactNumber(stats.travellingEmSignature));
+  pushMetric(rows, "Travelling IR Signature", formatCompactNumber(stats.travellingIrSignature));
   pushMetric(
     rows,
     "Stage One Acceleration",
@@ -368,6 +377,9 @@ function buildRadarStatRows(detail: FittingComponentDetail): ComponentCardMetric
   pushMetric(rows, "Scan Rate", formatCompactNumber(stats.scanRate));
   pushMetric(rows, "Scan Cooldown", formatCompactNumber(stats.scanCooldownTime, "s"));
   pushMetric(rows, "Signature Sensitivity", formatCompactNumber(stats.signatureSensitivity));
+  pushMetric(rows, "Aim Assist Minimum Assignment Distance", formatCompactNumber(stats.aimAssistMinAssignmentDistance));
+  pushMetric(rows, "Aim Assist Maximum Assignment Distance", formatCompactNumber(stats.aimAssistMaxAssignmentDistance));
+  pushMetric(rows, "Aim Assist Outside-Range Buffer Distance", formatCompactNumber(stats.aimAssistOutsideRangeBufferDistance));
   return rows;
 }
 

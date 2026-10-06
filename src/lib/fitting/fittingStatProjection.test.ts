@@ -306,6 +306,13 @@ test("buildDetailStatRowsFromFitting projects quantum calibration and canonical 
       calibrationTime: 11.5,
       quantumStageOneAccelRate: 376000,
       quantumStageTwoAccelRate: 11200000,
+      splineCooldown: 2.25,
+      splineJumpSpeed: 345,
+      calibrationProcessAngleLimit: 45,
+      calibrationWarningAngleLimit: 30,
+      travellingEmSignature: 6,
+      travellingIrSignature: 7,
+      rangeEfficiency: 0.8,
     },
   });
 
@@ -316,6 +323,13 @@ test("buildDetailStatRowsFromFitting projects quantum calibration and canonical 
   assert.equal(byLabel.get("Calibration Time (derived)"), "11.5s");
   assert.equal(byLabel.get("Stage One Acceleration"), "376");
   assert.equal(byLabel.get("Stage Two Acceleration"), "11,200");
+  assert.equal(byLabel.get("Spline Cooldown"), "2.25");
+  assert.equal(byLabel.get("Spline Jump Speed"), "345");
+  assert.equal(byLabel.get("Calibration Process Angle Limit"), "45");
+  assert.equal(byLabel.get("Calibration Warning Angle Limit"), "30");
+  assert.equal(byLabel.get("Travelling EM Signature"), "6");
+  assert.equal(byLabel.get("Travelling IR Signature"), "7");
+  assert.equal(byLabel.has("Range Efficiency"), false);
 });
 
 test("buildDetailStatRowsFromFitting projects cooler allocation and complete resource durability", () => {
@@ -357,6 +371,9 @@ test("buildDetailStatRowsFromFitting separates damaged and downed shield recover
       shieldHp: 100,
       regenRate: 12,
       coolingDraw: 2,
+      reservePoolRegenRate: 1.5,
+      reservePoolRegenTime: 8,
+      hardeningFactor: 0.25,
     },
     mitigation: {
       kind: "shield",
@@ -382,6 +399,27 @@ test("buildDetailStatRowsFromFitting separates damaged and downed shield recover
   assert.equal(byLabel.get("Downed Regen Delay"), "8s");
   assert.equal(byLabel.get("Regen by Power"), "1 pip: 5/s; 2 pips: 12/s");
   assert.equal(byLabel.get("Cooling Draw"), "2");
+  assert.equal(byLabel.get("Reserve Pool Regen Rate (derived)"), "1.5");
+  assert.equal(byLabel.get("Reserve Pool Regen Time (derived)"), "8");
+  assert.equal(byLabel.get("Hardening Factor"), "0.25");
+});
+
+test("buildDetailStatRowsFromFitting projects raw radar aim-assist distances", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "radar",
+    stats: {
+      detectionRange: 1200,
+      aimAssistMinAssignmentDistance: 100,
+      aimAssistMaxAssignmentDistance: 1000,
+      aimAssistOutsideRangeBufferDistance: 25,
+    },
+  });
+
+  const byLabel = new Map(rows.map((row) => [row.label, row.value]));
+  assert.equal(byLabel.get("Aim Assist Minimum Assignment Distance"), "100");
+  assert.equal(byLabel.get("Aim Assist Maximum Assignment Distance"), "1,000");
+  assert.equal(byLabel.get("Aim Assist Outside-Range Buffer Distance"), "25");
 });
 
 test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identical damage channel", () => {
