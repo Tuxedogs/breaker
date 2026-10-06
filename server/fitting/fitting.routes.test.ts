@@ -33,6 +33,10 @@ const quantumInterdictionId = "f5555555-5555-4555-8555-555555555555";
 const fuelTankId = "f6666666-6666-4666-8666-666666666666";
 const fuelIntakeId = "f7777777-7777-4777-8777-777777777777";
 const personalStorageId = "f8888888-8888-4888-8888-888888888888";
+const salvageFillerId = "fb111111-1111-4111-8111-111111111111";
+const salvageStorageId = "fb222222-2222-4222-8222-222222222222";
+const salvageEmitterId = "fb333333-3333-4333-8333-333333333333";
+const salvageSupporterId = "fb444444-4444-4444-8444-444444444444";
 const miningModifierId = "f9999999-9999-4999-8999-999999999999";
 const thrusterId = "fa111111-1111-4111-8111-111111111111";
 const legacyVtolThrusterId = "fa222222-2222-4222-8222-222222222222";
@@ -543,6 +547,10 @@ async function fixtureRoot(): Promise<string> {
     confidence: "high",
   }];
   records["vehicle_ammo.json"] = [{ ammoParamsRecord: ammoId, ammoKey: ammoId.replaceAll("-", "_"), alphaDamageTotal: 10, damagePhysical: 10, basePenetrationDistance: 0.66, maxPenetrationThickness: 0.5, confidence: "high" }];
+  records["salvage_filler_stations.json"] = [{ entityClass: salvageFillerId, componentKey: salvageFillerId, name: "Filler", displayName: "Filler", componentType: "salvage_filler_station", confidence: "high", sourcePath: "private/filler" }];
+  records["salvage_internal_storage.json"] = [{ entityClass: salvageStorageId, componentKey: salvageStorageId, name: "Storage", displayName: "Storage", componentType: "salvage_internal_storage", confidence: "high", resourceContainerCapacity: { value: 12.5, unitNode: "SStandardCargoUnit", unitField: "standardCargoUnits", unitKnown: false, unitUnknown: true, sourcePath: "private/capacity" }, inclusiveResources: [{ reference: "resource-guid", sourcePath: "private/ref" }] }];
+  records["salvage_field_emitters.json"] = [{ entityClass: salvageEmitterId, componentKey: salvageEmitterId, name: "Emitter", displayName: "Emitter", componentType: "salvage_field_emitter", confidence: "high" }];
+  records["salvage_field_supporters.json"] = [{ entityClass: salvageSupporterId, componentKey: salvageSupporterId, name: "Supporter", displayName: "Supporter", componentType: "salvage_field_supporter", confidence: "high" }];
 
   await Promise.all(PUBLIC_REGISTRIES.map(async (name) => {
     await writeFile(path.join(fittingRoot, name), `${JSON.stringify(envelope(name.replace(/\.json$/, ""), records[name]), null, 2)}\n`, "utf8");
@@ -578,6 +586,10 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "fuel_tanks.json"));
     await unlink(path.join(fittingRoot, "fuel_intakes.json"));
     await unlink(path.join(fittingRoot, "personal_storage.json"));
+    await unlink(path.join(fittingRoot, "salvage_filler_stations.json"));
+    await unlink(path.join(fittingRoot, "salvage_internal_storage.json"));
+    await unlink(path.join(fittingRoot, "salvage_field_emitters.json"));
+    await unlink(path.join(fittingRoot, "salvage_field_supporters.json"));
     await unlink(path.join(fittingRoot, "mining_modifiers.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
@@ -801,6 +813,20 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.deepEqual(personalStorageEngineering.internalPorts[0]?.acceptedTypes[0]?.subTypes, ["DoorPart"]);
     assert.equal(JSON.stringify(fuelTank?.body).includes("sourcePath"), false);
     assert.equal(JSON.stringify(personalStorage?.body).includes("private/storage"), false);
+
+    for (const [id, type] of [[salvageFillerId, "salvage_filler_station"], [salvageStorageId, "salvage_internal_storage"], [salvageEmitterId, "salvage_field_emitter"], [salvageSupporterId, "salvage_field_supporter"]] as const) {
+      const detail = await handleFittingRoute("GET", `/api/v1/fitting/components/${id}?${query}`, "test-request", root);
+      const data = (detail?.body as { data: { type: string; engineering: { salvage: { type: string; resourceContainer: { capacity: { value: number; unitNode: string; unitField: string }; inclusiveResources: Array<{ reference: string }> } | null } } } }).data;
+      assert.equal(data.type, type);
+      assert.equal(data.engineering.salvage.type, type);
+      assert.equal(JSON.stringify(detail?.body).includes("sourcePath"), false);
+      if (type === "salvage_internal_storage") {
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.value, 12.5);
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.unitNode, "SStandardCargoUnit");
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.unitField, "standardCargoUnits");
+        assert.equal(data.engineering.salvage.resourceContainer?.inclusiveResources[0]?.reference, "resource-guid");
+      }
+    }
 
     const miningModifier = await handleFittingRoute("GET", `/api/v1/fitting/components/${miningModifierId}?${query}`, "test-request", root);
     const miningModifierData = (miningModifier?.body as { data: { type: string; stats: Record<string, number> } }).data;

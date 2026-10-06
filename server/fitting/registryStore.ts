@@ -39,6 +39,10 @@ export const PUBLIC_REGISTRIES = [
   "fuel_tanks.json",
   "fuel_intakes.json",
   "personal_storage.json",
+  "salvage_filler_stations.json",
+  "salvage_internal_storage.json",
+  "salvage_field_emitters.json",
+  "salvage_field_supporters.json",
   "thrusters.json",
   "compatible_items_by_port.json",
   "compatibility_rules.json",
@@ -60,6 +64,10 @@ export const OPTIONAL_PUBLIC_REGISTRIES = new Set<(typeof PUBLIC_REGISTRIES)[num
   "fuel_tanks.json",
   "fuel_intakes.json",
   "personal_storage.json",
+  "salvage_filler_stations.json",
+  "salvage_internal_storage.json",
+  "salvage_field_emitters.json",
+  "salvage_field_supporters.json",
 ]);
 
 function registryPath(selection: DatasetSelection, fileName: string): string {

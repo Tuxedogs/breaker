@@ -32,6 +32,10 @@ const COMPONENT_FILES = [
   ["fuel_tanks.json", "fuel_tank"],
   ["fuel_intakes.json", "fuel_intake"],
   ["personal_storage.json", "personal_storage"],
+  ["salvage_filler_stations.json", "salvage_filler_station"],
+  ["salvage_internal_storage.json", "salvage_internal_storage"],
+  ["salvage_field_emitters.json", "salvage_field_emitter"],
+  ["salvage_field_supporters.json", "salvage_field_supporter"],
   ["thrusters.json", "thruster"],
 ] as const;
 
@@ -211,6 +215,10 @@ export function componentType(row: Row, fallback: string): string {
     fuel_tank: "fuel_tank",
     fuel_intake: "fuel_intake",
     personal_storage: "personal_storage",
+    salvage_filler_station: "salvage_filler_station",
+    salvage_internal_storage: "salvage_internal_storage",
+    salvage_field_emitter: "salvage_field_emitter",
+    salvage_field_supporter: "salvage_field_supporter",
   };
   return aliases[raw] ?? "other";
 }
@@ -651,6 +659,7 @@ function engineeringInternalPorts(value: unknown): Array<Record<string, unknown>
 }
 
 function componentEngineering(row: Row): Record<string, unknown> | null {
+  const salvageType = componentType(row, "other");
   const stateResources = engineeringStateResources(row.stateResourceDeltas);
   const thermal = objectValue(row.thermalHeatGeneration);
   const relay = objectValue(row.relayResourceNetwork);
@@ -683,7 +692,14 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     inclusiveResources,
     defaultComposition,
   } : null;
-  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage) return null;
+  const salvage = new Set(["salvage_filler_station", "salvage_internal_storage", "salvage_field_emitter", "salvage_field_supporter"]).has(salvageType) ? {
+    type: salvageType,
+    resourceContainer: salvageType === "salvage_internal_storage" && (resourceContainerCapacity || inclusiveResources.length > 0) ? {
+      capacity: resourceContainerCapacity,
+      inclusiveResources,
+    } : null,
+  } : null;
+  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage && !salvage) return null;
   return {
     stateResources,
     thermalHeatGeneration: thermal ? {
@@ -705,6 +721,7 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     fuelTank,
     fuelIntake: fuelIntakeParams,
     personalStorage,
+    salvage,
   };
 }
 
@@ -1034,6 +1051,10 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "fuel_tank",
     "fuel_intake",
     "personal_storage",
+    "salvage_filler_station",
+    "salvage_internal_storage",
+    "salvage_field_emitter",
+    "salvage_field_supporter",
     "thruster",
     "other",
   ];

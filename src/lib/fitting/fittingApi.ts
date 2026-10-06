@@ -879,6 +879,13 @@ export type FittingEngineeringDetail = {
       acceptedTypes: Array<{ type: string | null; subTypes: string[] }>;
     }>;
   } | null;
+  salvage: {
+    type: "salvage_filler_station" | "salvage_internal_storage" | "salvage_field_emitter" | "salvage_field_supporter";
+    resourceContainer: {
+      capacity: FittingEngineeringCapacity | null;
+      inclusiveResources: Array<{ reference: string | null }>;
+    } | null;
+  } | null;
 };
 
 export type FittingComponentDetail = FittingComponentSummary & {
