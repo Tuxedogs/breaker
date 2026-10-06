@@ -37,6 +37,7 @@ const salvageFillerId = "fb111111-1111-4111-8111-111111111111";
 const salvageStorageId = "fb222222-2222-4222-8222-222222222222";
 const salvageEmitterId = "fb333333-3333-4333-8333-333333333333";
 const salvageSupporterId = "fb444444-4444-4444-8444-444444444444";
+const countermeasureLauncherId = "fb555555-5555-4555-8555-555555555555";
 const miningModifierId = "f9999999-9999-4999-8999-999999999999";
 const thrusterId = "fa111111-1111-4111-8111-111111111111";
 const legacyVtolThrusterId = "fa222222-2222-4222-8222-222222222222";
@@ -551,6 +552,7 @@ async function fixtureRoot(): Promise<string> {
   records["salvage_internal_storage.json"] = [{ entityClass: salvageStorageId, componentKey: salvageStorageId, name: "Storage", displayName: "Storage", componentType: "salvage_internal_storage", confidence: "high", resourceContainerCapacity: { value: 12.5, unitNode: "SStandardCargoUnit", unitField: "standardCargoUnits", unitKnown: false, unitUnknown: true, sourcePath: "private/capacity" }, inclusiveResources: [{ reference: "resource-guid", sourcePath: "private/ref" }] }];
   records["salvage_field_emitters.json"] = [{ entityClass: salvageEmitterId, componentKey: salvageEmitterId, name: "Emitter", displayName: "Emitter", componentType: "salvage_field_emitter", confidence: "high" }];
   records["salvage_field_supporters.json"] = [{ entityClass: salvageSupporterId, componentKey: salvageSupporterId, name: "Supporter", displayName: "Supporter", componentType: "salvage_field_supporter", confidence: "high" }];
+  records["countermeasure_launchers.json"] = [{ entityClass: countermeasureLauncherId, componentKey: countermeasureLauncherId, name: "Countermeasure", displayName: "Countermeasure", componentType: "countermeasure_launcher", countermeasureLauncher: { ammoParamsRecord: "ammo-zero", initialAmmoCount: 0, maxAmmoCount: 0, maxRestockCount: 0, allowAmmoRepool: false, turnedOnByDefault: false, forceOn: false, asopSpawnState: "Disabled", sourcePath: "private/countermeasure" } }];
 
   await Promise.all(PUBLIC_REGISTRIES.map(async (name) => {
     await writeFile(path.join(fittingRoot, name), `${JSON.stringify(envelope(name.replace(/\.json$/, ""), records[name]), null, 2)}\n`, "utf8");
@@ -590,6 +592,7 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "salvage_internal_storage.json"));
     await unlink(path.join(fittingRoot, "salvage_field_emitters.json"));
     await unlink(path.join(fittingRoot, "salvage_field_supporters.json"));
+    await unlink(path.join(fittingRoot, "countermeasure_launchers.json"));
     await unlink(path.join(fittingRoot, "mining_modifiers.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
@@ -827,6 +830,16 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
         assert.equal(data.engineering.salvage.resourceContainer?.inclusiveResources[0]?.reference, "resource-guid");
       }
     }
+    const countermeasure = await handleFittingRoute("GET", `/api/v1/fitting/components/${countermeasureLauncherId}?${query}`, "test-request", root);
+    const countermeasureData = (countermeasure?.body as { data: { type: string; engineering: { countermeasureLauncher: Record<string, unknown> } } }).data;
+    assert.equal(countermeasureData.type, "countermeasure_launcher");
+    assert.deepEqual(countermeasureData.engineering.countermeasureLauncher, {
+      ammoParamsRecord: "ammo-zero", initialAmmoCount: 0, maxAmmoCount: 0, maxRestockCount: 0,
+      allowAmmoRepool: false, turnedOnByDefault: false, forceOn: false, asopSpawnState: "Disabled",
+    });
+    assert.equal(JSON.stringify(countermeasure?.body).includes("sourcePath"), false);
+    const countermeasureList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=countermeasure_launcher&${query}`, "test-request", root);
+    assert.equal((countermeasureList?.body as { data: Array<{ id: string }> }).data[0]?.id, countermeasureLauncherId);
 
     const miningModifier = await handleFittingRoute("GET", `/api/v1/fitting/components/${miningModifierId}?${query}`, "test-request", root);
     const miningModifierData = (miningModifier?.body as { data: { type: string; stats: Record<string, number> } }).data;

@@ -36,6 +36,7 @@ const COMPONENT_FILES = [
   ["salvage_internal_storage.json", "salvage_internal_storage"],
   ["salvage_field_emitters.json", "salvage_field_emitter"],
   ["salvage_field_supporters.json", "salvage_field_supporter"],
+  ["countermeasure_launchers.json", "countermeasure_launcher"],
   ["thrusters.json", "thruster"],
 ] as const;
 
@@ -219,6 +220,7 @@ export function componentType(row: Row, fallback: string): string {
     salvage_internal_storage: "salvage_internal_storage",
     salvage_field_emitter: "salvage_field_emitter",
     salvage_field_supporter: "salvage_field_supporter",
+    countermeasure_launcher: "countermeasure_launcher",
   };
   return aliases[raw] ?? "other";
 }
@@ -659,7 +661,7 @@ function engineeringInternalPorts(value: unknown): Array<Record<string, unknown>
 }
 
 function componentEngineering(row: Row): Record<string, unknown> | null {
-  const salvageType = componentType(row, "other");
+  const engineeringType = componentType(row, "other");
   const stateResources = engineeringStateResources(row.stateResourceDeltas);
   const thermal = objectValue(row.thermalHeatGeneration);
   const relay = objectValue(row.relayResourceNetwork);
@@ -692,14 +694,25 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     inclusiveResources,
     defaultComposition,
   } : null;
-  const salvage = new Set(["salvage_filler_station", "salvage_internal_storage", "salvage_field_emitter", "salvage_field_supporter"]).has(salvageType) ? {
-    type: salvageType,
-    resourceContainer: salvageType === "salvage_internal_storage" && (resourceContainerCapacity || inclusiveResources.length > 0) ? {
+  const salvage = new Set(["salvage_filler_station", "salvage_internal_storage", "salvage_field_emitter", "salvage_field_supporter"]).has(engineeringType) ? {
+    type: engineeringType,
+    resourceContainer: engineeringType === "salvage_internal_storage" && (resourceContainerCapacity || inclusiveResources.length > 0) ? {
       capacity: resourceContainerCapacity,
       inclusiveResources,
     } : null,
   } : null;
-  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage && !salvage) return null;
+  const rawCountermeasure = objectValue(row.countermeasureLauncher);
+  const countermeasureLauncher = engineeringType === "countermeasure_launcher" && rawCountermeasure ? {
+    ammoParamsRecord: text(rawCountermeasure.ammoParamsRecord),
+    initialAmmoCount: numberValue(rawCountermeasure.initialAmmoCount),
+    maxAmmoCount: numberValue(rawCountermeasure.maxAmmoCount),
+    maxRestockCount: numberValue(rawCountermeasure.maxRestockCount),
+    allowAmmoRepool: nullableBooleanValue(rawCountermeasure.allowAmmoRepool),
+    turnedOnByDefault: nullableBooleanValue(rawCountermeasure.turnedOnByDefault),
+    forceOn: nullableBooleanValue(rawCountermeasure.forceOn),
+    asopSpawnState: text(rawCountermeasure.asopSpawnState),
+  } : null;
+  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage && !salvage && !countermeasureLauncher) return null;
   return {
     stateResources,
     thermalHeatGeneration: thermal ? {
@@ -722,6 +735,7 @@ function componentEngineering(row: Row): Record<string, unknown> | null {
     fuelIntake: fuelIntakeParams,
     personalStorage,
     salvage,
+    countermeasureLauncher,
   };
 }
 
@@ -1055,6 +1069,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "salvage_internal_storage",
     "salvage_field_emitter",
     "salvage_field_supporter",
+    "countermeasure_launcher",
     "thruster",
     "other",
   ];

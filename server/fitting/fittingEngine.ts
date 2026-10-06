@@ -194,6 +194,7 @@ async function componentLookup(selection: DatasetSelection): Promise<ComponentLo
     ["salvage_internal_storage.json", "salvage_internal_storage"],
     ["salvage_field_emitters.json", "salvage_field_emitter"],
     ["salvage_field_supporters.json", "salvage_field_supporter"],
+    ["countermeasure_launchers.json", "countermeasure_launcher"],
     ["thrusters.json", "thruster"],
   ] as const;
   const byId = new Map<string, { row: Row; fallbackType: string }>();

@@ -886,6 +886,16 @@ export type FittingEngineeringDetail = {
       inclusiveResources: Array<{ reference: string | null }>;
     } | null;
   } | null;
+  countermeasureLauncher: {
+    ammoParamsRecord: string | null;
+    initialAmmoCount: number | null;
+    maxAmmoCount: number | null;
+    maxRestockCount: number | null;
+    allowAmmoRepool: boolean | null;
+    turnedOnByDefault: boolean | null;
+    forceOn: boolean | null;
+    asopSpawnState: string | null;
+  } | null;
 };
 
 export type FittingComponentDetail = FittingComponentSummary & {

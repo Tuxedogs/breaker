@@ -43,6 +43,7 @@ export const PUBLIC_REGISTRIES = [
   "salvage_internal_storage.json",
   "salvage_field_emitters.json",
   "salvage_field_supporters.json",
+  "countermeasure_launchers.json",
   "thrusters.json",
   "compatible_items_by_port.json",
   "compatibility_rules.json",
@@ -68,6 +69,7 @@ export const OPTIONAL_PUBLIC_REGISTRIES = new Set<(typeof PUBLIC_REGISTRIES)[num
   "salvage_internal_storage.json",
   "salvage_field_emitters.json",
   "salvage_field_supporters.json",
+  "countermeasure_launchers.json",
 ]);
 
 function registryPath(selection: DatasetSelection, fileName: string): string {
