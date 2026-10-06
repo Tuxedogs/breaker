@@ -73,6 +73,7 @@ export default function FittingPerformanceGrid({
   const roll = shipPerformance?.rollRate ?? extractedNum(calculateResult, "performance", "rollRate");
   const boostCapacity = extractedNum(calculateResult, "performance", "boostCapacity");
   const boostRegen = extractedNum(calculateResult, "performance", "boostRegen");
+  const boostRegenDelayAfterUse = shipPerformance?.boostRegenDelayAfterUse ?? null;
 
   const ordnancePayload = derivedNum(calculateResult, "ordnance", "totalOrdnancePayloadDamage");
 
@@ -220,6 +221,13 @@ export default function FittingPerformanceGrid({
             <FittingStatRow
               label="Boost Capacity / Regen"
               value={[boostCapacity, boostRegen].map((value) => value != null ? formatNumber(value) : "—").join(" / ")}
+              nested
+            />
+          ) : null}
+          {boostRegenDelayAfterUse != null ? (
+            <FittingStatRow
+              label="Boost Regen Delay After Use"
+              value={formatNumber(boostRegenDelayAfterUse)}
               nested
             />
           ) : null}
