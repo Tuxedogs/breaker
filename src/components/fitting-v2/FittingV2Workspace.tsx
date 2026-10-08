@@ -45,7 +45,7 @@ type Props = {
   compatibilityLoading: boolean;
   compatibilityError: boolean;
   onSelectShip: (shipKey: string) => void;
-  onPipChange: (category: PipCategory, value: number) => void;
+  onPipChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void;
   onSelectTarget: (target: FittingV2SelectedTarget, anchor: HTMLButtonElement) => void;
 };
 
@@ -181,11 +181,12 @@ function PerformanceBand({ metrics }: { metrics: FittingV2Metric[] }) {
   );
 }
 
-function PipColumn({ category, value, metadata, minimumSegments, maximumSegments, unavailableReason, onChange }: { category: PipCategory; value: number; metadata: FittingSimulationCategoryAllocationMetadata | undefined; minimumSegments?: number | null; maximumSegments?: number | null; unavailableReason?: string | null; onChange: (category: PipCategory, value: number) => void }) {
+function PipColumn({ category, value, metadata, minimumSegments, maximumSegments, unavailableReason, onChange }: { category: PipCategory; value: number; metadata: FittingSimulationCategoryAllocationMetadata | undefined; minimumSegments?: number | null; maximumSegments?: number | null; unavailableReason?: string | null; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
   const presentation = buildFittingV2PowerPipPresentation(metadata);
   const maximum = maximumSegments ?? presentation.maximumSegments;
   const minimum = minimumSegments ?? presentation.minimumSegments;
-  const hasBoundedMaximum = presentation.addressability === "selectable-pips" && maximum != null && Number.isInteger(maximum) && maximum > 0;
+  const hasPhysicalBounds = maximumSegments != null && Number.isInteger(maximumSegments) && maximumSegments > 0;
+  const hasBoundedMaximum = (hasPhysicalBounds || presentation.addressability === "selectable-pips") && maximum != null && Number.isInteger(maximum) && maximum > 0;
   const compactState = presentation.addressability === "non-pip-unit"
     ? `${presentation.unitType ?? "Input"} · Non-pip`
     : presentation.addressability === "distribution-unresolved"
@@ -201,29 +202,31 @@ function PipColumn({ category, value, metadata, minimumSegments, maximumSegments
     maxPips={hasBoundedMaximum ? maximum : 6}
     minPips={hasBoundedMaximum && minimum != null && Number.isInteger(minimum) ? Math.max(0, minimum) : 0}
     allocation={value}
-    exactPips={presentation.exactSegments}
+    exactPips={presentation.addressability === "selectable-pips" ? presentation.exactSegments : []}
     available={hasBoundedMaximum && !unavailableReason}
     interactive={hasBoundedMaximum && !unavailableReason}
     unavailableReason={unavailableReason ?? unavailableTitle}
-    onRequestAllocation={(allocation) => onChange(category, allocation)}
+    onRequestAllocation={(allocation) => onChange(category, allocation, { minimum, maximum })}
   />;
 }
 
-function PipTower({ column, assignment, draws, totalDraw, ready, simulation, onChange }: { column: FittingV2PowerColumn; assignment: PipAssignment; draws: PipSystemPowerDraw; totalDraw: number; ready: boolean; simulation: FittingSimulationState; onChange: (category: PipCategory, value: number) => void }) {
+function PipTower({ column, assignment, draws, totalDraw, ready, simulation, onChange }: { column: FittingV2PowerColumn; assignment: PipAssignment; draws: PipSystemPowerDraw; totalDraw: number; ready: boolean; simulation: FittingSimulationState; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
   const category = column.category;
   const categoryDraw = category ? draws[category] : 0;
   const percentage = totalDraw > 0 ? (categoryDraw / totalDraw) * 100 : null;
   const powered = category ? assignment[category] > 0 : false;
   const presentation = category ? buildFittingV2PowerPipPresentation(simulation.data?.power.categories?.[category]) : null;
-  const minimum = presentation?.minimumSegments;
+  const minimum = column.minimumSegments ?? presentation?.minimumSegments;
+  const maximum = column.maximumSegments ?? presentation?.maximumSegments;
   const firstPoweredSegment = presentation?.exactSegments.find((segment) => Number.isInteger(segment) && segment > 0) ?? 1;
-  const minimumTarget = presentation?.addressability === "selectable-pips" && presentation.maximumSegments != null
+  const hasPhysicalBounds = column.maximumSegments != null && Number.isInteger(column.maximumSegments) && column.maximumSegments > 0;
+  const minimumTarget = (hasPhysicalBounds || presentation?.addressability === "selectable-pips") && maximum != null
     ? minimum != null && Number.isInteger(minimum) && minimum > 0 ? minimum : firstPoweredSegment
     : null;
-  const canToggle = category !== null && column.unavailableReason === null && minimumTarget !== null && minimumTarget <= (presentation?.maximumSegments ?? 0);
-  const togglePower = () => { if (category && canToggle) onChange(category, powered ? 0 : minimumTarget!); };
+  const canToggle = category !== null && column.unavailableReason === null && minimumTarget !== null && minimumTarget <= maximum!;
+  const togglePower = () => { if (category && canToggle) onChange(category, powered ? 0 : minimumTarget!, { minimum: minimum ?? null, maximum: maximum ?? null }); };
   return (
-    <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${column.label} power allocation`} title={column.label}>
+    <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${column.label} power allocation`} data-port-id={column.portId ?? undefined} title={column.label}>
       <div className="fitv2-pip-stack-group">
         {category ? <PipColumn category={category} value={assignment[category]} metadata={simulation.data?.power.categories?.[category]} minimumSegments={column.minimumSegments} maximumSegments={column.maximumSegments} unavailableReason={column.unavailableReason} onChange={onChange} /> : <PowerTower label={column.label} maxPips={6} minPips={0} allocation={0} available={false} interactive={false} unavailableReason={column.unavailableReason} onRequestAllocation={() => undefined} />}
       </div>
@@ -261,7 +264,7 @@ function PowerDock({ aggregate }: { aggregate?: FittingAggregateGeneration }) {
   </div>;
 }
 
-function PowerSection({ assignment, draws, ready, simulation, effects, portRows, componentAllocations, powerAggregateGeneration, onChange }: { assignment: PipAssignment; draws: PipSystemPowerDraw; ready: boolean; simulation: FittingSimulationState; effects: FittingV2Effect[]; portRows: PortBreakdownRow[]; componentAllocations: readonly FittingComponentAllocation[]; powerAggregateGeneration?: FittingAggregateGeneration; onChange: (category: PipCategory, value: number) => void }) {
+function PowerSection({ assignment, draws, ready, simulation, effects, portRows, componentAllocations, powerAggregateGeneration, onChange }: { assignment: PipAssignment; draws: PipSystemPowerDraw; ready: boolean; simulation: FittingSimulationState; effects: FittingV2Effect[]; portRows: PortBreakdownRow[]; componentAllocations: readonly FittingComponentAllocation[]; powerAggregateGeneration?: FittingAggregateGeneration; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
   const totalDraw = Object.values(draws).reduce((total, value) => total + value, 0);
   const columns = buildFittingV2PowerColumns(portRows, simulation.data?.power.allocatedByCategory, componentAllocations);
   return (

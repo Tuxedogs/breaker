@@ -59,13 +59,21 @@ export function buildFittingV2PowerColumns(portRows: readonly PortBreakdownRow[]
 
   for (const row of installed) {
     const contract = allocationByPort.get(row.portId);
-    if (contract) {
+    const contractType = contract?.componentType.toLowerCase() ?? "";
+    const physicalCategory: PipCategory | null = contractType.includes("shield")
+      ? "shields"
+      : contractType.includes("radar")
+        ? "radar"
+        : contractType.includes("cooler")
+          ? (coolerIds.indexOf(row.portId) <= 0 ? "cooler1" : "cooler2")
+          : null;
+    if (contract && physicalCategory) {
       const supported = contract.allocationStatus === "supported" && contract.segmentAllocationSupported;
       columns.push({
         key: `physical:${row.portId}`,
         label: contract.displayName ?? row.equippedComponentName ?? row.portName ?? row.portId,
-        category: supported ? mapRowToPipCategory(row, coolerIds) : null,
-        icon: iconForCategory(mapRowToPipCategory(row, coolerIds) ?? "radar"),
+        category: supported ? physicalCategory : null,
+        icon: iconForCategory(physicalCategory),
         portId: row.portId,
         unavailableReason: supported ? null : contract.allocationReason ?? "Component power allocation is unavailable.",
         allocationStatus: contract.allocationStatus,

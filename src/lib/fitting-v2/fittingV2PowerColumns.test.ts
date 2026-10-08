@@ -54,6 +54,17 @@ test("physical allocation contract preserves six shields, separate coolers, rada
   assert.equal(columns.filter((column) => column.icon === "cooler").length, 2);
   assert.equal(columns.filter((column) => column.icon === "radar").length, 1);
   const unsupported = columns.find((column) => column.portId === "thruster-main");
-  assert.equal(unsupported?.category, null);
-  assert.match(unsupported?.unavailableReason ?? "", /not_segment_addressable/);
+  assert.equal(unsupported?.category, "engines");
+  assert.equal(unsupported?.unavailableReason, null);
+});
+
+test("component contracts do not expand aggregate unsupported families into one tower per installed item", () => {
+  const rows = [row("weapon-a", "ship_weapon"), row("weapon-b", "ship_weapon"), row("quantum-a", "quantum_drive")];
+  const contracts: FittingComponentAllocation[] = rows.map((entry) => ({
+    portId: entry.portId, componentKey: entry.equippedComponentKey, componentType: entry.componentCategory!, displayName: entry.equippedComponentName,
+    allocationStatus: "unsupported", allocationReason: "component_family_not_segment_addressable", segmentAllocationSupported: false,
+    minimumSegments: null, maximumSegments: null, powerRanges: [], provenance: {},
+  }));
+  const columns = buildFittingV2PowerColumns(rows, undefined, contracts);
+  assert.deepEqual(columns.map((column) => column.key), ["weapons", "quantum"]);
 });

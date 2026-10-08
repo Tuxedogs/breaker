@@ -120,10 +120,10 @@ export default function FittingV2Page() {
   const chooserCandidateIds = chooserCompatibility.result?.components.map((item) => item.id) ?? [];
   const chooserDetails = useEquippedComponentDetails(chooserCandidateIds);
 
-  function updatePip(category: PipCategory, value: number) {
+  function updatePip(category: PipCategory, value: number, physicalBounds?: { minimum: number | null; maximum: number | null }) {
     const metadata = simulation.data?.power.categories[category];
-    const maximum = metadata?.maximumSegments.value;
-    const minimum = metadata?.minimumSegments.value;
+    const maximum = physicalBounds?.maximum ?? metadata?.maximumSegments.value;
+    const minimum = physicalBounds?.minimum ?? metadata?.minimumSegments.value;
     setPipAssignment((current) => applyFittingV2PowerRequest(current, category, value, { minimum, maximum }));
   }
 
