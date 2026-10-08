@@ -15,9 +15,8 @@ type Props = {
 
 const MFD_ASSET_ROOT = "/images/fitting-v2/mfd";
 
-function regionAsset(kind: "minimum" | "pip", units: number, assigned: boolean): string {
+function regionAsset(units: number, assigned: boolean): string {
   const count = Math.max(1, Math.min(5, units));
-  if (kind === "minimum" && assigned && count > 1) return `${MFD_ASSET_ROOT}/${count}-min-assigned.svg`;
   if (assigned) return `${MFD_ASSET_ROOT}/assigned-${count}.svg`;
   return `${MFD_ASSET_ROOT}/${count === 5 ? "unassinged" : "unassigned"}-${count}.svg`;
 }
@@ -45,7 +44,7 @@ export default function PowerTower({ label, maxPips, minPips, allocation, exactP
           onClick={() => onRequestAllocation(region.allocation)}
           key={`${region.kind}-${region.allocation}`}
         >
-          <img className="fitv2-power-shape" src={regionAsset(region.kind, region.units, region.assigned)} alt="" />
+          <img className="fitv2-power-shape" src={regionAsset(region.units, region.assigned)} alt="" />
         </button>
       ))}
     </div>
