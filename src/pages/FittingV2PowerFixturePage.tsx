@@ -36,7 +36,6 @@ export default function FittingV2PowerFixturePage() {
       return <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${item.label} power allocation`} data-port-id={item.portId} title={`${item.label} · ${item.portId}`} key={item.portId}>
         <div className="fitv2-pip-stack-group"><PowerTower label={item.label} maxPips={item.max} minPips={item.min} allocation={allocation} available interactive onRequestAllocation={(value) => setAllocations((current) => ({ ...current, [item.portId]: value }))} /></div>
         <button type="button" className="fitv2-pip-icon-button" aria-label={powered ? `Power off ${item.label}` : `Power ${item.label} to minimum`} onClick={() => setAllocations((current) => ({ ...current, [item.portId]: powered ? 0 : item.min }))}><MfdPowerIcon kind={item.icon} className={`fitv2-pip-icon is-${item.icon}`} /></button>
-        <em>{item.portId}</em>
       </article>;
     })}</div></div></div>
   </section></main>;
