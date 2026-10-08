@@ -28,7 +28,25 @@ test("QED and EMP are conditional and ordered between Quantum and Radar", () => 
     row("radar", "radar"), row("emp", "utility", "EMP device"), row("quantum", "quantum_drive"), row("qed", "utility", "QED dampener"),
   ]);
   assert.deepEqual(columns.map((column) => column.icon), ["quantum", "emp", "qed", "radar"]);
-  assert.ok(columns.filter((column) => column.icon === "emp" || column.icon === "qed").every((column) => column.category === null));
+  assert.ok(columns.filter((column) => column.icon === "emp" || column.icon === "qed").every((column) => column.behavior === "binary_enable" && column.provenance === "MODELED_GAMEPLAY"));
+});
+
+test("Engines remain a modeled continuous channel when an exact performance curve is unresolved", () => {
+  const [engine] = buildFittingV2PowerColumns([row("thruster", "thruster")]);
+  assert.equal(engine?.category, "engines");
+  assert.equal(engine?.behavior, "segment_scaling");
+  assert.equal(engine?.provenance, "MODELED_GAMEPLAY");
+  assert.deepEqual([engine?.minimumSegments, engine?.maximumSegments], [1, 6]);
+});
+
+test("Quantum, QED, and EMP use binary enablement without continuous performance scaling", () => {
+  const columns = buildFittingV2PowerColumns([
+    row("quantum", "quantum_drive"), row("qed", "utility", "QED"), row("emp", "utility", "EMP"),
+  ]);
+  assert.ok(columns.every((column) => column.behavior === "binary_enable"));
+  const quantum = columns.find((column) => column.icon === "quantum");
+  assert.deepEqual([quantum?.minimumSegments, quantum?.maximumSegments], [undefined, undefined]);
+  assert.ok(columns.filter((column) => column.icon === "qed" || column.icon === "emp").every((column) => column.minimumSegments === 1 && column.maximumSegments === 1));
 });
 
 test("multiple installed shields remain separate unavailable physical columns when distribution is unresolved", () => {
@@ -50,7 +68,9 @@ test("physical allocation contract preserves six shields, separate coolers, rada
     powerRanges: [], provenance: {}, shieldHP: entry.componentCategory === "shield" ? 100 : undefined, regenRate: entry.componentCategory === "shield" ? 10 : undefined,
   }));
   const columns = buildFittingV2PowerColumns(rows, undefined, allocations);
-  assert.equal(columns.filter((column) => column.icon === "shields").length, 6);
+  const shields = columns.filter((column) => column.icon === "shields");
+  assert.equal(shields.length, 6);
+  assert.ok(shields.every((column) => column.key.startsWith("physical:") && column.category === "shields" && column.behavior === "segment_scaling" && column.provenance === "SOURCE_BACKED"));
   assert.equal(columns.filter((column) => column.icon === "cooler").length, 2);
   assert.equal(columns.filter((column) => column.icon === "radar").length, 1);
   const unsupported = columns.find((column) => column.portId === "thruster-main");

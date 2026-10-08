@@ -15,6 +15,8 @@ export type FittingV2PowerColumn = {
   allocationStatus?: FittingComponentAllocation["allocationStatus"];
   minimumSegments?: number | null;
   maximumSegments?: number | null;
+  behavior: "segment_scaling" | "binary_enable" | "placeholder" | "unresolved";
+  provenance: "SOURCE_BACKED" | "DERIVED" | "MODELED_GAMEPLAY" | "EMPIRICAL" | "UNRESOLVED";
 };
 
 const ORDER: Record<SystemIconKind, number> = {
@@ -79,12 +81,25 @@ export function buildFittingV2PowerColumns(portRows: readonly PortBreakdownRow[]
         allocationStatus: contract.allocationStatus,
         minimumSegments: contract.minimumSegments,
         maximumSegments: contract.maximumSegments,
+        behavior: supported ? "segment_scaling" : "unresolved",
+        provenance: supported ? "SOURCE_BACKED" : "UNRESOLVED",
       });
       continue;
     }
     const special = specialKind(row);
     if (special) {
-      columns.push({ key: `${special}:${row.portId}`, label: special.toUpperCase(), category: null, icon: special, portId: row.portId, unavailableReason: "This installed device has no independently addressable allocation channel in the current fitting power model." });
+      columns.push({
+        key: `${special}:${row.portId}`,
+        label: special.toUpperCase(),
+        category: null,
+        icon: special,
+        portId: row.portId,
+        unavailableReason: null,
+        minimumSegments: 1,
+        maximumSegments: 1,
+        behavior: "binary_enable",
+        provenance: "MODELED_GAMEPLAY",
+      });
       continue;
     }
     const category = mapRowToPipCategory(row, coolerIds);
@@ -104,10 +119,28 @@ export function buildFittingV2PowerColumns(portRows: readonly PortBreakdownRow[]
         icon: "shields",
         portId: row.portId,
         unavailableReason: "Per-generator power distribution is unresolved by the current fitting power model.",
+        behavior: "unresolved",
+        provenance: "UNRESOLVED",
       }));
     } else {
       const row = rows[0]!;
-      columns.push({ key: category, label: labelForCategory(category), category, icon: iconForCategory(category), portId: row.portId, unavailableReason: null });
+      const modeled = category === "engines" || category === "quantum";
+      columns.push({
+        key: category,
+        label: labelForCategory(category),
+        category,
+        icon: iconForCategory(category),
+        portId: row.portId,
+        unavailableReason: null,
+        // Engines have established continuous allocation behavior even while
+        // their quantitative performance curve remains unresolved. Quantum is
+        // binary, but its required allocation stays bound to the simulation
+        // contract rather than being flattened to a made-up one-pip floor.
+        minimumSegments: category === "engines" ? 1 : undefined,
+        maximumSegments: category === "engines" ? 6 : undefined,
+        behavior: category === "quantum" ? "binary_enable" : "segment_scaling",
+        provenance: modeled ? "MODELED_GAMEPLAY" : "SOURCE_BACKED",
+      });
     }
   }
 

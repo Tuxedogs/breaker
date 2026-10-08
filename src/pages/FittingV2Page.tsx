@@ -25,6 +25,7 @@ import {
 import { buildFittingV2SlotTopology } from "../lib/fitting-v2/fittingV2SlotTopology";
 import { isFittingV2TargetPotentiallyActionable, useFittingV2ChooserCompatibility } from "../lib/fitting-v2/fittingV2ChooserCompatibility";
 import { applyFittingV2PowerRequest } from "../lib/fitting-v2/fittingV2PowerState";
+import { applyFittingV2ModeledPowerRequest, type FittingV2ModeledPowerAssignment } from "../lib/fitting-v2/fittingV2ModeledPower";
 import FittingV2CompatibleChooser from "../components/fitting-v2/FittingV2CompatibleChooser";
 import type { FittingComponentSummary } from "../lib/fitting/fittingApi";
 import "../components/fitting-v2/fitting-v2.css";
@@ -41,6 +42,8 @@ export default function FittingV2Page() {
   const loadout = useFittingMockupLoadout(initialShipKey);
   const { selectedShipKey, selectShip: selectLoadoutShip, ships } = loadout;
   const [pipAssignment, setPipAssignment] = useState<PipAssignment>({ ...DEFAULT_PIP_ASSIGNMENT });
+  const [modeledPowerAssignment, setModeledPowerAssignment] = useState<FittingV2ModeledPowerAssignment>({});
+  const [physicalPowerAssignment, setPhysicalPowerAssignment] = useState<Record<string, number>>({});
   const [selectedTargetState, setSelectedTargetState] = useState<{ shipKey: string | null; target: FittingV2SelectedTarget } | null>(null);
   const [chooserTargetState, setChooserTargetState] = useState<{ shipKey: string | null; target: FittingV2SelectedTarget; anchor: HTMLButtonElement } | null>(null);
   const [chooserError, setChooserError] = useState<string | null>(null);
@@ -64,10 +67,14 @@ export default function FittingV2Page() {
     if (loadout.portRows.some((row) => row.shipKey !== shipKey)) return;
     if (pipSyncedShipRef.current === shipKey) return;
     pipSyncedShipRef.current = shipKey;
-    queueMicrotask(() => setPipAssignment({
-      ...pipAssignmentFromDrawsUncapped(pipPower.draws),
-      quantum: 0,
-    }));
+    queueMicrotask(() => {
+      setModeledPowerAssignment({});
+      setPhysicalPowerAssignment({});
+      setPipAssignment({
+        ...pipAssignmentFromDrawsUncapped(pipPower.draws),
+        quantum: 0,
+      });
+    });
   }, [loadout.portRows, pipPower.draws, pipPower.ready, selectedShipKey]);
 
   useEffect(() => {
@@ -125,6 +132,14 @@ export default function FittingV2Page() {
     const maximum = physicalBounds?.maximum ?? metadata?.maximumSegments.value;
     const minimum = physicalBounds?.minimum ?? metadata?.minimumSegments.value;
     setPipAssignment((current) => applyFittingV2PowerRequest(current, category, value, { minimum, maximum }));
+  }
+
+  function updateModeledPower(key: string, value: number) {
+    setModeledPowerAssignment((current) => applyFittingV2ModeledPowerRequest(current, key, value));
+  }
+
+  function updatePhysicalPower(key: string, value: number) {
+    setPhysicalPowerAssignment((current) => ({ ...current, [key]: Math.max(0, Math.round(value)) }));
   }
 
   function selectShip(nextShipKey: string) {
@@ -186,6 +201,8 @@ export default function FittingV2Page() {
       performanceMetrics={performanceMetrics}
       topology={topology}
       pipAssignment={pipAssignment}
+      modeledPowerAssignment={modeledPowerAssignment}
+      physicalPowerAssignment={physicalPowerAssignment}
       pipDraws={pipPower.draws}
       pipReady={pipPower.ready}
       simulation={simulation}
@@ -200,6 +217,8 @@ export default function FittingV2Page() {
       compatibilityError={compatible.error}
       onSelectShip={selectShip}
       onPipChange={updatePip}
+      onModeledPowerChange={updateModeledPower}
+      onPhysicalPowerChange={updatePhysicalPower}
       onSelectTarget={selectTarget}
     />
     {chooserTarget ? <div className="fitv2-chooser-scrim" aria-hidden="true" /> : null}

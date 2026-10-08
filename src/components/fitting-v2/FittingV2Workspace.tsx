@@ -20,6 +20,8 @@ import {
 } from "../../lib/fitting-v2/fittingV2Presentation";
 import type { FittingV2SlotNode, FittingV2SlotTopology } from "../../lib/fitting-v2/fittingV2SlotTopology";
 import { buildFittingV2PowerColumns, type FittingV2PowerColumn } from "../../lib/fitting-v2/fittingV2PowerColumns";
+import type { FittingV2ModeledPowerAssignment } from "../../lib/fitting-v2/fittingV2ModeledPower";
+import { displayedPhysicalPowerAllocation } from "../../lib/fitting-v2/fittingV2PhysicalPowerPresentation";
 
 type Props = {
   ships: FittingShipSummary[];
@@ -33,6 +35,8 @@ type Props = {
   performanceMetrics: FittingV2Metric[];
   topology: FittingV2SlotTopology;
   pipAssignment: PipAssignment;
+  modeledPowerAssignment: FittingV2ModeledPowerAssignment;
+  physicalPowerAssignment: Record<string, number>;
   pipDraws: PipSystemPowerDraw;
   pipReady: boolean;
   simulation: FittingSimulationState;
@@ -47,6 +51,8 @@ type Props = {
   compatibilityError: boolean;
   onSelectShip: (shipKey: string) => void;
   onPipChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void;
+  onModeledPowerChange: (key: string, value: number) => void;
+  onPhysicalPowerChange: (key: string, value: number) => void;
   onSelectTarget: (target: FittingV2SelectedTarget, anchor: HTMLButtonElement) => void;
 };
 
@@ -211,11 +217,13 @@ function PipColumn({ category, value, metadata, minimumSegments, maximumSegments
   />;
 }
 
-function PipTower({ column, assignment, draws, totalDraw, ready, simulation, onChange }: { column: FittingV2PowerColumn; assignment: PipAssignment; draws: PipSystemPowerDraw; totalDraw: number; ready: boolean; simulation: FittingSimulationState; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
+function PipTower({ column, assignment, binaryAllocation, physicalAllocation, draws, totalDraw, ready, simulation, onChange, onBinaryChange, onPhysicalChange }: { column: FittingV2PowerColumn; assignment: PipAssignment; binaryAllocation: number; physicalAllocation: number | null; draws: PipSystemPowerDraw; totalDraw: number; ready: boolean; simulation: FittingSimulationState; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void; onBinaryChange: (key: string, value: number) => void; onPhysicalChange: (key: string, value: number) => void }) {
   const category = column.category;
+  const isPhysicalSourceBacked = column.key.startsWith("physical:") && column.behavior === "segment_scaling" && category !== null;
+  const displayedPhysicalAllocation = displayedPhysicalPowerAllocation(category, physicalAllocation ?? 0, assignment);
   const categoryDraw = category ? draws[category] : 0;
   const percentage = totalDraw > 0 ? (categoryDraw / totalDraw) * 100 : null;
-  const powered = category ? assignment[category] > 0 : false;
+  const powered = isPhysicalSourceBacked ? displayedPhysicalAllocation > 0 : category ? assignment[category] > 0 : binaryAllocation > 0;
   const presentation = category ? buildFittingV2PowerPipPresentation(simulation.data?.power.categories?.[category]) : null;
   const minimum = column.minimumSegments ?? presentation?.minimumSegments;
   const maximum = column.maximumSegments ?? presentation?.maximumSegments;
@@ -224,12 +232,22 @@ function PipTower({ column, assignment, draws, totalDraw, ready, simulation, onC
   const minimumTarget = (hasPhysicalBounds || presentation?.addressability === "selectable-pips") && maximum != null
     ? minimum != null && Number.isInteger(minimum) && minimum > 0 ? minimum : firstPoweredSegment
     : null;
-  const canToggle = category !== null && column.unavailableReason === null && minimumTarget !== null && minimumTarget <= maximum!;
-  const togglePower = () => { if (category && canToggle) onChange(category, powered ? 0 : minimumTarget!, { minimum: minimum ?? null, maximum: maximum ?? null }); };
+  const isBinary = column.behavior === "binary_enable";
+  const requiredBinaryAllocation = minimumTarget ?? 1;
+  const canToggle = column.unavailableReason === null && (isBinary || (isPhysicalSourceBacked && minimumTarget !== null && minimumTarget <= maximum!) || (category !== null && minimumTarget !== null && minimumTarget <= maximum!));
+  const togglePower = () => {
+    if (isPhysicalSourceBacked) onPhysicalChange(column.key, powered ? 0 : minimumTarget!);
+    else if (isBinary && category) onChange(category, powered ? 0 : requiredBinaryAllocation, { minimum: requiredBinaryAllocation, maximum: requiredBinaryAllocation });
+    else if (isBinary) onBinaryChange(column.key, powered ? 0 : requiredBinaryAllocation);
+    else if (category && canToggle) onChange(category, powered ? 0 : minimumTarget!, { minimum: minimum ?? null, maximum: maximum ?? null });
+  };
   return (
-    <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${column.label} power allocation`} data-port-id={column.portId ?? undefined} title={column.label}>
+    <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${column.label} power allocation`} data-port-id={column.portId ?? undefined} data-power-behavior={column.behavior} data-provenance={column.provenance} title={`${column.label} · ${column.behavior} · ${column.provenance}`}>
       <div className="fitv2-pip-stack-group">
-        {category ? <PipColumn category={category} value={assignment[category]} metadata={simulation.data?.power.categories?.[category]} minimumSegments={column.minimumSegments} maximumSegments={column.maximumSegments} unavailableReason={column.unavailableReason} onChange={onChange} /> : <PowerTower label={column.label} maxPips={6} minPips={0} allocation={0} available={false} interactive={false} unavailableReason={column.unavailableReason} onRequestAllocation={() => undefined} />}
+        {isPhysicalSourceBacked ? <PowerTower label={column.label} maxPips={maximum ?? 6} minPips={minimum ?? 0} allocation={displayedPhysicalAllocation} available={column.unavailableReason === null} interactive={column.unavailableReason === null} unavailableReason={column.unavailableReason} onRequestAllocation={(value) => onPhysicalChange(column.key, value)} /> : isBinary ? <PowerTower label={column.label} maxPips={requiredBinaryAllocation} minPips={requiredBinaryAllocation} allocation={category ? assignment[category] : binaryAllocation} available={column.unavailableReason === null} interactive={column.unavailableReason === null} unavailableReason={column.unavailableReason} onRequestAllocation={(value) => {
+          if (category) onChange(category, value > 0 ? requiredBinaryAllocation : 0, { minimum: requiredBinaryAllocation, maximum: requiredBinaryAllocation });
+          else onBinaryChange(column.key, value > 0 ? requiredBinaryAllocation : 0);
+        }} /> : category ? <PipColumn category={category} value={assignment[category]} metadata={simulation.data?.power.categories?.[category]} minimumSegments={column.minimumSegments} maximumSegments={column.maximumSegments} unavailableReason={column.unavailableReason} onChange={onChange} /> : <PowerTower label={column.label} maxPips={6} minPips={0} allocation={0} available={false} interactive={false} unavailableReason={column.unavailableReason} onRequestAllocation={() => undefined} />}
       </div>
       <button type="button" className="fitv2-pip-icon-button" aria-label={powered ? `Power off ${column.label}` : `Power ${column.label} to minimum`} disabled={!canToggle} onClick={togglePower}>
         <MfdPowerIcon kind={column.icon} className={`fitv2-pip-icon is-${column.icon}`} />
@@ -262,13 +280,15 @@ function PowerDock({ aggregate, allocatedPips }: { aggregate?: FittingAggregateG
   const reason = remaining == null
     ? aggregate?.reason ?? "Aggregate generation is unavailable from the current source-backed contract."
     : `${numberFormat.format(remaining)} of ${numberFormat.format(aggregate!.generation!)} pips remain unassigned.`;
-  return <div className="fitv2-power-dock" title={reason}>
+  return <div className="fitv2-power-dock" title={`${reason} Battery is an inactive gameplay placeholder.`} data-battery-behavior="placeholder" data-battery-provenance="MODELED_GAMEPLAY">
     <img src="/images/fitting-v2/mfd/MFD-dock-output-battery.svg" alt="OUTPUT and BATTERY dock" />
     <strong className="fitv2-dock-output-value">{output}</strong>
   </div>;
 }
 
-function PowerSection({ assignment, draws, ready, simulation, effects, portRows, componentAllocations, powerAggregateGeneration, onChange }: { assignment: PipAssignment; draws: PipSystemPowerDraw; ready: boolean; simulation: FittingSimulationState; effects: FittingV2Effect[]; portRows: PortBreakdownRow[]; componentAllocations: readonly FittingComponentAllocation[]; powerAggregateGeneration?: FittingAggregateGeneration; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
+export type FittingV2PowerSectionProps = { assignment: PipAssignment; modeledPowerAssignment: FittingV2ModeledPowerAssignment; physicalPowerAssignment: Record<string, number>; draws: PipSystemPowerDraw; ready: boolean; simulation: FittingSimulationState; effects: FittingV2Effect[]; portRows: PortBreakdownRow[]; componentAllocations: readonly FittingComponentAllocation[]; powerAggregateGeneration?: FittingAggregateGeneration; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void; onModeledPowerChange: (key: string, value: number) => void; onPhysicalPowerChange: (key: string, value: number) => void };
+
+export function FittingV2PowerSection({ assignment, modeledPowerAssignment, physicalPowerAssignment, draws, ready, simulation, effects, portRows, componentAllocations, powerAggregateGeneration, onChange, onModeledPowerChange, onPhysicalPowerChange }: FittingV2PowerSectionProps) {
   const totalDraw = Object.values(draws).reduce((total, value) => total + value, 0);
   const allocatedPips = Object.values(assignment).reduce((total, value) => total + value, 0);
   const columns = buildFittingV2PowerColumns(portRows, simulation.data?.power.allocatedByCategory, componentAllocations);
@@ -282,7 +302,7 @@ function PowerSection({ assignment, draws, ready, simulation, effects, portRows,
         <div className="fitv2-power-stage">
           <img className="fitv2-signature-dock" src="/images/fitting-v2/mfd/signature-dock.svg" alt="" />
           <PowerDock aggregate={powerAggregateGeneration} allocatedPips={allocatedPips} />
-          <div className="fitv2-pip-grid fitv2-pip-stackl">{columns.map((column) => <PipTower key={column.key} column={column} assignment={assignment} draws={draws} totalDraw={totalDraw} ready={ready} simulation={simulation} onChange={onChange} />)}</div>
+          <div className="fitv2-pip-grid fitv2-pip-stackl">{columns.map((column) => <PipTower key={column.key} column={column} assignment={assignment} binaryAllocation={modeledPowerAssignment[column.key]?.allocation ?? 0} physicalAllocation={physicalPowerAssignment[column.key] ?? null} draws={draws} totalDraw={totalDraw} ready={ready} simulation={simulation} onChange={onChange} onBinaryChange={onModeledPowerChange} onPhysicalChange={onPhysicalPowerChange} />)}</div>
         </div>
         <LiveEffects effects={effects} loading={simulation.loading} />
       </div>
@@ -342,7 +362,7 @@ export default function FittingV2Workspace(props: Props) {
         <TopologyBrowser topology={props.topology} selectedTarget={props.selectedTarget} onSelectTarget={props.onSelectTarget} />
         <FittingV2Inspector shipName={shipName} metrics={props.performanceMetrics} portRows={props.portRows} detailsById={props.detailsById} selectedTarget={props.selectedTarget} compatible={props.compatible} compatibilityLoading={props.compatibilityLoading} compatibilityError={props.compatibilityError} />
       </section>
-      <PowerSection assignment={props.pipAssignment} draws={props.pipDraws} ready={props.pipReady} simulation={props.simulation} effects={props.effects} portRows={props.portRows} componentAllocations={props.componentAllocations ?? []} powerAggregateGeneration={props.powerAggregateGeneration} onChange={props.onPipChange} />
+      <FittingV2PowerSection assignment={props.pipAssignment} modeledPowerAssignment={props.modeledPowerAssignment} physicalPowerAssignment={props.physicalPowerAssignment} draws={props.pipDraws} ready={props.pipReady} simulation={props.simulation} effects={props.effects} portRows={props.portRows} componentAllocations={props.componentAllocations ?? []} powerAggregateGeneration={props.powerAggregateGeneration} onChange={props.onPipChange} onModeledPowerChange={props.onModeledPowerChange} onPhysicalPowerChange={props.onPhysicalPowerChange} />
       <PerformanceBand metrics={props.performanceMetrics} />
       <ResourceNetwork assignment={props.pipAssignment} simulation={props.simulation} />
     </main>
