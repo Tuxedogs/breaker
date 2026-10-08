@@ -258,10 +258,10 @@ function PowerDock({ aggregate, allocatedPips }: { aggregate?: FittingAggregateG
   const remaining = aggregate?.available && aggregate.status === "direct_source_single_plant" && aggregate.generation != null
     ? Math.max(0, aggregate.generation - allocatedPips)
     : null;
-  const output = remaining == null ? "—" : numberFormat.format(remaining);
+  const output = remaining == null ? "— / —" : `${numberFormat.format(remaining)} / ${numberFormat.format(aggregate!.generation!)}`;
   const reason = remaining == null
     ? aggregate?.reason ?? "Aggregate generation is unavailable from the current source-backed contract."
-    : `${output} of ${numberFormat.format(aggregate!.generation!)} pips remain unassigned.`;
+    : `${numberFormat.format(remaining)} of ${numberFormat.format(aggregate!.generation!)} pips remain unassigned.`;
   return <div className="fitv2-power-dock" title={reason}>
     <img src="/images/fitting-v2/mfd/MFD-dock-output-battery.svg" alt="OUTPUT and BATTERY dock" />
     <strong className="fitv2-dock-output-value">{output}</strong>
