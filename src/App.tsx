@@ -29,6 +29,9 @@ const FittingV2Page = lazy(() => import("./pages/FittingV2Page"));
 const FittingFixturePage = import.meta.env.DEV
   ? lazy(() => import("./pages/FittingFixturePage"))
   : null;
+const FittingV2PowerFixturePage = import.meta.env.DEV
+  ? lazy(() => import("./pages/FittingV2PowerFixturePage"))
+  : null;
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -226,6 +229,12 @@ export default function App() {
           path="fitting-v2/:shipKey"
           element={<Suspense fallback={<RouteFallback />}><FittingV2Page /></Suspense>}
         />
+        {FittingV2PowerFixturePage ? (
+          <Route
+            path="fitting-v2/__fixture/power"
+            element={<Suspense fallback={<RouteFallback />}><FittingV2PowerFixturePage /></Suspense>}
+          />
+        ) : null}
         {/* Legacy redirect — preserve old gunnery URL */}
         <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
         <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />

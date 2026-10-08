@@ -254,7 +254,30 @@ export type FittingCalculationCategory = {
   unavailableReason: string | null;
   derived: Record<string, string | number | boolean | null>;
   extracted?: Record<string, unknown>;
+  individualPlants?: FittingPowerPlant[];
+  aggregateGeneration?: FittingAggregateGeneration;
 };
+
+export type FittingComponentAllocation = {
+  portId: string | null;
+  componentKey: string | null;
+  componentType: string;
+  displayName?: string | null;
+  allocationStatus: "supported" | "unsupported" | "unresolved";
+  allocationReason: string | null;
+  segmentAllocationSupported: boolean;
+  minimumSegments: number | null;
+  maximumSegments: number | null;
+  powerRanges: Array<Record<string, unknown>>;
+  provenance: Record<string, string>;
+  shieldHP?: number | null;
+  regenRate?: number | null;
+  activeIdentityKnown?: boolean | null;
+  activeStatus?: string | null;
+};
+
+export type FittingPowerPlant = { componentId: string; portId: string | null; displayName: string | null; size: number | null; generation: number | null };
+export type FittingAggregateGeneration = { available: boolean; status: string; installedPlantCount: number; generation?: number | null; reason: string | null };
 
 export type FittingCalculation = {
   shipId: string;
@@ -262,6 +285,7 @@ export type FittingCalculation = {
   resolutionStatus: string;
   componentCountsByType: Record<string, number>;
   categories: Partial<Record<"power" | "cooling" | "shields" | "weapons" | "ordnance" | "quantum" | "radar" | "performance", FittingCalculationCategory>>;
+  componentAllocations?: FittingComponentAllocation[];
   warnings: string[];
 };
 
@@ -286,6 +310,7 @@ export type FittingCalculateResult = {
   resolutionStatus: string;
   componentCountsByType: Record<string, number>;
   categories: FittingCalculation["categories"];
+  componentAllocations?: FittingComponentAllocation[];
   summary: {
     firepower: { weaponAlphaTotal: number | null; weaponDpsTotal: number | null; weaponCount: number; confidence: FittingConfidence; inferred: boolean };
     ordnance: {
@@ -345,6 +370,28 @@ export type FittingSimulationMetric = {
   sources: FittingSimulationSourceFact[];
 };
 
+export type FittingSimulationAllocationCurvePoint = {
+  segments: number;
+  value: FittingSimulationMetric;
+};
+
+export type FittingSimulationCategoryAllocationMetadata = {
+  minimumSegments: FittingSimulationMetric;
+  nominalSegments: FittingSimulationMetric;
+  maximumSegments: FittingSimulationMetric;
+  exactAllocationCurve: FittingSimulationAllocationCurvePoint[];
+  unavailableReason: string | null;
+  unitType: string | null;
+  addressability: "selectable-pips" | "non-pip-unit" | "bounds-unavailable" | "component-family-missing" | "distribution-unresolved" | "no-component-installed";
+  componentCount: number;
+  perComponent: Array<{
+    componentId: string;
+    minimumSegments: FittingSimulationMetric;
+    maximumSegments: FittingSimulationMetric;
+    exactAllocationCurve: FittingSimulationAllocationCurvePoint[];
+  }>;
+};
+
 export type FittingSimulationMissingInput = {
   componentId: string | null;
   mountId: string | null;
@@ -385,6 +432,7 @@ export type FittingSimulationResult = {
     allocatedSegments: FittingSimulationMetric;
     marginSegments: FittingSimulationMetric;
     allocatedByCategory: FittingSimulationPowerAllocation;
+    categories: Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata>;
   };
   cooling: {
     capacity: FittingSimulationMetric;

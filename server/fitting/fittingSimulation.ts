@@ -54,6 +54,9 @@ export interface NormalizedFittingSimulationComponent {
   powerCapacitySegments?: number | null;
   nominalPowerDemandSegments?: number | null;
   minimumPowerDemandSegments?: number | null;
+  minimumPowerDemandPips?: number | null;
+  maximumPowerInput?: number | null;
+  maximumPowerInputPips?: number | null;
   nominalPowerDemandUnitType?: string | null;
   coolingCapacity?: number | null;
   coolingCapacityByPowerAllocation?: Array<{
@@ -73,7 +76,11 @@ export interface FittingSimulationInput {
   /** Foundry FixedPowerPool capacity for WeaponGun consumers. */
   weaponPowerPoolSegments?: number | null;
   weaponPowerPoolSourcePath?: string | null;
+  categoryPresence?: Partial<Record<FittingSimulationPowerCategory, { componentCount: number; unavailableReason: string }>>;
   durationSeconds?: number;
+  aggregateGeneration?: { available: boolean; status: string; installedPlantCount: number; generation?: number | null; reason?: string | null };
+  activeShieldPoolCapacity?: number | null;
+  activeShieldIdentityKnown?: boolean | null;
 }
 
 export interface SimulationSourceFact {
@@ -88,6 +95,23 @@ export interface SimulationMetric {
   provenance: "derived" | "unavailable";
   formula: string | null;
   sources: SimulationSourceFact[];
+}
+
+export interface FittingSimulationAllocationCurvePoint {
+  segments: number;
+  value: SimulationMetric;
+}
+
+export interface FittingSimulationCategoryAllocationMetadata {
+  minimumSegments: SimulationMetric;
+  nominalSegments: SimulationMetric;
+  maximumSegments: SimulationMetric;
+  exactAllocationCurve: FittingSimulationAllocationCurvePoint[];
+  unavailableReason: string | null;
+  unitType: string | null;
+  addressability: "selectable-pips" | "non-pip-unit" | "bounds-unavailable" | "component-family-missing" | "distribution-unresolved" | "no-component-installed";
+  componentCount: number;
+  perComponent: Array<{ componentId: string; minimumSegments: SimulationMetric; maximumSegments: SimulationMetric; exactAllocationCurve: FittingSimulationAllocationCurvePoint[] }>;
 }
 
 export interface SimulationMissingInput {
@@ -130,6 +154,7 @@ export interface FittingSimulationResult {
     allocatedSegments: SimulationMetric;
     marginSegments: SimulationMetric;
     allocatedByCategory: Record<FittingSimulationPowerCategory, number>;
+    categories: Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata>;
   };
   cooling: {
     capacity: SimulationMetric;
@@ -231,19 +256,110 @@ function categoryNominalDemand(
   );
 }
 
+function categoryAllocationMetadata(
+  components: NormalizedFittingSimulationComponent[],
+  weaponPowerPoolSegments: number | null,
+  weaponPoolSources: SimulationSourceFact[],
+  categoryPresence: FittingSimulationInput["categoryPresence"],
+): Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata> {
+  return Object.fromEntries(POWER_CATEGORIES.map((category) => {
+    const members = components.filter((component) => component.powerCategory === category);
+    const nominalValues = members.map((component) => component.nominalPowerDemandSegments);
+    const minimumValues = members.map((component) => component.minimumPowerDemandSegments);
+    const nominalSources = members.flatMap((component) => isFiniteNonnegative(component.nominalPowerDemandSegments)
+      ? [componentSource(component, "nominalPowerDemandSegments", component.nominalPowerDemandSegments)]
+      : []);
+    const minimumSources = members.flatMap((component) => isFiniteNonnegative(component.minimumPowerDemandSegments)
+      ? [componentSource(component, "minimumPowerDemandSegments", component.minimumPowerDemandSegments)]
+      : []);
+    const presence = categoryPresence?.[category];
+    const unitType = members.length > 0 && members.every((member) => member.nominalPowerDemandUnitType === members[0]?.nominalPowerDemandUnitType)
+      ? members[0]?.nominalPowerDemandUnitType ?? null
+      : null;
+    const nominalSegments = members.length > 0 && nominalValues.every(isFiniteNonnegative)
+      ? derived(sum(nominalValues as number[]), "sum(category nominalPowerDemandSegments)", nominalSources)
+      : unavailable(nominalSources);
+    // A single component owns its floor.  Multiple independently-fed components
+    // need an extracted distribution rule before their non-zero floors can be
+    // presented as one selectable category floor.
+    const canAggregateMinimum = members.length === 1
+      || (minimumValues.every(isFiniteNonnegative) && (minimumValues as number[]).every((value) => value === 0));
+    const minimumSegments = members.length > 0 && canAggregateMinimum && minimumValues.every(isFiniteNonnegative)
+      ? derived(sum(minimumValues as number[]), "sum(category minimumPowerDemandSegments)", minimumSources)
+      : unavailable(minimumSources);
+    const component = members.length === 1 ? members[0]! : null;
+    const curve = component?.shield?.regenByPowerAllocation?.map((entry) => ({
+      segments: entry.allocation,
+      value: derived(entry.value, "exact extracted shield regeneration at allocation", [
+        componentSource(component, entry.allocationSourcePath ?? `shield.regenByPowerAllocation[allocation=${entry.allocation}]`, entry.allocation),
+        componentSource(component, entry.valueSourcePath ?? `shield.regenByPowerAllocation[allocation=${entry.allocation}].value`, entry.value),
+      ]),
+    })) ?? component?.coolingCapacityByPowerAllocation?.map((entry) => ({
+      segments: entry.allocation,
+      value: derived(entry.capacity, "exact extracted cooling capacity at allocation", [componentSource(component, `coolingCapacityByPowerAllocation[allocation=${entry.allocation}]`, entry.capacity)]),
+    })) ?? [];
+    const explicitPipMaximum = component?.maximumPowerInputPips;
+    const explicitMaximum = component?.maximumPowerInput;
+    const curveMaximum = curve.length > 0 ? Math.max(...curve.map((entry) => entry.segments)) : null;
+    const maximumSegments = category === "weapons" && weaponPowerPoolSegments !== null
+      ? derived(weaponPowerPoolSegments, "Foundry FixedPowerPool poolSize for WeaponGun", weaponPoolSources)
+      : isFiniteNonnegative(explicitPipMaximum)
+        ? derived(explicitPipMaximum, "explicit extracted powerInputMaximumPips", [componentSource(component!, "powerInputMaximumPips", explicitPipMaximum)])
+        : isFiniteNonnegative(explicitMaximum)
+          ? derived(explicitMaximum, "explicit extracted powerInputMaximum", [componentSource(component!, "powerInputMaximum", explicitMaximum)])
+      : curveMaximum !== null
+        ? derived(curveMaximum, "maximum exact extracted allocation-curve segment", curve.flatMap((entry) => entry.value.sources))
+        : unavailable();
+    const unavailableReason = maximumSegments.value === null
+      ? category === "weapons"
+        ? "WeaponGun FixedPowerPool poolSize is unavailable for this ship."
+        : members.length === 0
+          ? presence?.unavailableReason ?? "No active component is mapped to this power category."
+          : members.length > 1
+            ? "A category maximum cannot be aggregated across multiple components without an extracted distribution rule."
+            : "No source-backed maximum allocation or exact allocation curve is available."
+      : null;
+    const perComponent = members.map((member) => {
+      const memberCurve = member.shield?.regenByPowerAllocation?.map((entry) => ({
+        segments: entry.allocation,
+        value: derived(entry.value, "exact extracted shield regeneration at allocation", [componentSource(member, entry.valueSourcePath ?? `shield.regenByPowerAllocation[allocation=${entry.allocation}].value`, entry.value)]),
+      })) ?? [];
+      return {
+        componentId: member.componentId ?? member.id,
+        minimumSegments: isFiniteNonnegative(member.minimumPowerDemandSegments) ? derived(member.minimumPowerDemandSegments, "component minimumPowerDemandSegments", [componentSource(member, "minimumPowerDemandSegments", member.minimumPowerDemandSegments)]) : unavailable(),
+        maximumSegments: isFiniteNonnegative(member.maximumPowerInputPips) ? derived(member.maximumPowerInputPips, "component powerInputMaximumPips", [componentSource(member, "powerInputMaximumPips", member.maximumPowerInputPips)]) : unavailable(),
+        exactAllocationCurve: memberCurve,
+      };
+    });
+    const hasPipAddressableBound = category === "weapons" || isFiniteNonnegative(explicitPipMaximum) || curveMaximum !== null;
+    const addressability = category === "shields" && members.length > 1
+      ? "distribution-unresolved"
+      : members.length === 0 && presence?.unavailableReason.includes("component family")
+        ? "component-family-missing"
+        : members.length === 0 && presence
+          ? "bounds-unavailable"
+          : unitType !== null && unitType !== "PowerSegment" && !hasPipAddressableBound
+            ? "non-pip-unit"
+            : maximumSegments.value !== null && Number.isInteger(maximumSegments.value) && hasPipAddressableBound
+              ? "selectable-pips"
+              : members.length === 0
+                ? "no-component-installed"
+                : "bounds-unavailable";
+    return [category, { minimumSegments, nominalSegments, maximumSegments, exactAllocationCurve: curve, unavailableReason, unitType, addressability, componentCount: members.length || presence?.componentCount || 0, perComponent }];
+  })) as Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata>;
+}
+
 function allocatedByCategory(
   components: NormalizedFittingSimulationComponent[],
   allocation: FittingSimulationAllocation,
-  weaponPowerPoolSegments: number | null,
+  metadata: Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata>,
 ): Record<FittingSimulationPowerCategory, number> {
   return Object.fromEntries(
     POWER_CATEGORIES.map((category) => {
       const demand = categoryNominalDemand(components, category);
       const requested = allocation[category] ?? demand;
-      const categoryCapacity = category === "weapons" && weaponPowerPoolSegments !== null
-        ? weaponPowerPoolSegments
-        : Number.POSITIVE_INFINITY;
-      return [category, Math.min(requested, demand, categoryCapacity)];
+      const maximum = metadata[category].maximumSegments.value;
+      return [category, maximum === null ? requested : Math.min(requested, maximum)];
     }),
   ) as Record<FittingSimulationPowerCategory, number>;
 }
@@ -359,6 +475,7 @@ function simulateWeapon(args: {
       allocationMissingPath,
       allocationUnavailableReason ?? "Required for weapon allocation ratio.",
     ));
+    if (allocationUnavailableReason) assumptions.push(allocationUnavailableReason);
   }
 
   const heatPerShot = directNumber(component, "weapon.heatPerShot", facts.heatPerShot, directInputs);
@@ -462,7 +579,7 @@ function simulateWeapon(args: {
     ? unavailable(allocationSources)
     : derived(
         weaponAllocationRatio,
-        "min(1, assigned weapon segments / sum active weapon nominal demand)",
+        "assigned weapon segments / sum active weapon nominal demand (only through nominal allocation)",
         allocationSources,
       );
 
@@ -862,7 +979,7 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
   const directInputs: SimulationSourceFact[] = [];
   const missingInputs: SimulationMissingInput[] = [];
   const assumptions = [
-    "Power allocations are capped at the active components' nominal demand.",
+    "Nominal demand is distinct from a source-backed category maximum; allocations above nominal require an extracted performance curve or multiplier.",
     "Cooling demand equals effective allocated consumer power segments in the validated v1 resource model.",
     "Energy weapons wait for a full refill after the regeneration cooldown before firing again.",
   ];
@@ -909,10 +1026,16 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
     ));
   }
 
+  const categoryMetadata = categoryAllocationMetadata(
+    components,
+    weaponPowerPoolSegments,
+    weaponPoolSources,
+    input.categoryPresence,
+  );
   const allocation = allocatedByCategory(
     components,
     input.powerAllocation ?? {},
-    weaponPowerPoolSegments,
+    categoryMetadata,
   );
   const allocatedSources: SimulationSourceFact[] = [];
   const defaultedAllocationCategories = new Set(input.defaultedPowerAllocationCategories ?? []);
@@ -974,7 +1097,12 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
   }
 
   const allocatedSegments = sum(Object.values(allocation));
-  const powerCapacityMetric = capacitySources.length > 0
+  const multiPlantUnresolved = input.aggregateGeneration?.installedPlantCount !== undefined
+    && input.aggregateGeneration.installedPlantCount >= 2
+    && !input.aggregateGeneration.available;
+  const powerCapacityMetric = multiPlantUnresolved
+    ? unavailable(capacitySources)
+    : capacitySources.length > 0
     ? derived(powerCapacity, "sum(active powerCapacitySegments)", capacitySources)
     : unavailable();
   const hasCompletePowerAllocation = hasCompletePowerDemand
@@ -1111,6 +1239,7 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
     : unavailable([...coolingDemandSources, ...coolingCapacitySources]);
 
   const activeShields = components.filter((component) => component.shield != null);
+  const shieldIdentityUnresolved = activeShields.length > 1 && input.activeShieldIdentityKnown !== true;
   const shieldMaxSources: SimulationSourceFact[] = [];
   let maxShieldRegen = 0;
   let hasCompleteShieldMaximum = activeShields.length > 0;
@@ -1134,7 +1263,9 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
     shieldMaxSources.push(fact);
     directInputs.push(fact);
   }
-  const maxShieldRegenMetric = hasCompleteShieldMaximum
+  const maxShieldRegenMetric = shieldIdentityUnresolved
+    ? unavailable(shieldMaxSources)
+    : hasCompleteShieldMaximum
     ? derived(maxShieldRegen, "sum(active shield maximum regeneration)", shieldMaxSources)
     : unavailable(shieldMaxSources);
 
@@ -1145,6 +1276,9 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
   let effectiveShieldRegenMetric: SimulationMetric;
   if (activeShields.length === 0) {
     effectiveShieldRegenMetric = unavailable();
+  } else if (shieldIdentityUnresolved) {
+    missingInputs.push(missing(null, "ship.shields.activeGeneratorIdentity", "Active shield generator identity is unresolved; aggregate regeneration is unavailable."));
+    effectiveShieldRegenMetric = unavailable([...shieldMaxSources, ...shieldAllocationSources]);
   } else if (allocationUnavailableReason) {
     effectiveShieldRegenMetric = unavailable([...shieldMaxSources, ...shieldAllocationSources]);
   } else if (assignedShieldPower === 0) {
@@ -1239,17 +1373,23 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
     (entry) => entry.path === "powerAllocation.weapons",
   );
   const weaponNetworkUnavailableReason = allocationUnavailableReason;
-  const weaponAllocationRatio = !weaponNetworkUnavailableReason
+  const rawWeaponAllocationRatio = !weaponNetworkUnavailableReason
     && hasCompleteWeaponDemand
     && weaponNominalDemand > 0
-    ? Math.min(1, allocation.weapons / weaponNominalDemand)
+    ? allocation.weapons / weaponNominalDemand
     : null;
+  const weaponAllocationRatio = rawWeaponAllocationRatio !== null && rawWeaponAllocationRatio <= 1
+    ? rawWeaponAllocationRatio
+    : null;
+  const weaponPerformanceUnavailableReason = rawWeaponAllocationRatio !== null && rawWeaponAllocationRatio > 1
+    ? "Weapon allocation exceeds nominal demand, but no extracted over-nominal capacity or regeneration curve is available."
+    : weaponNetworkUnavailableReason;
   const weapons = activeWeapons.map((component) => simulateWeapon({
     component,
     durationSeconds,
     weaponAllocationRatio,
     allocationSources: [...weaponDemandSources, ...weaponAllocationSources, ...weaponPoolSources],
-    allocationUnavailableReason: weaponNetworkUnavailableReason,
+    allocationUnavailableReason: weaponPerformanceUnavailableReason,
   }));
 
   for (const weapon of weapons) {
@@ -1287,6 +1427,7 @@ export function simulateFitting(input: FittingSimulationInput): FittingSimulatio
       allocatedSegments: powerAllocatedMetric,
       marginSegments: powerMarginMetric,
       allocatedByCategory: allocation,
+      categories: categoryMetadata,
     },
     cooling: {
       capacity: coolingCapacityMetric,

@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   buildFittingV2ComponentGroups,
   buildFittingV2PerformanceMetrics,
+  buildFittingV2PowerPipPresentation,
   fittingV2ComponentState,
 } from "./fittingV2Presentation";
 import type { FittingCalculateResult } from "../fitting/fittingApi";
@@ -107,4 +108,37 @@ test("component presentation hides controller noise and collapses equivalent har
   assert.equal(presentation.hardpoints.length, 1);
   assert.equal(presentation.hardpoints[0]?.quantity, 2);
   assert.equal(presentation.hiddenInternalPortCount, 1);
+});
+
+test("power-pip presentation receives source-backed maxima and preserves unavailable categories", () => {
+  const f7a = buildFittingV2PowerPipPresentation({
+    minimumSegments: { value: 2, provenance: "derived", formula: null, sources: [] },
+    nominalSegments: { value: 4, provenance: "derived", formula: null, sources: [] },
+    maximumSegments: { value: 6, provenance: "direct", formula: null, sources: [] },
+    exactAllocationCurve: [],
+    unavailableReason: null,
+    unitType: "PowerSegment",
+    addressability: "selectable-pips",
+    componentCount: 1,
+    perComponent: [],
+  });
+  const superHornet = buildFittingV2PowerPipPresentation({
+    minimumSegments: { value: 2, provenance: "derived", formula: null, sources: [] },
+    nominalSegments: { value: 4, provenance: "derived", formula: null, sources: [] },
+    maximumSegments: { value: 4, provenance: "direct", formula: null, sources: [] },
+    exactAllocationCurve: [],
+    unavailableReason: null,
+    unitType: "PowerSegment",
+    addressability: "selectable-pips",
+    componentCount: 1,
+    perComponent: [],
+  });
+  const engine = buildFittingV2PowerPipPresentation(undefined);
+
+  assert.equal(f7a.minimumSegments, 2);
+  assert.equal(f7a.maximumSegments, 6);
+  assert.equal(superHornet.maximumSegments, 4);
+  assert.equal(engine.maximumSegments, null);
+  assert.notEqual(engine.maximumSegments, 10);
+  assert.ok(engine.unavailableReason?.includes("No source-backed"));
 });

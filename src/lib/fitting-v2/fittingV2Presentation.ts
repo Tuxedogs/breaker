@@ -1,5 +1,6 @@
 import type {
   FittingCalculateResult,
+  FittingSimulationCategoryAllocationMetadata,
   FittingSimulationResult,
 } from "../fitting/fittingApi";
 import {
@@ -68,6 +69,36 @@ export type FittingV2Effect = {
   unit: string;
   unavailableReason: string | null;
 };
+
+export type FittingV2PowerPipPresentation = {
+  minimumSegments: number | null;
+  nominalSegments: number | null;
+  maximumSegments: number | null;
+  exactSegments: number[];
+  unavailableReason: string | null;
+  unitType: string | null;
+  addressability: FittingSimulationCategoryAllocationMetadata["addressability"] | "contract-unavailable";
+  componentCount: number;
+};
+
+/**
+ * The view layer deliberately consumes the simulation contract rather than a
+ * display cap. A null maximum is unavailable, not a ten-pip fallback.
+ */
+export function buildFittingV2PowerPipPresentation(
+  metadata: FittingSimulationCategoryAllocationMetadata | undefined,
+): FittingV2PowerPipPresentation {
+  return {
+    minimumSegments: finite(metadata?.minimumSegments.value),
+    nominalSegments: finite(metadata?.nominalSegments.value),
+    maximumSegments: finite(metadata?.maximumSegments.value),
+    exactSegments: metadata?.exactAllocationCurve.map((entry) => entry.segments) ?? [],
+    unavailableReason: metadata?.unavailableReason ?? "No source-backed allocation maximum is available.",
+    unitType: metadata?.unitType ?? null,
+    addressability: metadata?.addressability ?? "contract-unavailable",
+    componentCount: metadata?.componentCount ?? 0,
+  };
+}
 
 type StockComparison = {
   available?: boolean;

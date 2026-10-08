@@ -12,10 +12,9 @@ import { usePipSystemPowerDraw } from "../lib/fitting/usePipSystemPowerDraw";
 import { useFittingSimulation } from "../lib/fitting/useFittingSimulation";
 import { useCompatibleComponents } from "../lib/fitting/useCompatibleComponents";
 import { useEquippedComponentDetails } from "../lib/fitting/useEquippedComponentDetails";
-import { pipAssignmentFromDraws } from "../lib/fitting/fittingPipPower";
+import { pipAssignmentFromDrawsUncapped } from "../lib/fitting/fittingPipPower";
 import {
   DEFAULT_PIP_ASSIGNMENT,
-  PIP_MAX_PER_CATEGORY,
   type PipAssignment,
   type PipCategory,
 } from "../lib/fitting/fittingTerminalTypes";
@@ -25,6 +24,7 @@ import {
 } from "../lib/fitting-v2/fittingV2Presentation";
 import { buildFittingV2SlotTopology } from "../lib/fitting-v2/fittingV2SlotTopology";
 import { isFittingV2TargetPotentiallyActionable, useFittingV2ChooserCompatibility } from "../lib/fitting-v2/fittingV2ChooserCompatibility";
+import { applyFittingV2PowerRequest } from "../lib/fitting-v2/fittingV2PowerState";
 import FittingV2CompatibleChooser from "../components/fitting-v2/FittingV2CompatibleChooser";
 import type { FittingComponentSummary } from "../lib/fitting/fittingApi";
 import "../components/fitting-v2/fitting-v2.css";
@@ -64,7 +64,10 @@ export default function FittingV2Page() {
     if (loadout.portRows.some((row) => row.shipKey !== shipKey)) return;
     if (pipSyncedShipRef.current === shipKey) return;
     pipSyncedShipRef.current = shipKey;
-    queueMicrotask(() => setPipAssignment(pipAssignmentFromDraws(pipPower.draws)));
+    queueMicrotask(() => setPipAssignment({
+      ...pipAssignmentFromDrawsUncapped(pipPower.draws),
+      quantum: 0,
+    }));
   }, [loadout.portRows, pipPower.draws, pipPower.ready, selectedShipKey]);
 
   useEffect(() => {
@@ -118,10 +121,10 @@ export default function FittingV2Page() {
   const chooserDetails = useEquippedComponentDetails(chooserCandidateIds);
 
   function updatePip(category: PipCategory, value: number) {
-    setPipAssignment((current) => ({
-      ...current,
-      [category]: Math.max(0, Math.min(PIP_MAX_PER_CATEGORY, Math.round(value))),
-    }));
+    const metadata = simulation.data?.power.categories[category];
+    const maximum = metadata?.maximumSegments.value;
+    const minimum = metadata?.minimumSegments.value;
+    setPipAssignment((current) => applyFittingV2PowerRequest(current, category, value, { minimum, maximum }));
   }
 
   function selectShip(nextShipKey: string) {
@@ -188,6 +191,8 @@ export default function FittingV2Page() {
       simulation={simulation}
       effects={effects}
       portRows={loadout.portRows}
+      componentAllocations={loadout.calculateResult?.componentAllocations ?? []}
+      powerAggregateGeneration={loadout.calculateResult?.categories.power?.aggregateGeneration}
       detailsById={loadout.detailsById}
       selectedTarget={selectedTarget}
       compatible={compatible.result}
