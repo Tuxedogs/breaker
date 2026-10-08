@@ -1,6 +1,6 @@
 import { useState } from "react";
-import PowerPipIcon from "../components/fitting/terminal/PowerPipIcons";
 import type { SystemIconKind } from "../components/fitting/terminal/SystemIcon";
+import MfdPowerIcon from "../components/fitting-v2/MfdPowerIcon";
 import PowerTower from "../components/fitting-v2/PowerTower";
 import type { PipCategory } from "../lib/fitting/fittingTerminalTypes";
 import "../components/fitting-v2/fitting-v2.css";
@@ -30,16 +30,14 @@ export default function FittingV2PowerFixturePage() {
   };
   return <main className="fitv2-page"><section className="fitv2-power" aria-label="Fitting V2 physical power contract fixture">
     <header className="fitv2-power-heading"><div><span>Power systems</span><h2>Power allocation</h2></div><label className="fitv2-power-fixture-picker">Fixture <select aria-label="Power fixture scenario" value={scenario.key} onChange={(event) => selectScenario(event.target.value)}>{scenarios.map((item) => <option value={item.key} key={item.key}>{item.label}</option>)}</select></label></header>
-    <div className="fitv2-power-console"><div className="fitv2-pip-grid fitv2-pip-stackl">{scenario.columns.map((item) => {
+    <div className="fitv2-power-console"><div className="fitv2-power-stage"><img className="fitv2-signature-dock" src="/images/fitting-v2/mfd/signature-dock.svg" alt="" /><div className="fitv2-power-dock" title={scenario.outputReason}><img src="/images/fitting-v2/mfd/MFD-dock-output-battery.svg" alt="OUTPUT and BATTERY dock" /><strong className="fitv2-dock-output-value">{scenario.output ?? "—"}</strong></div><div className="fitv2-pip-grid fitv2-pip-stackl">{scenario.columns.map((item) => {
       const allocation = allocations[item.portId] ?? 0;
       const powered = allocation > 0;
       return <article className={`fitv2-pip-tower ${powered ? "is-powered" : "is-unpowered"}`} aria-label={`${item.label} power allocation`} data-port-id={item.portId} title={`${item.label} · ${item.portId}`} key={item.portId}>
         <div className="fitv2-pip-stack-group"><PowerTower label={item.label} maxPips={item.max} minPips={item.min} allocation={allocation} available interactive onRequestAllocation={(value) => setAllocations((current) => ({ ...current, [item.portId]: value }))} /></div>
-        <button type="button" className="fitv2-pip-icon-button" aria-label={powered ? `Power off ${item.label}` : `Power ${item.label} to minimum`} onClick={() => setAllocations((current) => ({ ...current, [item.portId]: powered ? 0 : item.min }))}><PowerPipIcon category={item.category} kind={item.icon} className={`fitv2-pip-icon is-${item.icon}`} /></button>
+        <button type="button" className="fitv2-pip-icon-button" aria-label={powered ? `Power off ${item.label}` : `Power ${item.label} to minimum`} onClick={() => setAllocations((current) => ({ ...current, [item.portId]: powered ? 0 : item.min }))}><MfdPowerIcon kind={item.icon} className={`fitv2-pip-icon is-${item.icon}`} /></button>
         <em>{item.portId}</em>
       </article>;
-    })}</div>
-      <div className="fitv2-power-dock"><div className="fitv2-dock-signature" aria-hidden><i /><i /><i /></div><div className="fitv2-dock-cell is-output" title={scenario.outputReason}><span>OUTPUT</span><strong>{scenario.output ?? "—"}</strong></div><div className="fitv2-dock-divider" aria-hidden /><div className="fitv2-dock-cell is-battery"><span>BATTERY</span><strong>—</strong><b aria-hidden /></div></div>
-    </div>
+    })}</div></div></div>
   </section></main>;
 }

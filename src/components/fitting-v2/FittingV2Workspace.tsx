@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import PowerPipIcon from "../fitting/terminal/PowerPipIcons";
 import PowerTower from "./PowerTower";
+import MfdPowerIcon from "./MfdPowerIcon";
 import type { ShipHeroAssetView } from "../../lib/fitting/mockup/fittingMockupViewTypes";
 import type { FittingShipSummary } from "../../lib/fitting/fittingPortGrouping";
 import type { PipAssignment, PipCategory } from "../../lib/fitting/fittingTerminalTypes";
@@ -231,7 +232,7 @@ function PipTower({ column, assignment, draws, totalDraw, ready, simulation, onC
         {category ? <PipColumn category={category} value={assignment[category]} metadata={simulation.data?.power.categories?.[category]} minimumSegments={column.minimumSegments} maximumSegments={column.maximumSegments} unavailableReason={column.unavailableReason} onChange={onChange} /> : <PowerTower label={column.label} maxPips={6} minPips={0} allocation={0} available={false} interactive={false} unavailableReason={column.unavailableReason} onRequestAllocation={() => undefined} />}
       </div>
       <button type="button" className="fitv2-pip-icon-button" aria-label={powered ? `Power off ${column.label}` : `Power ${column.label} to minimum`} disabled={!canToggle} onClick={togglePower}>
-        <PowerPipIcon category={category ?? "quantum"} kind={column.icon} className={`fitv2-pip-icon is-${column.icon}`} />
+        <MfdPowerIcon kind={column.icon} className={`fitv2-pip-icon is-${column.icon}`} />
       </button>
       <em>{ready && category && percentage != null ? `${numberFormat.format(percentage)}%` : "—"}</em>
     </article>
@@ -256,11 +257,9 @@ function LiveEffects({ effects, loading }: { effects: FittingV2Effect[]; loading
 function PowerDock({ aggregate }: { aggregate?: FittingAggregateGeneration }) {
   const output = aggregate?.available && aggregate.status === "direct_source_single_plant" && aggregate.generation != null ? numberFormat.format(aggregate.generation) : "—";
   const reason = aggregate?.reason ?? "Aggregate generation is unavailable from the current source-backed contract.";
-  return <div className="fitv2-power-dock">
-    <div className="fitv2-dock-signature" aria-hidden><i /><i /><i /></div>
-    <div className="fitv2-dock-cell is-output" title={reason}><span>OUTPUT</span><strong>{output}</strong></div>
-    <div className="fitv2-dock-divider" aria-hidden />
-    <div className="fitv2-dock-cell is-battery" title="Battery allocation data is unavailable in the current fitting model"><span>BATTERY</span><strong>—</strong><b aria-hidden /></div>
+  return <div className="fitv2-power-dock" title={reason}>
+    <img src="/images/fitting-v2/mfd/MFD-dock-output-battery.svg" alt="OUTPUT and BATTERY dock" />
+    <strong className="fitv2-dock-output-value">{output}</strong>
   </div>;
 }
 
@@ -274,8 +273,11 @@ function PowerSection({ assignment, draws, ready, simulation, effects, portRows,
       </header>
       {simulation.error ? <p className="fitv2-power-notice">Simulation unavailable: {simulation.error}</p> : null}
       <div className="fitv2-power-console">
-        <div className="fitv2-pip-grid fitv2-pip-stackl">{columns.map((column) => <PipTower key={column.key} column={column} assignment={assignment} draws={draws} totalDraw={totalDraw} ready={ready} simulation={simulation} onChange={onChange} />)}</div>
-        <PowerDock aggregate={powerAggregateGeneration} />
+        <div className="fitv2-power-stage">
+          <img className="fitv2-signature-dock" src="/images/fitting-v2/mfd/signature-dock.svg" alt="" />
+          <PowerDock aggregate={powerAggregateGeneration} />
+          <div className="fitv2-pip-grid fitv2-pip-stackl">{columns.map((column) => <PipTower key={column.key} column={column} assignment={assignment} draws={draws} totalDraw={totalDraw} ready={ready} simulation={simulation} onChange={onChange} />)}</div>
+        </div>
         <LiveEffects effects={effects} loading={simulation.loading} />
       </div>
     </section>
