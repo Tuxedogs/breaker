@@ -254,9 +254,14 @@ function LiveEffects({ effects, loading }: { effects: FittingV2Effect[]; loading
   );
 }
 
-function PowerDock({ aggregate }: { aggregate?: FittingAggregateGeneration }) {
-  const output = aggregate?.available && aggregate.status === "direct_source_single_plant" && aggregate.generation != null ? numberFormat.format(aggregate.generation) : "—";
-  const reason = aggregate?.reason ?? "Aggregate generation is unavailable from the current source-backed contract.";
+function PowerDock({ aggregate, allocatedPips }: { aggregate?: FittingAggregateGeneration; allocatedPips: number }) {
+  const remaining = aggregate?.available && aggregate.status === "direct_source_single_plant" && aggregate.generation != null
+    ? Math.max(0, aggregate.generation - allocatedPips)
+    : null;
+  const output = remaining == null ? "—" : numberFormat.format(remaining);
+  const reason = remaining == null
+    ? aggregate?.reason ?? "Aggregate generation is unavailable from the current source-backed contract."
+    : `${output} of ${numberFormat.format(aggregate!.generation!)} pips remain unassigned.`;
   return <div className="fitv2-power-dock" title={reason}>
     <img src="/images/fitting-v2/mfd/MFD-dock-output-battery.svg" alt="OUTPUT and BATTERY dock" />
     <strong className="fitv2-dock-output-value">{output}</strong>
@@ -265,6 +270,7 @@ function PowerDock({ aggregate }: { aggregate?: FittingAggregateGeneration }) {
 
 function PowerSection({ assignment, draws, ready, simulation, effects, portRows, componentAllocations, powerAggregateGeneration, onChange }: { assignment: PipAssignment; draws: PipSystemPowerDraw; ready: boolean; simulation: FittingSimulationState; effects: FittingV2Effect[]; portRows: PortBreakdownRow[]; componentAllocations: readonly FittingComponentAllocation[]; powerAggregateGeneration?: FittingAggregateGeneration; onChange: (category: PipCategory, value: number, bounds?: { minimum: number | null; maximum: number | null }) => void }) {
   const totalDraw = Object.values(draws).reduce((total, value) => total + value, 0);
+  const allocatedPips = Object.values(assignment).reduce((total, value) => total + value, 0);
   const columns = buildFittingV2PowerColumns(portRows, simulation.data?.power.allocatedByCategory, componentAllocations);
   return (
     <section className="fitv2-power" aria-labelledby="fitv2-power-title">
@@ -275,7 +281,7 @@ function PowerSection({ assignment, draws, ready, simulation, effects, portRows,
       <div className="fitv2-power-console">
         <div className="fitv2-power-stage">
           <img className="fitv2-signature-dock" src="/images/fitting-v2/mfd/signature-dock.svg" alt="" />
-          <PowerDock aggregate={powerAggregateGeneration} />
+          <PowerDock aggregate={powerAggregateGeneration} allocatedPips={allocatedPips} />
           <div className="fitv2-pip-grid fitv2-pip-stackl">{columns.map((column) => <PipTower key={column.key} column={column} assignment={assignment} draws={draws} totalDraw={totalDraw} ready={ready} simulation={simulation} onChange={onChange} />)}</div>
         </div>
         <LiveEffects effects={effects} loading={simulation.loading} />
