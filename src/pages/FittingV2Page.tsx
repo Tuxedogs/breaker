@@ -24,7 +24,7 @@ import {
 } from "../lib/fitting-v2/fittingV2Presentation";
 import { buildFittingV2SlotTopology } from "../lib/fitting-v2/fittingV2SlotTopology";
 import { isFittingV2TargetPotentiallyActionable, useFittingV2ChooserCompatibility } from "../lib/fitting-v2/fittingV2ChooserCompatibility";
-import { applyFittingV2PowerRequest } from "../lib/fitting-v2/fittingV2PowerState";
+import { applyFittingV2PhysicalPowerRequest, applyFittingV2PowerRequest } from "../lib/fitting-v2/fittingV2PowerState";
 import { applyFittingV2ModeledPowerRequest, type FittingV2ModeledPowerAssignment } from "../lib/fitting-v2/fittingV2ModeledPower";
 import FittingV2CompatibleChooser from "../components/fitting-v2/FittingV2CompatibleChooser";
 import type { FittingComponentSummary } from "../lib/fitting/fittingApi";
@@ -138,7 +138,8 @@ export default function FittingV2Page() {
     setModeledPowerAssignment((current) => applyFittingV2ModeledPowerRequest(current, key, value));
   }
 
-  function updatePhysicalPower(key: string, value: number) {
+  function updatePhysicalPower(key: string, category: PipCategory, value: number) {
+    setPipAssignment((current) => applyFittingV2PhysicalPowerRequest(current, category, value));
     setPhysicalPowerAssignment((current) => ({ ...current, [key]: Math.max(0, Math.round(value)) }));
   }
 

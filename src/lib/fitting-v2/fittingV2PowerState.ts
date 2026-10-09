@@ -12,5 +12,13 @@ export function applyFittingV2PowerRequest(current: PipAssignment, category: Pip
     ...current,
     [category]: nextValue,
     ...(category === "quantum" && nextValue > 0 ? { shields: 0 } : {}),
+    ...(category === "shields" && nextValue > 0 ? { quantum: 0 } : {}),
   };
+}
+
+/** Applies a per-component allocation without collapsing physical component identity. */
+export function applyFittingV2PhysicalPowerRequest(current: PipAssignment, category: PipCategory, requestedValue: number): PipAssignment {
+  return category === "shields" && requestedValue > 0
+    ? { ...current, quantum: 0 }
+    : current;
 }

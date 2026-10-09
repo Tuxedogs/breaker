@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { DEFAULT_PIP_ASSIGNMENT } from "../fitting/fittingTerminalTypes.ts";
-import { applyFittingV2PowerRequest } from "./fittingV2PowerState.ts";
+import { applyFittingV2PhysicalPowerRequest, applyFittingV2PowerRequest } from "./fittingV2PowerState.ts";
 
 test("power requests normalize nonzero allocations to the source-backed minimum", () => {
   const current = { ...DEFAULT_PIP_ASSIGNMENT };
@@ -29,4 +29,20 @@ test("powering quantum on powers shields off without restoring shields when quan
   const quantumOff = applyFittingV2PowerRequest(quantumOn, "quantum", 0, { minimum: 3, maximum: 6 });
   assert.equal(quantumOff.quantum, 0);
   assert.equal(quantumOff.shields, 0);
+});
+
+test("powering shields on powers quantum off without restoring quantum when shields turn off", () => {
+  const current = { ...DEFAULT_PIP_ASSIGNMENT, quantum: 3 };
+  const shieldsOn = applyFittingV2PowerRequest(current, "shields", 2, { minimum: 2, maximum: 6 });
+  assert.equal(shieldsOn.shields, 2);
+  assert.equal(shieldsOn.quantum, 0);
+  const shieldsOff = applyFittingV2PowerRequest(shieldsOn, "shields", 0, { minimum: 2, maximum: 6 });
+  assert.equal(shieldsOff.shields, 0);
+  assert.equal(shieldsOff.quantum, 0);
+});
+
+test("a powered physical shield request powers quantum off without altering its port allocation", () => {
+  const current = { ...DEFAULT_PIP_ASSIGNMENT, quantum: 3 };
+  assert.deepEqual(applyFittingV2PhysicalPowerRequest(current, "shields", 2), { ...current, quantum: 0 });
+  assert.equal(applyFittingV2PhysicalPowerRequest(current, "shields", 0), current);
 });

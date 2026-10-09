@@ -78,6 +78,26 @@ test("physical allocation contract preserves six shields, separate coolers, rada
   assert.equal(unsupported?.unavailableReason, null);
 });
 
+test("source-backed shield generators retain their own fused minimum-pip bounds", () => {
+  const rows = [
+    row("shield-left", "shield", "Shield Left"),
+    row("shield-center", "shield", "Shield Center"),
+    row("shield-right", "shield", "Shield Right"),
+  ];
+  const allocations: FittingComponentAllocation[] = rows.map((entry) => ({
+    portId: entry.portId, componentKey: entry.equippedComponentKey, componentType: "shield", displayName: entry.equippedComponentName,
+    allocationStatus: "supported", allocationReason: null, segmentAllocationSupported: true,
+    minimumSegments: 2, maximumSegments: 6, powerRanges: [], provenance: {},
+  }));
+
+  const shields = buildFittingV2PowerColumns(rows, undefined, allocations);
+  assert.deepEqual(shields.map((column) => [column.key, column.minimumSegments, column.maximumSegments]).sort(), [
+    ["physical:shield-center", 2, 6],
+    ["physical:shield-left", 2, 6],
+    ["physical:shield-right", 2, 6],
+  ]);
+});
+
 test("component contracts do not expand aggregate unsupported families into one tower per installed item", () => {
   const rows = [row("weapon-a", "ship_weapon"), row("weapon-b", "ship_weapon"), row("quantum-a", "quantum_drive")];
   const contracts: FittingComponentAllocation[] = rows.map((entry) => ({
