@@ -136,9 +136,18 @@ export function aggregatePipSystemDraws(
 }
 
 export function pipAssignmentFromDraws(draws: PipSystemPowerDraw): PipAssignment {
+  const assignment = pipAssignmentFromDrawsUncapped(draws);
+  for (const key of PIP_CATEGORIES) {
+    assignment[key] = Math.min(PIP_MAX_PER_CATEGORY, assignment[key]);
+  }
+  return assignment;
+}
+
+/** Source-backed consumers must not inherit the terminal's legacy ten-pip cap. */
+export function pipAssignmentFromDrawsUncapped(draws: PipSystemPowerDraw): PipAssignment {
   const assignment = {} as PipAssignment;
   for (const key of PIP_CATEGORIES) {
-    assignment[key] = Math.min(PIP_MAX_PER_CATEGORY, Math.max(0, Math.round(draws[key])));
+    assignment[key] = Math.max(0, Math.round(draws[key]));
   }
   return assignment;
 }

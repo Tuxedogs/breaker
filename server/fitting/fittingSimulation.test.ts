@@ -712,7 +712,7 @@ test("uses the exact extracted shield regeneration step for a single generator",
   ));
 });
 
-test("sums maximum regeneration only when multiple shield generators are fully powered", () => {
+test("keeps aggregate regeneration unresolved when multiple shield identities are unknown", () => {
   const shield = (id: string): NormalizedFittingSimulationComponent => ({
     id: `${id}-port`,
     componentId: id,
@@ -731,15 +731,13 @@ test("sums maximum regeneration only when multiple shield generators are fully p
   ];
 
   const full = simulateFitting({ components, powerAllocation: { shields: 6 } });
-  assert.equal(full.shields.maxRegenPerSecond.value, 1_204);
-  assert.equal(full.shields.effectiveRegenPerSecond.value, 1_204);
+  assert.equal(full.shields.maxRegenPerSecond.value, null);
+  assert.equal(full.shields.effectiveRegenPerSecond.value, null);
 
   const partial = simulateFitting({ components, powerAllocation: { shields: 3 } });
-  assert.equal(partial.shields.maxRegenPerSecond.value, 1_204);
+  assert.equal(partial.shields.maxRegenPerSecond.value, null);
   assert.equal(partial.shields.effectiveRegenPerSecond.value, null);
-  assert.ok(partial.missingInputs.some(
-    (entry) => entry.path === "powerAllocation.shields" && entry.reason.includes("no per-generator distribution rule"),
-  ));
+  assert.ok(partial.missingInputs.some((entry) => entry.path === "ship.shields.activeGeneratorIdentity"));
 });
 
 test("reports an unavailable single-generator step instead of interpolating", () => {
@@ -824,4 +822,108 @@ test("reports actual component identity separately from its mount", () => {
   assert.ok(simulated?.directInputs.some(
     (entry) => entry.componentId === "quarreler-component" && entry.mountId === "weapon-mount-1",
   ));
+});
+
+test("keeps source-backed category bounds, exact curves, and unavailable maxima distinct", () => {
+  const result = simulateFitting({
+    components: [
+      { id: "plant", componentType: "power_plant", powerCapacitySegments: 30 },
+      {
+        id: "weapon",
+        componentType: "ship_weapon",
+        powerCategory: "weapons",
+        nominalPowerDemandSegments: 4,
+        minimumPowerDemandSegments: 2,
+        weapon: { alphaDamage: 10, fireRateRpm: 60, maxAmmoLoad: 20, maxRegenPerSecond: 2, ammoCostPerShot: 1, regenCooldownSeconds: 1, heatPerShot: 0 },
+      },
+      {
+        id: "shield",
+        componentType: "shield",
+        powerCategory: "shields",
+        nominalPowerDemandSegments: 3,
+        minimumPowerDemandSegments: 1,
+        shield: { maxRegenPerSecond: 60, regenByPowerAllocation: [{ allocation: 1, value: 15 }, { allocation: 3, value: 60 }] },
+      },
+      {
+        id: "cooler",
+        componentType: "cooler",
+        powerCategory: "cooler1",
+        nominalPowerDemandSegments: 2,
+        coolingCapacity: 20,
+        coolingCapacityByPowerAllocation: [{ allocation: 1, capacity: 8 }, { allocation: 2, capacity: 20 }],
+      },
+      { id: "engine", componentType: "thruster", powerCategory: "engines", nominalPowerDemandSegments: 2 },
+    ],
+    powerAllocation: { weapons: 6, shields: 2, cooler1: 1, engines: 2 },
+    weaponPowerPoolSegments: 6,
+    weaponPowerPoolSourcePath: "FixedPowerPool[@itemType=WeaponGun]/@poolSize",
+  });
+
+  assert.equal(result.power.categories.weapons.minimumSegments.value, 2);
+  assert.equal(result.power.categories.weapons.nominalSegments.value, 4);
+  assert.equal(result.power.categories.weapons.maximumSegments.value, 6);
+  assert.equal(result.power.allocatedByCategory.weapons, 6);
+  assert.equal(result.weapons[0]?.allocationRatio.value, null);
+  assert.equal(result.weapons[0]?.effectiveAmmo.value, null);
+  assert.ok(result.weapons[0]?.assumptions.some((entry) => entry.includes("exceeds nominal")));
+
+  assert.deepEqual(result.power.categories.shields.exactAllocationCurve.map((point) => [point.segments, point.value.value]), [[1, 15], [3, 60]]);
+  assert.equal(result.shields.effectiveRegenPerSecond.value, null);
+  assert.deepEqual(result.power.categories.cooler1.exactAllocationCurve.map((point) => [point.segments, point.value.value]), [[1, 8], [2, 20]]);
+  assert.equal(result.cooling.capacity.value, 8);
+  assert.equal(result.power.categories.engines.maximumSegments.value, null);
+  assert.ok(result.power.categories.engines.unavailableReason?.includes("No source-backed maximum"));
+});
+
+test("does not aggregate non-zero minimum floors across independently allocated components", () => {
+  const result = simulateFitting({
+    components: [
+      { id: "plant", componentType: "power_plant", powerCapacitySegments: 20 },
+      { id: "shield-a", componentType: "shield", powerCategory: "shields", nominalPowerDemandSegments: 2, minimumPowerDemandSegments: 1 },
+      { id: "shield-b", componentType: "shield", powerCategory: "shields", nominalPowerDemandSegments: 2, minimumPowerDemandSegments: 1 },
+    ],
+    powerAllocation: { shields: 2 },
+  });
+
+  assert.equal(result.power.categories.shields.minimumSegments.value, null);
+});
+
+test("preserves source-backed radar, quantum, engine, life-support, and multi-shield allocation states", () => {
+  const shield = (id: string): NormalizedFittingSimulationComponent => ({
+    id,
+    componentType: "shield",
+    powerCategory: "shields",
+    minimumPowerDemandSegments: 1,
+    maximumPowerInputPips: 3,
+    nominalPowerDemandSegments: 3,
+    nominalPowerDemandUnitType: "PowerSegment",
+    shield: { maxRegenPerSecond: 602, regenByPowerAllocation: [{ allocation: 1, value: 140.4667 }, { allocation: 2, value: 341.1333 }, { allocation: 3, value: 602 }] },
+  });
+  const result = simulateFittingModel({
+    components: [
+      { id: "plant", componentType: "power_plant", powerCapacitySegments: 30 },
+      shield("shield-left"), shield("shield-right"),
+      { id: "radar", componentType: "radar", powerCategory: "radar", minimumPowerDemandSegments: 2, minimumPowerDemandPips: 2, maximumPowerInput: 5, maximumPowerInputPips: 5, nominalPowerDemandSegments: 5, nominalPowerDemandUnitType: "PowerSegment" },
+      { id: "quantum", componentType: "quantum_drive", powerCategory: "quantum", minimumPowerDemandSegments: 2, maximumPowerInput: 2, nominalPowerDemandSegments: 2, nominalPowerDemandUnitType: "StandardResource" },
+    ],
+    categoryPresence: {
+      engines: { componentCount: 11, unavailableReason: "Installed thruster consumers have no extracted power bounds or allocation curve." },
+      lifeSupport: { componentCount: 1, unavailableReason: "Installed LifeSupportGenerator component family is missing from the published fitting dataset." },
+    },
+  });
+
+  assert.equal(result.power.categories.radar.minimumSegments.value, 2);
+  assert.equal(result.power.categories.radar.maximumSegments.value, 5);
+  assert.equal(result.power.categories.radar.addressability, "selectable-pips");
+  assert.equal(result.power.categories.quantum.minimumSegments.value, 2);
+  assert.equal(result.power.categories.quantum.maximumSegments.value, 2);
+  assert.equal(result.power.categories.quantum.unitType, "StandardResource");
+  assert.equal(result.power.categories.quantum.addressability, "non-pip-unit");
+  assert.equal(result.power.categories.engines.componentCount, 11);
+  assert.equal(result.power.categories.engines.addressability, "bounds-unavailable");
+  assert.equal(result.power.categories.lifeSupport.addressability, "component-family-missing");
+  assert.equal(result.power.categories.shields.addressability, "distribution-unresolved");
+  assert.equal(result.power.categories.shields.perComponent.length, 2);
+  assert.deepEqual(result.power.categories.shields.perComponent[0]?.exactAllocationCurve.map((point) => point.segments), [1, 2, 3]);
+  assert.notEqual(result.power.categories.engines.maximumSegments.value, 10);
 });

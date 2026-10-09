@@ -18,6 +18,8 @@ const FITTING_PORT_TYPES = new Set([
   "Shield",
   "QuantumDrive",
   "Radar",
+  "MainThruster",
+  "ManeuverThruster",
   "WeaponGun",
   "Missile",
   "MissileLauncher",
@@ -33,6 +35,8 @@ const PORT_TYPE_TO_COMPONENT_TYPES: Record<string, string[]> = {
   Shield: ["shield"],
   QuantumDrive: ["quantum_drive"],
   Radar: ["radar"],
+  MainThruster: ["thruster"],
+  ManeuverThruster: ["thruster"],
   WeaponGun: ["ship_weapon"],
   Missile: ["missile"],
   MissileLauncher: ["missile_rack"],
@@ -603,7 +607,7 @@ function hardpointPortIds(tree: unknown[]): Set<string> {
   return ids;
 }
 
-function weaponFixedPowerPool(row: Row | undefined): { value: number; sourcePath: string } | null {
+export function weaponFixedPowerPool(row: Row | undefined): { value: number; sourcePath: string } | null {
   if (!row || !row.resourceNetworkPowerPools || typeof row.resourceNetworkPowerPools !== "object") {
     return null;
   }
@@ -687,6 +691,9 @@ function normalizeSimulationComponents(
         ?? item.row.powerConsumptionMinimum
         ?? item.row.minimumPowerRequired,
       ),
+      minimumPowerDemandPips: numberValue(item.row.powerInputMinimumPips),
+      maximumPowerInput: numberValue(item.row.powerInputMaximum),
+      maximumPowerInputPips: numberValue(item.row.powerInputMaximumPips),
       nominalPowerDemandUnitType: powerDemandUnitType(item.row),
       coolingCapacity: statNumber(stats, "coolingGenerated"),
       coolingCapacityByPowerAllocation,
@@ -722,6 +729,30 @@ function normalizeSimulationComponents(
   });
 }
 
+export function buildComponentAllocations(fitted: Array<{ portId: string; componentId: string; row: Row; fallbackType: string }>): Array<Record<string, unknown>> {
+  return fitted.map((item) => {
+    const type = componentType(item.row, item.fallbackType);
+    const canonical: Row = item.row.componentAllocation && typeof item.row.componentAllocation === "object"
+      ? { ...(item.row.componentAllocation as Row) }
+      : {
+          allocationStatus: "unresolved",
+          allocationReason: "component_allocation_contract_missing_from_artifact",
+          segmentAllocationSupported: false,
+          minimumSegments: null,
+          maximumSegments: null,
+          powerRanges: [],
+          provenance: { contract: "SOURCE GAP", powerRanges: "SOURCE GAP" },
+        };
+    return {
+      ...canonical,
+      portId: item.portId,
+      componentKey: item.componentId,
+      componentType: canonical.componentType ?? type,
+      displayName: canonical.displayName ?? text(item.row.displayName ?? item.row.name),
+    };
+  });
+}
+
 export async function calculateFittingLoadout(selection: DatasetSelection, body: unknown): Promise<unknown> {
   const input = parseLoadoutInput(body);
   const [ships, performance, stockCalcs, hardpoints, lookup] = await Promise.all([
@@ -751,6 +782,27 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     }
   }
   const weaponPowerPool = weaponFixedPowerPool(hardpointRow);
+  const categoryPresence = (() => {
+    const presence: Partial<Record<FittingSimulationPowerCategory, { componentCount: number; unavailableReason: string }>> = {};
+    const visit = (nodes: unknown[]): void => {
+      for (const candidate of nodes) {
+        if (!candidate || typeof candidate !== "object") continue;
+        const node = candidate as Row;
+        const type = text(node.portType)?.toLowerCase();
+        if (type === "mainthruster" || type === "maneuverthruster") {
+          const current = presence.engines?.componentCount ?? 0;
+          presence.engines = { componentCount: current + 1, unavailableReason: "Installed thruster consumers have no extracted power bounds or allocation curve." };
+        }
+        if (type === "lifesupportgenerator") {
+          const current = presence.lifeSupport?.componentCount ?? 0;
+          presence.lifeSupport = { componentCount: current + 1, unavailableReason: "Installed LifeSupportGenerator component family is missing from the published fitting dataset." };
+        }
+        visit(Array.isArray(node.children) ? node.children : []);
+      }
+    };
+    visit(hardpointTree);
+    return presence;
+  })();
   const mountTopologies = weaponMountTopologies(
     hardpointTree,
   );
@@ -805,7 +857,7 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     componentCountsByType[type] = (componentCountsByType[type] ?? 0) + 1;
   }
 
-  const powerGeneratedValues: number[] = [];
+  const powerPlantFacts: Array<{ componentId: string; portId: string; displayName: string | null; size: number | null; generation: number | null }> = [];
   const powerRequiredValues: number[] = [];
   const coolingGeneratedValues: number[] = [];
   const coolingRequiredValues: number[] = [];
@@ -827,7 +879,7 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     const stats = componentStats(item.row);
     const type = componentType(item.row, item.fallbackType);
 
-    if (statNumber(stats, "powerGenerated") !== null) powerGeneratedValues.push(statNumber(stats, "powerGenerated")!);
+    if (type === "power_plant") powerPlantFacts.push({ componentId: item.componentId, portId: item.portId, displayName: text(item.row.displayName ?? item.row.name), size: numberValue(item.row.size), generation: statNumber(stats, "powerGenerated") });
     if (statNumber(stats, "powerDraw") !== null) powerRequiredValues.push(statNumber(stats, "powerDraw")!);
     if (statNumber(stats, "coolingGenerated") !== null) coolingGeneratedValues.push(statNumber(stats, "coolingGenerated")!);
     if (statNumber(stats, "coolingDraw") !== null) coolingRequiredValues.push(statNumber(stats, "coolingDraw")!);
@@ -869,7 +921,18 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     }
   }
 
-  const totalPowerGenerated = sumNullable(powerGeneratedValues);
+  const totalPowerGenerated = powerPlantFacts.length === 1 ? powerPlantFacts[0]!.generation : null;
+  const aggregateGeneration = {
+    available: powerPlantFacts.length === 1 && totalPowerGenerated !== null,
+    generation: totalPowerGenerated,
+    status: powerPlantFacts.length >= 2
+      ? "unresolved_multi_power_plant_scaling"
+      : powerPlantFacts.length === 1
+        ? totalPowerGenerated !== null ? "direct_source_single_plant" : "missing_single_plant_generation"
+        : "no_power_plants_equipped",
+    installedPlantCount: powerPlantFacts.length,
+    reason: powerPlantFacts.length >= 2 ? "foundry_source_does_not_encode_multi_plant_scaling_or_rounding_semantics" : powerPlantFacts.length === 1 && totalPowerGenerated === null ? "missing_single_plant_generation" : null,
+  };
   const totalPowerRequired = sumNullable(powerRequiredValues);
   const totalCoolingGenerated = sumNullable(coolingGeneratedValues);
   const totalCoolingRequired = sumNullable(coolingRequiredValues);
@@ -903,15 +966,15 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
   const categories: Record<string, unknown> = {
     power: buildCategory(
       totalPowerGenerated !== null || totalPowerRequired !== null,
-      powerGeneratedValues.length > 0 && powerRequiredValues.length > 0 ? "high" : "medium",
+      powerPlantFacts.length > 0 && powerRequiredValues.length > 0 ? "high" : "medium",
       {
         totalPowerGenerated,
         totalPowerRequired,
-        powerSurplus: powerMargin,
-        powerDeficit: powerMargin !== null ? -powerMargin : null,
+        powerSurplus: powerMargin !== null && powerMargin >= 0 ? powerMargin : null,
+        powerDeficit: powerMargin !== null && powerMargin < 0 ? Math.abs(powerMargin) : null,
       },
       {
-        powerGeneratedValuesAvailable: powerGeneratedValues.length,
+        powerGeneratedValuesAvailable: powerPlantFacts.filter((plant) => plant.generation !== null).length,
         powerRequiredValuesAvailable: powerRequiredValues.length,
         modeledConsumers: powerRequiredValues.length,
       },
@@ -941,7 +1004,8 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       regenValues.length > 0 ? "high" : shieldHpValues.length > 0 ? "medium" : "low",
       {
         totalShieldHP: sumNullable(shieldHpValues),
-        totalRegenRate: sumNullable(regenValues),
+        totalRegenRate: null,
+        totalRegenRateStatus: shieldHpValues.length > 0 ? "unresolved_active_generator_identity" : "no_shields_equipped",
       },
       {
         shieldHpValuesAvailable: shieldHpValues.length,
@@ -1010,6 +1074,22 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       [],
     ),
   };
+  const resourcePools = hardpointRow?.resourceNetworkPowerPools && typeof hardpointRow.resourceNetworkPowerPools === "object" ? hardpointRow.resourceNetworkPowerPools as Row : {};
+  const shieldPool = Array.isArray(resourcePools.dynamic)
+    ? resourcePools.dynamic.find((pool: unknown) => pool && typeof pool === "object" && text((pool as Row).itemType)?.toLowerCase() === "shield") as Row | undefined
+    : undefined;
+  const shieldCategory = categories.shields as Record<string, unknown>;
+  shieldCategory.derived = {
+    ...(shieldCategory.derived as Record<string, unknown>),
+    installedShieldCount: fitted.filter((item) => componentType(item.row, item.fallbackType) === "shield").length,
+    activeShieldPoolCapacity: numberValue(shieldPool?.maxItemCount),
+    activeIdentityKnown: shieldHpValues.length > 0 ? false : null,
+    activeShieldPortIds: [],
+    aggregateActiveRegen: null,
+    aggregateActiveRegenStatus: "unresolved_active_generator_identity",
+  };
+  (categories.power as Record<string, unknown>).individualPlants = powerPlantFacts;
+  (categories.power as Record<string, unknown>).aggregateGeneration = aggregateGeneration;
 
   const performanceRow = performance.records.find((item) => canonicalId(item.shipKey) === input.shipId) ?? {};
   categories.performance = buildCategory(
@@ -1092,7 +1172,7 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       produced: totalPowerGenerated,
       required: totalPowerRequired,
       margin: powerMargin,
-      confidence: powerGeneratedValues.length > 0 && powerRequiredValues.length > 0 ? "high" : "medium",
+      confidence: powerPlantFacts.length > 0 && powerRequiredValues.length > 0 ? "high" : "medium",
       inferred: true,
     },
     cooling: {
@@ -1123,8 +1203,14 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
         defaultedPowerAllocationCategories: input.simulation.defaultedPowerAllocationCategories,
         weaponPowerPoolSegments: weaponPowerPool?.value ?? null,
         weaponPowerPoolSourcePath: weaponPowerPool?.sourcePath ?? null,
+        categoryPresence,
+        aggregateGeneration,
+        activeShieldPoolCapacity: numberValue(shieldPool?.maxItemCount),
+        activeShieldIdentityKnown: false,
       })
     : undefined;
+
+  const componentAllocations = buildComponentAllocations(fitted);
 
   return {
     data: {
@@ -1133,6 +1219,7 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       resolutionStatus,
       componentCountsByType,
       categories,
+      componentAllocations,
       summary,
       warnings,
       confidence,

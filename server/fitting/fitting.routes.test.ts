@@ -84,6 +84,7 @@ async function fixtureRoot(): Promise<string> {
       { id: "shield/main", portId: "shield/main", portName: "Shield", portType: "Shield", editable: true, children: [] },
       { id: "life_support/main", portId: "life_support/main", portName: "Life support", portType: "LifeSupportGenerator", editable: true, children: [] },
       { id: "fuel/main", portId: "fuel/main", portName: "Fuel tank", portType: "FuelTank", editable: true, children: [] },
+      { id: "engine/main", portId: "engine/main", portName: "Engine", portType: "MainThruster", defaultItemRef: "TestThruster", editable: true, children: [] },
       { id: "weapon/main", portId: "weapon/main", portName: "Main weapon", portType: "WeaponGun", editable: true, children: [], confidence: "high", resolvedDefaultComponentKey: componentId.replaceAll("-", "_") },
       { id: "missile/main", portId: "missile/main", portName: "Missile", portType: "Missile", editable: true, children: [] },
       {
@@ -143,6 +144,15 @@ async function fixtureRoot(): Promise<string> {
       { pips: 1, percentAssigned: 0.5, modifier: 0.7, range: "low", value: 10, privateSourcePath: "do/not/expose" },
       { pips: 2, percentAssigned: 1, modifier: 1, range: "high", value: 10 },
     ],
+    componentAllocation: {
+      allocationStatus: "supported",
+      allocationReason: null,
+      segmentAllocationSupported: true,
+      minimumSegments: 1,
+      maximumSegments: 2,
+      powerRanges: [],
+      provenance: { minimumSegments: "DERIVED FROM SOURCE", maximumSegments: "DIRECT SOURCE", powerRanges: "SOURCE GAP" },
+    },
     coolingGeneratedPowerFormula: "maximumOutput * allocation",
     coolingGeneratedPowerFormulaConfidence: "source_backed_for_coolers",
     confidence: "high",
@@ -988,6 +998,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     });
     assert.equal(calculate?.status, 200);
     assert.equal((calculate?.body as { data: { scope: string } }).data.scope, "custom_loadout");
+    const allocation = (calculate?.body as { data: { componentAllocations: Array<Record<string, unknown>> } }).data.componentAllocations.find((entry) => entry.portId === "weapon/main");
+    assert.equal(allocation?.allocationStatus, "supported");
+    assert.equal(allocation?.minimumSegments, 1);
+    assert.equal(allocation?.maximumSegments, 2);
+    assert.equal((allocation?.provenance as Record<string, string>).powerRanges, "SOURCE GAP");
     assert.equal("simulation" in (calculate?.body as { data: Record<string, unknown> }).data, false);
 
     const ordnance = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
@@ -1034,6 +1049,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
             capacitySegments: { value: number };
             weaponPoolCapacitySegments: { value: number; sources: Array<{ path: string; value: number }> };
             allocatedSegments: { value: number; sources: Array<{ path: string; value: number }> };
+            categories: {
+              weapons: { maximumSegments: { value: number | null } };
+              cooler1: { minimumSegments: { value: number | null }; exactAllocationCurve: Array<{ segments: number; value: { value: number | null } }> };
+              engines: { componentCount: number; addressability: string };
+            };
           };
           cooling: { utilizationPercent: { value: number } };
           shields: {
@@ -1046,6 +1066,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     }).data.simulation;
     assert.equal(simulation.power.capacitySegments.value, 10);
     assert.equal(simulation.power.weaponPoolCapacitySegments.value, 4);
+    assert.equal(simulation.power.categories.weapons.maximumSegments.value, 4);
+    assert.equal(simulation.power.categories.cooler1.minimumSegments.value, 0.5);
+    assert.equal(simulation.power.categories.engines.componentCount, 1);
+    assert.equal(simulation.power.categories.engines.addressability, "bounds-unavailable");
+    assert.deepEqual(simulation.power.categories.cooler1.exactAllocationCurve.map((point) => [point.segments, point.value.value]), [[1, 10], [2, 10]]);
     assert.ok(simulation.power.weaponPoolCapacitySegments.sources.some(
       (entry) => entry.path.includes("FixedPowerPool") && entry.value === 4,
     ));

@@ -25,8 +25,12 @@ const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/Invent
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
 const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
+const FittingV2Page = lazy(() => import("./pages/FittingV2Page"));
 const FittingFixturePage = import.meta.env.DEV
   ? lazy(() => import("./pages/FittingFixturePage"))
+  : null;
+const FittingV2PowerFixturePage = import.meta.env.DEV
+  ? lazy(() => import("./pages/FittingV2PowerFixturePage"))
   : null;
 
 const AlphaThresholdToolPage = lazy(() =>
@@ -217,6 +221,20 @@ export default function App() {
         />
         <Route path="fitting-legacy" element={<LegacyFittingRoute />} />
         <Route path="fitting-legacy/:shipKey" element={<LegacyFittingRoute />} />
+        <Route
+          path="fitting-v2"
+          element={<Suspense fallback={<RouteFallback />}><FittingV2Page /></Suspense>}
+        />
+        <Route
+          path="fitting-v2/:shipKey"
+          element={<Suspense fallback={<RouteFallback />}><FittingV2Page /></Suspense>}
+        />
+        {FittingV2PowerFixturePage ? (
+          <Route
+            path="fitting-v2/__fixture/power"
+            element={<Suspense fallback={<RouteFallback />}><FittingV2PowerFixturePage /></Suspense>}
+          />
+        ) : null}
         {/* Legacy redirect — preserve old gunnery URL */}
         <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
         <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />

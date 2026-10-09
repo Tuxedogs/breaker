@@ -1,0 +1,110 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import type { PortBreakdownRow } from "../fitting/fittingPortGrouping";
+import { buildFittingV2PowerColumns } from "./fittingV2PowerColumns";
+import type { FittingComponentAllocation } from "../fitting/fittingApi";
+
+function row(portId: string, componentCategory: string, name = portId): PortBreakdownRow {
+  return {
+    shipKey: "ship", portId, portName: name, portType: componentCategory, portSubtype: null,
+    portCategory: componentCategory, ruleCategory: componentCategory, parentPortId: null, childPortIds: [],
+    equippedComponentKey: `${portId}-component`, equippedComponentName: name, componentCategory,
+    componentManufacturer: null, componentSize: 1, portExactSize: 1, portMinSize: 1, portMaxSize: 1,
+    componentSubtype: null, compatibilityStatus: null, editable: true, bespoke: false, locked: false,
+    warnings: [], confidence: null,
+  };
+}
+
+test("power columns are installed-component aware and keep physical coolers separate", () => {
+  const columns = buildFittingV2PowerColumns([
+    row("weapon", "ship_weapon"), row("quantum", "quantum_drive"),
+    row("cooler-b", "cooler"), row("cooler-a", "cooler"),
+  ]);
+  assert.deepEqual(columns.map((column) => column.key), ["weapons", "quantum", "cooler1", "cooler2"]);
+});
+
+test("QED and EMP are conditional and ordered between Quantum and Radar", () => {
+  const columns = buildFittingV2PowerColumns([
+    row("radar", "radar"), row("emp", "utility", "EMP device"), row("quantum", "quantum_drive"), row("qed", "utility", "QED dampener"),
+  ]);
+  assert.deepEqual(columns.map((column) => column.icon), ["quantum", "emp", "qed", "radar"]);
+  assert.ok(columns.filter((column) => column.icon === "emp" || column.icon === "qed").every((column) => column.behavior === "binary_enable" && column.provenance === "MODELED_GAMEPLAY"));
+});
+
+test("Engines remain a modeled continuous channel when an exact performance curve is unresolved", () => {
+  const [engine] = buildFittingV2PowerColumns([row("thruster", "thruster")]);
+  assert.equal(engine?.category, "engines");
+  assert.equal(engine?.behavior, "segment_scaling");
+  assert.equal(engine?.provenance, "MODELED_GAMEPLAY");
+  assert.deepEqual([engine?.minimumSegments, engine?.maximumSegments], [1, 6]);
+});
+
+test("Quantum, QED, and EMP use binary enablement without continuous performance scaling", () => {
+  const columns = buildFittingV2PowerColumns([
+    row("quantum", "quantum_drive"), row("qed", "utility", "QED"), row("emp", "utility", "EMP"),
+  ]);
+  assert.ok(columns.every((column) => column.behavior === "binary_enable"));
+  const quantum = columns.find((column) => column.icon === "quantum");
+  assert.deepEqual([quantum?.minimumSegments, quantum?.maximumSegments], [undefined, undefined]);
+  assert.ok(columns.filter((column) => column.icon === "qed" || column.icon === "emp").every((column) => column.minimumSegments === 1 && column.maximumSegments === 1));
+});
+
+test("multiple installed shields remain separate unavailable physical columns when distribution is unresolved", () => {
+  const columns = buildFittingV2PowerColumns([row("shield-left", "shield"), row("shield-right", "shield")]);
+  assert.deepEqual(columns.map((column) => column.label), ["Shield 1", "Shield 2"]);
+  assert.ok(columns.every((column) => column.unavailableReason?.includes("distribution is unresolved")));
+});
+
+test("physical allocation contract preserves six shields, separate coolers, radar, and unsupported identity", () => {
+  const rows = [
+    ...Array.from({ length: 6 }, (_, index) => row(`shield-${index + 1}`, "shield", `Shield ${index + 1}`)),
+    row("cooler-a", "cooler"), row("cooler-b", "cooler"), row("radar-main", "radar"), row("thruster-main", "thruster"),
+  ];
+  const allocations: FittingComponentAllocation[] = rows.map((entry) => ({
+    portId: entry.portId, componentKey: entry.equippedComponentKey, componentType: entry.componentCategory!, displayName: entry.equippedComponentName,
+    allocationStatus: ["shield", "cooler", "radar"].includes(entry.componentCategory!) ? "supported" : "unsupported",
+    allocationReason: ["shield", "cooler", "radar"].includes(entry.componentCategory!) ? null : "component_family_not_segment_addressable",
+    segmentAllocationSupported: ["shield", "cooler", "radar"].includes(entry.componentCategory!), minimumSegments: 1, maximumSegments: 6,
+    powerRanges: [], provenance: {}, shieldHP: entry.componentCategory === "shield" ? 100 : undefined, regenRate: entry.componentCategory === "shield" ? 10 : undefined,
+  }));
+  const columns = buildFittingV2PowerColumns(rows, undefined, allocations);
+  const shields = columns.filter((column) => column.icon === "shields");
+  assert.equal(shields.length, 6);
+  assert.ok(shields.every((column) => column.key.startsWith("physical:") && column.category === "shields" && column.behavior === "segment_scaling" && column.provenance === "SOURCE_BACKED"));
+  assert.equal(columns.filter((column) => column.icon === "cooler").length, 2);
+  assert.equal(columns.filter((column) => column.icon === "radar").length, 1);
+  const unsupported = columns.find((column) => column.portId === "thruster-main");
+  assert.equal(unsupported?.category, "engines");
+  assert.equal(unsupported?.unavailableReason, null);
+});
+
+test("source-backed shield generators retain their own fused minimum-pip bounds", () => {
+  const rows = [
+    row("shield-left", "shield", "Shield Left"),
+    row("shield-center", "shield", "Shield Center"),
+    row("shield-right", "shield", "Shield Right"),
+  ];
+  const allocations: FittingComponentAllocation[] = rows.map((entry) => ({
+    portId: entry.portId, componentKey: entry.equippedComponentKey, componentType: "shield", displayName: entry.equippedComponentName,
+    allocationStatus: "supported", allocationReason: null, segmentAllocationSupported: true,
+    minimumSegments: 2, maximumSegments: 6, powerRanges: [], provenance: {},
+  }));
+
+  const shields = buildFittingV2PowerColumns(rows, undefined, allocations);
+  assert.deepEqual(shields.map((column) => [column.key, column.minimumSegments, column.maximumSegments]).sort(), [
+    ["physical:shield-center", 2, 6],
+    ["physical:shield-left", 2, 6],
+    ["physical:shield-right", 2, 6],
+  ]);
+});
+
+test("component contracts do not expand aggregate unsupported families into one tower per installed item", () => {
+  const rows = [row("weapon-a", "ship_weapon"), row("weapon-b", "ship_weapon"), row("quantum-a", "quantum_drive")];
+  const contracts: FittingComponentAllocation[] = rows.map((entry) => ({
+    portId: entry.portId, componentKey: entry.equippedComponentKey, componentType: entry.componentCategory!, displayName: entry.equippedComponentName,
+    allocationStatus: "unsupported", allocationReason: "component_family_not_segment_addressable", segmentAllocationSupported: false,
+    minimumSegments: null, maximumSegments: null, powerRanges: [], provenance: {},
+  }));
+  const columns = buildFittingV2PowerColumns(rows, undefined, contracts);
+  assert.deepEqual(columns.map((column) => column.key), ["weapons", "quantum"]);
+});
