@@ -1,6 +1,6 @@
 # Moonbreaker Design Canon
 
-Updated: 2026-09-25
+Updated: 2026-10-10 (Mining pilot addition)
 
 This canon describes the visual system currently implemented across Moonbreaker / Scintel. It is the default reference for new UI work and for page-by-page visual refinement.
 
@@ -632,6 +632,16 @@ Mining retains semantic method, quality-band, encounter, and recommendation colo
 Selected filters must be distinguishable from hover and inactive states. Tables and recommendation lists should favor comparison, stable columns, and tabular numerics.
 
 Do not remove meaningful category colors solely to make Mining visually quieter.
+
+### Implemented UI Recovery Pilot (2026-10-10)
+
+The Mining pilot is page-scoped to `src/components/industry/mining/mining.css`; it does not replace shared dashboard, navigation, or global `ops-*` tokens. Its confirmed surface contract is canvas `#0c1218`, workspace `#111a21`, card `#151e24`, raised `#1b2831`, default border `#293943`, hover border `#384e5b`, and cyan selected/focus `#55ccef`. It uses a 2px routine radius and the approved restrained panel/card/inset shadows only for task surfaces and location records.
+
+Mining primary UI text uses the existing system UI stack. Rajdhani remains limited to compact action buttons; it is not the general-purpose Mining text face. Filter chips are 28px system-ui controls, selected chips retain the approved Crafting-style inset treatment, and focused controls use an independent two-pixel cyan ring.
+
+The route workflow remains filter → ranked locations → evidence/detail. Selected route materials appear as a counted context strip with individual removal and clear-all. Location records target a 56px desktop minimum where their evidence permits; method, environment, coverage, quality/source evidence, bookmark, and selection remain available rather than being discarded to meet density.
+
+Direct-spawn competition is always material-specific. A multi-material route presents every selected material independently in focused-first scan order; it never calculates or suggests a combined competition percentage. Missing-at-location, loading, unavailable-reference, and absent-direct-spawn evidence remain distinct presentation states sourced from the existing reference data.
 
 ## Carrier Logistics Canon
 

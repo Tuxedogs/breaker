@@ -15,7 +15,6 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import {
   buildMiningLocationSurveyPresentation,
-  buildMiningSpawnCompetitionPools,
   type MiningSpawnCompetitionMember,
   type MiningSpawnCompetitionPool,
 } from "../../../features/mining/miningPresentationModels";
@@ -35,11 +34,14 @@ import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
 import {
+  buildMiningCompetitionTargets,
   formatMiningCompetitionPercentagePoints,
+  miningCompetitionEvidenceMessage,
   miningCompetitionEmptyMessage,
   miningCompetitionMaterialColor,
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
+  type MiningCompetitionTargetPresentation,
 } from "./miningCompetitionPresentation";
 import { miningMethodPresentation } from "./miningMethodPresentation";
 import MiningMethodIcon from "./MiningMethodIcon";
@@ -339,6 +341,28 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
   );
 }
 
+function MiningCompetitionTarget({ target }: { target: MiningCompetitionTargetPresentation }) {
+  if (target.pools.length > 0) {
+    return <>
+      {target.pools.map((pool) => <MiningCompetitionPool key={`${target.materialKey}:${pool.sourceGroup}`} pool={pool} />)}
+    </>;
+  }
+
+  return (
+    <div className="mdet-competition-pool mdet-competition-pool--unavailable" data-competition-target={target.materialKey}>
+      <div className="mdet-competition-copy">
+        <span>Direct spawn competition</span>
+        <div className="mdet-competition-target">
+          <MaterialNameCell name={target.materialName} iconSize={27} />
+        </div>
+      </div>
+      <p className="mdet-competition-empty">
+        {miningCompetitionEvidenceMessage(target.materialName, target.evidenceState ?? "no-direct-spawn-evidence")}
+      </p>
+    </div>
+  );
+}
+
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
   return (
     <div className="mdet-mobile-stat">
@@ -541,23 +565,26 @@ export function LocationDetail({
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
   const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
-  const competitionTarget = useMemo(() => {
-    const selectedKey = focusedMaterialKey
-      ? canonicalMiningMaterialKey(focusedMaterialKey)
-      : buildQueueMaterialKeys.size === 1
-        ? canonicalMiningMaterialKey([...buildQueueMaterialKeys][0])
-        : null;
-    if (!selectedKey || !buildQueueMaterialKeys.has(selectedKey)) return null;
-    const matchingRows = staticResourceRows.filter(
-      (row) => canonicalMiningMaterial({ materialId: row.materialId, materialName: row.materialName }).key === canonicalMiningMaterialKey(selectedKey),
-    );
-    if (matchingRows.length === 0) return null;
-    return canonicalMiningMaterialKey(selectedKey);
-  }, [buildQueueMaterialKeys, focusedMaterialKey, staticResourceRows]);
-  const competitionPools = useMemo(
-    () => competitionTarget ? buildMiningSpawnCompetitionPools(staticResourceRows, competitionTarget) : [],
-    [competitionTarget, staticResourceRows],
-  );
+  const competitionTargets = useMemo<MiningCompetitionTargetPresentation[]>(() => {
+    const selectedMaterialNames = new Map<string, string>();
+    for (const material of activeDemandMaterials) {
+      const canonical = canonicalMiningMaterial({
+        materialKey: material.materialKey,
+        materialId: material.materialId,
+        displayName: material.displayName,
+        materialName: material.materialName,
+      });
+      if (!canonical.unresolvedUuid && canonical.key) selectedMaterialNames.set(canonical.key, canonical.label);
+    }
+
+    return buildMiningCompetitionTargets({
+      selectedMaterialKeys: buildQueueMaterialKeys,
+      selectedMaterialNames,
+      focusedMaterialKey,
+      staticResourceRows,
+      staticIndexStatus,
+    });
+  }, [activeDemandMaterials, buildQueueMaterialKeys, focusedMaterialKey, staticIndexStatus, staticResourceRows]);
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
     [demandRows],
@@ -656,9 +683,9 @@ export function LocationDetail({
       )}
 
       <section className="mdet-competition" aria-label="Direct spawn competition">
-        {competitionPools.length > 0
-          ? competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)
-          : <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(Boolean(competitionTarget))}</p>}
+        {competitionTargets.length > 0
+          ? competitionTargets.map((target) => <MiningCompetitionTarget key={target.materialKey} target={target} />)
+          : <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(false)}</p>}
       </section>
 
       {entry.nearbyStations.length > 0 && (

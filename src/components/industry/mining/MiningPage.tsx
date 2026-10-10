@@ -487,6 +487,12 @@ export default function MiningModule() {
     : planner.filters.showOnlyStarred
       ? "Saved mode"
       : "Explore mode";
+  const activeMaterialCount = buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size;
+  const rankingContext = effectiveMaterialFilterKeys.size > 0
+    ? coveragePlan
+      ? `${coveragePlan.coveredCount}/${coveragePlan.totalMaterials} selected materials covered · ${searchFilteredLocations.length} locations`
+      : `${effectiveMaterialFilterKeys.size} selected materials · ${searchFilteredLocations.length} locations`
+    : `Exploration index · ${searchFilteredLocations.length} locations`;
 
   return (
     <div className="mine-page mine-page--v2">
@@ -515,7 +521,7 @@ export default function MiningModule() {
             onClick={() => setMobileFiltersOpen(true)}
           >
             <span>Filters</span>
-            <strong>{(buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size) ? `${buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size} materials` : selectedSystemName ?? miningScopeLabel}</strong>
+            <strong>{activeMaterialCount ? `${activeMaterialCount} material${activeMaterialCount === 1 ? "" : "s"}` : selectedSystemName ?? miningScopeLabel}</strong>
           </button>
 
           <div className="mining-shell">
@@ -594,8 +600,8 @@ export default function MiningModule() {
             <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
               <div className={`mlist-header${buildQueueSelectionActive ? " mlist-header--with-tools" : ""}`}>
                 <div className="mlist-header-line">
-                  <span className="mlist-header-label">Ranked route solution</span>
-                  <span className="mlist-header-count">Complete set / {searchFilteredLocations.length} locations</span>
+                  <span className="mlist-header-label">Ranked locations</span>
+                  <span className="mlist-header-count">{rankingContext}</span>
                 </div>
                 {buildQueueSelectionActive && (
                   <div className="mlist-tools-row">

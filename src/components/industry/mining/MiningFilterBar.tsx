@@ -155,6 +155,16 @@ export function MiningFilterBar({
       <div className="scintel-filter-body mining-filter-drawer">
         {allMaterialChips.length > 0 && (
           <div className="mining-filter-chip-block">
+            {selectedMaterialChips.length > 0 && (
+              <section className="mining-selected-material-context" aria-label="Selected route materials">
+                <div className="mining-selected-material-context__head">
+                  <span>Route materials</span>
+                  <strong>{selectedMaterialChips.length} active</strong>
+                  {clearMaterialsButton}
+                </div>
+                {renderMaterialChips(selectedMaterialChips, "Selected route materials")}
+              </section>
+            )}
             <div className="mining-material-strip">
               {compactSelectedOnly
                 ? (
