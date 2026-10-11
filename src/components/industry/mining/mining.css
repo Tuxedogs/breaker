@@ -1795,9 +1795,13 @@
 .mine-page.mine-page--v2 .mdet-competition-empty { margin: 0; padding: 18px; color: var(--mine-intel-copy-muted); font-size: 10px; }
 .mine-page.mine-page--v2 .mdet-competition-pool { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 152px; border-top: 0; }
 .mine-page.mine-page--v2 .mdet-competition-pool + .mdet-competition-pool { border-top: 1px solid var(--mine-intel-border); }
-.mine-page.mine-page--v2 .mdet-competition-pool--unavailable { min-height: 82px; background: var(--mine-intel-workspace); }
-.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-copy { padding-block: 12px; }
-.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-empty { align-self: center; margin: 0; padding: 14px 18px; border: 0; color: var(--mine-intel-copy-secondary); font-size: 11px; line-height: 1.4; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable { grid-template-columns: minmax(164px, max-content) minmax(0, 1fr); min-height: 56px; background: var(--mine-intel-workspace); }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-copy { gap: 3px; padding: 8px 12px; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-copy > span { font-size: 9px; letter-spacing: .09em; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-target { gap: 0; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-target .mining-material-name-icon { width: 20px; height: 20px; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-target .mining-material-name-text { font-size: 13px; }
+.mine-page.mine-page--v2 .mdet-competition-pool--unavailable .mdet-competition-empty { align-self: center; margin: 0; padding: 9px 14px; border: 0; color: var(--mine-intel-copy-secondary); font-size: 11px; line-height: 1.35; }
 .mine-page.mine-page--v2 .mdet-competition-copy { display: flex; min-width: 0; flex-direction: column; justify-content: center; gap: 7px; padding: 16px; border-right: 1px solid var(--mine-intel-border); }
 .mine-page.mine-page--v2 .mdet-competition-copy > span { color: #8297a2; font-size: 11px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
 .mine-page.mine-page--v2 .mdet-competition-target { display: grid; gap: 2px; }
@@ -1969,6 +1973,15 @@
   }
 
   .mine-page.mine-page--v2 .mining-detail-column { overflow-x: hidden; }
+}
+
+@media (min-width: 2200px) {
+  /* P2 follow-up: preserve compact hierarchy while giving 2K evidence metadata a readable scale. */
+  .mine-page.mine-page--v2 .mdet-competition-copy > span { font-size: 12px; }
+  .mine-page.mine-page--v2 .mdet-competition-target small,
+  .mine-page.mine-page--v2 .mdet-competition-copy > p { font-size: 11px; }
+  .mine-page.mine-page--v2 .mdet-competition-member .mining-material-name-text { font-size: 12px; }
+  .mine-page.mine-page--v2 .mdet-competition-member > strong { font-size: 11px; }
 }
 
 @media (min-width: 901px) and (max-width: 1599px) {
