@@ -75,6 +75,8 @@ export type MaterialOccurrenceDisplay = {
 export type DemandRow = {
   name: string;
   key: string;
+  materialKey: string;
+  associationKey: string;
   miningType: string;
   coverage: string;
   targetQualityChanceLabel: string;
@@ -90,6 +92,8 @@ export type DemandRow = {
 export type ResourceRow = {
   name: string;
   key: string;
+  materialKey: string;
+  associationKey: string;
   miningType: string;
   qualityLabel: string;
   quality900Label: string;

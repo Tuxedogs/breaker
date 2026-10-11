@@ -639,9 +639,9 @@ The Mining pilot is page-scoped to `src/components/industry/mining/mining.css`; 
 
 Mining primary UI text uses the existing system UI stack. Rajdhani remains limited to compact action buttons; it is not the general-purpose Mining text face. Filter chips are 28px system-ui controls, selected chips retain the approved Crafting-style inset treatment, and focused controls use an independent two-pixel cyan ring.
 
-The route workflow remains filter → ranked locations → evidence/detail. Selected route materials appear as a counted context strip with individual removal and clear-all. Location records target a 56px desktop minimum where their evidence permits; method, environment, coverage, quality/source evidence, bookmark, and selection remain available rather than being discarded to meet density.
+The route workflow remains filter → ranked locations → evidence/detail. At desktop widths that can preserve all three usable panels, the Ranked Locations panel has a Crafting-derived vertical spine with four discrete widths: 56px icon rail, 190px compact, 340px standard, and 490px expanded. The filter panel owns selected count and Clear; Mining does not render a second ACTIVE materials banner or duplicate selected-material strip in the profile. Location records remain a 56px desktop target and disclose laterally: identity first, then method availability, then environment.
 
-Direct-spawn competition is always material-specific. A multi-material route presents every selected material independently in focused-first scan order; it never calculates or suggests a combined competition percentage. Missing-at-location, loading, unavailable-reference, and absent-direct-spawn evidence remain distinct presentation states sourced from the existing reference data.
+Direct-spawn competition is source-pool-specific. A pool is visible only if the inspected location has a selected material in that delivered pool; multiple selected materials in that one pool share one truthful bar while retaining their own colors. It never calculates or suggests a combined target percentage, renormalizes a muted competitor, or merges distinct pools. Missing-at-location, loading, unavailable-reference, and absent-direct-spawn evidence remain distinct presentation states sourced from the existing reference data.
 
 ## Carrier Logistics Canon
 

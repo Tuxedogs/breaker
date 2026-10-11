@@ -28,6 +28,7 @@ export function LocationListItem({
   planetAssetMap,
   starred,
   selected,
+  panelMode = "standard",
   onSelect,
   onToggleStar,
 }: {
@@ -40,6 +41,7 @@ export function LocationListItem({
   planetAssetMap: Map<string, PlanetAsset> | null;
   starred: boolean;
   selected: boolean;
+  panelMode?: "collapsed" | "compact" | "standard" | "expanded";
   onSelect: () => void;
   onToggleStar: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
@@ -82,13 +84,13 @@ export function LocationListItem({
 
   return (
     <div
-      className={`mlist-item${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
+      className={`mlist-item mlist-item--${panelMode}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`${selected ? "Collapse" : "Select"} ${locationDisplayName} mining location`}
+      aria-label={`${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
     >
       {rank !== undefined && <span className="mlist-item-rank" aria-hidden="true">{rank}</span>}
       <div className="mlist-item-thumb" aria-hidden="true">

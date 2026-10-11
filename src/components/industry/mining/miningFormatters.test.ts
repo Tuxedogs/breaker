@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { StaticLocationMaterialRow } from "../../../features/mining/staticMiningIndex";
 import {
+  buildDemandRows,
   buildOccurrenceDisplay,
   formatMiningProbability,
   usesSpecificLocationOccurrence,
 } from "./miningFormatters";
+import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 
 function staticRow(overrides: Partial<StaticLocationMaterialRow> = {}): StaticLocationMaterialRow {
   return {
@@ -76,4 +78,34 @@ test("preserves legacy occurrence presentation for specific-location materials",
   const occurrence = buildOccurrenceDisplay(staticRow({ materialId: "sadaryx", materialName: "Sadaryx" }), null);
   assert.equal(occurrence.mode, "legacy");
   assert.equal(occurrence.locationRankLabel, "Location-specific");
+});
+
+test("retains one selected-material row per delivered mining-method association", () => {
+  const entry = {
+    locationKey: "pyro:ignis",
+    locationName: "Ignis",
+    systemName: "Pyro",
+    locationKind: "moon",
+    spawnType: "mixed",
+    nearbyStations: [],
+    materials: ["Gold"],
+    score: 1,
+  } as PublicLocationEntry;
+  const required = new Map<string, RequiredMaterial>([["gold", {
+    materialId: "gold",
+    materialName: "Gold",
+    requiredQuantity: 1,
+    usedBy: [],
+    slots: [],
+  }]]);
+  const rows = buildDemandRows(
+    entry,
+    new Set(["gold"]),
+    ["gold"],
+    required,
+    [staticRow({ resolvedMineableClass: "Shipborne" }), staticRow({ resolvedMineableClass: "Handborne" })],
+    null,
+  );
+  assert.deepEqual(rows.map((row) => [row.materialKey, row.miningType]), [["gold", "Surface Ship"], ["gold", "Hand"]]);
+  assert.notEqual(rows[0].associationKey, rows[1].associationKey);
 });

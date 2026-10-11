@@ -34,6 +34,24 @@ export type MiningSpawnCompetitionPool = {
   competitorCount: number;
 };
 
+/**
+ * A source-pool view for the whole current selection.  It deliberately
+ * retains every selected member in the pool rather than deriving an
+ * aggregate target probability.
+ */
+export type MiningSelectedSpawnCompetitionPool = {
+  sourceGroup: string;
+  selectedMembers: MiningSpawnCompetitionMember[];
+  members: MiningSpawnCompetitionMember[];
+  competitorCount: number;
+};
+
+export type MiningMethodMaterialEntry = {
+  name: string;
+  miningType: string;
+  associationKey: string;
+};
+
 type StaticSource = NonNullable<StaticLocationMaterialRow["sources"]>[number];
 
 function normalize(value: string | null | undefined): string {
@@ -180,4 +198,54 @@ export function buildMiningSpawnCompetitionPools(
     });
   }
   return pools;
+}
+
+/**
+ * Coalesces selected materials only when they share the same delivered source
+ * pool. The member shares remain the delivered pool shares; this must never
+ * be read as a combined target chance.
+ */
+export function buildMiningSelectedSpawnCompetitionPools(
+  rows: StaticLocationMaterialRow[],
+  selectedMaterials: Iterable<string>,
+): MiningSelectedSpawnCompetitionPool[] {
+  const selected = [...new Set([...selectedMaterials].map(normalize).filter(Boolean))];
+  const groups = new Map<string, { sourceGroup: string; selectedKeys: Set<string> }>();
+
+  for (const selectedMaterial of selected) {
+    for (const pool of buildMiningSpawnCompetitionPools(rows, selectedMaterial)) {
+      const key = normalize(pool.sourceGroup);
+      const group = groups.get(key) ?? { sourceGroup: pool.sourceGroup, selectedKeys: new Set<string>() };
+      group.selectedKeys.add(normalize(pool.target.materialKey));
+      groups.set(key, group);
+    }
+  }
+
+  return [...groups.values()]
+    .sort((left, right) => compareText(normalize(left.sourceGroup), normalize(right.sourceGroup)))
+    .map((group) => {
+      const members = [...selectUniqueMembers(rows, group.sourceGroup).values()].sort(comparePoolShare);
+      const selectedMembers = members.filter((member) => group.selectedKeys.has(normalize(member.materialKey)));
+      return {
+        sourceGroup: group.sourceGroup,
+        selectedMembers,
+        members,
+        competitorCount: members.filter((member) => !group.selectedKeys.has(normalize(member.materialKey))).length,
+      };
+    })
+    .filter((pool) => pool.selectedMembers.length > 0);
+}
+
+/** Source-backed rows are ordered for scanning, not merged across methods. */
+export function compareMiningMethodMaterialEntries(left: MiningMethodMaterialEntry, right: MiningMethodMaterialEntry): number {
+  const methodRank = (method: string): number => {
+    const normalized = normalize(method);
+    if (normalized === "asteroid" || normalized === "ship" || normalized === "surface ship") return 0;
+    if (normalized === "vehicle" || normalized === "surface vehicle") return 1;
+    if (normalized === "hand") return 2;
+    return 3;
+  };
+  return methodRank(left.miningType) - methodRank(right.miningType)
+    || compareText(normalize(left.name), normalize(right.name))
+    || compareText(left.associationKey, right.associationKey);
 }

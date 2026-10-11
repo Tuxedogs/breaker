@@ -4,7 +4,9 @@ import test from "node:test";
 import {
   buildMiningEnvironmentPresentation,
   buildMiningLocationSurveyPresentation,
+  buildMiningSelectedSpawnCompetitionPools,
   buildMiningSpawnCompetitionPools,
+  compareMiningMethodMaterialEntries,
 } from "./miningPresentationModels";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -117,4 +119,30 @@ test("orders pools deterministically and returns every target source group", () 
   const pools = buildMiningSpawnCompetitionPools(rows, "target");
   assert.deepEqual(pools.map((pool) => pool.sourceGroup), ["Alpha", "Beta"]);
   assert.deepEqual(pools[0].members.map((member) => member.materialName), ["Able", "Target", "Zulu"]);
+});
+
+test("coalesces selected materials only within their shared delivered source pool", () => {
+  const rows = [
+    { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
+    { materialId: "gold", materialName: "Gold", sources: [{ materialKey: "gold", materialName: "Gold", groupName: "ship", relativeProbability: 30 }, { materialKey: "gold", materialName: "Gold", groupName: "hand", relativeProbability: 50 }] },
+    { materialId: "iron", materialName: "Iron", sources: [{ materialKey: "iron", materialName: "Iron", groupName: "ship", relativeProbability: 10 }, { materialKey: "iron", materialName: "Iron", groupName: "hand", relativeProbability: 50 }] },
+  ] as StaticLocationMaterialRow[];
+  const pools = buildMiningSelectedSpawnCompetitionPools(rows, ["copper", "gold"]);
+  assert.deepEqual(pools.map((pool) => [pool.sourceGroup, pool.selectedMembers.map((member) => member.materialName), pool.competitorCount]), [
+    ["hand", ["Gold"], 1],
+    ["ship", ["Copper", "Gold"], 1],
+  ]);
+  assert.deepEqual(pools[1].members.map((member) => [member.materialName, member.relativeProbability]), [
+    ["Copper", 60], ["Gold", 30], ["Iron", 10],
+  ]);
+});
+
+test("orders method-associated material rows without collapsing identical materials", () => {
+  const entries = [
+    { name: "Beryl", miningType: "Hand", associationKey: "beryl:hand" },
+    { name: "Copper", miningType: "Vehicle", associationKey: "copper:vehicle" },
+    { name: "Copper", miningType: "Ship", associationKey: "copper:ship" },
+    { name: "Aluminum", miningType: "Surface Ship", associationKey: "aluminum:ship" },
+  ].sort(compareMiningMethodMaterialEntries);
+  assert.deepEqual(entries.map((entry) => entry.associationKey), ["aluminum:ship", "copper:ship", "copper:vehicle", "beryl:hand"]);
 });

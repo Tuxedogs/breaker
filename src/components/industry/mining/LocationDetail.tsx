@@ -14,9 +14,11 @@ import {
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import {
+  buildMiningSelectedSpawnCompetitionPools,
   buildMiningLocationSurveyPresentation,
+  compareMiningMethodMaterialEntries,
   type MiningSpawnCompetitionMember,
-  type MiningSpawnCompetitionPool,
+  type MiningSelectedSpawnCompetitionPool,
 } from "../../../features/mining/miningPresentationModels";
 import {
   buildDemandRows,
@@ -250,16 +252,16 @@ function competitionAccentStyle(accentColor: string): CSSProperties {
   return { "--mdet-competition-color": accentColor } as CSSProperties;
 }
 
-function CompetitionMember({ member, target, link }: { member: MiningSpawnCompetitionMember; target: boolean; link: CompetitionLinkProps }) {
+function CompetitionMember({ member, selected, link }: { member: MiningSpawnCompetitionMember; selected: boolean; link: CompetitionLinkProps }) {
   const probabilitySummary = miningCompetitionProbabilitySummary(member);
   return (
     <li
-      className={`mdet-competition-member${target ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+      className={`mdet-competition-member${selected ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
       data-competition-material-key={member.materialKey}
       data-linked-active={link.active ? "true" : undefined}
       style={competitionAccentStyle(link.accentColor)}
       title={probabilitySummary}
-      aria-label={`${member.materialName}. ${probabilitySummary}. ${target ? "Target" : "Competing material"}.`}
+      aria-label={`${member.materialName}. ${probabilitySummary}. ${selected ? "Selected material" : "Other pool material"}.`}
       tabIndex={0}
       onMouseEnter={link.onMouseEnter}
       onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
@@ -272,7 +274,7 @@ function CompetitionMember({ member, target, link }: { member: MiningSpawnCompet
   );
 }
 
-function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
+function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionPool }) {
   const [activeMaterialKey, setActiveMaterialKey] = useState<string | null>(null);
   const linkProps = (member: MiningSpawnCompetitionMember): CompetitionLinkProps => {
     const materialKey = member.materialKey;
@@ -298,31 +300,31 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
       <div className="mdet-competition-copy">
         <span>Direct spawn competition</span>
         <div className="mdet-competition-target" title={`Source group: ${pool.sourceGroup}`}>
-          <MaterialNameCell name={pool.target.materialName} iconSize={27} />
           <small>{miningCompetitionSourceLabel(pool.sourceGroup)}</small>
         </div>
         <strong>{pool.competitorCount} competing resource{pool.competitorCount === 1 ? "" : "s"}</strong>
-        <p>{pool.members.length} primary materials share this source pool.</p>
+        <p>{pool.members.length} primary materials share this source pool; selected materials retain their source colors.</p>
       </div>
       <div className="mdet-competition-readout">
-        <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${pool.target.materialName}`}>
+        <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${miningCompetitionSourceLabel(pool.sourceGroup)}`}>
           {pool.members.map((member) => {
             const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
               ? Math.max(member.relativeProbability, 0)
               : 0;
             const link = linkProps(member);
             const probabilitySummary = miningCompetitionProbabilitySummary(member);
+            const selected = pool.selectedMembers.includes(member);
             return (
               <span
                 key={`${pool.sourceGroup}:${member.materialKey}:bar`}
-                className={`mdet-competition-segment${member === pool.target ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+                className={`mdet-competition-segment${selected ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
                 role="listitem"
                 tabIndex={0}
                 data-competition-material-key={member.materialKey}
                 data-linked-active={link.active ? "true" : undefined}
-                style={{ ...competitionAccentStyle(link.accentColor), flexGrow: share }}
+                style={{ ...competitionAccentStyle(link.accentColor), flexGrow: share, opacity: selected ? 1 : 0.32 }}
                 title={`${member.materialName}. ${probabilitySummary}`}
-                aria-label={`${member.materialName}. ${probabilitySummary}. ${member === pool.target ? "Target" : "Competing material"}.`}
+                aria-label={`${member.materialName}. ${probabilitySummary}. ${selected ? "Selected material" : "Other pool material"}.`}
                 onMouseEnter={link.onMouseEnter}
                 onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
                 onFocus={link.onFocus}
@@ -333,7 +335,7 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
         </div>
         <ul className="mdet-competition-members">
           {pool.members.map((member) => (
-            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} target={member === pool.target} link={linkProps(member)} />
+            <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} selected={pool.selectedMembers.includes(member)} link={linkProps(member)} />
           ))}
         </ul>
       </div>
@@ -341,13 +343,7 @@ function MiningCompetitionPool({ pool }: { pool: MiningSpawnCompetitionPool }) {
   );
 }
 
-function MiningCompetitionTarget({ target }: { target: MiningCompetitionTargetPresentation }) {
-  if (target.pools.length > 0) {
-    return <>
-      {target.pools.map((pool) => <MiningCompetitionPool key={`${target.materialKey}:${pool.sourceGroup}`} pool={pool} />)}
-    </>;
-  }
-
+function MiningCompetitionUnavailableTarget({ target }: { target: MiningCompetitionTargetPresentation }) {
   return (
     <div className="mdet-competition-pool mdet-competition-pool--unavailable" data-competition-target={target.materialKey}>
       <div className="mdet-competition-copy">
@@ -522,7 +518,10 @@ export function LocationDetail({
     [entry, staticResourceRows, staticMiningIndex],
   );
 
-  const coveredDemandRows = useMemo(() => demandRows.filter((r) => r.status !== "missing"), [demandRows]);
+  const coveredDemandRows = useMemo(
+    () => demandRows.filter((row) => row.status !== "missing").sort(compareMiningMethodMaterialEntries),
+    [demandRows],
+  );
 
   // Dev-mode logging
   useEffect(() => {
@@ -585,6 +584,16 @@ export function LocationDetail({
       staticIndexStatus,
     });
   }, [activeDemandMaterials, buildQueueMaterialKeys, focusedMaterialKey, staticIndexStatus, staticResourceRows]);
+  const competitionPools = useMemo(
+    () => staticIndexStatus === "loaded"
+      ? buildMiningSelectedSpawnCompetitionPools(staticResourceRows, buildQueueMaterialKeys)
+      : [],
+    [buildQueueMaterialKeys, staticIndexStatus, staticResourceRows],
+  );
+  const competitionUnavailableTargets = useMemo(
+    () => competitionTargets.filter((target) => target.pools.length === 0),
+    [competitionTargets],
+  );
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
     [demandRows],
@@ -593,13 +602,7 @@ export function LocationDetail({
     const rows = hasBuildQueueTarget
       ? resourceRows.filter((row) => !demandedMaterialKeys.has(resourceRowMaterialKey(row)))
       : resourceRows;
-    const byMaterial = new Map<string, ResourceRow>();
-    for (const row of rows) {
-      const key = resourceRowMaterialKey(row);
-      const existing = byMaterial.get(key);
-      if (!existing || (row.sourceWeight ?? -1) > (existing.sourceWeight ?? -1)) byMaterial.set(key, row);
-    }
-    return [...byMaterial.values()];
+    return [...rows].sort(compareMiningMethodMaterialEntries);
   }, [demandedMaterialKeys, hasBuildQueueTarget, resourceRows]);
 
   const materialProfileTitle = hasBuildQueueTarget ? "Other materials at this location" : "Material profile";
@@ -683,9 +686,11 @@ export function LocationDetail({
       )}
 
       <section className="mdet-competition" aria-label="Direct spawn competition">
-        {competitionTargets.length > 0
-          ? competitionTargets.map((target) => <MiningCompetitionTarget key={target.materialKey} target={target} />)
-          : <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(false)}</p>}
+        {competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)}
+        {competitionUnavailableTargets.map((target) => <MiningCompetitionUnavailableTarget key={target.materialKey} target={target} />)}
+        {competitionPools.length === 0 && competitionUnavailableTargets.length === 0 && (
+          <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(false)}</p>
+        )}
       </section>
 
       {entry.nearbyStations.length > 0 && (
@@ -718,7 +723,7 @@ export function LocationDetail({
             </thead>
             <tbody>
               {coveredDemandRows.map((row) => (
-                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
+                <tr key={row.associationKey} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
                   <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
                   <td><MiningOccurrenceCell row={row} /></td>
@@ -755,7 +760,7 @@ export function LocationDetail({
             </thead>
             <tbody>
               {otherLocationMaterialRows.map((row) => (
-                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
+                <tr key={row.associationKey} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
                   <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.miningType || "Unknown"} /></td>
                   <td><MiningOccurrenceCell row={row} /></td>

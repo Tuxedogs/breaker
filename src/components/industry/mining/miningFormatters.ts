@@ -188,7 +188,8 @@ export function demandMaterialLabel(material: RequiredMaterial | undefined, fall
     ?? fallbackKey;
 }
 
-export function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string {
+export function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name" | "materialKey">): string {
+  if (typeof row.materialKey === "string") return row.materialKey;
   return canonicalMiningMaterial({
     materialKey: row.key.includes(":") ? undefined : row.key,
     materialId: row.key.includes(":") ? undefined : row.key,
@@ -441,39 +442,51 @@ export function buildDemandRows(
 ): DemandRow[] {
   if (buildQueueMaterialKeys.size === 0) return [];
   const coveredSet = new Set(locationMaterialKeys);
-  const staticRowsByKey = new Map(staticResourceRows.map((row) => [getStaticMaterialKey(row), row]));
+  const staticRowsByKey = new Map<string, typeof staticResourceRows>();
+  for (const staticRow of staticResourceRows) {
+    const key = getStaticMaterialKey(staticRow);
+    const rows = staticRowsByKey.get(key) ?? [];
+    rows.push(staticRow);
+    staticRowsByKey.set(key, rows);
+  }
   const rows: DemandRow[] = [];
   for (const key of buildQueueMaterialKeys) {
     const routeScoreEntry = findRouteScoreForMaterial(entry, key);
     const covered = coveredSet.has(key);
-    const staticRow = staticRowsByKey.get(key);
-    const qualityRow = staticRow ? getStaticMaterialQualityRow(staticRow, staticMiningIndex) : null;
     const demandMaterial = demandMaterialByKey.get(key);
     const targetThreshold = demandMaterial?.selectedQuality ?? routeScoreEntry?.selectedQuality ?? routeScoreEntry?.signals.selectedQuality ?? 800;
-    const densityScore = staticRow ? getStaticDensityScore(staticRow, staticMiningIndex) ?? routeScoreEntry?.signals.encounterPct : routeScoreEntry?.signals.encounterPct;
-    const occurrence = staticRow ? buildOccurrenceDisplay(staticRow, staticMiningIndex, key) : null;
-    const sw = staticRow && occurrence?.mode === "probability"
-      ? occurrenceRankWeight(staticRow, staticMiningIndex)
-      : densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
-    const signal = covered ? encounterSignalFromWeight(sw) : "Unknown";
-    const st = covered ? encounterStatusFromSignal(signal) : "missing";
-    const rowStatus = st === "none" ? "low" : st;
-    rows.push({
-      name: staticRow?.materialName ?? demandMaterialLabel(demandMaterial, routeScoreEntry?.displayName ?? key),
-      key,
-      miningType: staticRow ? displayMiningMethodLabel(staticRow.resolvedMineableClass) : routeScoreEntry?.signals.selectedMethod ?? "Not indexed",
-      coverage: covered ? "Covered" : "Missing",
-      targetQualityChanceLabel: covered && staticRow
-        ? formatThresholdChance(pickWeightedQualityChances(qualityRow, staticRow), targetThreshold)
-        : "Unknown",
-      quality900Label: covered && staticRow
-        ? formatStaticQualityChanceDecimalBelow1(pickWeightedQualityChances(qualityRow, staticRow), "900")
-        : "Unknown",
-      densityLabel: covered ? formatEncounterTier(sw) : "Missing",
-      compositionLabel: covered && staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
-      sourceStrength: signal,
-      sourceWeight: sw,
-      occurrence: occurrence ?? {
+    const associations = staticRowsByKey.get(key) ?? [undefined];
+    for (const staticRow of associations) {
+      const qualityRow = staticRow ? getStaticMaterialQualityRow(staticRow, staticMiningIndex) : null;
+      const densityScore = staticRow ? getStaticDensityScore(staticRow, staticMiningIndex) ?? routeScoreEntry?.signals.encounterPct : routeScoreEntry?.signals.encounterPct;
+      const occurrence = staticRow ? buildOccurrenceDisplay(staticRow, staticMiningIndex, key) : null;
+      const sw = staticRow && occurrence?.mode === "probability"
+        ? occurrenceRankWeight(staticRow, staticMiningIndex)
+        : densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
+      const signal = covered ? encounterSignalFromWeight(sw) : "Unknown";
+      const st = covered ? encounterStatusFromSignal(signal) : "missing";
+      const rowStatus = st === "none" ? "low" : st;
+      const associationKey = staticRow
+        ? `${key}:${staticRow.resolvedMineableClass}:${(staticRow.sources ?? []).map((source) => source.groupName ?? source.spawnType ?? "unknown").sort().join("|")}`
+        : `${key}:unresolved`;
+      rows.push({
+        name: staticRow?.materialName ?? demandMaterialLabel(demandMaterial, routeScoreEntry?.displayName ?? key),
+        key,
+        materialKey: key,
+        associationKey,
+        miningType: staticRow ? displayMiningMethodLabel(staticRow.resolvedMineableClass) : routeScoreEntry?.signals.selectedMethod ?? "Not indexed",
+        coverage: covered ? "Covered" : "Missing",
+        targetQualityChanceLabel: covered && staticRow
+          ? formatThresholdChance(pickWeightedQualityChances(qualityRow, staticRow), targetThreshold)
+          : "Unknown",
+        quality900Label: covered && staticRow
+          ? formatStaticQualityChanceDecimalBelow1(pickWeightedQualityChances(qualityRow, staticRow), "900")
+          : "Unknown",
+        densityLabel: covered ? formatEncounterTier(sw) : "Missing",
+        compositionLabel: covered && staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
+        sourceStrength: signal,
+        sourceWeight: sw,
+        occurrence: occurrence ?? {
         mode: "legacy",
         primaryRockShareLabel: "Unknown",
         spawnRollProbabilityLabel: "Unknown",
@@ -481,9 +494,10 @@ export function buildDemandRows(
         methodAvailabilityLabel: "Unknown",
         traceMaterialsLabel: "None indexed",
         traceMaterials: [],
-      },
-      status: rowStatus as "strong" | "moderate" | "low" | "missing",
-    });
+        },
+        status: rowStatus as "strong" | "moderate" | "low" | "missing",
+      });
+    }
   }
   return rows;
 }
@@ -527,6 +541,8 @@ export function buildResourceRows(
       return {
         name: row.materialName || canonical.label || "Unknown Material",
         key: key || `${row.systemKey}:${row.locationKey}:${row.materialId || row.materialName}`,
+        materialKey: key,
+        associationKey: `${key}:${row.resolvedMineableClass}:${(row.sources ?? []).map((source) => source.groupName ?? source.spawnType ?? "unknown").sort().join("|")}`,
         miningType: displayMiningMethodLabel(row.resolvedMineableClass),
         qualityLabel: formatStaticQualityChanceFromChances(weightedChances),
         quality900Label: formatStaticQualityChanceDecimalBelow1(weightedChances, "900"),
@@ -554,6 +570,8 @@ export function buildResourceRows(
     return {
       name: r.materialName,
       key,
+      materialKey: canonicalMiningMaterialKey(key),
+      associationKey: `${canonicalMiningMaterialKey(key)}:${(r as { miningType?: string }).miningType ?? "unknown"}`,
       miningType: displayMiningMethodLabel((r as { miningType?: string }).miningType ?? ""),
       qualityLabel: qualityDisplay.kind === "ignored" ? "N/A" : qualityDisplay.kind === "chance" ? qualityDisplay.label : "Unknown",
       quality900Label: "Unknown",
