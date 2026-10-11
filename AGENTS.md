@@ -290,3 +290,11 @@ Do not continue into:
 * API redesign
 * Calculation changes
 * Additional speculative features unless the task explicitly requests them.
+
+## Codex Orchestration
+
+The primary Codex session is the orchestrator. Reuse the project-scoped roles in `.codex/agents/` only when their bounded expertise will cost less than direct work. The durable routing, handoff, vault-memory, and recovery rules are in `docs/agents/HIERARCHY.md`, `docs/agents/HANDOFF_CONTRACT.md`, and the authoritative vault note `D:\Vaults\Star Citizen Projects\Projects\Breaker\20 Architecture\Codex Orchestration.md`.
+
+Before a non-trivial task, establish the actual repository, worktree, branch, HEAD, and dirty state. Do not assume that the current directory is the intended worktree. Preserve unrelated WIP, particularly the active Mining workstream and the paused Fitting V2 checkpoint.
+
+Use the Obsidian vault as durable project memory, not chat summaries. Start from the hub and relevant concise index note; read the smallest set of task-relevant notes and current repository evidence. Vault notes record decisions, current state, ownership, and checkpoints; source code and accepted runtime selectors remain the authority for executable behavior and live data.
