@@ -8,23 +8,23 @@ This page-scoped pilot preserves the approved Mining palette and canonical `src/
 
 | Concern | Canonical owner |
 | --- | --- |
-| Workspace geometry, spine controls, responsive adaptation | `MiningPage.tsx` and `mining.css` |
+| Workspace geometry, divider state, responsive adaptation | `MiningPage.tsx` and `mining.css` |
 | Single progressive location row | `LocationListItem.tsx` |
 | Method-aware material rows and pool membership | `miningFormatters.ts` and `miningPresentationModels.ts` |
 | Source-pool detail rendering | `LocationDetail.tsx` |
 
 ## Interaction contract
 
-The desktop three-panel composition is enabled only at viewport widths that keep the filter panel, 490px location panel, spine, gaps, and a 360px minimum profile usable. Between the compact desktop and mobile layouts, Mining retains its existing adaptive layout rather than clipping the profile.
+The desktop three-panel composition is enabled only at viewport widths that keep filters, Ranked Locations, a fixed divider, gaps, and a 360px minimum profile usable. Between the compact desktop and mobile layouts, Mining retains its existing adaptive layout rather than clipping the profile.
 
-The Ranked Locations panel persists only a valid notch in `moonbreaker:mining-location-panel-v1`:
+The Ranked Locations preference persists a boolean in `moonbreaker:mining-location-panel-v1`. Legacy persisted multi-notch values are read safely as expanded, except the legacy collapsed value:
 
-- Collapsed: 56px, icon rail.
-- Compact: 190px, rank, icon, name, bookmark.
-- Standard: 340px, adds method icons and delivered shares.
-- Expanded: 490px, adds environment indicators.
+- Expanded: rank, oversized location image, location name, selected-material coverage, conditional system badge, color-coded textual Ship/Vehicle/Hand availability, and bookmark.
+- Collapsed: the same record identity, coverage, system badge, and bookmark; only method availability is hidden and the profile receives the released width.
 
-The cyan diamond toggles collapsed and the last noncollapsed notch. The spine drag previews an in-range width and snaps only on release; double-click restores Standard. Keyboard arrows change notches, while Home and End select the collapsed and expanded bounds. At narrow widths the spine is hidden and the existing filter sheet/detail behavior remains authoritative.
+The narrow divider has one labelled chevron button. It toggles the expanded/collapsed preference with native keyboard operation and exposes `aria-expanded`; it is not draggable, resizable, or a multi-stage spine. At narrow widths the divider is hidden and the existing filter-sheet/detail behavior remains authoritative.
+
+Location artwork is an intentionally oversized 68px asset clipped by the 54px record surface, without a separate thumbnail card or circular treatment. Location records use source-backed method text only; temperature, O₂, environmental columns, and method-image cells remain in the Location Profile rather than duplicating the ranked list. Coverage is `X / Y` when a selection exists and a meaningful dash when it does not. System badges appear only when no system filter is active, not merely because a visible subset currently happens to have one system.
 
 ## Detail truth
 
@@ -34,4 +34,4 @@ Competition bars are built from delivered source-pool membership. A selected mat
 
 ## Acceptance evidence
 
-`tests/ui/mining-three-panel.spec.ts` covers notch controls, pointer drag, refresh persistence, no page overflow, desktop adaptation, and mobile spine suppression using fixture mode. Screenshots are written to `artifacts/mining-three-panel/` for 2560, 1920, 1440, 768, 430, 390, and 375 viewport widths and each desktop notch.
+`tests/ui/mining-three-panel.spec.ts` covers expanded/collapsed method visibility, system-badge filtering, refresh persistence, no page overflow, desktop adaptation, and mobile divider suppression using fixture mode. Screenshots are written to `artifacts/mining-ranked-list-refinement/` for 2560, 1920, 1440, 768, 430, 390, and 375 viewport widths plus expanded/collapsed desktop states.

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { buildRecommendationRequest, getMiningRecommendations } from "../../../features/mining/recommenderAdapter";
 import { type MiningCoverageMode } from "../../../features/mining/coveragePlan";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
@@ -44,25 +44,13 @@ const SYSTEM_SELECTOR_ORDER = ["Stanton", "Pyro", "Nyx"];
 const DORMANT_MINING_TYPE_FILTERS = new Set<string>();
 const DORMANT_ENCOUNTER_TIER_FILTERS = new Set<MiningEncounterTier>();
 const MINING_LOCATION_PANEL_STORAGE_KEY = "moonbreaker:mining-location-panel-v1";
-const MINING_LOCATION_PANEL_WIDTHS = {
-  collapsed: 56,
-  compact: 190,
-  standard: 340,
-  expanded: 490,
-} as const;
-type MiningLocationPanelMode = keyof typeof MINING_LOCATION_PANEL_WIDTHS;
-const MINING_LOCATION_PANEL_MODES = Object.keys(MINING_LOCATION_PANEL_WIDTHS) as MiningLocationPanelMode[];
-
-function readMiningLocationPanelState(): { mode: MiningLocationPanelMode; lastOpenMode: Exclude<MiningLocationPanelMode, "collapsed"> } {
+function readMiningLocationPanelCollapsedState(): boolean {
   try {
-    const stored = JSON.parse(localStorage.getItem(MINING_LOCATION_PANEL_STORAGE_KEY) ?? "{}") as Partial<{ mode: MiningLocationPanelMode; lastOpenMode: MiningLocationPanelMode }>;
-    const mode = stored.mode && MINING_LOCATION_PANEL_MODES.includes(stored.mode) ? stored.mode : "standard";
-    const lastOpenMode = stored.lastOpenMode && stored.lastOpenMode !== "collapsed" && MINING_LOCATION_PANEL_MODES.includes(stored.lastOpenMode)
-      ? stored.lastOpenMode
-      : mode === "collapsed" ? "standard" : mode;
-    return { mode, lastOpenMode };
+    const stored = JSON.parse(localStorage.getItem(MINING_LOCATION_PANEL_STORAGE_KEY) ?? "{}") as Partial<{ collapsed: boolean; mode: string }>;
+    if (typeof stored.collapsed === "boolean") return stored.collapsed;
+    return stored.mode === "collapsed";
   } catch {
-    return { mode: "standard", lastOpenMode: "standard" };
+    return false;
   }
 }
 const debugMiningIdentity = Boolean(
@@ -161,85 +149,15 @@ export default function MiningModule() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [buildQueueSelectionActive, setBuildQueueSelectionActive] = useState(initialSidebarState.buildQueueActive);
   const isMobileViewport = useIsMobileMiningViewport();
-  const initialLocationPanelState = useMemo(() => readMiningLocationPanelState(), []);
-  const [locationPanelMode, setLocationPanelMode] = useState<MiningLocationPanelMode>(initialLocationPanelState.mode);
-  const [lastOpenLocationPanelMode, setLastOpenLocationPanelMode] = useState<Exclude<MiningLocationPanelMode, "collapsed">>(initialLocationPanelState.lastOpenMode);
-  const spineDragStartXRef = useRef<number | null>(null);
-  const spineDragWidthRef = useRef<number>(MINING_LOCATION_PANEL_WIDTHS[initialLocationPanelState.mode]);
-  const [spineDragWidth, setSpineDragWidth] = useState<number | null>(null);
+  const [locationPanelCollapsed, setLocationPanelCollapsed] = useState(() => readMiningLocationPanelCollapsedState());
 
   // Persist settings
   useEffect(() => { try { localStorage.setItem(MINING_RANKING_MODE_STORAGE_KEY, rankingMode); } catch { /* ignore */ } }, [rankingMode]);
   useEffect(() => { try { localStorage.setItem(MINING_COVERAGE_MODE_STORAGE_KEY, coverageMode); } catch { /* ignore */ } }, [coverageMode]);
   useEffect(() => { try { if (queueFocusItemId) localStorage.setItem(MINING_QUEUE_FOCUS_STORAGE_KEY, queueFocusItemId); else localStorage.removeItem(MINING_QUEUE_FOCUS_STORAGE_KEY); } catch { /* ignore */ } }, [queueFocusItemId]);
   useEffect(() => {
-    try { localStorage.setItem(MINING_LOCATION_PANEL_STORAGE_KEY, JSON.stringify({ mode: locationPanelMode, lastOpenMode: lastOpenLocationPanelMode })); } catch { /* local preferences are optional */ }
-  }, [lastOpenLocationPanelMode, locationPanelMode]);
-
-  const setLocationPanelNotch = useCallback((mode: MiningLocationPanelMode) => {
-    setLocationPanelMode(mode);
-    if (mode !== "collapsed") setLastOpenLocationPanelMode(mode);
-  }, []);
-
-  const snapLocationPanelWidth = useCallback((width: number) => {
-    const closest = MINING_LOCATION_PANEL_MODES.reduce((current, candidate) => (
-      Math.abs(MINING_LOCATION_PANEL_WIDTHS[candidate] - width) < Math.abs(MINING_LOCATION_PANEL_WIDTHS[current] - width)
-        ? candidate
-        : current
-    ), "standard" as MiningLocationPanelMode);
-    setLocationPanelNotch(closest);
-  }, [setLocationPanelNotch]);
-
-  const toggleLocationPanelCollapsed = useCallback(() => {
-    setLocationPanelNotch(locationPanelMode === "collapsed" ? lastOpenLocationPanelMode : "collapsed");
-  }, [lastOpenLocationPanelMode, locationPanelMode, setLocationPanelNotch]);
-
-  const handleSpinePointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    if (window.innerWidth <= 1320 || event.button !== 0) return;
-    event.preventDefault();
-    spineDragStartXRef.current = event.clientX;
-    spineDragWidthRef.current = MINING_LOCATION_PANEL_WIDTHS[locationPanelMode];
-    setSpineDragWidth(spineDragWidthRef.current);
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }, [locationPanelMode]);
-
-  const handleSpinePointerUp = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    if (spineDragStartXRef.current === null) return;
-    const width = spineDragWidthRef.current + event.clientX - spineDragStartXRef.current;
-    spineDragStartXRef.current = null;
-    setSpineDragWidth(null);
-    snapLocationPanelWidth(width);
-  }, [snapLocationPanelWidth]);
-
-  const handleSpinePointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
-    if (spineDragStartXRef.current === null) return;
-    setSpineDragWidth(Math.min(
-      MINING_LOCATION_PANEL_WIDTHS.expanded,
-      Math.max(MINING_LOCATION_PANEL_WIDTHS.collapsed, spineDragWidthRef.current + event.clientX - spineDragStartXRef.current),
-    ));
-  }, []);
-
-  const handleSpinePointerCancel = useCallback(() => {
-    spineDragStartXRef.current = null;
-    setSpineDragWidth(null);
-  }, []);
-
-  const handleSpineKeyDown = useCallback((event: ReactKeyboardEvent<HTMLDivElement>) => {
-    const currentIndex = MINING_LOCATION_PANEL_MODES.indexOf(locationPanelMode);
-    if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
-      event.preventDefault();
-      setLocationPanelNotch(MINING_LOCATION_PANEL_MODES[Math.max(0, currentIndex - 1)]);
-    } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
-      event.preventDefault();
-      setLocationPanelNotch(MINING_LOCATION_PANEL_MODES[Math.min(MINING_LOCATION_PANEL_MODES.length - 1, currentIndex + 1)]);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      setLocationPanelNotch("collapsed");
-    } else if (event.key === "End") {
-      event.preventDefault();
-      setLocationPanelNotch("expanded");
-    }
-  }, [locationPanelMode, setLocationPanelNotch]);
+    try { localStorage.setItem(MINING_LOCATION_PANEL_STORAGE_KEY, JSON.stringify({ collapsed: locationPanelCollapsed })); } catch { /* local preferences are optional */ }
+  }, [locationPanelCollapsed]);
 
   useEffect(() => {
     let cancelled = false;
@@ -620,10 +538,7 @@ export default function MiningModule() {
             <strong>{activeMaterialCount ? `${activeMaterialCount} material${activeMaterialCount === 1 ? "" : "s"}` : selectedSystemName ?? miningScopeLabel}</strong>
           </button>
 
-          <div
-            className={`mining-shell mining-shell--location-${locationPanelMode}`}
-            style={{ "--mining-location-panel-width": `${spineDragWidth ?? MINING_LOCATION_PANEL_WIDTHS[locationPanelMode]}px` } as CSSProperties}
-          >
+          <div className={`mining-shell${locationPanelCollapsed ? " mining-shell--locations-collapsed" : ""}`}>
             <div className="mining-browser-column">
             <MobileFilterSheet
               open={mobileFiltersOpen}
@@ -696,7 +611,7 @@ export default function MiningModule() {
             </aside>
             </MobileFilterSheet>
 
-            <aside className={`mlist-panel mining-location-panel mining-location-panel--${locationPanelMode}`} aria-label="Ranked mining locations">
+            <aside id="mining-ranked-locations" className={`mlist-panel mining-location-panel${locationPanelCollapsed ? " mining-location-panel--collapsed" : ""}`} aria-label="Ranked mining locations">
               <div className={`mlist-header${buildQueueSelectionActive ? " mlist-header--with-tools" : ""}`}>
                 <div className="mlist-header-line">
                   <span className="mlist-header-label">Ranked locations</span>
@@ -755,7 +670,8 @@ export default function MiningModule() {
                             planetAssetMap={planetAssetMap}
                             starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
                             selected={isSelected}
-                            panelMode={locationPanelMode}
+                            collapsed={locationPanelCollapsed}
+                            showSystemBadge={!selectedSystemName}
                             onSelect={() => toggleSelectedLocation(entry.locationKey)}
                             onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
                           />
@@ -799,36 +715,16 @@ export default function MiningModule() {
             </aside>
             </div>
 
-            <div
-              className="mining-location-spine"
-              role="separator"
-              aria-label="Resize ranked locations panel"
-              aria-orientation="vertical"
-              aria-valuemin={MINING_LOCATION_PANEL_WIDTHS.collapsed}
-              aria-valuemax={MINING_LOCATION_PANEL_WIDTHS.expanded}
-              aria-valuenow={MINING_LOCATION_PANEL_WIDTHS[locationPanelMode]}
-              aria-valuetext={`Ranked locations ${locationPanelMode}, ${MINING_LOCATION_PANEL_WIDTHS[locationPanelMode]} pixels`}
-              tabIndex={0}
-              onPointerDown={handleSpinePointerDown}
-              onPointerMove={handleSpinePointerMove}
-              onPointerUp={handleSpinePointerUp}
-              onPointerCancel={handleSpinePointerCancel}
-              onDoubleClick={() => setLocationPanelNotch("standard")}
-              onKeyDown={handleSpineKeyDown}
-            >
-              <span className="mining-location-spine-cap mining-location-spine-cap--top" aria-hidden="true" />
-              <span className="mining-location-spine-rail" aria-hidden="true" />
-              <span className="mining-location-spine-trace" aria-hidden="true"><i /></span>
-              <span className="mining-location-spine-cap mining-location-spine-cap--bottom" aria-hidden="true" />
+            <div className="mining-location-divider">
               <button
                 type="button"
-                className="mining-location-spine-diamond"
-                aria-label={locationPanelMode === "collapsed" ? `Restore ranked locations to ${lastOpenLocationPanelMode}` : "Collapse ranked locations to icon rail"}
-                aria-pressed={locationPanelMode === "collapsed"}
-                onPointerDown={(event) => event.stopPropagation()}
-                onClick={(event) => { event.stopPropagation(); toggleLocationPanelCollapsed(); }}
+                className="mining-location-divider-toggle"
+                aria-controls="mining-ranked-locations"
+                aria-expanded={!locationPanelCollapsed}
+                aria-label={locationPanelCollapsed ? "Expand ranked locations method availability" : "Collapse ranked locations method availability"}
+                onClick={() => setLocationPanelCollapsed((collapsed) => !collapsed)}
               >
-                <span aria-hidden="true" />
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
               </button>
             </div>
 

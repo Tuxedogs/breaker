@@ -13,10 +13,7 @@ import { formatMiningProbability, miningMethodBadge, systemBadgeClass } from "./
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
-import MiningMethodIcon from "./MiningMethodIcon";
-import { miningMethodPresentation } from "./miningMethodPresentation";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
-import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
 
 export function LocationListItem({
   rank,
@@ -28,7 +25,8 @@ export function LocationListItem({
   planetAssetMap,
   starred,
   selected,
-  panelMode = "standard",
+  collapsed = false,
+  showSystemBadge,
   onSelect,
   onToggleStar,
 }: {
@@ -41,7 +39,8 @@ export function LocationListItem({
   planetAssetMap: Map<string, PlanetAsset> | null;
   starred: boolean;
   selected: boolean;
-  panelMode?: "collapsed" | "compact" | "standard" | "expanded";
+  collapsed?: boolean;
+  showSystemBadge: boolean;
   onSelect: () => void;
   onToggleStar: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
@@ -57,7 +56,6 @@ export function LocationListItem({
   const hasBuildQueueDemand = buildQueueMaterialKeys.size > 0;
   const primaryCovered = hasBuildQueueDemand ? coveredBQ : coveredSelected;
   const totalRelevant = hasBuildQueueDemand ? buildQueueMaterialKeys.size : selectedMaterials.size;
-  const coveragePct = totalRelevant > 0 ? Math.round((primaryCovered.length / totalRelevant) * 100) : 0;
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
@@ -77,14 +75,9 @@ export function LocationListItem({
     }
   };
 
-  const demandBar = totalRelevant > 0 ? coveragePct : null;
-  const methodLabel = survey.methods.length > 0
-    ? survey.methods.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
-    : entry.locationKind || entry.spawnType || "Unavailable";
-
   return (
     <div
-      className={`mlist-item mlist-item--${panelMode}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
+      className={`mlist-item${collapsed ? " mlist-item--collapsed" : ""}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       role="button"
@@ -112,41 +105,26 @@ export function LocationListItem({
           </span>
         </div>
         <div className="mlist-item-sub">
-          {!isLagrangeChildGroup && (
+          {showSystemBadge && !isLagrangeChildGroup && (
             <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
       </div>
-      <div className="mlist-method-availability" aria-label={`${methodLabel} mining available`}>
+      <div className="mlist-method-availability" aria-label="Source-backed mining method availability">
         {survey.methods.length > 0 ? survey.methods.map((item) => {
-          const label = miningMethodBadge(item.method)?.label ?? item.method;
-          const presentation = miningMethodPresentation(item.method);
+          const method = miningMethodBadge(item.method);
+          const label = method?.label ?? item.method;
           return (
-            <span className="mlist-method-availability-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
-              {presentation.iconKey ? (
-                <MiningMethodIcon methodKey={presentation.iconKey} className="mlist-method-icon" />
-              ) : (
-                <span className="mlist-method-fallback">{presentation.visibleLabel}</span>
-              )}
-              {presentation.iconKey && <span className="sr-only">{label}</span>}
-              <strong>{formatMiningProbability(item.share)}</strong>
+            <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+              <span>{label}</span><strong>{formatMiningProbability(item.share)}</strong>
             </span>
           );
-        }) : <span className="mlist-method-text">{methodLabel}</span>}
+        }) : <span className="mlist-method-unavailable">Methods unavailable</span>}
       </div>
-      <MiningEnvironmentStatus environment={survey.environment} />
-      {demandBar !== null && (
-        <div className="mlist-item-coverage">
-          <span className="mlist-bar-label"><strong>{primaryCovered.length}</strong> of {totalRelevant} </span>
-          <div className="mlist-bar-track">
-            <div
-              className={`mlist-bar-fill${demandBar >= 100 ? " mlist-bar-fill--full" : demandBar >= 60 ? " mlist-bar-fill--good" : ""}`}
-              style={{ width: `${demandBar}%` }}
-            />
-          </div>
-        </div>
-      )}
+      <div className="mlist-item-coverage" aria-label={totalRelevant > 0 ? `${primaryCovered.length} of ${totalRelevant} selected materials represented` : "No selected materials"}>
+        {totalRelevant > 0 ? <strong>{primaryCovered.length} / {totalRelevant}</strong> : <span>—</span>}
+      </div>
       <button
         type="button"
         className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
