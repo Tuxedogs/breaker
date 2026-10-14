@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import MaterialIcon from "../../logistics/MaterialIcon";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
@@ -75,19 +74,14 @@ export function MiningScopeActions({
 export function MiningFilterBar({
   selectedMaterials,
   visibleResourceGroups,
-  compactSelectedOnly = false,
-  focusedMaterialKey = null,
   selectionLocked = false,
-  onFocusMaterial,
   onToggleMaterial,
   onClearMaterials,
 }: {
   selectedMaterials: Set<string>;
   visibleResourceGroups: ResourceGroups;
   compactSelectedOnly?: boolean;
-  focusedMaterialKey?: string | null;
   selectionLocked?: boolean;
-  onFocusMaterial?: (id: string) => void;
   onToggleMaterial: (id: string) => void;
   onClearMaterials: () => void;
 }) {
@@ -99,32 +93,23 @@ export function MiningFilterBar({
     [handFiltered, shipAndHarvestable, vehicle],
   );
 
-  const selectedMaterialChips = useMemo(
-    () => allMaterialChips
-      .filter((chip) => selectedMaterials.has(chip.id))
-      .sort((left, right) => Number(right.id === focusedMaterialKey) - Number(left.id === focusedMaterialKey)),
-    [allMaterialChips, focusedMaterialKey, selectedMaterials],
-  );
-
   const renderMaterialChips = (chips: ResourceGroup[], ariaLabel: string) => (
-    <div className="mining-filter-chips mining-filter-chips--wrap" role="group" aria-label={ariaLabel}>
+    <div className="mining-filter-chips mining-filter-chips--wrap mining-filter-chips--quiet-index" role="group" aria-label={ariaLabel}>
       {chips.map((chip) => {
         const selected = selectedMaterials.has(chip.id);
         return (
           <button
             key={chip.id}
             type="button"
-            className={`mining-filter-chip mining-filter-chip--material${chip.label.length > 12 ? " mining-filter-chip--long" : ""}${selected ? " is-active" : ""}${chip.id === focusedMaterialKey ? " is-focus" : ""}${chip.disabled ? " is-disabled" : ""}`}
+            className={`mining-filter-chip mining-filter-chip--material${selected ? " is-active" : ""}${chip.disabled ? " is-disabled" : ""}`}
             aria-pressed={selected}
-            aria-label={`${chip.label}${chip.id === focusedMaterialKey ? ", competition target" : ""}`}
+            aria-label={chip.label}
             aria-disabled={chip.disabled || undefined}
             disabled={chip.disabled}
             onClick={() => {
-              onFocusMaterial?.(chip.id);
               if (!selectionLocked) onToggleMaterial(chip.id);
             }}
           >
-            <MaterialIcon materialName={chip.label} size={15} className="mining-material-icon" />
             {chip.label}
           </button>
         );
@@ -146,55 +131,10 @@ export function MiningFilterBar({
 
   return (
     <div
-      className={[
-        "scintel-filter-shell",
-        "mining-filter-compact mining-left-rail-filters",
-        compactSelectedOnly ? "mining-filter-compact--selected-only" : "",
-      ].filter(Boolean).join(" ")}
+      className="scintel-filter-shell mining-filter-compact mining-left-rail-filters"
     >
       <div className="scintel-filter-body mining-filter-drawer">
-        {allMaterialChips.length > 0 && (
-          <div className="mining-filter-chip-block">
-            {selectedMaterialChips.length > 0 && (
-              <section className="mining-selected-material-context" aria-label="Selected route materials">
-                <div className="mining-selected-material-context__head">
-                  <span>Route materials</span>
-                  <strong>{selectedMaterialChips.length} active</strong>
-                  {clearMaterialsButton}
-                </div>
-                {renderMaterialChips(selectedMaterialChips, "Selected route materials")}
-              </section>
-            )}
-            <div className="mining-material-strip">
-              {compactSelectedOnly
-                ? (
-                  <div className="mining-material-selected-row">
-                    {renderMaterialChips(selectedMaterialChips, "Selected queue materials")}
-                    {clearMaterialsButton}
-                  </div>
-                )
-                : (
-                  <div className="mining-material-subgroup mining-material-subgroup--ship">
-                    <span className="mining-material-subgroup-label">Ship</span>
-                    {renderMaterialChips(shipAndHarvestable, "Ship material filters")}
-                  </div>
-                )}
-              {!compactSelectedOnly && vehicle.length > 0 && (
-                <div className="mining-material-subgroup mining-material-subgroup--vehicle">
-                  <span className="mining-material-subgroup-label">Vehicle</span>
-                  {renderMaterialChips(vehicle, "Vehicle-minable material filters")}
-                </div>
-              )}
-              {!compactSelectedOnly && handFiltered.length > 0 && (
-                <div className="mining-material-subgroup mining-material-subgroup--hand">
-                  <span className="mining-material-subgroup-label">Hand</span>
-                  {renderMaterialChips(handFiltered, "Hand-minable material filters")}
-                  {clearMaterialsButton}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {allMaterialChips.length > 0 && <div className="mining-filter-chip-block"><div className="mining-material-index-head"><span>Materials</span>{clearMaterialsButton}</div>{renderMaterialChips(allMaterialChips, "Mining material filters")}</div>}
       </div>
     </div>
   );

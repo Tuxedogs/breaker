@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   getStaticLocationEnvironment,
   getStaticLocationDisplayName,
+  getStaticMethodBiasForLocation,
   type StaticMiningIndex,
 } from "./staticMiningIndex";
 import { groupStaticMiningBrowseRows } from "./recommenderAdapter";
@@ -53,6 +54,29 @@ test("location environment resolves through canonical Pyro aliases without subst
     temperatureClassification: "cold",
     temperatureCelsius: null,
   });
+});
+
+test("location method shares retain delivered zeros instead of treating them as missing", () => {
+  const entry = {
+    locationKey: "test-location",
+    locationName: "Test Location",
+    systemName: "Test",
+  } as PublicLocationEntry;
+  const distributionRow = {
+    methodShares: { Hand: 0, Ship: 1, Vehicle: 0 },
+  };
+  const index = {
+    distributionByLocationJoinKey: new Map([
+      ["test::test-location", [distributionRow]],
+    ]),
+    locationKeysByDisplayName: new Map(),
+  } as unknown as StaticMiningIndex;
+
+  assert.deepEqual(getStaticMethodBiasForLocation(entry, index), [
+    { method: "Surface Ship", share: 1 },
+    { method: "Hand", share: 0 },
+    { method: "Vehicle", share: 0 },
+  ]);
 });
 
 test("Browse-mode static rows use generated Lagrange parents and retain member codes", () => {

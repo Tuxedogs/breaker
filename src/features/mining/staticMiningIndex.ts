@@ -652,7 +652,7 @@ function getMethodBiasRecord(row: StaticLocationDistributionRow): Record<string,
     row.distribution,
   ];
   return records.find((record) =>
-    record && Object.values(record).some((share) => Number.isFinite(share) && share > 0)
+    record && Object.values(record).some((share) => Number.isFinite(share))
   );
 }
 
@@ -698,11 +698,12 @@ export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index
     addMethodBiasRow(items, row);
   }
 
-  const positiveItems = items.filter((item) => item.share > 0);
+  const finiteItems = items.filter((item) => Number.isFinite(item.share));
+  const positiveItems = finiteItems.filter((item) => item.share > 0);
   const totalShare = positiveItems.reduce((sum, item) => sum + item.share, 0);
   const normalizedItems = totalShare > 1
-    ? positiveItems.map((item) => ({ ...item, share: item.share / totalShare }))
-    : positiveItems;
+    ? finiteItems.map((item) => ({ ...item, share: item.share > 0 ? item.share / totalShare : 0 }))
+    : finiteItems;
 
   return normalizedItems
     .sort((left, right) => right.share - left.share);

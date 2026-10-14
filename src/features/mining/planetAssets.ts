@@ -7,6 +7,12 @@ interface PlanetAssetEntry {
   thumbnail2x: string;
   main: string;
   main2x: string;
+  headerImage?: string;
+  headerImage2x?: string;
+  headerFit?: "cover" | "contain";
+  headerPositionX?: number;
+  headerPositionY?: number;
+  headerArtWidth?: number;
 }
 
 export interface PlanetAsset {
@@ -14,6 +20,12 @@ export interface PlanetAsset {
   thumbnail2x: string;
   main: string;
   main2x: string;
+  headerImage: string;
+  headerImage2x: string;
+  headerFit: "cover" | "contain";
+  headerPositionX: number;
+  headerPositionY: number;
+  headerArtWidth: number;
 }
 
 function normalize(s: string): string {
@@ -56,6 +68,12 @@ async function loadManifest(): Promise<Map<string, PlanetAsset>> {
           thumbnail2x: `${BASE}/${e.thumbnail2x}`,
           main: `${BASE}/${e.main}`,
           main2x: `${BASE}/${e.main2x}`,
+          headerImage: `${BASE}/${e.headerImage ?? e.main}`,
+          headerImage2x: `${BASE}/${e.headerImage2x ?? e.main2x}`,
+          headerFit: e.headerFit ?? (e.headerImage ? "cover" : "contain"),
+          headerPositionX: e.headerPositionX ?? 50,
+          headerPositionY: e.headerPositionY ?? 50,
+          headerArtWidth: e.headerArtWidth ?? 60,
         };
         registerAssetKey(map, e.id, asset);
         registerAssetKey(map, e.id.replace(/-/g, ""), asset);

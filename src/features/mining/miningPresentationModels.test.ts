@@ -137,6 +137,63 @@ test("coalesces selected materials only within their shared delivered source poo
   ]);
 });
 
+test("omits an absent selected material instead of manufacturing a competition pool", () => {
+  const rows = [
+    { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
+    { materialId: "iron", materialName: "Iron", sources: [{ materialKey: "iron", materialName: "Iron", groupName: "ship", relativeProbability: 40 }] },
+  ] as StaticLocationMaterialRow[];
+
+  assert.deepEqual(buildMiningSelectedSpawnCompetitionPools(rows, ["beryl"]), []);
+});
+
+test("keeps selected materials in separate delivered pools when they do not share a source group", () => {
+  const rows = [
+    { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
+    { materialId: "gold", materialName: "Gold", sources: [{ materialKey: "gold", materialName: "Gold", groupName: "hand", relativeProbability: 50 }] },
+    { materialId: "iron", materialName: "Iron", sources: [{ materialKey: "iron", materialName: "Iron", groupName: "ship", relativeProbability: 40 }] },
+    { materialId: "hadanite", materialName: "Hadanite", sources: [{ materialKey: "hadanite", materialName: "Hadanite", groupName: "hand", relativeProbability: 50 }] },
+  ] as StaticLocationMaterialRow[];
+
+  const pools = buildMiningSelectedSpawnCompetitionPools(rows, ["copper", "gold"]);
+  assert.deepEqual(pools.map((pool) => [pool.sourceGroup, pool.selectedMembers.map((member) => member.materialKey)]), [
+    ["hand", ["gold"]],
+    ["ship", ["copper"]],
+  ]);
+});
+
+test("returns no competition section data when none of the selected materials are present", () => {
+  const rows = [
+    { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
+  ] as StaticLocationMaterialRow[];
+
+  assert.deepEqual(buildMiningSelectedSpawnCompetitionPools(rows, ["beryl", "carinite"]), []);
+});
+
+test("suppresses duplicate source pools when selected identities repeat", () => {
+  const rows = [
+    { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
+    { materialId: "gold", materialName: "Gold", sources: [{ materialKey: "gold", materialName: "Gold", groupName: "ship", relativeProbability: 40 }] },
+  ] as StaticLocationMaterialRow[];
+
+  const pools = buildMiningSelectedSpawnCompetitionPools(rows, ["copper", "Copper", "copper"]);
+  assert.equal(pools.length, 1);
+  assert.deepEqual(pools[0].selectedMembers.map((member) => member.materialKey), ["copper"]);
+});
+
+test("Magda renders only the delivered Hand, Vehicle, and Surface Ship pools for mixed selected coverage", () => {
+  const magdaRows = materialRows.filter((row) => row.systemKey === "Stanton" && row.locationDisplayName === "Magda");
+  const pools = buildMiningSelectedSpawnCompetitionPools(magdaRows, [
+    "aluminum", "beryl", "quantanium", "stileron", "tin", "carinite", "feynmaline", "aphorite",
+  ]);
+
+  assert.deepEqual(pools.map((pool) => [pool.sourceGroup, pool.selectedMembers.map((member) => member.materialName)]), [
+    ["FPS_Mineables", ["Aphorite"]],
+    ["GroundVehicle_Mineables", ["Feynmaline"]],
+    ["SpaceShip_Mineables", ["Aluminum", "Quantanium"]],
+  ]);
+  assert.equal(pools.flatMap((pool) => pool.selectedMembers).some((member) => ["Beryl", "Carinite", "Stileron", "Tin"].includes(member.materialName)), false);
+});
+
 test("orders method-associated material rows without collapsing identical materials", () => {
   const entries = [
     { name: "Beryl", miningType: "Hand", associationKey: "beryl:hand" },

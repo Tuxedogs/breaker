@@ -142,7 +142,6 @@ export default function MiningModule() {
     return new Set(canonical);
   });
   const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set());
-  const [focusedMaterialKey, setFocusedMaterialKey] = useState<string | null>(null);
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
@@ -196,10 +195,6 @@ export default function MiningModule() {
 
   const buildQueueMaterials = useMemo(() => new Set(miningRequiredMaterials.map(materialKeyOf)), [miningRequiredMaterials]);
   const buildQueueMaterialsKey = [...buildQueueMaterials].sort().join(",");
-  useEffect(() => {
-    if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
-    queueMicrotask(() => setFocusedMaterialKey((current) => current && buildQueueMaterials.has(current) ? current : [...buildQueueMaterials][0] ?? null));
-  }, [buildQueueMaterials, buildQueueMaterialsKey, buildQueueSelectionActive]);
   useEffect(() => {
     if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
     queueMicrotask(() => setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])));
@@ -446,7 +441,6 @@ export default function MiningModule() {
   function toggleMaterial(id: string) {
     const key = canonicalMiningMaterialKey(id);
     if (availableMaterialKeysForSelectedSystem && !availableMaterialKeysForSelectedSystem.has(key)) return;
-    setFocusedMaterialKey(key);
     setSelectedMaterials((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); if (next.size === 0) setBuildQueueSelectionActive(false); return next; });
   }
   function toggleSystem(sys: string) {
@@ -457,7 +451,7 @@ export default function MiningModule() {
     });
   }
   function selectBuildQueueMaterials() {
-    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); setFocusedMaterialKey([...buildQueueMaterials][0] ?? null); return true; });
+    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
   }
   function selectExploreMode() {
     setBuildQueueSelectionActive(false);
@@ -468,13 +462,11 @@ export default function MiningModule() {
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setLocationSearch("");
     setSelectedMaterials(new Set());
-    setFocusedMaterialKey(null);
     setSelectedSystems(new Set());
   }
   function clearSelectedMaterials() {
     setBuildQueueSelectionActive(false);
     setSelectedMaterials(new Set());
-    setFocusedMaterialKey(null);
   }
   function toggleSelectedLocation(locationKey: string) {
     if (!isMobileViewport) {
@@ -549,7 +541,7 @@ export default function MiningModule() {
             >
             <aside className="mining-filter-panel" aria-label="Mining filters and constraints">
               <div className="mining-panel-heading">
-                <span>Survey control deck</span>
+                <span>Survey control</span>
                 <span>{searchFilteredLocations.length} ranked locations / {buildQueueSelectionActive ? buildQueueMaterials.size : effectiveMaterialFilterKeys.size} active materials</span>
               </div>
               <div className="mining-control-deck">
@@ -602,9 +594,7 @@ export default function MiningModule() {
                 selectedMaterials={buildQueueSelectionActive ? buildQueueMaterials : effectiveSelectedMaterials}
                 visibleResourceGroups={visibleResourceGroups}
                 compactSelectedOnly={buildQueueSelectionActive}
-                focusedMaterialKey={focusedMaterialKey}
                 selectionLocked={buildQueueSelectionActive}
-                onFocusMaterial={(id) => setFocusedMaterialKey(canonicalMiningMaterialKey(id))}
                 onToggleMaterial={toggleMaterial}
                 onClearMaterials={clearSelectedMaterials}
               />
@@ -681,7 +671,6 @@ export default function MiningModule() {
                                 entry={entry}
                                 activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
                                 buildQueueMaterialKeys={effectiveMaterialFilterKeys}
-                                focusedMaterialKey={focusedMaterialKey}
                                 locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
                                 staticMiningIndex={staticMiningIndex}
                                 staticIndexStatus={staticIndexStatus}
@@ -734,7 +723,6 @@ export default function MiningModule() {
                   entry={effectiveSelectedEntry}
                   activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
                   buildQueueMaterialKeys={effectiveMaterialFilterKeys}
-                  focusedMaterialKey={focusedMaterialKey}
                   locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
                   staticMiningIndex={staticMiningIndex}
                   staticIndexStatus={staticIndexStatus}

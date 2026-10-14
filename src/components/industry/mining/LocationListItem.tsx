@@ -15,6 +15,8 @@ import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
+const RANKED_LOCATION_METHOD_ORDER = ["Hand", "Ship", "Vehicle"] as const;
+
 export function LocationListItem({
   rank,
   entry,
@@ -67,6 +69,14 @@ export function LocationListItem({
     ),
     [entry, staticMiningIndex],
   );
+  const rankedMethods = useMemo(
+    () => [...survey.methods].sort((left, right) => {
+      const leftIndex = RANKED_LOCATION_METHOD_ORDER.indexOf((miningMethodBadge(left.method)?.label ?? left.method) as typeof RANKED_LOCATION_METHOD_ORDER[number]);
+      const rightIndex = RANKED_LOCATION_METHOD_ORDER.indexOf((miningMethodBadge(right.method)?.label ?? right.method) as typeof RANKED_LOCATION_METHOD_ORDER[number]);
+      return (leftIndex < 0 ? RANKED_LOCATION_METHOD_ORDER.length : leftIndex) - (rightIndex < 0 ? RANKED_LOCATION_METHOD_ORDER.length : rightIndex);
+    }),
+    [survey.methods],
+  );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -108,19 +118,19 @@ export function LocationListItem({
           {showSystemBadge && !isLagrangeChildGroup && (
             <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
+          <span className="mlist-method-availability" aria-label="Source-backed mining method availability">
+            {rankedMethods.length > 0 ? rankedMethods.map((item) => {
+              const method = miningMethodBadge(item.method);
+              const label = method?.label ?? item.method;
+              return (
+                <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+                  <span>{label}</span><strong>{formatMiningProbability(item.share)}</strong>
+                </span>
+              );
+            }) : <span className="mlist-method-unavailable">Methods unavailable</span>}
+          </span>
           <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
-      </div>
-      <div className="mlist-method-availability" aria-label="Source-backed mining method availability">
-        {survey.methods.length > 0 ? survey.methods.map((item) => {
-          const method = miningMethodBadge(item.method);
-          const label = method?.label ?? item.method;
-          return (
-            <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
-              <span>{label}</span><strong>{formatMiningProbability(item.share)}</strong>
-            </span>
-          );
-        }) : <span className="mlist-method-unavailable">Methods unavailable</span>}
       </div>
       <div className="mlist-item-coverage" aria-label={totalRelevant > 0 ? `${primaryCovered.length} of ${totalRelevant} selected materials represented` : "No selected materials"}>
         {totalRelevant > 0 ? <strong>{primaryCovered.length} / {totalRelevant}</strong> : <span>—</span>}

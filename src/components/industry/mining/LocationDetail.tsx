@@ -14,7 +14,6 @@ import {
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import {
-  buildMiningSelectedSpawnCompetitionPools,
   buildMiningLocationSurveyPresentation,
   compareMiningMethodMaterialEntries,
   type MiningSpawnCompetitionMember,
@@ -36,17 +35,17 @@ import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
 import {
-  buildMiningCompetitionTargets,
+  buildMiningLocationCompetitionPools,
   formatMiningCompetitionPercentagePoints,
-  miningCompetitionEvidenceMessage,
-  miningCompetitionEmptyMessage,
+  miningCompetitionPoolCoverage,
   miningCompetitionMaterialColor,
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
-  type MiningCompetitionTargetPresentation,
 } from "./miningCompetitionPresentation";
 import { miningMethodPresentation } from "./miningMethodPresentation";
 import MiningMethodIcon from "./MiningMethodIcon";
+
+const HEADER_METHOD_SLOT_ORDER = ["Hand", "Ship", "Vehicle"] as const;
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -192,12 +191,10 @@ function MiningOccurrenceCell({ row }: { row: DemandRow | ResourceRow }) {
   if (row.occurrence.mode === "legacy") {
     return <MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={"sourceTitle" in row ? row.sourceTitle : undefined} />;
   }
-  const title = `Primary share: ${row.occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.name}. Spawn roll: ${row.occurrence.spawnRollProbabilityLabel} is the chance that one game-data roll selects both the pool and ${row.name}. Location rank: ${row.occurrence.locationRankLabel} among places using the same mining method. These values describe game-data weights, not a guaranteed percentage of scanned rocks.`;
+  const title = `Primary share: ${row.occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.name}. This is a game-data weight, not a guaranteed percentage of scanned rocks.`;
   return (
     <div className="mdet-occurrence" title={title}>
       <strong>{row.occurrence.primaryRockShareLabel} primary</strong>
-      <span>{row.occurrence.spawnRollProbabilityLabel} spawn roll</span>
-      <span>{row.occurrence.locationRankLabel}</span>
     </div>
   );
 }
@@ -269,6 +266,7 @@ function CompetitionMember({ member, selected, link }: { member: MiningSpawnComp
       onBlur={(event) => link.onBlur(event.relatedTarget)}
     >
       <MaterialNameCell name={member.materialName} iconSize={15} />
+      <span className="mdet-competition-member-role">{selected ? "Selected" : "Competing"}</span>
       <strong>{formatMiningCompetitionPercentagePoints(member.relativeProbability)}</strong>
     </li>
   );
@@ -276,6 +274,17 @@ function CompetitionMember({ member, selected, link }: { member: MiningSpawnComp
 
 function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionPool }) {
   const [activeMaterialKey, setActiveMaterialKey] = useState<string | null>(null);
+  const coverage = miningCompetitionPoolCoverage(pool.members);
+  const coverageSummary = coverage.hasUnavailableShare
+    ? "One or more published pool shares are unavailable."
+    : coverage.unrepresentedShare && coverage.unrepresentedShare > 0
+      ? `${formatMiningCompetitionPercentagePoints(coverage.knownShare)} of this source pool is represented by published location records; ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)} remains unrepresented.`
+      : null;
+  const coverageLabel = coverage.hasUnavailableShare
+    ? "One or more shares unavailable."
+    : coverage.unrepresentedShare && coverage.unrepresentedShare > 0
+      ? `${formatMiningCompetitionPercentagePoints(coverage.knownShare)} published · ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)} unrepresented`
+      : null;
   const linkProps = (member: MiningSpawnCompetitionMember): CompetitionLinkProps => {
     const materialKey = member.materialKey;
     const clearUnlessLinked = (relatedTarget: EventTarget | null) => {
@@ -298,15 +307,14 @@ function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionP
   return (
     <div className="mdet-competition-pool">
       <div className="mdet-competition-copy">
-        <span>Direct spawn competition</span>
         <div className="mdet-competition-target" title={`Source group: ${pool.sourceGroup}`}>
           <small>{miningCompetitionSourceLabel(pool.sourceGroup)}</small>
         </div>
         <strong>{pool.competitorCount} competing resource{pool.competitorCount === 1 ? "" : "s"}</strong>
-        <p>{pool.members.length} primary materials share this source pool; selected materials retain their source colors.</p>
+        {coverageLabel && <p title={coverageSummary ?? undefined}>{coverageLabel}</p>}
       </div>
       <div className="mdet-competition-readout">
-        <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${miningCompetitionSourceLabel(pool.sourceGroup)}`}>
+        <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${miningCompetitionSourceLabel(pool.sourceGroup)}${coverageSummary ? `. ${coverageSummary}` : ""}`}>
           {pool.members.map((member) => {
             const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
               ? Math.max(member.relativeProbability, 0)
@@ -322,7 +330,7 @@ function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionP
                 tabIndex={0}
                 data-competition-material-key={member.materialKey}
                 data-linked-active={link.active ? "true" : undefined}
-                style={{ ...competitionAccentStyle(link.accentColor), flexGrow: share, opacity: selected ? 1 : 0.32 }}
+                style={{ ...competitionAccentStyle(link.accentColor), width: `${share}%`, opacity: selected ? 1 : 0.32 }}
                 title={`${member.materialName}. ${probabilitySummary}`}
                 aria-label={`${member.materialName}. ${probabilitySummary}. ${selected ? "Selected material" : "Other pool material"}.`}
                 onMouseEnter={link.onMouseEnter}
@@ -332,6 +340,15 @@ function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionP
               />
             );
           })}
+          {coverage.unrepresentedShare !== null && coverage.unrepresentedShare > 0 && (
+            <span
+              className="mdet-competition-segment mdet-competition-segment--unrepresented"
+              role="listitem"
+              style={{ width: `${coverage.unrepresentedShare}%` }}
+              title={`Unrepresented in published location records: ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)}`}
+              aria-label={`Unrepresented in published location records: ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)}. No resources are inferred for this share.`}
+            />
+          )}
         </div>
         <ul className="mdet-competition-members">
           {pool.members.map((member) => (
@@ -339,22 +356,6 @@ function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionP
           ))}
         </ul>
       </div>
-    </div>
-  );
-}
-
-function MiningCompetitionUnavailableTarget({ target }: { target: MiningCompetitionTargetPresentation }) {
-  return (
-    <div className="mdet-competition-pool mdet-competition-pool--unavailable" data-competition-target={target.materialKey}>
-      <div className="mdet-competition-copy">
-        <span>Direct spawn competition</span>
-        <div className="mdet-competition-target">
-          <MaterialNameCell name={target.materialName} iconSize={27} />
-        </div>
-      </div>
-      <p className="mdet-competition-empty">
-        {miningCompetitionEvidenceMessage(target.materialName, target.evidenceState ?? "no-direct-spawn-evidence")}
-      </p>
     </div>
   );
 }
@@ -425,8 +426,6 @@ function MiningMobileMaterialCard({
         className="mdet-mobile-stat-grid"
         title={"sourceTitle" in row ? row.sourceTitle : undefined}
       >
-        {probabilityOccurrence && <MiningMobileStat label="Spawn Roll" value={row.occurrence.spawnRollProbabilityLabel} />}
-        {probabilityOccurrence && <MiningMobileStat label="Location Rank" value={row.occurrence.locationRankLabel} />}
         {probabilityOccurrence && <MiningMobileStat label="Method Available" value={row.occurrence.methodAvailabilityLabel} />}
         <MiningMobileStat label={qualityHeader} value={primaryQualityLabel} />
         <MiningMobileStat label="900+ Quality" value={row.quality900Label} />
@@ -463,7 +462,6 @@ export function LocationDetail({
   entry,
   activeDemandMaterials,
   buildQueueMaterialKeys,
-  focusedMaterialKey,
   locationMaterialKeys,
   staticMiningIndex,
   staticIndexStatus,
@@ -475,7 +473,6 @@ export function LocationDetail({
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
-  focusedMaterialKey?: string | null;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
   staticIndexStatus: "loading" | "loaded" | "error";
@@ -553,46 +550,43 @@ export function LocationDetail({
   const locationSubtitle = locationTitleMatch?.[2] ?? null;
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap ?? null, locationDisplayName) ?? getPlanetAsset(planetAssetMap ?? null, entry.locationName);
+  const locationArtworkStyle = planetAsset
+    ? {
+      "--mdet-header-art-fit": planetAsset.headerFit,
+      "--mdet-header-art-position": `${planetAsset.headerPositionX}% ${planetAsset.headerPositionY}%`,
+      "--mdet-header-art-width": `${planetAsset.headerArtWidth}%`,
+    } as CSSProperties
+    : undefined;
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
+  const locationMethodBias = useMemo(
+    () => getStaticMethodBiasForLocation(entry, staticMiningIndex),
+    [entry, staticMiningIndex],
+  );
   const survey = useMemo(
     () => buildMiningLocationSurveyPresentation(
       getStaticLocationEnvironment(entry, staticMiningIndex),
-      getStaticMethodBiasForLocation(entry, staticMiningIndex),
+      locationMethodBias,
     ),
-    [entry, staticMiningIndex],
+    [entry, locationMethodBias, staticMiningIndex],
   );
+  const surveyMethodsBySlot = useMemo(() => {
+    const methodsBySlot = new Map<string, (typeof locationMethodBias)[number]>();
+    for (const item of locationMethodBias) {
+      const slot = miningMethodBadge(item.method)?.label;
+      if (slot && !methodsBySlot.has(slot)) methodsBySlot.set(slot, item);
+    }
+    return methodsBySlot;
+  }, [locationMethodBias]);
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
   const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
-  const competitionTargets = useMemo<MiningCompetitionTargetPresentation[]>(() => {
-    const selectedMaterialNames = new Map<string, string>();
-    for (const material of activeDemandMaterials) {
-      const canonical = canonicalMiningMaterial({
-        materialKey: material.materialKey,
-        materialId: material.materialId,
-        displayName: material.displayName,
-        materialName: material.materialName,
-      });
-      if (!canonical.unresolvedUuid && canonical.key) selectedMaterialNames.set(canonical.key, canonical.label);
-    }
-
-    return buildMiningCompetitionTargets({
+  const competitionPools = useMemo(
+    () => buildMiningLocationCompetitionPools({
       selectedMaterialKeys: buildQueueMaterialKeys,
-      selectedMaterialNames,
-      focusedMaterialKey,
       staticResourceRows,
       staticIndexStatus,
-    });
-  }, [activeDemandMaterials, buildQueueMaterialKeys, focusedMaterialKey, staticIndexStatus, staticResourceRows]);
-  const competitionPools = useMemo(
-    () => staticIndexStatus === "loaded"
-      ? buildMiningSelectedSpawnCompetitionPools(staticResourceRows, buildQueueMaterialKeys)
-      : [],
+    }),
     [buildQueueMaterialKeys, staticIndexStatus, staticResourceRows],
-  );
-  const competitionUnavailableTargets = useMemo(
-    () => competitionTargets.filter((target) => target.pools.length === 0),
-    [competitionTargets],
   );
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
@@ -608,41 +602,36 @@ export function LocationDetail({
   const materialProfileTitle = hasBuildQueueTarget ? "Other materials at this location" : "Material profile";
   return (
     <div className={`mdet-panel${hideHeader ? " mdet-panel--inline-mobile" : ""}`}>
-      <div className={`mdet-survey-stage${hideHeader ? " mdet-survey-stage--inline" : ""}`}>
+      <div className={`mdet-survey-stage${planetAsset ? " mdet-survey-stage--artwork" : ""}${hideHeader ? " mdet-survey-stage--inline" : ""}`} style={locationArtworkStyle}>
+        {!hideHeader && planetAsset && (
+          <div className="mdet-header-art-region" aria-hidden="true">
+            <img
+              src={planetAsset.headerImage}
+              srcSet={`${planetAsset.headerImage2x} 2x`}
+              alt=""
+              className="mdet-header-art"
+            />
+          </div>
+        )}
         {!hideHeader && (
           <div className="mdet-header">
-            <div className="mdet-stage-top">
-              <span>Location profile</span>
-              {onToggleStar && (
-                <>
-                  <button
-                    type="button"
-                    className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
-                    onClick={onToggleStar}
-                    aria-pressed={starred}
-                    aria-label={starred ? "Remove saved" : "Save"}
-                    aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
-                    {...bookmarkTooltip.triggerProps}
-                  >
-                    <MiningBookmarkIcon />
-                  </button>
-                  {bookmarkTooltip.tooltip}
-                </>
-              )}
-            </div>
-            <div className="mdet-thumb" aria-hidden="true">
-              {planetAsset ? (
-                <img
-                  src={planetAsset.main}
-                  srcSet={`${planetAsset.main2x} 2x`}
-                  alt=""
-                  className="mdet-thumb-img"
-                />
-              ) : (
-                <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
-              )}
-            </div>
-            <span className="mdet-scan-reticle" aria-hidden="true" />
+            {onToggleStar && (
+              <>
+                <button
+                  type="button"
+                  className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
+                  onClick={onToggleStar}
+                  aria-pressed={starred}
+                  aria-label={starred ? "Remove saved" : "Save"}
+                  aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
+                  {...bookmarkTooltip.triggerProps}
+                >
+                  <MiningBookmarkIcon />
+                </button>
+                {bookmarkTooltip.tooltip}
+              </>
+            )}
+            {planetAsset && <span className="mdet-scan-reticle" aria-hidden="true" />}
             <div className="mdet-header-left">
               <div className="mdet-label">{entry.systemName} system</div>
               <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
@@ -660,16 +649,19 @@ export function LocationDetail({
           <div className="mdet-environment">
             <MiningEnvironmentStatus environment={survey.environment} />
           </div>
-          <div className="mdet-method-rack mdet-method-rack--prominent" aria-label="Location mining method availability">
-            {survey.methods.length > 0 ? survey.methods.map((item) => {
+          <div className={`mdet-method-rack mdet-method-rack--prominent${locationMethodBias.length === 0 ? " is-unavailable" : ""}`} aria-label="Location mining method availability">
+            {HEADER_METHOD_SLOT_ORDER.map((slot) => {
+              const item = surveyMethodsBySlot.get(slot);
+              if (!item) return <span className="mdet-method-rack-slot" key={slot} aria-hidden="true" />;
               const label = miningMethodBadge(item.method)?.label ?? item.method;
               const presentation = miningMethodPresentation(item.method);
               return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
                 {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
-                {presentation.iconKey && <span className="sr-only">{label}</span>}
+                {presentation.iconKey && <span className="mdet-method-label">{label}</span>}
                 <strong className="mdet-method-rack-value">{formatMiningProbability(item.share)}</strong>
               </div>;
-            }) : <span className="mdet-unavailable">Unavailable</span>}
+            })}
+            {locationMethodBias.length === 0 && <span className="mdet-method-rack-unavailable">Methods unavailable</span>}
           </div>
         </section>
       </div>
@@ -685,14 +677,6 @@ export function LocationDetail({
         </p>
       )}
 
-      <section className="mdet-competition" aria-label="Direct spawn competition">
-        {competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)}
-        {competitionUnavailableTargets.map((target) => <MiningCompetitionUnavailableTarget key={target.materialKey} target={target} />)}
-        {competitionPools.length === 0 && competitionUnavailableTargets.length === 0 && (
-          <p className="mdet-competition-empty">{miningCompetitionEmptyMessage(false)}</p>
-        )}
-      </section>
-
       {entry.nearbyStations.length > 0 && (
         <div className="mdet-stations">
           <span className="mdet-stations-label">Nearby</span>
@@ -705,8 +689,7 @@ export function LocationDetail({
   
       {demandRows.length > 0 && (
         <div className="mining-demand-breakdown">
-          <div className="mdet-section-label mdet-section-label--demand">Selected materials at this location</div>
-          <table className="mining-resource-index-table">
+          <table className="mining-resource-index-table" aria-label="Selected materials at this location">
             <colgroup>
               <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
               <col className="mining-resource-col--encounter" /><col className="mining-resource-col--quality" />
@@ -715,7 +698,7 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Shows how often this is the primary material inside its mining pool.">Occurrence</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
@@ -738,6 +721,12 @@ export function LocationDetail({
         </div>
       )}
 
+      {competitionPools.length > 0 && (
+        <section className="mdet-competition" aria-label="Direct spawn competition">
+          {competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)}
+        </section>
+      )}
+
       {otherLocationMaterialRows.length > 0 && (
         <div className="mining-resource-index">
           <div className="mdet-section-label">
@@ -752,7 +741,7 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Shows how often this is the primary material inside its mining pool.">Occurrence</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("800+")}>800+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>

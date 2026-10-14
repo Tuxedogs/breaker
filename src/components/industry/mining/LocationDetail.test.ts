@@ -2,12 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  buildMiningCompetitionTargets,
+  buildMiningLocationCompetitionPools,
   formatMiningCompetitionDecimalProbability,
   formatMiningCompetitionPercentagePoints,
-  miningCompetitionEvidenceMessage,
-  miningCompetitionEmptyMessage,
   miningCompetitionMaterialColor,
+  miningCompetitionPoolCoverage,
   miningCompetitionProbabilitySummary,
   miningCompetitionSourceLabel,
 } from "./miningCompetitionPresentation";
@@ -27,6 +26,25 @@ test("keeps zero distinct from unavailable competition probabilities", () => {
   assert.equal(formatMiningCompetitionDecimalProbability(null), "Unavailable");
 });
 
+test("does not normalize a partial source pool to look complete", () => {
+  const coverage = miningCompetitionPoolCoverage([
+    { materialKey: "beradom", materialName: "Beradom", relativeProbability: 8, groupProbability: 12.5, materialProbability: 1, sourceProbability: 0.01 },
+    { materialKey: "glacosite", materialName: "Glacosite", relativeProbability: 4, groupProbability: 12.5, materialProbability: 1, sourceProbability: 0.005 },
+    { materialKey: "feynmaline", materialName: "Feynmaline", relativeProbability: 0.5, groupProbability: 12.5, materialProbability: 1, sourceProbability: 0.000625 },
+  ]);
+
+  assert.deepEqual(coverage, { knownShare: 12.5, unrepresentedShare: 87.5, hasUnavailableShare: false });
+});
+
+test("retains an unavailable pool share instead of manufacturing a remainder", () => {
+  const coverage = miningCompetitionPoolCoverage([
+    { materialKey: "beradom", materialName: "Beradom", relativeProbability: 8, groupProbability: 12.5, materialProbability: 1, sourceProbability: 0.01 },
+    { materialKey: "unknown", materialName: "Unknown", relativeProbability: undefined, groupProbability: 12.5, materialProbability: 1, sourceProbability: undefined },
+  ]);
+
+  assert.deepEqual(coverage, { knownShare: 8, unrepresentedShare: null, hasUnavailableShare: true });
+});
+
 test("exposes all four delivered probability semantics to assistive technology", () => {
   assert.equal(miningCompetitionProbabilitySummary({
     materialKey: "copper",
@@ -38,49 +56,30 @@ test("exposes all four delivered probability semantics to assistive technology",
   }), "Pool share: 20.8%. Group probability: 7.5%. Material probability: 100%. Source probability: 1.56%");
 });
 
-test("distinguishes selection-needed from unavailable source-group data", () => {
-  assert.equal(miningCompetitionEmptyMessage(false), "Select a material to inspect its direct-spawn source-group competition.");
-  assert.equal(miningCompetitionEmptyMessage(true), "Source-group competition is unavailable for the selected material at this location.");
-});
-
-test("keeps multi-material competition states material-specific instead of inventing an aggregate", () => {
-  assert.equal(
-    miningCompetitionEvidenceMessage("Copper", "not-at-location"),
-    "Copper is not represented in the source-backed material records for this location.",
-  );
-  assert.equal(
-    miningCompetitionEvidenceMessage("Gold", "no-direct-spawn-evidence"),
-    "No direct-spawn source-group competition evidence is published for Gold at this location.",
-  );
-  assert.equal(
-    miningCompetitionEvidenceMessage("Beryl", "reference-unavailable"),
-    "Direct-spawn competition evidence for Beryl is unavailable because the location reference index could not load.",
-  );
-  assert.equal(
-    miningCompetitionEvidenceMessage("Laranite", "loading"),
-    "Direct-spawn competition evidence for Laranite is loading.",
-  );
-});
-
-test("builds a per-material competition view for every selected material", () => {
+test("renders source-backed pools only for selected materials present at the location", () => {
   const rows = [
     { materialId: "copper", materialName: "Copper", sources: [{ materialKey: "copper", materialName: "Copper", groupName: "ship", relativeProbability: 60 }] },
     { materialId: "gold", materialName: "Gold", sources: [{ materialKey: "gold", materialName: "Gold", groupName: "ship", relativeProbability: 40 }] },
   ] as StaticLocationMaterialRow[];
-  const targets = buildMiningCompetitionTargets({
+  const pools = buildMiningLocationCompetitionPools({
     selectedMaterialKeys: ["copper", "gold", "beryl"],
-    selectedMaterialNames: new Map([["beryl", "Beryl"]]),
-    focusedMaterialKey: "gold",
     staticResourceRows: rows,
     staticIndexStatus: "loaded",
   });
 
-  assert.deepEqual(targets.map((target) => [target.materialKey, target.materialName, target.evidenceState]), [
-    ["gold", "Gold", null],
-    ["beryl", "Beryl", "not-at-location"],
-    ["copper", "Copper", null],
-  ]);
-  assert.deepEqual(targets.map((target) => target.pools.length), [1, 0, 1]);
+  assert.equal(pools.length, 1);
+  assert.deepEqual(pools[0].selectedMembers.map((member) => member.materialName), ["Copper", "Gold"]);
+  assert.equal(pools[0].selectedMembers.some((member) => member.materialKey === "beryl"), false);
+});
+
+test("keeps unavailable source data out of competition rather than treating it as material absence", () => {
+  const pools = buildMiningLocationCompetitionPools({
+    selectedMaterialKeys: ["copper"],
+    staticResourceRows: [],
+    staticIndexStatus: "error",
+  });
+
+  assert.deepEqual(pools, []);
 });
 
 test("presents delivered competition source groups as user-facing mining pools", () => {
