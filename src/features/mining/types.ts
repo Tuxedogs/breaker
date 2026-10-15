@@ -284,6 +284,8 @@ export interface MiningRecommendationRequest {
   manualDemand: ManualMiningDemandItem[];
   favoriteLocationIds: string[];
   filters: MiningPlannerFilters;
+  /** Optional server/fallback eligibility gate; this does not model a ship's breakability or cargo constraints. */
+  allowedMiningMethods?: string[];
   rankingMode?: "quality" | "quantity" | "balanced";
   /** Placeholder for future refinery context (active refinery, processing speed, etc.). */
   refineryContext: null;

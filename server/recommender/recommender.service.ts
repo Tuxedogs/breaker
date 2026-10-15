@@ -3,12 +3,15 @@ import { buildRequirementInput } from "./buildRequirementInput.js";
 import { formatRecommendations } from "./formatRecommendations.js";
 import { loadApiData } from "./loadApiData.js";
 import { scoreLocations } from "./scoreLocations.js";
-import type { RecommendRequest, RecommendResponse, RecommenderWarning } from "./recommender.types.js";
+import type { RecommendRequest, RecommendResponse, RecommenderApiData, RecommenderWarning } from "./recommender.types.js";
 import { addWarning } from "./recommenderWarnings.js";
 
-export async function getRecommendations(request: RecommendRequest): Promise<RecommendResponse> {
+export async function getRecommendations(
+  request: RecommendRequest,
+  apiDataOverride?: RecommenderApiData,
+): Promise<RecommendResponse> {
   const warnings: RecommenderWarning[] = [];
-  const apiData = await loadApiData(warnings);
+  const apiData = apiDataOverride ?? await loadApiData(warnings);
   const requirements = aggregateRequirements(
     buildRequirementInput(request),
     warnings,
@@ -27,7 +30,10 @@ export async function getRecommendations(request: RecommendRequest): Promise<Rec
     };
   }
 
-  const scored = scoreLocations(requirements, apiData, warnings);
+  const scored = scoreLocations(requirements, apiData, warnings, {
+    allowedMiningMethods: request.allowedMiningMethods,
+    rankingMode: request.rankingMode,
+  });
 
   return {
     recommendations: formatRecommendations(scored.locations),
