@@ -243,6 +243,15 @@ function getRankingMode(request: MiningRecommendationRequest): MiningRankingMode
   return request.rankingMode === "quantity" || request.rankingMode === "balanced" ? request.rankingMode : "quality";
 }
 
+function staticMiningMethod(row: StaticLocationMaterialRow): string {
+  const value = row.resolvedMineableClass.toLowerCase();
+  if (value.includes("ship") || value.includes("orbit")) return "ship";
+  if (value.includes("geo") || value.includes("vehicle") || value.includes("ground")) return "ground";
+  if (value.includes("hand")) return "hand";
+  if (value.includes("harvest")) return "harvestable";
+  return value;
+}
+
 type StaticLocationRowsGroup = {
   rows: StaticLocationMaterialRow[];
   locationKey: string;
@@ -290,9 +299,9 @@ function buildStaticRouteScore(
   index: StaticMiningIndex,
   rankingMode: MiningRankingMode,
 ): NonNullable<PublicLocationEntry["routeScores"]>[number] {
-  const threshold = demand.selectedQuality ?? 800;
+  const threshold = demand.selectedQuality;
   const qualityRow = getStaticMaterialQualityRow(row, index);
-  const qualityChance = getRowQualityChance(row, index, threshold);
+  const qualityChance = threshold === undefined ? null : getRowQualityChance(row, index, threshold);
   const encounterPct = clampPct(getStaticDensityScore(row, index));
   const qualityPct = qualityChance == null ? 0 : clampPct(qualityChance * 100);
   const qualityFit = qualityChance == null ? null : Math.round(qualityPct);
@@ -360,7 +369,7 @@ function buildStaticRouteScore(
   };
 }
 
-function buildStaticRecommendations(
+export function buildStaticRecommendations(
   request: MiningRecommendationRequest,
   index: StaticMiningIndex,
 ): RecommendationResponse {
@@ -368,6 +377,9 @@ function buildStaticRecommendations(
   const demandByKey = new Map(demand.map((material) => [material.materialKey, material]));
   const hasDemand = demand.length > 0;
   const rankingMode = getRankingMode(request);
+  const allowedMethods = request.allowedMiningMethods?.length
+    ? new Set(request.allowedMiningMethods.map((method) => method.trim().toLowerCase()).filter(Boolean))
+    : null;
 
   const groups = groupStaticMiningBrowseRows(index.rows);
 
@@ -383,7 +395,15 @@ function buildStaticRecommendations(
     const coveredDemand = demand.filter((material) => rowByMaterialKey.has(material.materialKey));
     if (hasDemand && coveredDemand.length === 0) continue;
 
-    const routeScores = coveredDemand
+    const eligibleDemand = coveredDemand.filter((material) => {
+      const row = rowByMaterialKey.get(material.materialKey)!;
+      if (allowedMethods && !allowedMethods.has(staticMiningMethod(row))) return false;
+      if (material.selectedQuality === undefined) return true;
+      return getRowQualityChance(row, index, material.selectedQuality) !== null;
+    });
+    if (hasDemand && eligibleDemand.length === 0) continue;
+
+    const routeScores = eligibleDemand
       .map((material) => buildStaticRouteScore(rowByMaterialKey.get(material.materialKey)!, material, index, rankingMode))
       .sort((left, right) => right.overallTargetabilityScore - left.overallTargetabilityScore);
 
@@ -391,7 +411,7 @@ function buildStaticRecommendations(
       const qty = demandByKey.get(score.materialKey)?.requiredQuantity ?? 1;
       return sum + score.overallTargetabilityScore * Math.max(1, Number(qty) || 1);
     }, 0);
-    const demandWeight = coveredDemand.reduce((sum, material) => sum + Math.max(1, Number(material.requiredQuantity) || 1), 0);
+    const demandWeight = eligibleDemand.reduce((sum, material) => sum + Math.max(1, Number(material.requiredQuantity) || 1), 0);
     const locationFitScore = demandWeight > 0 ? weightedDemandScore / demandWeight : 0;
     // Fit describes how good the indexed covered material matches are.
     // Coverage is exposed separately so impossible multi-material combinations
@@ -419,7 +439,7 @@ function buildStaticRecommendations(
       routeTargetabilityScore,
       routeTargetabilityLabel: targetabilityLabel(routeTargetabilityScore),
       routeScores,
-      requiredMaterials: coveredDemand.map((material) => ({
+      requiredMaterials: eligibleDemand.map((material) => ({
         materialKey: material.materialKey,
         materialId: material.materialId,
         materialName: material.materialName,
@@ -431,7 +451,7 @@ function buildStaticRecommendations(
       })),
     });
 
-    for (const material of coveredDemand) {
+    for (const material of eligibleDemand) {
       const coverage = diagnosticsCoverage.get(material.materialKey) ?? {
         materialKey: material.materialKey,
         materialId: material.materialId,
