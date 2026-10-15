@@ -147,7 +147,7 @@ export function buildMiningLocationSurveyPresentation(
 ): MiningLocationSurveyPresentation {
   return {
     environment: buildMiningEnvironmentPresentation(environment),
-    methods: methodBiasItems.filter((item) => Number.isFinite(item.share) && item.share > 0),
+    methods: methodBiasItems.filter((item) => Number.isFinite(item.share) && item.share >= 0),
   };
 }
 

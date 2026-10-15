@@ -26,17 +26,15 @@ async function openMining(page: Page, width: number, height: number) {
   await expect(page.locator(".mlist-item-thumb-img").first()).toBeVisible();
 }
 
-test("collapses only the method availability area and persists the chosen list state", async ({ page }) => {
+test("keeps ranked location method availability visible without an obsolete collapse control", async ({ page }) => {
   await mkdir(screenshotDir, { recursive: true });
   await openMining(page, 1920, 1080);
 
   const shell = page.locator(".mining-shell");
-  const locations = page.locator(".mining-location-panel");
-  const toggle = page.getByRole("button", { name: "Collapse ranked locations method availability" });
+  const toggle = page.getByRole("button", { name: /ranked locations method availability/i });
   const firstRecord = page.locator(".mlist-item").first();
 
-  await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(toggle).toHaveCount(0);
   await expect(firstRecord.locator(".mlist-item-thumb")).toBeVisible();
   await expect(firstRecord.locator(".mlist-item-body")).toBeVisible();
   await expect(firstRecord.locator(".mlist-item-coverage")).toBeVisible();
@@ -49,26 +47,10 @@ test("collapses only the method availability area and persists the chosen list s
   await page.getByRole("button", { name: "Stanton", exact: true }).click();
   await expect(page.locator(".mlist-system-badge")).toHaveCount(0);
 
-  await locations.locator(".mlist-items").evaluate((element) => {
-    element.scrollTop = 84;
-  });
-  await toggle.focus();
-  await expect(toggle).toBeFocused();
-  await page.keyboard.press("Enter");
-  await expect(shell).toHaveClass(/mining-shell--locations-collapsed/);
-  await expect(page.getByRole("button", { name: "Expand ranked locations method availability" })).toHaveAttribute("aria-expanded", "false");
-  await expect(firstRecord.locator(".mlist-item-thumb")).toBeVisible();
-  await expect(firstRecord.locator(".mlist-item-body")).toBeVisible();
-  await expect(firstRecord.locator(".mlist-item-coverage")).toBeVisible();
-  await expect(firstRecord.locator(".mlist-method-availability")).toBeHidden();
-  expect(await locations.locator(".mlist-items").evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await expect(shell).not.toHaveClass(/mining-shell--locations-collapsed/);
+  await expect(firstRecord.locator(".mlist-method-availability")).toBeVisible();
   await expectNoDocumentOverflow(page);
-  await page.screenshot({ path: path.join(screenshotDir, "collapsed-system-selected-1920x1080.png") });
-
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(shell).toHaveClass(/mining-shell--locations-collapsed/);
-  await expect(page.getByRole("button", { name: "Expand ranked locations method availability" })).toHaveAttribute("aria-expanded", "false");
-  await expectNoDocumentOverflow(page);
+  await page.screenshot({ path: path.join(screenshotDir, "system-selected-1920x1080.png") });
 });
 
 test("keeps the mobile filter sheet and location detail flow free of the desktop divider", async ({ page }) => {
@@ -83,10 +65,8 @@ test("keeps the mobile filter sheet and location detail flow free of the desktop
     { width: 375, height: 812 },
   ]) {
     await openMining(page, viewport.width, viewport.height);
-    const isThreePanelDesktop = viewport.width >= 1321;
-    const toggle = page.getByRole("button", { name: "Collapse ranked locations method availability" });
-    if (isThreePanelDesktop) await expect(toggle).toBeVisible();
-    else await expect(toggle).toBeHidden();
+    const toggle = page.getByRole("button", { name: /ranked locations method availability/i });
+    await expect(toggle).toHaveCount(0);
     if (viewport.width <= 760) await expect(page.locator(".mining-mobile-filter-trigger")).toBeVisible();
     await expect(page.locator(".mining-location-panel")).toBeVisible();
     await expectNoDocumentOverflow(page);

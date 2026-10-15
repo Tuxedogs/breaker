@@ -58,6 +58,7 @@ test("builds one shared source-backed survey projection for location cards and d
   assert.deepEqual(survey.methods, [
     { method: "Surface Ship", share: 0.8 },
     { method: "Hand", share: 0.2 },
+    { method: "Unknown", share: 0 },
   ]);
 });
 
