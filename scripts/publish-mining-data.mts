@@ -6,6 +6,7 @@ import {
   transformPyroDistributionRows,
   transformPyroRows,
 } from "./update-pyro-location-indexes.mts";
+import { verifyAcceptedMiningSource } from "./miningPublicationProvenance.mts";
 
 type Publication = {
   source: string;
@@ -27,6 +28,7 @@ if (!sourceBuildId) {
 
 const sourceRoot = path.resolve(configuredSourceRoot);
 const targetRoot = path.resolve(process.env.MINING_DATA_ROOT ?? "server-data/mining");
+const acceptedSource = await verifyAcceptedMiningSource(sourceRoot, sourceBuildId);
 
 const publications: Publication[] = [
   { source: "recommendations/location_material_index.json", target: "indexes/location-material.json", shape: "array" },
@@ -213,7 +215,12 @@ manifestFiles.push({
 
 await writeFile(
   path.join(targetRoot, "manifest.json"),
-  `${JSON.stringify({ schemaVersion: 1, source: "scintel-api", files: manifestFiles }, null, 2)}\n`,
+  `${JSON.stringify({
+    schemaVersion: 2,
+    source: "scintel-api",
+    acceptedSource,
+    files: manifestFiles,
+  }, null, 2)}\n`,
 );
 
 console.log(`Published ${manifestFiles.length} Mining server artifacts to ${targetRoot}.`);
