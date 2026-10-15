@@ -40,7 +40,7 @@
 
 ## Next safe action
 
-Do not republish or deploy without approval. The next safe correction is a reviewed full publication from `out/LIVE/current.json.datasetRoot`, with explicit matching `SCINTEL_SOURCE_BUILD_ID` and `SCINTEL_REF_INDEX`; it will resolve the Yela Ring identity delta and write immutable provenance into the manifest. Review the complete generated-artifact diff before committing it. No recommendation formula or Scintel contract should be changed.
+Do not republish or deploy without approval. The next safe correction is a reviewed full publication from `out/LIVE/current.json.datasetRoot`, with `SCINTEL_ACCEPTED_BUILD_ID` set to the selector's active build, `SCINTEL_SOURCE_BUILD_ID` set to its raw source build, and an explicit matching `SCINTEL_REF_INDEX`; it will resolve the Yela Ring identity delta and write immutable provenance into the manifest. Review the complete generated-artifact diff before committing it. No recommendation formula or Scintel contract should be changed.
 
 ## Publication provenance audit (October 15, 2026)
 
