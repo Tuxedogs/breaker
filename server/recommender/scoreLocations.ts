@@ -17,6 +17,7 @@ import {
   miningLocationMergeKey,
 } from "./locationNormalization.js";
 import type { MiningRankingMode } from "./recommender.types.js";
+import { rankEvidence } from "../../src/features/mining/rankingContract.js";
 
 function qualityFit(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number | undefined {
   if (requirement.selectedQuality === undefined) return 1;
@@ -79,12 +80,7 @@ function weightedEvidenceScore(
   yieldFit: number,
   requirementWeight: number,
 ): number {
-  const weights = rankingMode === "quantity"
-    ? { quality: 0.2, yield: 0.8 }
-    : rankingMode === "balanced"
-      ? { quality: 0.5, yield: 0.5 }
-      : { quality: 0.8, yield: 0.2 };
-  return (qualityFitResult * weights.quality + yieldFit * weights.yield) * requirementWeight;
+  return rankEvidence(rankingMode, qualityFitResult, yieldFit) * requirementWeight;
 }
 
 function materialNeedKey(requirement: AggregatedRequirement): string {
@@ -251,7 +247,7 @@ export function scoreLocations(
   const indexedResourcesByLocation = buildIndexedResources(apiData, warnings);
   const identityResolver = apiData.materialIdentityResolver;
   const allowedMethods = allowedMiningMethodSet(options.allowedMiningMethods);
-  const rankingMode = options.rankingMode ?? "quality";
+  const rankingMode = options.rankingMode;
 
   for (const requirement of requirements) {
     const group = findMaterialGroup(requirement, apiData.materialGroups, warnings, identityResolver);
@@ -333,12 +329,16 @@ export function scoreLocations(
       }
       const baseScore = source.overallScore ?? fallbackSourceScore(source as Record<string, unknown>);
       const requirementWeight = Math.log10(requirement.requiredQuantity + 10);
-      const score = weightedEvidenceScore(
-        rankingMode,
-        qualityFitResult,
-        sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
-        requirementWeight,
-      );
+      // Omitted rankingMode retains the prior multiplicative score contract for
+      // old API clients. Explicit modes use the shared two-domain contract.
+      const score = rankingMode === undefined
+        ? (baseScore + (compositionAverageUsed ?? 0) / 100) * qualityFitResult * requirementWeight
+        : weightedEvidenceScore(
+          rankingMode,
+          qualityFitResult,
+          sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
+          requirementWeight,
+        );
       const scoreDiagnostic: ScoreContributionDiagnostic = {
         materialKey: requirement.materialKey,
         materialId: requirement.materialId,

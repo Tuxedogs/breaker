@@ -120,3 +120,38 @@ test("static fallback preserves the same ship and explicit-quality eligibility g
   assert.deepEqual(response.recommendations.map((entry) => entry.locationName).sort(), ["Quality Ridge", "Quantity Basin"]);
   assert.ok(response.recommendations.flatMap((entry) => entry.routeScores ?? []).every((route) => route.selectedQuality === 900));
 });
+
+test("static fallback reports only request-eligible coverage for mixed methods and missing quality", () => {
+  const index = fixtureStaticIndex();
+  index.rows = [
+    staticRow("Agricium", "Mixed Ridge", "Handborne", 1, 0.99),
+    staticRow("Agricium", "Mixed Ridge", "Shipborne", 0.4, 0.8),
+    staticRow("Bexalite", "Mixed Ridge", "Shipborne", 0.8),
+  ];
+  const response = buildStaticRecommendations(request("quality"), index);
+  const mixed = response.recommendations.find((entry) => entry.locationName === "Mixed Ridge");
+  assert.ok(mixed);
+  assert.deepEqual(mixed.requiredMaterials?.map((material) => material.materialKey), ["agricium"]);
+  assert.deepEqual(mixed.materials.sort(), ["Agricium", "Bexalite"]);
+  assert.equal(mixed.routeScores?.[0]?.signals.qualityChance, 0.8);
+});
+
+test("explicit ranking modes produce parity ordering between server and static fallback", async () => {
+  for (const mode of ["quality", "quantity", "balanced"] as const) {
+    const server = await getRecommendations(request(mode), fixtureApiData());
+    const fallback = buildStaticRecommendations(request(mode), fixtureStaticIndex());
+    assert.deepEqual(
+      fallback.recommendations.map((entry) => entry.locationName),
+      server.recommendations.map((entry) => entry.locationName),
+      mode,
+    );
+  }
+});
+
+test("omitting rankingMode retains the legacy server score path", async () => {
+  const legacy = request("quality");
+  delete legacy.rankingMode;
+  const response = await getRecommendations(legacy, fixtureApiData());
+  assert.equal(response.recommendations[0]?.locationName, "Quantity Basin");
+  assert.ok(response.recommendations.every((entry) => entry.locationName !== "Unknown Quality"));
+});
