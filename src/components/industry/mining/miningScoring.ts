@@ -1,13 +1,5 @@
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
-import {
-  getStaticDensityScore,
-  getStaticMaterialQualityRow,
-  getStaticMaterialKey,
-  getStaticResourcesForLocation,
-  type StaticMiningIndex,
-} from "../../../features/mining/staticMiningIndex";
-import type { MiningRankingMode } from "./miningTypes";
 
 export function findRouteScoreForMaterial(entry: PublicLocationEntry, materialKey: string | null | undefined) {
   if (!materialKey) return null;
@@ -43,44 +35,26 @@ export function compareLocationsByRecommendationScore(left: PublicLocationEntry,
     left.locationName.localeCompare(right.locationName);
 }
 
-export const scoringWeightsByMode: Record<MiningRankingMode, { encounter: number; quality: number; composition: number; methodFit: number }> = {
-  quality: { encounter: 0.35, quality: 0.45, composition: 0.10, methodFit: 0.10 },
-  quantity: { encounter: 0.55, quality: 0.10, composition: 0.25, methodFit: 0.10 },
-  balanced: { encounter: 0.40, quality: 0.25, composition: 0.20, methodFit: 0.15 },
-};
-
-export function clampScore(value: number | null | undefined): number {
-  if (value === null || value === undefined || !Number.isFinite(value)) return 0;
-  return Math.max(0, Math.min(100, value));
-}
-
-export function compositionPctFromRow(row: { compositionAveragePercentage?: number | null } | null | undefined): number {
-  const value = row?.compositionAveragePercentage;
-  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
-  return clampScore(value > 1 ? value : value * 100);
-}
-
-export function methodFitPctFromRow(row: { methodFit?: number | null; locationClassDistributionShare?: number | null } | null | undefined): number {
-  const value = row?.methodFit ?? row?.locationClassDistributionShare;
-  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
-  return clampScore(value > 1 ? value : value * 100);
-}
-
-export function demandWeightedLocationScore(
+/**
+ * Re-aggregate only the scores already produced by the recommender.  A
+ * location's static browse rows are deliberately not an input here: they can
+ * describe physically present but method-ineligible or quality-unsupported
+ * sources.
+ */
+export function recommendationDemandScore(
   entry: PublicLocationEntry,
   demandMaterials: RequiredMaterial[],
-  locationMaterialKeysByLocationKey: Map<string, string[]>,
-  staticMiningIndex: StaticMiningIndex | null,
-  rankingMode: MiningRankingMode,
-): { covered: number; score: number } {
-  if (demandMaterials.length === 0) return { covered: 0, score: getLocationSortScore(entry) };
-  const coveredKeys = new Set(locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []);
-  const staticRowsByKey = new Map(
-    getStaticResourcesForLocation(entry, staticMiningIndex).map((row) => [getStaticMaterialKey(row), row])
-  );
+): { covered: number; score: number | null } {
+  if (demandMaterials.length === 0) return { covered: 0, score: null };
+  const eligibleKeys = new Set((entry.requiredMaterials ?? []).map((material) => canonicalMiningMaterial({
+    materialKey: material.materialKey,
+    materialId: material.materialId,
+    materialName: material.materialName,
+    displayName: material.displayName,
+  }).key).filter(Boolean));
   let covered = 0;
-  let weightedFit = 0;
-  let coveredDemandWeight = 0;
+  let weightedScore = 0;
+  let scoredDemandWeight = 0;
   for (const material of demandMaterials) {
     const canonical = canonicalMiningMaterial({
       materialKey: material.materialKey,
@@ -90,29 +64,44 @@ export function demandWeightedLocationScore(
     });
     if (canonical.unresolvedUuid || !canonical.key) continue;
     const quantityWeight = Math.max(1, Number(material.requiredQuantity) || 1);
-    if (!coveredKeys.has(canonical.key)) {
-      continue;
-    }
+    if (!eligibleKeys.has(canonical.key)) continue;
     covered += 1;
-    const row = staticRowsByKey.get(canonical.key);
-    const qualityRow = row ? getStaticMaterialQualityRow(row, staticMiningIndex) : null;
-    const threshold = material.selectedQuality ?? 800;
-    const qualityChance = qualityRow?.qualityThresholdChancesWeighted?.[String(threshold)]
-      ?? qualityRow?.thresholdChances?.[String(threshold)]
-      ?? row?.qualityThresholdChancesWeighted?.[String(threshold)]
-      ?? 0;
-    const weights = scoringWeightsByMode[rankingMode];
-    const fit = (
-      clampScore(row ? getStaticDensityScore(row, staticMiningIndex) : 0) * weights.encounter +
-      clampScore(qualityChance * 100) * weights.quality +
-      compositionPctFromRow(row) * weights.composition +
-      methodFitPctFromRow(row) * weights.methodFit
-    );
-    weightedFit += fit * quantityWeight;
-    coveredDemandWeight += quantityWeight;
+    const route = findRouteScoreForMaterial(entry, canonical.key);
+    if (!route || !Number.isFinite(route.overallTargetabilityScore)) continue;
+    weightedScore += route.overallTargetabilityScore * quantityWeight;
+    scoredDemandWeight += quantityWeight;
   }
-  const locationFit = coveredDemandWeight > 0 ? weightedFit / coveredDemandWeight : 0;
-  return { covered, score: locationFit };
+  return { covered, score: scoredDemandWeight > 0 ? weightedScore / scoredDemandWeight : null };
+}
+
+export function compareLocationsForDemand(
+  left: PublicLocationEntry,
+  right: PublicLocationEntry,
+  demandMaterials: RequiredMaterial[],
+): number {
+  const leftScore = recommendationDemandScore(left, demandMaterials);
+  const rightScore = recommendationDemandScore(right, demandMaterials);
+  return rightScore.covered - leftScore.covered ||
+    (rightScore.score ?? getLocationSortScore(right)) - (leftScore.score ?? getLocationSortScore(left)) ||
+    left.locationName.localeCompare(right.locationName);
+}
+
+/**
+ * The coverage planner may show a score specific to its active demand.  Keep
+ * the original recommendation score intact if no per-material recommendation
+ * score exists instead of fabricating a zero.
+ */
+export function withRecommendationDemandScores(
+  locations: PublicLocationEntry[],
+  demandMaterials: RequiredMaterial[],
+  targetabilityLabel: (score: number) => PublicLocationEntry["routeTargetabilityLabel"],
+): PublicLocationEntry[] {
+  return locations.map((entry) => {
+    const score = recommendationDemandScore(entry, demandMaterials).score;
+    if (score === null) return entry;
+    const rounded = Math.round(score);
+    return { ...entry, score: rounded, routeTargetabilityScore: rounded, routeTargetabilityLabel: targetabilityLabel(rounded) };
+  });
 }
 
 
