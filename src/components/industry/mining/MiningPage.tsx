@@ -360,7 +360,6 @@ export default function MiningModule() {
     sidebarOnlyMaterials,
     buildQueueSelectionActive,
     coverageMode,
-    rankingMode,
     selectedLocationKey,
     staticMiningIndex,
     materials,
