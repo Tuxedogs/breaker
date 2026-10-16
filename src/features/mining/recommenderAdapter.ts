@@ -403,8 +403,16 @@ export function buildStaticRecommendations(
         (material.selectedQuality === undefined || getRowQualityChance(row, index, material.selectedQuality) !== null)
       );
       // A material can have multiple methods at one physical location. Choose
-      // the best eligible row; never let an ineligible sibling grant coverage.
-      const best = eligible.sort((left, right) => staticEncounterPct(right, index) - staticEncounterPct(left, index))[0];
+      // the best eligible row for the requested strategy; never let an
+      // ineligible sibling grant coverage. Selecting by encounter first would
+      // incorrectly make quality mode ignore stronger quality evidence.
+      const best = eligible
+        .map((row) => ({ row, score: buildStaticRouteScore(row, material, index, rankingMode) }))
+        .sort((left, right) =>
+          right.score.overallTargetabilityScore - left.score.overallTargetabilityScore ||
+          right.score.signals.qualityChance! - left.score.signals.qualityChance! ||
+          right.score.signals.yieldPotential - left.score.signals.yieldPotential
+        )[0]?.row;
       if (best) eligibleRowByMaterialKey.set(material.materialKey, best);
     }
     const eligibleDemand = coveredDemand.filter((material) => eligibleRowByMaterialKey.has(material.materialKey));
