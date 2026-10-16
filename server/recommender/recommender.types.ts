@@ -201,6 +201,12 @@ export interface ScoreContributionDiagnostic {
   qualityFit: number;
   requirementWeight: number;
   finalContribution: number;
+  /**
+   * Explicit ranking modes expose this normalized, modeled route score to the
+   * formatter. It is not a physical probability; the source signals retain
+   * their original probability and threshold fields separately.
+   */
+  routeTargetabilityScore?: number;
   compositionMissing: boolean;
   thresholdDataMissing: boolean;
   sourceResolverPath?: string;
