@@ -339,6 +339,13 @@ export function scoreLocations(
           sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
           requirementWeight,
         );
+      const routeTargetabilityScore = rankingMode === undefined
+        ? undefined
+        : rankEvidence(
+          rankingMode,
+          qualityFitResult,
+          sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
+        ) * 100;
       const scoreDiagnostic: ScoreContributionDiagnostic = {
         materialKey: requirement.materialKey,
         materialId: requirement.materialId,
@@ -356,6 +363,7 @@ export function scoreLocations(
         qualityFit: qualityFitResult,
         requirementWeight,
         finalContribution: score,
+        routeTargetabilityScore,
         compositionMissing,
         thresholdDataMissing,
         sourceResolverPath: source.sourceResolverPath,

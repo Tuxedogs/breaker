@@ -449,7 +449,18 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
     const qualityRouteScore = route.signals.quality.score === null ? null : roundScore(route.signals.quality.score);
     const yieldRouteScore = roundScore(route.signals.composition.score ?? 0);
     const demandMatchScore = roundScore(maxDemand > 0 ? (route.rawDemand / maxDemand) * 100 : 0);
-    const overallTargetabilityScore = roundScore(route.signals.recommendation);
+    const sourceLocation = route.source.sourceLocationRawName ?? route.source.location ?? route.source.providerName;
+    const scoredRoute = locations.find((location) => location.locationKey === route.locationKey)
+      ?.scoreDiagnostics?.find((diagnostic) =>
+        diagnostic.materialKey === route.requirement.materialKey &&
+        diagnostic.sourceLocationRawName === sourceLocation
+      ) ?? locations.find((location) => location.locationKey === route.locationKey)
+      ?.scoreDiagnostics?.find((diagnostic) => diagnostic.materialKey === route.requirement.materialKey);
+    // Explicit modes hand the shared ranking-contract result through directly.
+    // The fallback preserves the legacy formatter score for omitted mode.
+    const overallTargetabilityScore = roundScore(
+      scoredRoute?.routeTargetabilityScore ?? route.signals.recommendation,
+    );
     const score: MaterialRouteScore = {
       materialKey: route.requirement.materialKey,
       materialId: route.requirement.materialId,

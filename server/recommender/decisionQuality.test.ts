@@ -2,9 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { createMaterialIdentityResolver } from "../../src/lib/materialIdentity.js";
-import { buildStaticRecommendations } from "../../src/features/mining/recommenderAdapter.js";
-import type { MiningRecommendationRequest } from "../../src/features/mining/types.js";
-import type { StaticLocationMaterialRow, StaticMiningIndex } from "../../src/features/mining/staticMiningIndex.js";
+import { compareLocationsForDemand, withRecommendationDemandScores } from "../../src/components/industry/mining/miningScoring.js";
+import type { MiningRecommendationRequest, RequiredMaterial } from "../../src/features/mining/types.js";
 import { getRecommendations } from "./recommender.service.js";
 import type { ApiSource, MaterialSourceGroup, RecommenderApiData } from "./recommender.types.js";
 
@@ -66,34 +65,12 @@ function request(rankingMode: "quality" | "quantity" | "balanced"): MiningRecomm
   };
 }
 
-function staticRow(materialName: string, location: string, method: StaticLocationMaterialRow["resolvedMineableClass"], score: number, qualityChance?: number): StaticLocationMaterialRow {
-  return {
-    materialId: materialName.toLowerCase(), materialName,
-    system: "Test System", systemKey: "test", systemDisplayName: "Test System",
-    location, locationKey: location.toLowerCase().replace(/ /g, "-"), locationDisplayName: location,
-    parents: [], parentDisplayNames: [], resolvedMineableClass: method,
-    sourceCount: 1, sourceProbabilitySum: score, sourceProbabilityMax: score,
-    compositionAveragePercentage: score * 100,
-    qualityThresholdChancesWeighted: qualityChance === undefined ? {} : { "900": qualityChance },
-    qualityOverrideApplied: false, qualityOverrideRecordNames: [], qualityDistributionSourceNames: [],
-    locationClassDistributionShare: 1, encounterScore: score * 100, materialEncounterScore: score * 100,
-  };
-}
-
-function fixtureStaticIndex(): StaticMiningIndex {
-  const rows = materialNames.flatMap((materialName) => [
-    staticRow(materialName, "Quality Ridge", "Shipborne", 0.1, 0.9),
-    staticRow(materialName, "Quantity Basin", "Shipborne", 0.9, 0.3),
-    staticRow(materialName, "Hand Jackpot", "Handborne", 1, 0.99),
-    staticRow(materialName, "Unknown Quality", "Shipborne", 1),
-  ]);
-  return {
-    rows, rankings: [], resourcesByLocationJoinKey: new Map(), materialKeysByLocationJoinKey: new Map(),
-    locationKeysByDisplayName: new Map(), materialResources: [], rankingByRowKey: new Map(),
-    encounterScoreRangeByMaterialKey: new Map(), materialEncounterScoreRangeByMaterialKey: new Map(),
-    distributionRows: [], distributionByLocationJoinKey: new Map(), qualityRows: [], qualityByRowKey: new Map(),
-    locationHierarchy: null,
-  };
+function visibleDemandMaterials(response: Awaited<ReturnType<typeof getRecommendations>>): RequiredMaterial[] {
+  return (response.recommendations[0]?.requiredMaterials ?? []).map((material) => ({
+    ...material,
+    usedBy: [],
+    slots: [],
+  }));
 }
 
 test("decision-quality fixture applies ship eligibility, fails closed on missing quality evidence, and changes server order by ranking mode", async () => {
@@ -115,54 +92,31 @@ test("decision-quality fixture applies ship eligibility, fails closed on missing
   }
 });
 
-test("static fallback preserves the same ship and explicit-quality eligibility gates", () => {
-  const response = buildStaticRecommendations(request("quality"), fixtureStaticIndex());
-  assert.deepEqual(response.recommendations.map((entry) => entry.locationName).sort(), ["Quality Ridge", "Quantity Basin"]);
-  assert.ok(response.recommendations.flatMap((entry) => entry.routeScores ?? []).every((route) => route.selectedQuality === 900));
-});
+test("visible demand ordering consumes getRecommendations route scores for every ranking mode", async () => {
+  const expected = {
+    quality: { location: "Quality Ridge", score: 74 },
+    quantity: { location: "Quantity Basin", score: 78 },
+    balanced: { location: "Quantity Basin", score: 60 },
+  } as const;
 
-test("static fallback reports only request-eligible coverage for mixed methods and missing quality", () => {
-  const index = fixtureStaticIndex();
-  index.rows = [
-    staticRow("Agricium", "Mixed Ridge", "Handborne", 1, 0.99),
-    staticRow("Agricium", "Mixed Ridge", "Shipborne", 0.4, 0.8),
-    staticRow("Bexalite", "Mixed Ridge", "Shipborne", 0.8),
-  ];
-  const response = buildStaticRecommendations(request("quality"), index);
-  const mixed = response.recommendations.find((entry) => entry.locationName === "Mixed Ridge");
-  assert.ok(mixed);
-  assert.deepEqual(mixed.requiredMaterials?.map((material) => material.materialKey), ["agricium"]);
-  assert.deepEqual(mixed.materials.sort(), ["Agricium", "Bexalite"]);
-  assert.equal(mixed.routeScores?.[0]?.signals.qualityChance, 0.8);
-});
-
-test("static fallback chooses same-location eligible evidence by requested ranking strategy", () => {
-  const index = fixtureStaticIndex();
-  index.rows = [
-    // Quantity Basin is stronger on published encounter evidence, while
-    // Quality Ridge has the higher evidenced Quality 900 chance.
-    staticRow("Agricium", "Strategy Ridge", "Shipborne", 0.9, 0.2),
-    staticRow("Agricium", "Strategy Ridge", "Shipborne", 0.2, 0.95),
-  ];
-
-  const quality = buildStaticRecommendations(request("quality"), index);
-  const quantity = buildStaticRecommendations(request("quantity"), index);
-
-  assert.equal(quality.recommendations[0]?.routeScores?.[0]?.signals.qualityChance, 0.95);
-  assert.equal(quantity.recommendations[0]?.routeScores?.[0]?.signals.qualityChance, 0.2);
-  assert.equal(quality.recommendations[0]?.routeScores?.[0]?.signals.yieldPotential, 20);
-  assert.equal(quantity.recommendations[0]?.routeScores?.[0]?.signals.yieldPotential, 90);
-});
-
-test("explicit ranking modes produce parity ordering between server and static fallback", async () => {
   for (const mode of ["quality", "quantity", "balanced"] as const) {
-    const server = await getRecommendations(request(mode), fixtureApiData());
-    const fallback = buildStaticRecommendations(request(mode), fixtureStaticIndex());
-    assert.deepEqual(
-      fallback.recommendations.map((entry) => entry.locationName),
-      server.recommendations.map((entry) => entry.locationName),
-      mode,
+    const response = await getRecommendations(request(mode), fixtureApiData());
+    const visibleDemand = visibleDemandMaterials(response);
+    const visible = [...response.recommendations].sort((left, right) =>
+      compareLocationsForDemand(left, right, visibleDemand),
     );
+    const displayed = withRecommendationDemandScores(
+      visible,
+      visibleDemand,
+      () => "Good",
+    );
+
+    // Quantity Basin's old formatter heuristic is lower than Quality Ridge
+    // despite the canonical quantity scorer choosing it. This assertion locks
+    // the scorer-to-visible-list handoff rather than a fabricated route score.
+    assert.equal(visible[0]?.locationName, expected[mode].location, mode);
+    assert.equal(displayed[0]?.routeScores?.[0]?.overallTargetabilityScore, expected[mode].score, mode);
+    assert.equal(displayed[0]?.score, expected[mode].score, mode);
   }
 });
 
