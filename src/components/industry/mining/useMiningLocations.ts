@@ -28,6 +28,23 @@ export interface MiningLocationsResult {
   selectedEntry: PublicLocationEntry | null;
 }
 
+/**
+ * Demand coverage follows the recommender's explicitly eligible material set.
+ * An empty array is meaningful: the location was considered but no requested
+ * material survived the method and quality-evidence gates.
+ */
+export function getRecommendationEligibleMaterialKeys(location: PublicLocationEntry): string[] | null {
+  if (location.requiredMaterials === undefined) return null;
+  return Array.from(new Set(location.requiredMaterials.map((material) =>
+    canonicalMiningMaterial({
+      materialKey: material.materialKey,
+      materialId: material.materialId,
+      materialName: material.materialName,
+      displayName: material.displayName,
+    }).key
+  ).filter(Boolean)));
+}
+
 export function useMiningLocations({
   locations,
   loadingState,
@@ -79,7 +96,17 @@ export function useMiningLocations({
   const locationMaterialKeysByLocationKey = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const location of locations) {
-      map.set(location.locationKey, getStaticLocationMaterialKeys(location, staticMiningIndex));
+      // A recommendation's requiredMaterials are its request-eligible,
+      // quality-supported coverage contract. Static membership remains in the
+      // separate indexed map below for browsing and source details, but must
+      // not grant demand coverage to an excluded sibling source.
+      const eligibleKeys = getRecommendationEligibleMaterialKeys(location);
+      map.set(
+        location.locationKey,
+        eligibleKeys !== null
+          ? eligibleKeys
+          : getStaticLocationMaterialKeys(location, staticMiningIndex),
+      );
     }
     return map;
   }, [locations, staticMiningIndex]);

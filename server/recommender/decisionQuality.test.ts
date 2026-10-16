@@ -136,6 +136,24 @@ test("static fallback reports only request-eligible coverage for mixed methods a
   assert.equal(mixed.routeScores?.[0]?.signals.qualityChance, 0.8);
 });
 
+test("static fallback chooses same-location eligible evidence by requested ranking strategy", () => {
+  const index = fixtureStaticIndex();
+  index.rows = [
+    // Quantity Basin is stronger on published encounter evidence, while
+    // Quality Ridge has the higher evidenced Quality 900 chance.
+    staticRow("Agricium", "Strategy Ridge", "Shipborne", 0.9, 0.2),
+    staticRow("Agricium", "Strategy Ridge", "Shipborne", 0.2, 0.95),
+  ];
+
+  const quality = buildStaticRecommendations(request("quality"), index);
+  const quantity = buildStaticRecommendations(request("quantity"), index);
+
+  assert.equal(quality.recommendations[0]?.routeScores?.[0]?.signals.qualityChance, 0.95);
+  assert.equal(quantity.recommendations[0]?.routeScores?.[0]?.signals.qualityChance, 0.2);
+  assert.equal(quality.recommendations[0]?.routeScores?.[0]?.signals.yieldPotential, 20);
+  assert.equal(quantity.recommendations[0]?.routeScores?.[0]?.signals.yieldPotential, 90);
+});
+
 test("explicit ranking modes produce parity ordering between server and static fallback", async () => {
   for (const mode of ["quality", "quantity", "balanced"] as const) {
     const server = await getRecommendations(request(mode), fixtureApiData());
