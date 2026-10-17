@@ -120,6 +120,31 @@ test("visible demand ordering consumes getRecommendations route scores for every
   }
 });
 
+test("multiple eligible sources at one physical location retain the server's explicit-mode ordering", async () => {
+  const apiData = fixtureApiData();
+  apiData.materialGroups = [{
+    materialId: "agricium",
+    materialName: "Agricium",
+    sources: [
+      source("Agricium", "Duplicated Ridge", "ship_mineable", 0.4, 0.4),
+      source("Agricium", "Duplicated Ridge", "ship_mineable", 0.4, 0.4),
+      source("Agricium", "Solo Ridge", "ship_mineable", 0.7, 0.7),
+    ],
+  }];
+  const singleMaterialRequest = request("quality");
+  singleMaterialRequest.requiredMaterials = [singleMaterialRequest.requiredMaterials[0]!];
+
+  const response = await getRecommendations(singleMaterialRequest, apiData);
+  const visibleDemand = visibleDemandMaterials(response);
+  const visible = [...response.recommendations].sort((left, right) =>
+    compareLocationsForDemand(left, right, visibleDemand),
+  );
+
+  assert.equal(response.recommendations[0]?.locationName, "Duplicated Ridge");
+  assert.equal(visible[0]?.locationName, "Duplicated Ridge");
+  assert.equal(visible[0]?.routeScores?.[0]?.overallTargetabilityScore, 80);
+});
+
 test("omitting rankingMode retains the legacy server score path", async () => {
   const legacy = request("quality");
   delete legacy.rankingMode;
