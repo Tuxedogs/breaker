@@ -46,13 +46,17 @@ export function LocationListItem({
   onSelect: () => void;
   onToggleStar: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
+  const eligibleMaterialKeys = useMemo(
+    () => entry.requiredMaterials?.map((material) => material.materialKey ?? material.materialId) ?? locationMaterialKeys,
+    [entry.requiredMaterials, locationMaterialKeys],
+  );
   const coveredBQ = useMemo(
-    () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
-    [locationMaterialKeys, buildQueueMaterialKeys]
+    () => eligibleMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
+    [eligibleMaterialKeys, buildQueueMaterialKeys]
   );
   const coveredSelected = useMemo(
-    () => locationMaterialKeys.filter((key) => selectedMaterials.has(key)),
-    [locationMaterialKeys, selectedMaterials]
+    () => eligibleMaterialKeys.filter((key) => selectedMaterials.has(key)),
+    [eligibleMaterialKeys, selectedMaterials]
   );
 
   const hasBuildQueueDemand = buildQueueMaterialKeys.size > 0;
@@ -132,7 +136,7 @@ export function LocationListItem({
           <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
       </div>
-      <div className="mlist-item-coverage" aria-label={totalRelevant > 0 ? `${primaryCovered.length} of ${totalRelevant} selected materials represented` : "No selected materials"}>
+      <div className="mlist-item-coverage" aria-label={totalRelevant > 0 ? `${primaryCovered.length} of ${totalRelevant} request-eligible, quality-supported materials covered` : "No selected materials"}>
         {totalRelevant > 0 ? <strong>{primaryCovered.length} / {totalRelevant}</strong> : <span>—</span>}
       </div>
       <button

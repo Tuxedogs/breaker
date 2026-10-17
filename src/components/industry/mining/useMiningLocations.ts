@@ -10,9 +10,9 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 import type { MaterialTemplate } from "../../../types/logistics";
-import { compareLocationsByRecommendationScore, demandWeightedLocationScore, diversifyLocationsByMaterials } from "./miningScoring";
+import { compareLocationsByRecommendationScore, compareLocationsForDemand, diversifyLocationsByMaterials, withRecommendationDemandScores } from "./miningScoring";
 import { encounterSignalFromWeight, miningTypeFromSpawn, targetabilityLabel } from "./miningFormatters";
-import type { MiningEncounterTier, MiningRankingMode } from "./miningTypes";
+import type { MiningEncounterTier } from "./miningTypes";
 import type { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 
 type UseMiningPlannerStateReturn = ReturnType<typeof useMiningPlannerState>;
@@ -28,6 +28,23 @@ export interface MiningLocationsResult {
   selectedEntry: PublicLocationEntry | null;
 }
 
+/**
+ * Demand coverage follows the recommender's explicitly eligible material set.
+ * An empty array is meaningful: the location was considered but no requested
+ * material survived the method and quality-evidence gates.
+ */
+export function getRecommendationEligibleMaterialKeys(location: PublicLocationEntry): string[] | null {
+  if (location.requiredMaterials === undefined) return null;
+  return Array.from(new Set(location.requiredMaterials.map((material) =>
+    canonicalMiningMaterial({
+      materialKey: material.materialKey,
+      materialId: material.materialId,
+      materialName: material.materialName,
+      displayName: material.displayName,
+    }).key
+  ).filter(Boolean)));
+}
+
 export function useMiningLocations({
   locations,
   loadingState,
@@ -40,7 +57,6 @@ export function useMiningLocations({
   sidebarOnlyMaterials,
   buildQueueSelectionActive,
   coverageMode,
-  rankingMode,
   selectedLocationKey,
   staticMiningIndex,
   materials,
@@ -58,7 +74,6 @@ export function useMiningLocations({
   sidebarOnlyMaterials: RequiredMaterial[];
   buildQueueSelectionActive: boolean;
   coverageMode: MiningCoverageMode;
-  rankingMode: MiningRankingMode;
   selectedLocationKey: string | null;
   staticMiningIndex: StaticMiningIndex | null;
   materials: MaterialTemplate[];
@@ -79,7 +94,17 @@ export function useMiningLocations({
   const locationMaterialKeysByLocationKey = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const location of locations) {
-      map.set(location.locationKey, getStaticLocationMaterialKeys(location, staticMiningIndex));
+      // A recommendation's requiredMaterials are its request-eligible,
+      // quality-supported coverage contract. Static membership remains in the
+      // separate indexed map below for browsing and source details, but must
+      // not grant demand coverage to an excluded sibling source.
+      const eligibleKeys = getRecommendationEligibleMaterialKeys(location);
+      map.set(
+        location.locationKey,
+        eligibleKeys !== null
+          ? eligibleKeys
+          : getStaticLocationMaterialKeys(location, staticMiningIndex),
+      );
     }
     return map;
   }, [locations, staticMiningIndex]);
@@ -141,21 +166,16 @@ export function useMiningLocations({
     const modeDemandMaterials = activeBuildQueueDemandMaterials.length > 0 ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials;
     if (modeDemandMaterials.length > 0) {
       return ranked.sort((a, b) => {
-        const as_ = demandWeightedLocationScore(a, modeDemandMaterials, locationMaterialKeysByLocationKey, staticMiningIndex, rankingMode);
-        const bs_ = demandWeightedLocationScore(b, modeDemandMaterials, locationMaterialKeysByLocationKey, staticMiningIndex, rankingMode);
-        return bs_.covered - as_.covered || bs_.score - as_.score || a.locationName.localeCompare(b.locationName);
+        return compareLocationsForDemand(a, b, modeDemandMaterials);
       });
     }
     return ranked.sort(compareLocationsByRecommendationScore);
-  }, [activeBuildQueueDemandMaterials, activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, locationMaterialKeysByLocationKey, rankingMode, sidebarOnlyMaterials, staticMiningIndex]);
+  }, [activeBuildQueueDemandMaterials, activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, sidebarOnlyMaterials]);
 
   const coverageRankedFilteredLocations = useMemo(() => {
     if (activeBuildQueueDemandMaterials.length === 0) return baseRankedFilteredLocations;
-    return baseRankedFilteredLocations.map((entry) => {
-      const score = Math.round(demandWeightedLocationScore(entry, activeBuildQueueDemandMaterials, locationMaterialKeysByLocationKey, staticMiningIndex, rankingMode).score);
-      return { ...entry, score, routeTargetabilityScore: score, routeTargetabilityLabel: targetabilityLabel(score) };
-    });
-  }, [activeBuildQueueDemandMaterials, baseRankedFilteredLocations, locationMaterialKeysByLocationKey, rankingMode, staticMiningIndex]);
+    return withRecommendationDemandScores(baseRankedFilteredLocations, activeBuildQueueDemandMaterials, targetabilityLabel);
+  }, [activeBuildQueueDemandMaterials, baseRankedFilteredLocations]);
 
   const coveragePlan = useMemo(
     () => buildQueueSelectionActive && activeBuildQueueDemandMaterials.length > 0

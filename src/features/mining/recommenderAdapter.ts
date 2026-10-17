@@ -21,6 +21,7 @@ import {
   type StaticLocationMaterialRow,
   type StaticMiningIndex,
 } from "./staticMiningIndex";
+import { rankEvidence, type MiningRankingMode } from "./rankingContract";
 
 export interface RecommenderWarning {
   code: string;
@@ -66,13 +67,6 @@ type CanonicalDemand = RequiredMaterial & {
 
 type RecommenderSource = "post" | "static-fallback";
 
-type MiningRankingMode = NonNullable<MiningRecommendationRequest["rankingMode"]>;
-
-const weightsByMode: Record<MiningRankingMode, { encounter: number; quality: number; composition: number; methodFit: number }> = {
-  quality: { encounter: 0.35, quality: 0.45, composition: 0.10, methodFit: 0.10 },
-  quantity: { encounter: 0.55, quality: 0.10, composition: 0.25, methodFit: 0.10 },
-  balanced: { encounter: 0.40, quality: 0.25, composition: 0.20, methodFit: 0.15 },
-};
 
 type FallbackReason =
   | { type: "status"; status: number }
@@ -239,8 +233,21 @@ function getMethodFitPct(row: StaticLocationMaterialRow): number {
   return clampPct(value > 1 ? value : value * 100);
 }
 
-function getRankingMode(request: MiningRecommendationRequest): MiningRankingMode {
-  return request.rankingMode === "quantity" || request.rankingMode === "balanced" ? request.rankingMode : "quality";
+function staticEncounterPct(row: StaticLocationMaterialRow, index: StaticMiningIndex): number {
+  return clampPct(getStaticDensityScore(row, index) ?? row.materialEncounterScore ?? row.encounterScore);
+}
+
+function getRankingMode(request: MiningRecommendationRequest): MiningRankingMode | undefined {
+  return request.rankingMode;
+}
+
+function staticMiningMethod(row: StaticLocationMaterialRow): string {
+  const value = row.resolvedMineableClass.toLowerCase();
+  if (value.includes("ship") || value.includes("orbit")) return "ship";
+  if (value.includes("geo") || value.includes("vehicle") || value.includes("ground")) return "ground";
+  if (value.includes("hand")) return "hand";
+  if (value.includes("harvest")) return "harvestable";
+  return value;
 }
 
 type StaticLocationRowsGroup = {
@@ -288,26 +295,25 @@ function buildStaticRouteScore(
   row: StaticLocationMaterialRow,
   demand: CanonicalDemand,
   index: StaticMiningIndex,
-  rankingMode: MiningRankingMode,
+  rankingMode: MiningRankingMode | undefined,
 ): NonNullable<PublicLocationEntry["routeScores"]>[number] {
-  const threshold = demand.selectedQuality ?? 800;
+  const threshold = demand.selectedQuality;
   const qualityRow = getStaticMaterialQualityRow(row, index);
-  const qualityChance = getRowQualityChance(row, index, threshold);
-  const encounterPct = clampPct(getStaticDensityScore(row, index));
+  const qualityChance = threshold === undefined ? null : getRowQualityChance(row, index, threshold);
+  // The published relative-density range may be absent in a partial/static
+  // fixture. In that case use the delivered encounter signal directly rather
+  // than collapsing every route to a fabricated zero.
+  const encounterPct = staticEncounterPct(row, index);
   const qualityPct = qualityChance == null ? 0 : clampPct(qualityChance * 100);
   const qualityFit = qualityChance == null ? null : Math.round(qualityPct);
   const compositionPct = getCompositionPct(row);
   const methodFitPct = getMethodFitPct(row);
-  const weights = weightsByMode[rankingMode];
-  // Coverage is a gate at the location level. Full coverage does not add points;
-  // per-material fit is weighted from real indexed density, quality, composition,
-  // and the selected material's mining-method share at this location.
-  const materialFitScore = (
-    encounterPct * weights.encounter +
-    qualityPct * weights.quality +
-    compositionPct * weights.composition +
-    methodFitPct * weights.methodFit
-  );
+  // Explicit modes share the server's two-domain evidence contract. The
+  // static fallback's yield input is its published encounter index; it is not
+  // a validated mechanical yield calculation.
+  const materialFitScore = rankingMode === undefined
+    ? encounterPct * 0.35 + qualityPct * 0.45 + compositionPct * 0.10 + methodFitPct * 0.10
+    : rankEvidence(rankingMode, qualityPct / 100, encounterPct / 100) * 100;
   const overallTargetabilityScore = Math.round(materialFitScore);
 
   return {
@@ -360,7 +366,7 @@ function buildStaticRouteScore(
   };
 }
 
-function buildStaticRecommendations(
+export function buildStaticRecommendations(
   request: MiningRecommendationRequest,
   index: StaticMiningIndex,
 ): RecommendationResponse {
@@ -368,6 +374,9 @@ function buildStaticRecommendations(
   const demandByKey = new Map(demand.map((material) => [material.materialKey, material]));
   const hasDemand = demand.length > 0;
   const rankingMode = getRankingMode(request);
+  const allowedMethods = request.allowedMiningMethods?.length
+    ? new Set(request.allowedMiningMethods.map((method) => method.trim().toLowerCase()).filter(Boolean))
+    : null;
 
   const groups = groupStaticMiningBrowseRows(index.rows);
 
@@ -379,19 +388,45 @@ function buildStaticRecommendations(
     const first = rows[0];
     if (!first) continue;
 
-    const rowByMaterialKey = new Map(rows.map((row) => [getStaticMaterialKey(row), row]));
-    const coveredDemand = demand.filter((material) => rowByMaterialKey.has(material.materialKey));
+    const rowsByMaterialKey = new Map<string, StaticLocationMaterialRow[]>();
+    for (const row of rows) {
+      const key = getStaticMaterialKey(row);
+      rowsByMaterialKey.set(key, [...(rowsByMaterialKey.get(key) ?? []), row]);
+    }
+    const coveredDemand = demand.filter((material) => rowsByMaterialKey.has(material.materialKey));
     if (hasDemand && coveredDemand.length === 0) continue;
 
-    const routeScores = coveredDemand
-      .map((material) => buildStaticRouteScore(rowByMaterialKey.get(material.materialKey)!, material, index, rankingMode))
+    const eligibleRowByMaterialKey = new Map<string, StaticLocationMaterialRow>();
+    for (const material of coveredDemand) {
+      const eligible = (rowsByMaterialKey.get(material.materialKey) ?? []).filter((row) =>
+        (!allowedMethods || allowedMethods.has(staticMiningMethod(row))) &&
+        (material.selectedQuality === undefined || getRowQualityChance(row, index, material.selectedQuality) !== null)
+      );
+      // A material can have multiple methods at one physical location. Choose
+      // the best eligible row for the requested strategy; never let an
+      // ineligible sibling grant coverage. Selecting by encounter first would
+      // incorrectly make quality mode ignore stronger quality evidence.
+      const best = eligible
+        .map((row) => ({ row, score: buildStaticRouteScore(row, material, index, rankingMode) }))
+        .sort((left, right) =>
+          right.score.overallTargetabilityScore - left.score.overallTargetabilityScore ||
+          right.score.signals.qualityChance! - left.score.signals.qualityChance! ||
+          right.score.signals.yieldPotential - left.score.signals.yieldPotential
+        )[0]?.row;
+      if (best) eligibleRowByMaterialKey.set(material.materialKey, best);
+    }
+    const eligibleDemand = coveredDemand.filter((material) => eligibleRowByMaterialKey.has(material.materialKey));
+    if (hasDemand && eligibleDemand.length === 0) continue;
+
+    const routeScores = eligibleDemand
+      .map((material) => buildStaticRouteScore(eligibleRowByMaterialKey.get(material.materialKey)!, material, index, rankingMode))
       .sort((left, right) => right.overallTargetabilityScore - left.overallTargetabilityScore);
 
     const weightedDemandScore = routeScores.reduce((sum, score) => {
       const qty = demandByKey.get(score.materialKey)?.requiredQuantity ?? 1;
       return sum + score.overallTargetabilityScore * Math.max(1, Number(qty) || 1);
     }, 0);
-    const demandWeight = coveredDemand.reduce((sum, material) => sum + Math.max(1, Number(material.requiredQuantity) || 1), 0);
+    const demandWeight = eligibleDemand.reduce((sum, material) => sum + Math.max(1, Number(material.requiredQuantity) || 1), 0);
     const locationFitScore = demandWeight > 0 ? weightedDemandScore / demandWeight : 0;
     // Fit describes how good the indexed covered material matches are.
     // Coverage is exposed separately so impossible multi-material combinations
@@ -419,7 +454,9 @@ function buildStaticRecommendations(
       routeTargetabilityScore,
       routeTargetabilityLabel: targetabilityLabel(routeTargetabilityScore),
       routeScores,
-      requiredMaterials: coveredDemand.map((material) => ({
+      // This is request-eligible, quality-supported coverage, not the full
+      // physical material membership reported by the static index.
+      requiredMaterials: eligibleDemand.map((material) => ({
         materialKey: material.materialKey,
         materialId: material.materialId,
         materialName: material.materialName,
@@ -431,7 +468,7 @@ function buildStaticRecommendations(
       })),
     });
 
-    for (const material of coveredDemand) {
+    for (const material of eligibleDemand) {
       const coverage = diagnosticsCoverage.get(material.materialKey) ?? {
         materialKey: material.materialKey,
         materialId: material.materialId,

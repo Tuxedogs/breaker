@@ -64,3 +64,9 @@ After applying the publisher transform to the selected accepted dataset:
 ### Safeguard added
 
 `scripts/publish-mining-data.mts` now refuses a source root unless its `mining_generation_receipt.json` names the supplied accepted build and validates the exact `material_sources_quality_enriched.json` and `location_material_index.json` hashes. Its schema-2 manifest records that receipt/build provenance. The focused regression test proves both acceptance and rejection of a tampered source artifact.
+
+## Decision-quality fallback boundary (October 16, 2026)
+
+Static fallback coverage now uses a recommendation entry's `requiredMaterials` as the request-eligible, quality-supported contract. Raw static membership remains available for exploration and source detail, but it cannot create coverage, a completion location, or a route-complete signal. A missing quality threshold and a disallowed mining method therefore remain missing coverage.
+
+Static fallback ranking intentionally uses the published encounter index as its yield-domain input, whereas the server scorer uses source `overallScore` plus composition evidence. Matching order in a synthetic fixture only proves that each explicit ranking strategy selects the correct available evidence inside its own pipeline; it does not establish real-world server/fallback yield equivalence or invent a probability conversion between those upstream signals.
