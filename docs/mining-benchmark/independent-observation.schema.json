@@ -14,12 +14,23 @@
     "sourceIdentity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["breakerCommit", "acceptedBuildId", "selectorSha256"],
+      "required": ["breakerCommit", "acceptedBuildId", "selectorSha256", "frozenInputsSha256", "publicationInputSha256", "publicationEvidence"],
       "properties": {
         "breakerCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "acceptedBuildId": { "type": "string", "minLength": 1 },
         "selectorSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "frozenInputsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        "frozenInputsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "publicationInputSha256": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" } },
+        "publicationEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reference", "recordedAt", "recorder"],
+          "properties": {
+            "reference": { "type": "string", "format": "uri" },
+            "recordedAt": { "type": "string", "format": "date-time" },
+            "recorder": { "type": "string", "minLength": 1 }
+          }
+        }
       }
     },
     "constraintSnapshot": {
@@ -53,7 +64,7 @@
     "observation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["targetPresent", "qualityMeasurement", "quantityMeasurement", "breakability", "objectiveCompletion", "evidenceLink"],
+      "required": ["targetPresent", "qualityMeasurement", "quantityMeasurement", "breakability", "objectiveCompletion", "evidenceLink", "evidenceProvenance"],
       "properties": {
         "targetPresent": { "enum": [true, false, "unknown"] },
         "targetComposition": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
@@ -62,6 +73,16 @@
         "breakability": { "enum": ["proven", "not_proven", "unknown"] },
         "objectiveCompletion": { "enum": ["completed", "not_completed", "unknown", "not_applicable"] },
         "evidenceLink": { "type": ["string", "null"], "format": "uri" },
+        "evidenceProvenance": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["recorder", "recordedAt", "artifactSha256"],
+          "properties": {
+            "recorder": { "type": "string", "minLength": 1 },
+            "recordedAt": { "type": "string", "format": "date-time" },
+            "artifactSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
         "missingFields": { "type": "array", "items": { "type": "string" } },
         "notes": { "type": "string" }
       }
@@ -70,7 +91,7 @@
   "allOf": [
     {
       "if": { "properties": { "evidenceKind": { "const": "synthetic_harness" } }, "required": ["evidenceKind"] },
-      "then": { "properties": { "observation": { "properties": { "objectiveCompletion": { "const": "not_applicable" } } } } }
+      "then": { "type": "object", "properties": { "observation": { "type": "object", "properties": { "objectiveCompletion": { "const": "not_applicable" } } } } }
     }
   ]
 }

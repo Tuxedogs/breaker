@@ -10,6 +10,17 @@ Status: **insufficient_evidence**
 | Target yield per minute | unknown | independent quantity and time measurements required |
 | Objective completion | unknown | independent completed/not_completed observations required |
 
+## Frozen scenario coverage
+| Scenario | Mode | Capture status |
+| --- | --- | --- |
+| quantanium-ship-any-quality | quantity | missing |
+| laranite-quality-900-quantity | quality | missing |
+| laranite-quality-900-quantity | quantity | missing |
+| copper-iron-unequal-coverage | balanced | missing |
+| agricium-bexalite-prospector-quality-900 | balanced | missing |
+| raw-ice-incomplete-quality-evidence | quality | missing |
+| raw-ice-incomplete-quality-evidence | balanced | missing |
+
 ## Validation errors
 - None
 
