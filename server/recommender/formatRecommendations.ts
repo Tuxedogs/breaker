@@ -450,17 +450,30 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
     const yieldRouteScore = roundScore(route.signals.composition.score ?? 0);
     const demandMatchScore = roundScore(maxDemand > 0 ? (route.rawDemand / maxDemand) * 100 : 0);
     const sourceLocation = route.source.sourceLocationRawName ?? route.source.location ?? route.source.providerName;
-    const scoredRoute = locations.find((location) => location.locationKey === route.locationKey)
-      ?.scoreDiagnostics?.find((diagnostic) =>
+    const diagnostics = locations.find((location) => location.locationKey === route.locationKey)
+      ?.scoreDiagnostics?.filter((diagnostic) =>
         diagnostic.materialKey === route.requirement.materialKey &&
         diagnostic.sourceLocationRawName === sourceLocation
-      ) ?? locations.find((location) => location.locationKey === route.locationKey)
-      ?.scoreDiagnostics?.find((diagnostic) => diagnostic.materialKey === route.requirement.materialKey);
-    // Explicit modes hand the shared ranking-contract result through directly.
-    // The fallback preserves the legacy formatter score for omitted mode.
-    const overallTargetabilityScore = roundScore(
-      scoredRoute?.routeTargetabilityScore ?? route.signals.recommendation,
-    );
+      ) ?? [];
+    const matchingDiagnostics = diagnostics.length > 0
+      ? diagnostics
+      : locations.find((location) => location.locationKey === route.locationKey)
+        ?.scoreDiagnostics?.filter((diagnostic) => diagnostic.materialKey === route.requirement.materialKey) ?? [];
+    // The scorer accumulates each eligible source contribution at a physical
+    // location. Carry that same explicit-mode aggregation into the one route
+    // score the UI consumes; selecting the first source here would let the
+    // displayed order disagree with the server when a material has multiple
+    // eligible source rows at that location. These are modeled rank scores,
+    // not probabilities, so their sum is intentionally not clamped to 100.
+    // Omitted rankingMode retains the legacy formatter score path.
+    const explicitRouteScore = matchingDiagnostics.length > 0 && matchingDiagnostics.every(
+      (diagnostic) => diagnostic.routeTargetabilityScore !== undefined,
+    )
+      ? matchingDiagnostics.reduce((sum, diagnostic) => sum + (diagnostic.routeTargetabilityScore ?? 0), 0)
+      : undefined;
+    const overallTargetabilityScore = explicitRouteScore === undefined
+      ? route.signals.recommendation
+      : Math.round(explicitRouteScore);
     const score: MaterialRouteScore = {
       materialKey: route.requirement.materialKey,
       materialId: route.requirement.materialId,
