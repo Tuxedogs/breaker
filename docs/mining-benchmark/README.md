@@ -33,4 +33,10 @@ Ship-method eligibility is not breakability proof. In particular, the Prospector
 
 Store held-out records outside `server-data`, `src`, and Scintel implementation inputs. Validate each record against `independent-observation.schema.json`; synthetic records are permitted only with `evidenceKind: "synthetic_harness"` and can validate the harness, never decision lift. Every observation records its evidence link or absence, including no-target searches and adverse conditions, to control survivor bias.
 
+## Repeatable evaluator
+
+Run `node --import tsx scripts/mining-benchmark-evaluator.mts --observations <records.json> --scorecard <scorecard.md>`. The evaluator checks frozen-input integrity, exact Breaker/source identities, scenario budgets, allowed methods and modes, independent evidence links, pairing, and the comparison fields needed to measure eligibility correctness, false coverage, target yield, and objective completion. Pass `--source-root <published-mining-root>` only when validating the four frozen publication-input hashes; the input must be the frozen published snapshot, not a live replacement.
+
+Records are paired by `pairId`, with exactly one `breaker` and one `baseline` observation for the same scenario and ranking mode. The `comparison` block explicitly preserves what was recommended versus what independent evidence observed; neither is inferred from a static index. A missing pair, unknown outcome, absent measurement/link, synthetic-only pair, or failed validation produces `insufficient_evidence`. Synthetic fixtures can demonstrate evaluator mechanics but are permanently excluded from player decision-lift aggregates.
+
 No empirical observations are frozen in this repository yet. Therefore this benchmark currently makes no player decision-lift claim.

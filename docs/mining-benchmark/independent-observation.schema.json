@@ -3,9 +3,10 @@
   "title": "Breaker independent mining benchmark observation",
   "type": "object",
   "additionalProperties": false,
-  "required": ["observationId", "scenarioId", "attemptKind", "evidenceKind", "capturedAt", "sourceIdentity", "constraintSnapshot", "observation"],
+  "required": ["observationId", "pairId", "scenarioId", "attemptKind", "evidenceKind", "capturedAt", "sourceIdentity", "constraintSnapshot", "comparison", "observation"],
   "properties": {
     "observationId": { "type": "string", "minLength": 1 },
+    "pairId": { "type": "string", "minLength": 1 },
     "scenarioId": { "type": "string", "minLength": 1 },
     "attemptKind": { "enum": ["breaker", "baseline"] },
     "evidenceKind": { "enum": ["runtime_capture", "gameplay_log", "controlled_encounter", "independent_mechanics_adjudication", "synthetic_harness"] },
@@ -17,7 +18,8 @@
       "properties": {
         "breakerCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "acceptedBuildId": { "type": "string", "minLength": 1 },
-        "selectorSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        "selectorSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "frozenInputsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },
     "constraintSnapshot": {
@@ -32,6 +34,20 @@
         "searchMinutes": { "type": ["number", "null"], "minimum": 0 },
         "inspectedEncounters": { "type": "integer", "minimum": 0 },
         "adverseConditions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rankingMode", "recommendedLocation", "declaredRequestEligible", "observedRequestEligible", "declaredFullCoverage", "observedFullCoverage", "declaredObjectiveCompletion"],
+      "properties": {
+        "rankingMode": { "type": "string", "minLength": 1 },
+        "recommendedLocation": { "type": ["string", "null"] },
+        "declaredRequestEligible": { "enum": [true, false, "unknown"] },
+        "observedRequestEligible": { "enum": [true, false, "unknown"] },
+        "declaredFullCoverage": { "enum": [true, false, "unknown"] },
+        "observedFullCoverage": { "enum": [true, false, "unknown"] },
+        "declaredObjectiveCompletion": { "enum": ["completed", "not_completed", "unknown", "not_applicable"] }
       }
     },
     "observation": {
