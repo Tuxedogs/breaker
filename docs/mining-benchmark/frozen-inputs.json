@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "benchmarkId": "mining-decision-quality-heldout-v1",
+  "frozenAt": "2026-10-17T00:00:00-05:00",
+  "comparisonImplementation": {
+    "repository": "Tuxedogs/breaker",
+    "commit": "c7199f896bf4334ec70273710af81d420e30e767",
+    "pullRequest": 40,
+    "integrationStatus": "unmerged_review_only"
+  },
+  "acceptedSource": {
+    "channel": "LIVE",
+    "acceptedBuildId": "4.10.191.2241-12519617-blueprint-filter.3",
+    "sourceBuildId": "4.10.191.2241-12519617",
+    "selectorPath": "D:\\scintel\\out\\LIVE\\current.json",
+    "selectorSha256": "f8b83d649d888996faf9ddbb4e3ed7dbc6d54d7c631e37a0edb74df254aeee6a",
+    "moonbreakerMiningManifestSha256": "5f5fde52f06dc42ce4753d15e55eda0ebb52c0663b658f238591f4b671a49c44",
+    "publicationInputSha256": {
+      "recommender/material-source-scores.json": "de597b1dab27e8a3c6f656b445aa47dfd6b48145cb60d32a9752cc92e145ecfe",
+      "indexes/location-material.json": "44f560375df07157ec04f613a7b4d68e11ec21c4f25c10f151e5074bd61b41e6",
+      "indexes/material-quality.json": "ba560ee55c51490587f3f5b2ab367bfd7114e753d01eeda72f73dd9fa1ebefcb",
+      "indexes/material-encounter-rankings.json": "1eddb3682c4f000ba6c72ef111d6597885772822131f58d34fc2db955ff1ac05"
+    }
+  },
+  "baselineDefinitions": {
+    "encounter_top1": {
+      "rule": "After the scenario's method and explicit-quality eligibility gates, choose the location with the highest published materialEncounterScore for the primary requested material; tie-break by canonical location key ascending.",
+      "forbiddenInputs": ["Breaker rank score", "source-backed outcome observation", "ship breakability inference"]
+    },
+    "encounter_coverage": {
+      "rule": "Choose the eligible route set that covers the most requested material keys, then maximizes the quantity-weighted mean materialEncounterScore; tie-break by canonical location keys ascending.",
+      "forbiddenInputs": ["Breaker rank score", "unobserved full-coverage claim", "ship breakability inference"]
+    }
+  },
+  "scenarios": [
+    {
+      "id": "quantanium-ship-any-quality",
+      "materials": [{ "materialName": "Quantanium", "requiredQuantity": 1 }],
+      "allowedMiningMethods": ["ship"],
+      "rankingModes": ["quantity"],
+      "baseline": "encounter_top1",
+      "budget": { "maxTravelMinutes": 20, "maxSearchMinutes": 30, "maxInspectedEncounters": 12 },
+      "outcome": "observed_target_yield_per_time_or_opportunity",
+      "stopCondition": "one fixed-budget Breaker attempt and one fixed-budget baseline attempt, or each reaches its budget",
+      "holdoutStatus": "placeholder_no_independent_observation"
+    },
+    {
+      "id": "laranite-quality-900-quantity",
+      "materials": [{ "materialName": "Laranite", "requiredQuantity": 10, "selectedQuality": 900 }],
+      "allowedMiningMethods": ["ship"],
+      "rankingModes": ["quality", "quantity"],
+      "baseline": "encounter_top1",
+      "budget": { "maxTravelMinutes": 20, "maxSearchMinutes": 30, "maxInspectedEncounters": 12 },
+      "outcome": "quality-qualified_quantity_per_time_or_opportunity",
+      "stopCondition": "one fixed-budget attempt per declared mode and baseline",
+      "holdoutStatus": "placeholder_no_independent_observation"
+    },
+    {
+      "id": "copper-iron-unequal-coverage",
+      "materials": [{ "materialName": "Copper", "requiredQuantity": 20 }, { "materialName": "Iron", "requiredQuantity": 5 }],
+      "allowedMiningMethods": ["ship"],
+      "rankingModes": ["balanced"],
+      "baseline": "encounter_coverage",
+      "budget": { "maxTravelMinutes": 30, "maxSearchMinutes": 45, "maxInspectedEncounters": 16 },
+      "outcome": "objective_completion_and_false_full_coverage",
+      "stopCondition": "one-trip attempt first; record a separately budgeted multi-stop attempt only if predeclared before capture",
+      "holdoutStatus": "placeholder_no_independent_observation"
+    },
+    {
+      "id": "agricium-bexalite-prospector-quality-900",
+      "materials": [{ "materialName": "Agricium", "requiredQuantity": 10, "selectedQuality": 900 }, { "materialName": "Bexalite", "requiredQuantity": 10, "selectedQuality": 900 }],
+      "allowedMiningMethods": ["ship"],
+      "persona": "Prospector",
+      "rankingModes": ["balanced"],
+      "baseline": "encounter_coverage",
+      "budget": { "maxTravelMinutes": 30, "maxSearchMinutes": 45, "maxInspectedEncounters": 16 },
+      "outcome": "eligible_coverage_with_breakability_unknown_or_observed",
+      "stopCondition": "do not classify a target breakable without independent mechanics evidence from the recorded encounter",
+      "holdoutStatus": "placeholder_no_independent_observation"
+    },
+    {
+      "id": "raw-ice-incomplete-quality-evidence",
+      "materials": [{ "materialName": "Raw Ice", "requiredQuantity": 10, "selectedQuality": 900 }, { "materialName": "Bexalite", "requiredQuantity": 5, "selectedQuality": 900 }],
+      "allowedMiningMethods": ["ship"],
+      "rankingModes": ["quality", "balanced"],
+      "baseline": "encounter_coverage",
+      "budget": { "maxTravelMinutes": 20, "maxSearchMinutes": 20, "maxInspectedEncounters": 8 },
+      "outcome": "fail_closed_reason_codes_and_abstention",
+      "stopCondition": "evaluate exclusion or unresolved output; no fake quality probability, completion, or lift may be recorded",
+      "holdoutStatus": "placeholder_no_independent_observation"
+    }
+  ]
+}

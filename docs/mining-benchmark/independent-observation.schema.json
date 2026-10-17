@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Breaker independent mining benchmark observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["observationId", "scenarioId", "attemptKind", "evidenceKind", "capturedAt", "sourceIdentity", "constraintSnapshot", "observation"],
+  "properties": {
+    "observationId": { "type": "string", "minLength": 1 },
+    "scenarioId": { "type": "string", "minLength": 1 },
+    "attemptKind": { "enum": ["breaker", "baseline"] },
+    "evidenceKind": { "enum": ["runtime_capture", "gameplay_log", "controlled_encounter", "independent_mechanics_adjudication", "synthetic_harness"] },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "sourceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["breakerCommit", "acceptedBuildId", "selectorSha256"],
+      "properties": {
+        "breakerCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "acceptedBuildId": { "type": "string", "minLength": 1 },
+        "selectorSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "constraintSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "location", "method", "travelMinutes", "searchMinutes", "inspectedEncounters"],
+      "properties": {
+        "system": { "type": ["string", "null"] },
+        "location": { "type": ["string", "null"] },
+        "method": { "type": "string" },
+        "travelMinutes": { "type": ["number", "null"], "minimum": 0 },
+        "searchMinutes": { "type": ["number", "null"], "minimum": 0 },
+        "inspectedEncounters": { "type": "integer", "minimum": 0 },
+        "adverseConditions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetPresent", "qualityMeasurement", "quantityMeasurement", "breakability", "objectiveCompletion", "evidenceLink"],
+      "properties": {
+        "targetPresent": { "enum": [true, false, "unknown"] },
+        "targetComposition": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "qualityMeasurement": { "type": ["number", "null"], "minimum": 0 },
+        "quantityMeasurement": { "type": ["number", "null"], "minimum": 0 },
+        "breakability": { "enum": ["proven", "not_proven", "unknown"] },
+        "objectiveCompletion": { "enum": ["completed", "not_completed", "unknown", "not_applicable"] },
+        "evidenceLink": { "type": ["string", "null"], "format": "uri" },
+        "missingFields": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "evidenceKind": { "const": "synthetic_harness" } }, "required": ["evidenceKind"] },
+      "then": { "properties": { "observation": { "properties": { "objectiveCompletion": { "const": "not_applicable" } } } } }
+    }
+  ]
+}
