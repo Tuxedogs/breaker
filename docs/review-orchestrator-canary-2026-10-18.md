@@ -4,7 +4,7 @@ This file exists only to validate the controlled Breaker review orchestrator.
 
 ## Requested correction target
 
-`PENDING_REVIEWER_CORRECTION`
+`CORRECTED_BY_REVIEW`
 
 ## Acceptance criterion
 
