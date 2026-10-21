@@ -35,6 +35,7 @@ import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./minin
 import { useMiningLocations } from "./useMiningLocations";
 import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
+import { recommendationTieGroupSize } from "./miningScoring";
 import { LocationDetail } from "./LocationDetail";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import MobileFilterSheet from "../../shared/MobileFilterSheet";
@@ -513,7 +514,7 @@ export default function MiningModule() {
             </span>
             <div className="mining-command-copy">
               <h1>Mining Intelligence</h1>
-              <p>Survey locations, compare material probability, plan the next extraction route.</p>
+              <p>Survey locations, compare modeled source opportunity, plan the next extraction route.</p>
             </div>
             {state.status === "loading" && <span className="mining-command-status" role="status">Refreshing recommendations…</span>}
             {state.status === "error" && <span className="mining-command-status mining-command-status--error" role="status">Could not refresh recommendations. Showing previous results.</span>}
@@ -651,6 +652,7 @@ export default function MiningModule() {
                         >
                           <LocationListItem
                             rank={index + 1}
+                            tieGroupSize={recommendationTieGroupSize(entry, listLocations, buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials)}
                             entry={entry}
                             selectedMaterials={effectiveMaterialFilterKeys}
                             buildQueueMaterialKeys={activeBuildQueueMaterialKeys}

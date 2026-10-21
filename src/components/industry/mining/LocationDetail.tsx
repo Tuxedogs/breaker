@@ -649,13 +649,13 @@ export function LocationDetail({
           <div className="mdet-environment">
             <MiningEnvironmentStatus environment={survey.environment} />
           </div>
-          <div className={`mdet-method-rack mdet-method-rack--prominent${locationMethodBias.length === 0 ? " is-unavailable" : ""}`} aria-label="Location mining method availability">
+          <div className={`mdet-method-rack mdet-method-rack--prominent${locationMethodBias.length === 0 ? " is-unavailable" : ""}`} aria-label="Source-backed location mining method eligibility. It does not verify ship equipment-specific fracture feasibility, scanned-rock success, or recoverable or refined SCU.">
             {HEADER_METHOD_SLOT_ORDER.map((slot) => {
               const item = surveyMethodsBySlot.get(slot);
               if (!item) return <span className="mdet-method-rack-slot" key={slot} aria-hidden="true" />;
               const label = miningMethodBadge(item.method)?.label ?? item.method;
               const presentation = miningMethodPresentation(item.method);
-              return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+              return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} modeled source share. Method eligibility does not verify equipped-head fracture feasibility, scanned-rock success, or recovered/refined SCU.`}>
                 {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
                 {presentation.iconKey && <span className="mdet-method-label">{label}</span>}
                 <strong className="mdet-method-rack-value">{formatMiningProbability(item.share)}</strong>

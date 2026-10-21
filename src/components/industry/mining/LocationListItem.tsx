@@ -19,6 +19,7 @@ const RANKED_LOCATION_METHOD_ORDER = ["Hand", "Ship", "Vehicle"] as const;
 
 export function LocationListItem({
   rank,
+  tieGroupSize = 1,
   entry,
   selectedMaterials,
   buildQueueMaterialKeys,
@@ -33,6 +34,7 @@ export function LocationListItem({
   onToggleStar,
 }: {
   rank?: number;
+  tieGroupSize?: number;
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
@@ -99,7 +101,15 @@ export function LocationListItem({
       aria-pressed={selected}
       aria-label={`${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
     >
-      {rank !== undefined && <span className="mlist-item-rank" aria-hidden="true">{rank}</span>}
+      {rank !== undefined && (
+        <span
+          className={`mlist-item-rank${tieGroupSize > 1 ? " mlist-item-rank--tied" : ""}`}
+          title={tieGroupSize > 1 ? `Tied modeled rank with ${tieGroupSize - 1} other location${tieGroupSize === 2 ? "" : "s"}. Stable order is used only to display the tie.` : undefined}
+          aria-label={tieGroupSize > 1 ? `Tied modeled rank ${rank}, shared by ${tieGroupSize} locations` : `Rank ${rank}`}
+        >
+          {tieGroupSize > 1 ? `T-${rank}` : rank}
+        </span>
+      )}
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (
           <img
@@ -122,12 +132,12 @@ export function LocationListItem({
           {showSystemBadge && !isLagrangeChildGroup && (
             <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
-          <span className="mlist-method-availability" aria-label="Source-backed mining method availability">
+          <span className="mlist-method-availability" aria-label="Source-backed mining method eligibility. These shares describe modeled source coverage, not ship equipment-specific fracture feasibility or guaranteed recoverable SCU.">
             {rankedMethods.length > 0 ? rankedMethods.map((item) => {
               const method = miningMethodBadge(item.method);
               const label = method?.label ?? item.method;
               return (
-                <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+                <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} modeled source share. This indicates method eligibility only; it does not verify equipped-head fracture feasibility, scanned-rock success, or recovered/refined SCU.`}>
                   <span>{label}</span><strong>{formatMiningProbability(item.share)}</strong>
                 </span>
               );

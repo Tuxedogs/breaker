@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { buildCoveragePlan } from "../../../features/mining/coveragePlan.js";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types.js";
-import { compareLocationsForDemand, withRecommendationDemandScores } from "./miningScoring.js";
+import { compareLocationsForDemand, recommendationTieGroupSize, withRecommendationDemandScores } from "./miningScoring.js";
 
 const demand = (key: string, quantity = 1): RequiredMaterial => ({
   materialKey: key,
@@ -95,4 +95,33 @@ test("no-demand browsing leaves canonical recommendation scores unchanged", () =
   assert.equal(displayed[0], entry);
   assert.equal(displayed[0]?.score, 50);
   assert.equal(displayed[0]?.routeTargetabilityScore, 50);
+});
+
+test("marks equal model evidence as a tie without changing deterministic location order", () => {
+  const alpha = recommendation("Alpha Ridge", { agricium: 72 });
+  const bravo = recommendation("Bravo Ridge", { agricium: 72 });
+  const ordered = [bravo, alpha].sort((left, right) => compareLocationsForDemand(left, right, []));
+
+  assert.deepEqual(ordered.map((entry) => entry.locationName), ["Alpha Ridge", "Bravo Ridge"]);
+  assert.equal(recommendationTieGroupSize(alpha, ordered, []), 2);
+  assert.equal(recommendationTieGroupSize(bravo, ordered, []), 2);
+});
+
+test("does not call equal raw scores a tie when queue coverage differs", () => {
+  const requested = [demand("agricium"), demand("bexalite")];
+  const partial = recommendation("Partial Ridge", { agricium: 70 }, ["agricium"]);
+  const complete = recommendation("Complete Ridge", { agricium: 70, bexalite: 70 });
+  const ordered = [partial, complete].sort((left, right) => compareLocationsForDemand(left, right, requested));
+
+  assert.equal(ordered[0]?.locationName, "Complete Ridge");
+  assert.equal(recommendationTieGroupSize(partial, ordered, requested), 1);
+  assert.equal(recommendationTieGroupSize(complete, ordered, requested), 1);
+});
+
+test("marks equal queue coverage and equal modeled evidence as a tie", () => {
+  const requested = [demand("agricium")];
+  const alpha = recommendation("Alpha Ridge", { agricium: 70 });
+  const bravo = recommendation("Bravo Ridge", { agricium: 70 });
+
+  assert.equal(recommendationTieGroupSize(alpha, [alpha, bravo], requested), 2);
 });

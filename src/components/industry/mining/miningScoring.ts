@@ -87,6 +87,33 @@ export function compareLocationsForDemand(
 }
 
 /**
+ * A visible tie exists only when the evidence used by the active ordering is
+ * also identical. In particular, equal modeled scores do not override the
+ * coverage-first ordering used for queue demand.
+ */
+export function recommendationTieGroupSize(
+  entry: PublicLocationEntry,
+  locations: PublicLocationEntry[],
+  demandMaterials: RequiredMaterial[],
+): number {
+  if (demandMaterials.length > 0) {
+    const current = recommendationDemandScore(entry, demandMaterials);
+    const currentScore = current.score ?? getLocationSortScore(entry);
+    return locations.filter((candidate) => {
+      const candidateScore = recommendationDemandScore(candidate, demandMaterials);
+      return candidateScore.covered === current.covered &&
+        (candidateScore.score ?? getLocationSortScore(candidate)) === currentScore;
+    }).length;
+  }
+
+  const score = getLocationSortScore(entry);
+  const matchedDemand = getMatchedDemandCount(entry);
+  return locations.filter((candidate) =>
+    getLocationSortScore(candidate) === score && getMatchedDemandCount(candidate) === matchedDemand
+  ).length;
+}
+
+/**
  * The coverage planner may show a score specific to its active demand.  Keep
  * the original recommendation score intact if no per-material recommendation
  * score exists instead of fabricating a zero.
