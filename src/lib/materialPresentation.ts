@@ -52,7 +52,7 @@ for (const presentation of CANONICAL_MATERIAL_PRESENTATIONS) {
   }
 }
 
-export const canonicalMaterialPresentations = CANONICAL_MATERIAL_PRESENTATIONS.map(({ aliases: _aliases, ...presentation }) => presentation);
+export const canonicalMaterialPresentations = CANONICAL_MATERIAL_PRESENTATIONS.map(({ canonicalKey, displayName, color, iconSrc }) => ({ canonicalKey, displayName, color, iconSrc }));
 
 export function resolveMaterialPresentation(materialIdentity: string | null | undefined): MaterialPresentation {
   const rawIdentity = (materialIdentity ?? "").trim();

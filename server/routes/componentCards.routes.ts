@@ -275,7 +275,14 @@ function pickVariantRepresentative(records: BrowserRecord[]): BrowserRecord {
 }
 
 function browserSummary(record: BrowserRecord): BrowserRecord {
-  const { searchText: _searchText, searchTokens: _searchTokens, description: _description, descriptionSourceKey: _descriptionSourceKey, materials: _materials, source: _source, card: _card, ...summary } = record;
+  const summary = { ...record };
+  delete summary.searchText;
+  delete summary.searchTokens;
+  delete summary.description;
+  delete summary.descriptionSourceKey;
+  delete summary.materials;
+  delete summary.source;
+  delete summary.card;
   return summary;
 }
 
