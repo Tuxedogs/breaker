@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { buildCoveragePlan } from "../../../features/mining/coveragePlan.js";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types.js";
-import { compareLocationsForDemand, recommendationTieGroupSize, withRecommendationDemandScores } from "./miningScoring.js";
+import { compareLocationsForDemand, getDisplayedLocationRank, recommendationTieGroupSize, withRecommendationDemandScores } from "./miningScoring.js";
 
 const demand = (key: string, quantity = 1): RequiredMaterial => ({
   materialKey: key,
@@ -105,6 +105,8 @@ test("marks equal model evidence as a tie without changing deterministic locatio
   assert.deepEqual(ordered.map((entry) => entry.locationName), ["Alpha Ridge", "Bravo Ridge"]);
   assert.equal(recommendationTieGroupSize(alpha, ordered, []), 2);
   assert.equal(recommendationTieGroupSize(bravo, ordered, []), 2);
+  assert.deepEqual(ordered.map((entry) => getDisplayedLocationRank(entry, ordered, []).visualLabel), ["T-1", "T-1"]);
+  assert.equal(getDisplayedLocationRank(alpha, ordered, []).accessibleLabel, "Tied modeled rank 1, shared by 2 locations");
 });
 
 test("does not call equal raw scores a tie when queue coverage differs", () => {
@@ -124,4 +126,16 @@ test("marks equal queue coverage and equal modeled evidence as a tie", () => {
   const bravo = recommendation("Bravo Ridge", { agricium: 70 });
 
   assert.equal(recommendationTieGroupSize(alpha, [alpha, bravo], requested), 2);
+});
+
+test("uses competition ranks for a three-way tie and its non-tied successor", () => {
+  const alpha = { ...recommendation("Alpha Ridge", { agricium: 80 }), score: 80, routeTargetabilityScore: 80 };
+  const bravo = { ...recommendation("Bravo Ridge", { agricium: 80 }), score: 80, routeTargetabilityScore: 80 };
+  const charlie = { ...recommendation("Charlie Ridge", { agricium: 80 }), score: 80, routeTargetabilityScore: 80 };
+  const delta = { ...recommendation("Delta Ridge", { agricium: 70 }), score: 70, routeTargetabilityScore: 70 };
+  const ordered = [delta, charlie, bravo, alpha].sort((left, right) => compareLocationsForDemand(left, right, []));
+
+  assert.deepEqual(ordered.map((entry) => entry.locationName), ["Alpha Ridge", "Bravo Ridge", "Charlie Ridge", "Delta Ridge"]);
+  assert.deepEqual(ordered.map((entry) => getDisplayedLocationRank(entry, ordered, []).visualLabel), ["T-1", "T-1", "T-1", "4"]);
+  assert.equal(getDisplayedLocationRank(delta, ordered, []).accessibleLabel, "Rank 4");
 });

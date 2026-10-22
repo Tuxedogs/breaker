@@ -96,21 +96,55 @@ export function recommendationTieGroupSize(
   locations: PublicLocationEntry[],
   demandMaterials: RequiredMaterial[],
 ): number {
+  return locations.filter((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials)).length;
+}
+
+function sameActiveRankingEvidence(
+  left: PublicLocationEntry,
+  right: PublicLocationEntry,
+  demandMaterials: RequiredMaterial[],
+): boolean {
   if (demandMaterials.length > 0) {
-    const current = recommendationDemandScore(entry, demandMaterials);
-    const currentScore = current.score ?? getLocationSortScore(entry);
-    return locations.filter((candidate) => {
-      const candidateScore = recommendationDemandScore(candidate, demandMaterials);
-      return candidateScore.covered === current.covered &&
-        (candidateScore.score ?? getLocationSortScore(candidate)) === currentScore;
-    }).length;
+    const leftScore = recommendationDemandScore(left, demandMaterials);
+    const rightScore = recommendationDemandScore(right, demandMaterials);
+    return leftScore.covered === rightScore.covered &&
+      (leftScore.score ?? getLocationSortScore(left)) === (rightScore.score ?? getLocationSortScore(right));
   }
 
-  const score = getLocationSortScore(entry);
-  const matchedDemand = getMatchedDemandCount(entry);
-  return locations.filter((candidate) =>
-    getLocationSortScore(candidate) === score && getMatchedDemandCount(candidate) === matchedDemand
-  ).length;
+  return getLocationSortScore(left) === getLocationSortScore(right) &&
+    getMatchedDemandCount(left) === getMatchedDemandCount(right);
+}
+
+export type DisplayedLocationRank = {
+  visualLabel: string;
+  accessibleLabel: string;
+  tooltip: string | null;
+  tieGroupSize: number;
+};
+
+/**
+ * Convert the already-displayed stable order into competition ranks. A tie's
+ * rank is its first displayed position, so all members receive one label.
+ */
+export function getDisplayedLocationRank(
+  entry: PublicLocationEntry,
+  displayedLocations: PublicLocationEntry[],
+  demandMaterials: RequiredMaterial[],
+): DisplayedLocationRank {
+  const index = displayedLocations.findIndex((candidate) => candidate.locationKey === entry.locationKey);
+  const fallbackRank = Math.max(index, 0) + 1;
+  const tiedEntries = displayedLocations.filter((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials));
+  if (tiedEntries.length < 2) {
+    return { visualLabel: String(fallbackRank), accessibleLabel: `Rank ${fallbackRank}`, tooltip: null, tieGroupSize: 1 };
+  }
+  const sharedRank = Math.max(displayedLocations.findIndex((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials)), 0) + 1;
+  const accessibleLabel = `Tied modeled rank ${sharedRank}, shared by ${tiedEntries.length} locations`;
+  return {
+    visualLabel: `T-${sharedRank}`,
+    accessibleLabel,
+    tooltip: `${accessibleLabel}. Stable order only displays this tie.`,
+    tieGroupSize: tiedEntries.length,
+  };
 }
 
 /**

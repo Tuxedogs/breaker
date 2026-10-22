@@ -35,7 +35,7 @@ import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./minin
 import { useMiningLocations } from "./useMiningLocations";
 import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
-import { recommendationTieGroupSize } from "./miningScoring";
+import { getDisplayedLocationRank } from "./miningScoring";
 import { LocationDetail } from "./LocationDetail";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import MobileFilterSheet from "../../shared/MobileFilterSheet";
@@ -642,7 +642,7 @@ export default function MiningModule() {
                         <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
                       )}
                     </div>
-                  ) : listLocations.map((entry, index) => {
+                  ) : listLocations.map((entry) => {
                     const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
                     const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
                     return (
@@ -651,8 +651,7 @@ export default function MiningModule() {
                           className={isMobileViewport && isSelected ? "mlist-inline-stack mlist-inline-stack--expanded" : undefined}
                         >
                           <LocationListItem
-                            rank={index + 1}
-                            tieGroupSize={recommendationTieGroupSize(entry, listLocations, buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials)}
+                            rank={getDisplayedLocationRank(entry, listLocations, buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials)}
                             entry={entry}
                             selectedMaterials={effectiveMaterialFilterKeys}
                             buildQueueMaterialKeys={activeBuildQueueMaterialKeys}

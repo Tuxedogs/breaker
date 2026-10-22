@@ -19,7 +19,6 @@ const RANKED_LOCATION_METHOD_ORDER = ["Hand", "Ship", "Vehicle"] as const;
 
 export function LocationListItem({
   rank,
-  tieGroupSize = 1,
   entry,
   selectedMaterials,
   buildQueueMaterialKeys,
@@ -33,8 +32,7 @@ export function LocationListItem({
   onSelect,
   onToggleStar,
 }: {
-  rank?: number;
-  tieGroupSize?: number;
+  rank?: { visualLabel: string; accessibleLabel: string; tooltip: string | null; tieGroupSize: number };
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
@@ -68,6 +66,7 @@ export function LocationListItem({
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
+  const rankTooltip = useMiningHoverTooltip(rank?.tooltip ?? "");
   const survey = useMemo(
     () => buildMiningLocationSurveyPresentation(
       getStaticLocationEnvironment(entry, staticMiningIndex),
@@ -95,19 +94,26 @@ export function LocationListItem({
     <div
       className={`mlist-item${collapsed ? " mlist-item--collapsed" : ""}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
       onClick={onSelect}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        if (rank?.tooltip) rankTooltip.triggerProps.onKeyDown(event);
+        handleKeyDown(event);
+      }}
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
+      aria-label={`${rank?.accessibleLabel ? `${rank.accessibleLabel}. ` : ""}${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
+      aria-describedby={rankTooltip.open ? rankTooltip.tooltipId : undefined}
+      onMouseEnter={rank?.tooltip ? rankTooltip.triggerProps.onMouseEnter : undefined}
+      onMouseLeave={rank?.tooltip ? rankTooltip.triggerProps.onMouseLeave : undefined}
+      onFocus={rank?.tooltip ? rankTooltip.triggerProps.onFocus : undefined}
+      onBlur={rank?.tooltip ? rankTooltip.triggerProps.onBlur : undefined}
     >
-      {rank !== undefined && (
+      {rank && (
         <span
-          className={`mlist-item-rank${tieGroupSize > 1 ? " mlist-item-rank--tied" : ""}`}
-          title={tieGroupSize > 1 ? `Tied modeled rank with ${tieGroupSize - 1} other location${tieGroupSize === 2 ? "" : "s"}. Stable order is used only to display the tie.` : undefined}
-          aria-label={tieGroupSize > 1 ? `Tied modeled rank ${rank}, shared by ${tieGroupSize} locations` : `Rank ${rank}`}
+          className={`mlist-item-rank${rank.tieGroupSize > 1 ? " mlist-item-rank--tied" : ""}`}
+          aria-hidden="true"
         >
-          {tieGroupSize > 1 ? `T-${rank}` : rank}
+          {rank.visualLabel}
         </span>
       )}
       <div className="mlist-item-thumb" aria-hidden="true">
@@ -161,6 +167,7 @@ export function LocationListItem({
         <MiningBookmarkIcon />
       </button>
       {bookmarkTooltip.tooltip}
+      {rankTooltip.tooltip}
     </div>
   );
 }
