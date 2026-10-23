@@ -153,7 +153,7 @@ test("uses route positions rather than model-score ties for a greedy coverage pl
   assert.deepEqual(displayed.map((entry) => entry.locationName), ["Alpha Ridge", "Charlie Ridge", "Bravo Ridge"]);
   assert.deepEqual(
     displayed.map((entry) => getDisplayedLocationRank(entry, displayed, requested, { routeOrdered: true }).visualLabel),
-    ["Route 1", "Route 2", "Route 3"],
+    ["R1", "R2", "R3"],
   );
   assert.equal(
     getDisplayedLocationRank(bravo, displayed, requested, { routeOrdered: true }).accessibleLabel,

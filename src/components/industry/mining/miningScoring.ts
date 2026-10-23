@@ -136,7 +136,9 @@ export function getDisplayedLocationRank(
   const fallbackRank = Math.max(index, 0) + 1;
   if (options.routeOrdered) {
     return {
-      visualLabel: `Route ${fallbackRank}`,
+      // The rank column is deliberately 22px wide; keep the visual token
+      // compact while the accessible label and tooltip retain the full meaning.
+      visualLabel: `R${fallbackRank}`,
       accessibleLabel: `Route position ${fallbackRank}`,
       tooltip: "Route order reflects the coverage plan, not a modeled score rank.",
       tieGroupSize: 1,
