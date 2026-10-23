@@ -32,7 +32,7 @@ export function LocationListItem({
   onSelect,
   onToggleStar,
 }: {
-  rank?: number;
+  rank?: { visualLabel: string; accessibleLabel: string; tooltip: string | null; tieGroupSize: number };
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
@@ -66,6 +66,7 @@ export function LocationListItem({
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
+  const rankTooltip = useMiningHoverTooltip(rank?.tooltip ?? "");
   const survey = useMemo(
     () => buildMiningLocationSurveyPresentation(
       getStaticLocationEnvironment(entry, staticMiningIndex),
@@ -93,13 +94,28 @@ export function LocationListItem({
     <div
       className={`mlist-item${collapsed ? " mlist-item--collapsed" : ""}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
       onClick={onSelect}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        if (rank?.tooltip) rankTooltip.triggerProps.onKeyDown(event);
+        handleKeyDown(event);
+      }}
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
+      aria-label={`${rank?.accessibleLabel ? `${rank.accessibleLabel}. ` : ""}${selected ? "Selected" : "Select"} ${locationDisplayName} mining location`}
+      aria-describedby={rankTooltip.open ? rankTooltip.tooltipId : undefined}
+      onMouseEnter={rank?.tooltip ? rankTooltip.triggerProps.onMouseEnter : undefined}
+      onMouseLeave={rank?.tooltip ? rankTooltip.triggerProps.onMouseLeave : undefined}
+      onFocus={rank?.tooltip ? rankTooltip.triggerProps.onFocus : undefined}
+      onBlur={rank?.tooltip ? rankTooltip.triggerProps.onBlur : undefined}
     >
-      {rank !== undefined && <span className="mlist-item-rank" aria-hidden="true">{rank}</span>}
+      {rank && (
+        <span
+          className={`mlist-item-rank${rank.tieGroupSize > 1 ? " mlist-item-rank--tied" : ""}`}
+          aria-hidden="true"
+        >
+          {rank.visualLabel}
+        </span>
+      )}
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (
           <img
@@ -122,12 +138,12 @@ export function LocationListItem({
           {showSystemBadge && !isLagrangeChildGroup && (
             <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
-          <span className="mlist-method-availability" aria-label="Source-backed mining method availability">
+          <span className="mlist-method-availability" aria-label="Source-backed mining method eligibility. These shares describe modeled source coverage, not ship equipment-specific fracture feasibility or guaranteed recoverable SCU.">
             {rankedMethods.length > 0 ? rankedMethods.map((item) => {
               const method = miningMethodBadge(item.method);
               const label = method?.label ?? item.method;
               return (
-                <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
+                <span className={`mlist-method-availability-item${method ? ` ${method.className}` : ""}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} modeled source share. This indicates method eligibility only; it does not verify equipped-head fracture feasibility, scanned-rock success, or recovered/refined SCU.`}>
                   <span>{label}</span><strong>{formatMiningProbability(item.share)}</strong>
                 </span>
               );
@@ -151,6 +167,7 @@ export function LocationListItem({
         <MiningBookmarkIcon />
       </button>
       {bookmarkTooltip.tooltip}
+      {rankTooltip.tooltip}
     </div>
   );
 }

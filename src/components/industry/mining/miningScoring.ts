@@ -87,6 +87,78 @@ export function compareLocationsForDemand(
 }
 
 /**
+ * A visible tie exists only when the evidence used by the active ordering is
+ * also identical. In particular, equal modeled scores do not override the
+ * coverage-first ordering used for queue demand.
+ */
+export function recommendationTieGroupSize(
+  entry: PublicLocationEntry,
+  locations: PublicLocationEntry[],
+  demandMaterials: RequiredMaterial[],
+): number {
+  return locations.filter((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials)).length;
+}
+
+function sameActiveRankingEvidence(
+  left: PublicLocationEntry,
+  right: PublicLocationEntry,
+  demandMaterials: RequiredMaterial[],
+): boolean {
+  if (demandMaterials.length > 0) {
+    const leftScore = recommendationDemandScore(left, demandMaterials);
+    const rightScore = recommendationDemandScore(right, demandMaterials);
+    return leftScore.covered === rightScore.covered &&
+      (leftScore.score ?? getLocationSortScore(left)) === (rightScore.score ?? getLocationSortScore(right));
+  }
+
+  return getLocationSortScore(left) === getLocationSortScore(right) &&
+    getMatchedDemandCount(left) === getMatchedDemandCount(right);
+}
+
+export type DisplayedLocationRank = {
+  visualLabel: string;
+  accessibleLabel: string;
+  tooltip: string | null;
+  tieGroupSize: number;
+};
+
+/**
+ * Convert the already-displayed stable order into competition ranks. A tie's
+ * rank is its first displayed position, so all members receive one label.
+ */
+export function getDisplayedLocationRank(
+  entry: PublicLocationEntry,
+  displayedLocations: PublicLocationEntry[],
+  demandMaterials: RequiredMaterial[],
+  options: { routeOrdered?: boolean } = {},
+): DisplayedLocationRank {
+  const index = displayedLocations.findIndex((candidate) => candidate.locationKey === entry.locationKey);
+  const fallbackRank = Math.max(index, 0) + 1;
+  if (options.routeOrdered) {
+    return {
+      // The rank column is deliberately 22px wide; keep the visual token
+      // compact while the accessible label and tooltip retain the full meaning.
+      visualLabel: `R${fallbackRank}`,
+      accessibleLabel: `Route position ${fallbackRank}`,
+      tooltip: "Route order reflects the coverage plan, not a modeled score rank.",
+      tieGroupSize: 1,
+    };
+  }
+  const tiedEntries = displayedLocations.filter((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials));
+  if (tiedEntries.length < 2) {
+    return { visualLabel: String(fallbackRank), accessibleLabel: `Rank ${fallbackRank}`, tooltip: null, tieGroupSize: 1 };
+  }
+  const sharedRank = Math.max(displayedLocations.findIndex((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials)), 0) + 1;
+  const accessibleLabel = `Tied modeled rank ${sharedRank}, shared by ${tiedEntries.length} locations`;
+  return {
+    visualLabel: `T-${sharedRank}`,
+    accessibleLabel,
+    tooltip: `${accessibleLabel}. Stable order only displays this tie.`,
+    tieGroupSize: tiedEntries.length,
+  };
+}
+
+/**
  * The coverage planner may show a score specific to its active demand.  Keep
  * the original recommendation score intact if no per-material recommendation
  * score exists instead of fabricating a zero.
