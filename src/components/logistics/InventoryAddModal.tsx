@@ -1,3 +1,4 @@
+import './inventory-add-modal.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createInventoryEntryDraft, useLogisticsStore } from '../../stores/logisticsStore';
 import { getActiveInventoryEntries, getInventoryUnitLabel, resolveInventoryUnitType } from '../../lib/logistics/inventory';
