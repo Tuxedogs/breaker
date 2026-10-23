@@ -375,7 +375,7 @@ export default function ComponentResultsBrowser({
       ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
       : compareRecipeBrowserRecords);
     return { groupedRecords: grouped };
-  }, [filteredRecords, records, savedOnly, search, serverPage]);
+  }, [filteredRecords, records, search, serverPage]);
 
   
   const pageLimit = serverPage?.limit ?? resultsPerPage;
@@ -385,7 +385,7 @@ export default function ComponentResultsBrowser({
   const pageStart = (visiblePage - 1) * pageLimit;
   const pageRecords = useMemo(
     () => serverPage ? groupedRecords : groupedRecords.slice(pageStart, pageStart + pageLimit),
-    [groupedRecords, pageLimit, pageStart, savedOnly, serverPage],
+    [groupedRecords, pageLimit, pageStart, serverPage],
   );
 
   useEffect(() => {

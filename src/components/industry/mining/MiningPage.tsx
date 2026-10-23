@@ -35,6 +35,7 @@ import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./minin
 import { useMiningLocations } from "./useMiningLocations";
 import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
+import { getDisplayedLocationRank } from "./miningScoring";
 import { LocationDetail } from "./LocationDetail";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 import MobileFilterSheet from "../../shared/MobileFilterSheet";
@@ -360,7 +361,6 @@ export default function MiningModule() {
     sidebarOnlyMaterials,
     buildQueueSelectionActive,
     coverageMode,
-    rankingMode,
     selectedLocationKey,
     staticMiningIndex,
     materials,
@@ -514,7 +514,7 @@ export default function MiningModule() {
             </span>
             <div className="mining-command-copy">
               <h1>Mining Intelligence</h1>
-              <p>Survey locations, compare material probability, plan the next extraction route.</p>
+              <p>Survey locations, compare modeled source opportunity, plan the next extraction route.</p>
             </div>
             {state.status === "loading" && <span className="mining-command-status" role="status">Refreshing recommendations…</span>}
             {state.status === "error" && <span className="mining-command-status mining-command-status--error" role="status">Could not refresh recommendations. Showing previous results.</span>}
@@ -642,7 +642,7 @@ export default function MiningModule() {
                         <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
                       )}
                     </div>
-                  ) : listLocations.map((entry, index) => {
+                  ) : listLocations.map((entry) => {
                     const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
                     const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
                     return (
@@ -651,7 +651,12 @@ export default function MiningModule() {
                           className={isMobileViewport && isSelected ? "mlist-inline-stack mlist-inline-stack--expanded" : undefined}
                         >
                           <LocationListItem
-                            rank={index + 1}
+                            rank={getDisplayedLocationRank(
+                              entry,
+                              listLocations,
+                              buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials,
+                              { routeOrdered: buildQueueSelectionActive && coveragePlan !== null && coverageMode !== "best-single" },
+                            )}
                             entry={entry}
                             selectedMaterials={effectiveMaterialFilterKeys}
                             buildQueueMaterialKeys={activeBuildQueueMaterialKeys}

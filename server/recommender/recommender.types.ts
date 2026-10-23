@@ -2,6 +2,7 @@ import type { ApiWarning } from "../shared/warnings.js";
 import type { MaterialIdentityResolver } from "../../src/lib/materialIdentity.js";
 
 export type MaterialUnitType = "unit" | "SCU" | "scu" | "cscu";
+export type MiningRankingMode = "quality" | "quantity" | "balanced";
 
 export interface RequirementInput {
   materialKey?: string;
@@ -26,6 +27,10 @@ export interface RecommendRequest {
   materialRequirements?: RequirementInput[];
   favoriteLocationIds?: string[];
   filters?: { showOnlyStarred?: boolean };
+  /** Optional eligibility gate. Values are normalized to ship, ground, hand, or harvestable. */
+  allowedMiningMethods?: string[];
+  /** Optional server-side weighting of evidenced quality versus yield signals. */
+  rankingMode?: MiningRankingMode;
 }
 
 export interface AggregatedRequirement {
@@ -196,6 +201,12 @@ export interface ScoreContributionDiagnostic {
   qualityFit: number;
   requirementWeight: number;
   finalContribution: number;
+  /**
+   * Explicit ranking modes expose this normalized, modeled route score to the
+   * formatter. It is not a physical probability; the source signals retain
+   * their original probability and threshold fields separately.
+   */
+  routeTargetabilityScore?: number;
   compositionMissing: boolean;
   thresholdDataMissing: boolean;
   sourceResolverPath?: string;
