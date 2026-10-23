@@ -651,7 +651,12 @@ export default function MiningModule() {
                           className={isMobileViewport && isSelected ? "mlist-inline-stack mlist-inline-stack--expanded" : undefined}
                         >
                           <LocationListItem
-                            rank={getDisplayedLocationRank(entry, listLocations, buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials)}
+                            rank={getDisplayedLocationRank(
+                              entry,
+                              listLocations,
+                              buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials,
+                              { routeOrdered: buildQueueSelectionActive && coveragePlan !== null && coverageMode !== "best-single" },
+                            )}
                             entry={entry}
                             selectedMaterials={effectiveMaterialFilterKeys}
                             buildQueueMaterialKeys={activeBuildQueueMaterialKeys}

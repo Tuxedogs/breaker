@@ -139,3 +139,24 @@ test("uses competition ranks for a three-way tie and its non-tied successor", ()
   assert.deepEqual(ordered.map((entry) => getDisplayedLocationRank(entry, ordered, []).visualLabel), ["T-1", "T-1", "T-1", "4"]);
   assert.equal(getDisplayedLocationRank(delta, ordered, []).accessibleLabel, "Rank 4");
 });
+
+test("uses route positions rather than model-score ties for a greedy coverage plan", () => {
+  const requested = [demand("agricium"), demand("bexalite")];
+  const alpha = recommendation("Alpha Ridge", { agricium: 80 }, ["agricium"]);
+  const bravo = recommendation("Bravo Ridge", { agricium: 80 }, ["agricium"]);
+  const charlie = recommendation("Charlie Ridge", { bexalite: 70 }, ["bexalite"]);
+  const scoreOrdered = [alpha, bravo, charlie].sort((left, right) => compareLocationsForDemand(left, right, requested));
+  const eligible = new Map(scoreOrdered.map((entry) => [entry.locationKey, entry.requiredMaterials!.map((material) => material.materialKey!)]));
+  const plan = buildCoveragePlan({ mode: "complete-set", demandMaterials: requested, locations: scoreOrdered, locationMaterialKeysByLocationKey: eligible });
+  const displayed = plan.locations.map((location) => location.entry);
+
+  assert.deepEqual(displayed.map((entry) => entry.locationName), ["Alpha Ridge", "Charlie Ridge", "Bravo Ridge"]);
+  assert.deepEqual(
+    displayed.map((entry) => getDisplayedLocationRank(entry, displayed, requested, { routeOrdered: true }).visualLabel),
+    ["Route 1", "Route 2", "Route 3"],
+  );
+  assert.equal(
+    getDisplayedLocationRank(bravo, displayed, requested, { routeOrdered: true }).accessibleLabel,
+    "Route position 3",
+  );
+});

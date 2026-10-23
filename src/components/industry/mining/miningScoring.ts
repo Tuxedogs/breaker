@@ -130,9 +130,18 @@ export function getDisplayedLocationRank(
   entry: PublicLocationEntry,
   displayedLocations: PublicLocationEntry[],
   demandMaterials: RequiredMaterial[],
+  options: { routeOrdered?: boolean } = {},
 ): DisplayedLocationRank {
   const index = displayedLocations.findIndex((candidate) => candidate.locationKey === entry.locationKey);
   const fallbackRank = Math.max(index, 0) + 1;
+  if (options.routeOrdered) {
+    return {
+      visualLabel: `Route ${fallbackRank}`,
+      accessibleLabel: `Route position ${fallbackRank}`,
+      tooltip: "Route order reflects the coverage plan, not a modeled score rank.",
+      tieGroupSize: 1,
+    };
+  }
   const tiedEntries = displayedLocations.filter((candidate) => sameActiveRankingEvidence(entry, candidate, demandMaterials));
   if (tiedEntries.length < 2) {
     return { visualLabel: String(fallbackRank), accessibleLabel: `Rank ${fallbackRank}`, tooltip: null, tieGroupSize: 1 };
