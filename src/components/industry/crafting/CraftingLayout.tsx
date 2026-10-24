@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { getComponentCardBrowserPage, type ComponentCardBrowserPage } from "@/lib/componentCardIndexApi";
+import { getComponentCardBrowserPage, getComponentCardIndex, type ComponentCardBrowserPage } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
 import CommandHeader from "@/components/shared/CommandHeader";
 import "./recipe-browser.css";
@@ -15,12 +15,27 @@ export default function CraftingLayout() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const isBrowserRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting";
+  const isDesignPreviewRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting/design-preview";
   const hasSelectedDetail = isBrowserRoute && Boolean(searchParams.get("preview"));
   const browserRequestParams = new URLSearchParams(searchParams);
   browserRequestParams.delete("preview");
   const browserRequestKey = browserRequestParams.toString();
 
   useEffect(() => {
+    if (isDesignPreviewRoute) {
+      let cancelled = false;
+      getComponentCardIndex().then((index) => {
+        if (cancelled) return;
+        setComponentCards(index.records);
+        setComponentCardFacets(index.facets);
+        setLoading(false);
+      }).catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : "Failed to load crafting browser");
+        setLoading(false);
+      });
+      return () => { cancelled = true; };
+    }
     if (!isBrowserRoute) return;
     const controller = new AbortController();
     queueMicrotask(() => {
@@ -53,7 +68,7 @@ export default function CraftingLayout() {
         setLoading(false);
       });
     return () => controller.abort();
-  }, [browserRequestKey, isBrowserRoute]);
+  }, [browserRequestKey, isBrowserRoute, isDesignPreviewRoute]);
 
   const contextValue = useMemo(
     () => ({ componentCards, componentCardFacets, loading, error, browserPage }),

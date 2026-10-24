@@ -53,7 +53,7 @@ test.describe("Crafting coded design preview", () => {
       { name: "1280x720", width: 1280, height: 720 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto(previewPath, { waitUntil: "domcontentloaded" });
+      await page.goto(`${previewPath}?search=AD5B`, { waitUntil: "domcontentloaded" });
       await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
       await expect(page.getByTestId("crafting-design-preview")).toBeVisible();
       await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
@@ -126,7 +126,7 @@ test.describe("Crafting coded design preview", () => {
   test("keeps prototype controls interactive and leaves production routing intact", async ({ page }) => {
     const failures = installFailureGuards(page);
     await page.setViewportSize({ width: 1680, height: 945 });
-    await page.goto(previewPath, { waitUntil: "domcontentloaded" });
+    await page.goto(`${previewPath}?search=AD5B`, { waitUntil: "domcontentloaded" });
     await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
     await page.getByRole("button", { name: "Clear all" }).click();
     await expect(page).toHaveURL(previewPath);

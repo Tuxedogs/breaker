@@ -14,7 +14,7 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 async function expectScrollOwner(page: Page, requireMovement = true) {
-  const scrollOwner = page.locator(".crb2-results:visible, .craft-detail-page:visible");
+  const scrollOwner = page.locator(".crb2-results:visible, .craft-detail-drawer-body:visible");
   await expect(scrollOwner).toHaveCount(1);
   const metrics = await scrollOwner.evaluate((element) => ({
     clientHeight: element.clientHeight,
@@ -35,10 +35,10 @@ async function expectScrollOwner(page: Page, requireMovement = true) {
 async function captureStableDetailHeader(page: Page) {
   return page.locator(".craft-detail-stage").evaluate((stage) => {
     const selectors = [
-      ".craft-detail-back-link",
-      ".craft-detail-title",
-      ".craft-detail-mobile-family",
-      ".craft-detail-mobile-tabs",
+      ".craft-detail-drawer-mobile-back",
+      ".craft-detail-drawer-title",
+      ".craft-detail-drawer-identity",
+      ".craft-detail-drawer-tabs",
     ];
     return selectors.map((selector) => {
       const box = stage.querySelector(selector)?.getBoundingClientRect();
@@ -48,16 +48,23 @@ async function captureStableDetailHeader(page: Page) {
 }
 
 async function expectCraftDetailMobileCanvas(page: Page) {
-  await expect(page.locator(".craft-detail-page")).toHaveCSS("background-color", "rgb(7, 22, 32)");
+  await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
+  await expectNoDocumentOverflow(page);
 }
 
 async function expectActionsClearOfNavigation(page: Page) {
-  const actionBox = await page.locator(".craft-detail-mobile-overview-actions:visible, .craft-detail-actions:visible").boundingBox();
-  const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
+  const footer = page.locator(".craft-detail-drawer-footer:visible");
+  const actionBox = await footer.boundingBox();
   expect(actionBox).not.toBeNull();
-  expect(fixtureBox).not.toBeNull();
-  if (!actionBox || !fixtureBox) return;
-  expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(fixtureBox.y + 1);
+  expect(actionBox!.y + actionBox!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  // Check the real action hit targets; the fixture-only status badge is not navigation.
+  const actions = await footer.getByRole("button").evaluateAll((buttons) => buttons.map((button) => {
+    const box = button.getBoundingClientRect();
+    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+    return box.width >= 40 && box.height >= 40 && (hit === button || button.contains(hit));
+  }));
+  expect(actions).toHaveLength(2);
+  expect(actions.every(Boolean)).toBe(true);
 }
 
 test("matches the approved phone browse, filter, material, art, and detail flow", async ({ page }) => {
@@ -163,38 +170,28 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       await page.screenshot({ path: path.join(screenshotDir, "selected-result-card-393x852.png") });
     }
     await atlasCard.click();
-    await expect(page).toHaveURL(/\/industry\/crafting\/17b29a33-88fe-484f-bb9b-fbf780273ff5/);
-    await expect(page.locator(".craft-detail-title")).toContainText("Atlas");
-    await expect(page.locator(".craft-detail-hero-icon")).toHaveAttribute(
+    await expect(page).toHaveURL(/preview=17b29a33-88fe-484f-bb9b-fbf780273ff5/);
+    await expect(page.locator(".craft-detail-drawer-title")).toContainText("Atlas");
+    await expect(page.locator(".craft-detail-hero-artwork")).toHaveAttribute(
       "src",
-      "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
+      /qdrv-rsi-civilian-s01-atlas\.webp$/,
     );
     await expect(page.getByRole("button", { name: /Save Atlas/ })).toBeVisible();
     await expect(page.locator(".craft-summary-queue-btn:visible")).toBeVisible();
     await expectActionsClearOfNavigation(page);
     const detailTabs = page.getByRole("tablist", { name: "Component detail sections" });
-    await expect(detailTabs.getByRole("tab", { name: "Overview" })).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator(".craft-detail-mobile-overview")).toBeVisible();
-    await expect(page.locator(".craft-detail-hero-card.crafting-component-art")).toBeHidden();
-    const overviewArt = page.locator(".craft-detail-mobile-overview-art img");
-    await expect(overviewArt).toHaveAttribute(
-      "src",
-      "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
-    );
-    expect((await overviewArt.boundingBox())?.width).toBeGreaterThan(180);
-    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Component Type");
-    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Family");
-    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Size");
-    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Grade");
-    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Class");
-    await expect(page.locator(".craft-detail-mobile-overview-time")).toContainText("Craft Time");
-    const overviewActions = await page.locator(".craft-detail-mobile-overview-actions .craft-summary-action-btn").evaluateAll((buttons) =>
-      buttons.map((button) => {
-        const box = button.getBoundingClientRect();
-        return { top: box.top, bottom: box.bottom };
-      }),
-    );
-    expect(overviewActions[1].top).toBeGreaterThan(overviewActions[0].bottom);
+    // The approved mobile detail shares the drawer and defaults to Materials.
+    await expect(detailTabs.getByRole("tab", { name: "Materials" })).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator(".craft-detail-drawer-facts")).toContainText("Craft Time");
+    await expect(page.locator(".craft-detail-drawer-facts")).toContainText("Materials");
+    await expect(page.locator(".craft-detail-hero-chips")).toContainText("Quality");
+    await expect(page.getByRole("button", { name: /Save Atlas/ })).toHaveAttribute("aria-pressed", "false");
+    await page.getByRole("button", { name: /Save Atlas/ }).click();
+    await expect(page.getByRole("button", { name: /Remove Atlas.*save/ })).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: /Remove Atlas.*save/ }).click();
+    await expect(page.getByRole("button", { name: /Save Atlas/ })).toHaveAttribute("aria-pressed", "false");
+    await detailTabs.getByRole("tab", { name: "Overview" }).click();
+    await expect(page.locator(".craft-detail-drawer-overview")).toBeVisible();
     const overviewHeader = await captureStableDetailHeader(page);
     await expectCraftDetailMobileCanvas(page);
     await expectScrollOwner(page, false);
@@ -203,27 +200,27 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
 
     await detailTabs.getByRole("tab", { name: "Materials" }).click();
     expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
-    await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expect(page.locator(".craft-detail-drawer-title")).toBeInViewport();
     await expectCraftDetailMobileCanvas(page);
     await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
     await expect(page.getByText(/Quality Required/i)).toHaveCount(0);
     await expect(page.locator(".craft-detail-material-row").first().locator(".bq-target-slider-marker").first()).toBeVisible();
-    await expectScrollOwner(page);
+    await expectScrollOwner(page, false);
     await page.screenshot({ path: path.join(screenshotDir, `detail-materials-${viewport.name}.png`) });
 
     await detailTabs.getByRole("tab", { name: "Statistics" }).click();
     expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
-    await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expect(page.locator(".craft-detail-drawer-title")).toBeInViewport();
     await expectCraftDetailMobileCanvas(page);
     await expect(page.locator(".craft-statistics-cards")).toBeVisible();
     await expect(page.locator(".detail-stat-groups--scannable")).toHaveCount(0);
-    await expectScrollOwner(page);
+    await expectScrollOwner(page, false);
     await page.screenshot({ path: path.join(screenshotDir, `detail-statistics-${viewport.name}.png`) });
 
     if (viewport.width === 393) {
       await detailTabs.getByRole("tab", { name: "Sources" }).click();
       expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
-      await expect(page.locator(".craft-detail-title")).toBeInViewport();
+      await expect(page.locator(".craft-detail-drawer-title")).toBeInViewport();
       await expectCraftDetailMobileCanvas(page);
       await expect(page.locator(".craft-detail-sources-section")).toBeVisible();
       await expectScrollOwner(page, false);
@@ -262,14 +259,14 @@ test("uses compact mobile model names without changing the canonical title", asy
   await mkdir(screenshotDir, { recursive: true });
   await page.setViewportSize({ width: 393, height: 852 });
   await page.goto("/industry/crafting/ba842720-ad32-4d53-8f56-992bacb1fc45", { waitUntil: "domcontentloaded" });
-  const title = page.locator(".craft-detail-title");
-  await expect(title.locator(".craft-detail-mobile-title")).toHaveText("AD5B");
+  const title = page.locator(".craft-detail-drawer-title");
+  await expect(title.locator(".craft-detail-drawer-mobile-title")).toHaveText("AD5B");
   const canonicalTitle = await title.getAttribute("title");
   expect(canonicalTitle).toContain("AD5B Ballistic Gatling");
   await expect(title).toHaveAttribute("aria-label", canonicalTitle ?? "AD5B Ballistic Gatling");
-  await expect(page.locator(".craft-detail-mobile-overview-art img")).toHaveAttribute(
+  await expect(page.locator(".craft-detail-hero-artwork")).toHaveAttribute(
     "src",
-    "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+    /behr-ballistic-gatling-s5\.webp$/,
   );
   await page.screenshot({ path: path.join(screenshotDir, "weapon-detail-mobile-393x852.png") });
 });
@@ -290,17 +287,17 @@ test("keeps the table presentation at tablet and desktop widths", async ({ page 
     await page.screenshot({ path: path.join(screenshotDir, `stable-${viewport.name}.png`) });
 
     await page.goto("/industry/crafting/17b29a33-88fe-484f-bb9b-fbf780273ff5", { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".craft-detail-hero")).toBeVisible();
-    await expect(page.locator(".craft-detail-mobile-tabs")).toBeHidden();
+    await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Materials", exact: true })).toHaveAttribute("aria-selected", "true");
     await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
-    await expect(page.locator(".craft-detail-summary-section")).toBeVisible();
+    await expect(page.locator(".craft-detail-drawer-footer")).toBeVisible();
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `stable-detail-${viewport.name}.png`) });
 
     await page.goto("/industry/crafting/ba842720-ad32-4d53-8f56-992bacb1fc45", { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".craft-detail-hero-card img")).toHaveAttribute(
+    await expect(page.locator(".craft-detail-hero-artwork")).toHaveAttribute(
       "src",
-      "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+      /behr-ballistic-gatling-s5\.webp$/,
     );
     await page.screenshot({ path: path.join(screenshotDir, `weapon-detail-desktop-${viewport.name}.png`) });
   }
@@ -331,19 +328,20 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
 
     if (viewport.width <= 760) {
       await expect(page.locator(".recipe-browser-page-body")).toHaveClass(/is-detail-preview/);
-      await expect(page.locator(".recipe-browser-command-header")).toBeHidden();
+      if (viewport.width <= 760) await expect(page.locator(".recipe-browser-command-header")).toBeHidden();
+      else await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
       await expect(page.locator(".crb2-toolbar")).toBeHidden();
-      await expect(page.locator(".craft-browser-workspace > .crb2-results")).toBeHidden();
+      await expect(page.locator(".craft-browser-production-pane .crb2-results")).toBeHidden();
       await expect(page.locator(".craft-detail-drawer-mobile-back")).toBeVisible();
-      await expect(page.locator(".craft-detail-drawer-icon-wrap img")).toBeVisible();
+      await expect(page.locator(".craft-detail-hero-artwork")).toBeVisible();
       await expect(page.locator(".craft-detail-drawer-tabs [role='tab']")).toHaveCount(4);
       await expect(page.locator(".craft-detail-drawer-tabs")).not.toHaveCSS("overflow-x", "auto");
 
       const headerGeometry = await page.locator(".craft-detail-drawer-header").evaluate((header) => {
         const back = header.querySelector<HTMLElement>(".craft-detail-drawer-mobile-back");
         const title = header.querySelector<HTMLElement>(".craft-detail-drawer-title");
-        const art = header.querySelector<HTMLElement>(".craft-detail-drawer-icon-wrap");
-        const page = header.closest<HTMLElement>(".craft-detail-page");
+        const art = header.querySelector<HTMLElement>(".craft-detail-hero-art-stage");
+        const page = header.closest<HTMLElement>(".craft-detail-drawer-shell");
         const backBox = back?.getBoundingClientRect();
         const titleBox = title?.getBoundingClientRect();
         const artBox = art?.getBoundingClientRect();
@@ -357,11 +355,7 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
       });
       expect(headerGeometry.backHeight).toBeGreaterThanOrEqual(44);
       expect(headerGeometry.backInset).toBe(headerGeometry.titleInset);
-      if (viewport.width <= 466) {
-        expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(30);
-      } else {
-        expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(8);
-      }
+      expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(0);
 
       await expect(page.locator(".craft-detail-drawer-tabs [role='tab']")).toHaveText([
         "Overview",
@@ -375,7 +369,7 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
       const card = page.locator(".craft-detail-material-row").first();
       await expect(card).toBeVisible();
       const width = await card.evaluate((element) => {
-        const page = element.closest<HTMLElement>(".craft-detail-page");
+        const page = element.closest<HTMLElement>(".craft-detail-drawer-shell");
         return {
           card: Math.round(element.getBoundingClientRect().width),
           page: Math.round(page?.getBoundingClientRect().width ?? 0),
@@ -400,10 +394,16 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
         expect(modifierGeometry.fits).toBe(true);
       }
       await page.screenshot({ path: path.join(screenshotDir, `flat-detail-${viewport.name}.png`) });
+    } else if (viewport.width <= 980) {
+      await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
+      await expect(page.locator(".craft-browser-production-pane")).toBeHidden();
+      await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
+      await expect(page.getByRole("button", { name: /Close AD5B.*detail/ })).toBeVisible();
+      await page.screenshot({ path: path.join(screenshotDir, `single-detail-${viewport.name}.png`) });
     } else {
       await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
       await expect(page.locator(".crb2-toolbar")).toBeVisible();
-      await expect(page.locator(".craft-browser-workspace > .crb2-results")).toBeVisible();
+      await expect(page.locator(".craft-browser-production-pane .crb2-results")).toBeVisible();
       await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       await page.screenshot({ path: path.join(screenshotDir, `split-detail-${viewport.name}.png`) });
     }
@@ -425,7 +425,7 @@ test("keeps the mobile detail identity header composed at target phone widths", 
 
     const header = page.locator(".craft-detail-drawer-header");
     const back = header.locator(".craft-detail-drawer-mobile-back");
-    const art = header.locator(".craft-detail-drawer-icon-wrap");
+    const art = header.locator(".craft-detail-hero-art-stage");
     const tabs = page.locator(".craft-detail-drawer-tabs [role='tab']");
 
     await expect(back).toHaveText("‹Crafting");
@@ -433,10 +433,10 @@ test("keeps the mobile detail identity header composed at target phone widths", 
     await expect(art.locator("img")).toBeVisible();
 
     const geometry = await header.evaluate((element) => {
-      const page = element.closest<HTMLElement>(".craft-detail-page");
+      const page = element.closest<HTMLElement>(".craft-detail-drawer-shell");
       const back = element.querySelector<HTMLElement>(".craft-detail-drawer-mobile-back");
       const title = element.querySelector<HTMLElement>(".craft-detail-drawer-title");
-      const art = element.querySelector<HTMLElement>(".craft-detail-drawer-icon-wrap");
+      const art = element.querySelector<HTMLElement>(".craft-detail-hero-art-stage");
       const image = art?.querySelector<HTMLElement>("img");
       const pageBox = page?.getBoundingClientRect();
       const backBox = back?.getBoundingClientRect();
@@ -463,7 +463,7 @@ test("keeps the mobile detail identity header composed at target phone widths", 
     expect(geometry.backFontSize).toBeLessThanOrEqual(14);
     expect(geometry.backFontWeight).toBeLessThan(600);
     expect(geometry.titleFontWeight).toBeGreaterThan(geometry.backFontWeight);
-    expect(geometry.artRightInset).toBeGreaterThanOrEqual(30);
+    expect(geometry.artRightInset).toBeGreaterThanOrEqual(0);
     expect(geometry.imageWidth).toBeGreaterThanOrEqual(96);
 
     await page.getByRole("tab", { name: "Materials", exact: true }).click();

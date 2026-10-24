@@ -1,0 +1,164 @@
+{
+  "baseCommit": "6f904d701bc9fffb82d6af91c74c6c75250b553a",
+  "branch": "codex/beta-queue-crafting-acceptance",
+  "date": "2026-10-23",
+  "sourceFiles": [
+    {
+      "path": "playwright.beta-review.config.ts",
+      "sha256": "2e452c9c9befea0e4459ab44fc538e2c6f799ceb4ef3bdf10d2f4a158630c7f6"
+    },
+    {
+      "path": "playwright.inventory-add-modal.config.ts",
+      "sha256": "ddf3253163d17e532c38bb089a948d904c3514cc56ff7c223c7b0feb86f3cda9"
+    },
+    {
+      "path": "src/components/industry/crafting/components/CraftingBrowserWorkspace.tsx",
+      "sha256": "266fc1456228f4f20ab5465dd443af1a1e373f9efeed042292496e910a2c1867"
+    },
+    {
+      "path": "src/components/industry/crafting/CraftingLayout.tsx",
+      "sha256": "81c198fa2265f183915e8bebb409570c71becf1816c11d10a48cfa5dba122221"
+    },
+    {
+      "path": "src/components/industry/crafting/CraftingPage.tsx",
+      "sha256": "c0c66c741c244c7da6d72033f393fa39967783e5132250fee2cc0161763da41e"
+    },
+    {
+      "path": "src/components/logistics/build-queue.css",
+      "sha256": "527d7e6833b337cbae3776a55faaec6e8b6f2facf20b7cb7a856dc8732d2e3da"
+    },
+    {
+      "path": "src/components/logistics/componentStatGroupIcons.ts",
+      "sha256": "162f53d09160e8d387316797af3fe9fcdc94b36f1160e5e965acbc6c77179f97"
+    },
+    {
+      "path": "src/components/logistics/InventoryAddModal.tsx",
+      "sha256": "e1d1d054de4260b6653199f34e56d012747fe2acabd610743e4a3b43d825a3a2"
+    },
+    {
+      "path": "src/components/shared/craft-statistics-cards.css",
+      "sha256": "947e1d222ba9fb9a721445efd5d6da7f682600c49b5faa1addeb6ee9d2b2816d"
+    },
+    {
+      "path": "src/dev/fixtures/buildQueue/index.ts",
+      "sha256": "372cb683667f92b95e29d9be2d5245c7eb1936187df69466f3a2187f4f7ac5db"
+    },
+    {
+      "path": "src/dev/mocks/handlers.ts",
+      "sha256": "f4ec51132a59a6d5f8af95f3b9a34512055e920ad60749ef58b3036bda34f6a3"
+    },
+    {
+      "path": "src/lib/componentCardIndexApi.ts",
+      "sha256": "bc827fa81e7f7db122283662f3b5d59041c5d1d1f28f395916a3a9b51b7efec2"
+    },
+    {
+      "path": "src/lib/componentCatalog.test.ts",
+      "sha256": "aff54f76c51fa2f8cc42482660ba8cf498ecece0023cc8a68a2992a261501911"
+    },
+    {
+      "path": "src/lib/fitting/fittingComponentPersistentStorage.ts",
+      "sha256": "ca74179c7b17b11953958900ce3108aae38576d6525831d3436b165fdfeaf673"
+    },
+    {
+      "path": "tests/ui/build-queue-inventory-workflow.spec.ts",
+      "sha256": "eb67d9c1dd6c145f9843a108b547666fdf346fb844ae9ee9fb86a8b941565299"
+    },
+    {
+      "path": "tests/ui/build-queue-stats.spec.ts",
+      "sha256": "2a8ecede8584a1868de42f56cb99eff0a35fb889b1f2dc41a96673d2d800c3f3"
+    },
+    {
+      "path": "tests/ui/crafting-browser-detail.spec.ts",
+      "sha256": "29e8221fc98975387edb5c9b559c0c971906ccdc2bfb46bfa482b35034570a98"
+    },
+    {
+      "path": "tests/ui/crafting-design-preview.spec.ts",
+      "sha256": "fb790e8fe87f8f88e956d59e16850055c5bea30df72b99182407d06c9ba45433"
+    },
+    {
+      "path": "tests/ui/crafting-mobile.spec.ts",
+      "sha256": "b6dd0fb00b5f0c5826675a506ffe6b69de7cd6aaaa76b18b8d934396ae45bb87"
+    }
+  ],
+  "sourceDrift": 0,
+  "buildAndLint": {
+    "lint": 0,
+    "build": 0
+  },
+  "domainGates": {
+    "crafting": 0,
+    "api": 0,
+    "content": 0,
+    "lint": 0,
+    "mining": 0,
+    "fitting": 0
+  },
+  "unitPassed": {
+    "Mining": 69,
+    "Crafting": 68,
+    "Fitting": 134
+  },
+  "ui": [
+    {
+      "Name": "final-inventory",
+      "Config": "playwright.inventory.config.ts",
+      "ExitCode": 0,
+      "Passed": 3,
+      "Failed": 0,
+      "Skipped": 0,
+      "Flaky": 0,
+      "DurationMs": 41625.354999999996
+    },
+    {
+      "Name": "final-inventory-add",
+      "Config": "playwright.inventory-add-modal.config.ts",
+      "ExitCode": 0,
+      "Passed": 1,
+      "Failed": 0,
+      "Skipped": 0,
+      "Flaky": 0,
+      "DurationMs": 30399.248
+    },
+    {
+      "Name": "final-mining-ui",
+      "Config": "playwright.mining.config.ts",
+      "ExitCode": 0,
+      "Passed": 2,
+      "Failed": 0,
+      "Skipped": 0,
+      "Flaky": 0,
+      "DurationMs": 38616.976
+    },
+    {
+      "Name": "final-crafting-ui",
+      "Config": "playwright.crafting.config.ts",
+      "ExitCode": 0,
+      "Passed": 26,
+      "Failed": 0,
+      "Skipped": 0,
+      "Flaky": 0,
+      "DurationMs": 259696.416
+    },
+    {
+      "Name": "final-beta",
+      "Config": "playwright.beta-review.config.ts",
+      "ExitCode": 0,
+      "Passed": 10,
+      "Failed": 0,
+      "Skipped": 0,
+      "Flaky": 0,
+      "DurationMs": 51745.152
+    }
+  ],
+  "buildQueue": {
+    "command": "npm run ui:build-queue",
+    "passed": 16,
+    "exitCode": 0,
+    "duration": "2.2m",
+    "skipped": 0,
+    "failed": 0
+  },
+  "externalBlocker": "Authorized disposable-account live backend persistence round trip unavailable; no production user data used",
+  "recommendation": "GO local client acceptance; NO-GO beta promotion",
+  "finalFormatting": "Removed surplus EOF blank line from new workflow spec after validation; executable code unchanged."
+}

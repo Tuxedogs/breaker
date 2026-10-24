@@ -4050,6 +4050,7 @@
     min-height: 44px;
     padding: 0;
     display: grid;
+    grid-template-rows: 17px 14px 11px;
     place-items: center;
     border: 1px solid rgba(65, 132, 160, 0.22);
     border-radius: 10px;
@@ -4078,6 +4079,26 @@
     line-height: 1;
     font-weight: 800;
     font-variant-numeric: tabular-nums;
+  }
+
+  .bq-queue-pill-name,
+  .bq-queue-pill-state {
+    display: block;
+    min-width: 0;
+    max-width: calc(100% - 8px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bq-queue-pill-name {
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  .bq-queue-pill-state {
+    font-size: 9px;
+    line-height: 11px;
   }
 
   .bq-queue-pill-dot {
@@ -8796,15 +8817,15 @@
 .bq-page .bq-mat-row--planning .bq-mat-required { grid-column: 2; }
 .bq-page .bq-mat-row--planning .bq-target-editor--stacked {
   display: grid;
-  grid-column: 3 / 5;
+  grid-column: 3 / -1;
   grid-row: 1;
-  grid-template-columns: 145px minmax(300px, 1fr);
+  grid-template-columns: 100px minmax(0, 1fr);
   grid-template-rows: 1fr;
   align-items: center;
-  gap: 28px;
-  width: calc(100% - 72px);
+  gap: 16px;
+  width: 100%;
 }
-.bq-page .bq-mat-row--planning .bq-target-editor--stacked > .bq-target-quality { width: 145px; }
+.bq-page .bq-mat-row--planning .bq-target-editor--stacked > .bq-target-quality { width: 100px; }
 .bq-page .bq-mat-row--planning .bq-target-editor--stacked > .bq-target-slider-shell { width: 100%; }
 .bq-page .bq-mat-row--planning .bq-target-cell {
   position: relative;
@@ -9994,13 +10015,23 @@
 .bq-page .bq-item--target-workspace .bq-mat-row,
 .bq-page .bq-item--target-workspace .bq-mat-row--mobile-card {
   display: grid;
-  grid-template-columns: minmax(220px, 0.9fr) minmax(240px, 1.4fr) 84px minmax(92px, 0.7fr);
+  grid-template-columns: minmax(220px, 0.9fr) minmax(240px, 1.4fr) max-content minmax(92px, 0.7fr);
   grid-template-rows: auto auto;
   gap: 6px 12px;
   align-items: center;
   min-height: 0;
   padding: 7px 10px 5px;
 }
+
+/* Planning has no inventory action column; give its editable slider the remaining row width. */
+.bq-page .bq-item--target-workspace .bq-mat-row.bq-mat-row--planning {
+  grid-template-columns: minmax(180px, 0.9fr) minmax(80px, 0.35fr) minmax(0, 1.75fr);
+  padding-bottom: 29px;
+}
+
+.bq-page .bq-mat-row--planning .bq-target-slider-marker span { top: 12px; }
+.bq-page .bq-mat-row--planning .bq-target-slider-marker:nth-child(3n + 2) span { top: 24px; }
+.bq-page .bq-mat-row--planning .bq-target-slider-marker:nth-child(3n) span { top: 36px; }
 
 .bq-page .bq-item--target-workspace .bq-mat-row > .bq-mat-card-head {
   display: contents;
@@ -10133,13 +10164,13 @@
   display: contents;
 }
 
-.bq-page .bq-item--target-workspace .bq-mat-card-head .bq-target-editor {
+.bq-page .bq-item--target-workspace .bq-mat-card-head .bq-target-editor--input {
   grid-column: 3;
   grid-row: 1;
   align-self: center;
   justify-self: end;
-  width: auto;
-  max-width: 84px;
+  width: max-content;
+  max-width: none;
 }
 
 .bq-page .bq-item--target-workspace .bq-target-editor-label {
@@ -10679,7 +10710,7 @@
 
   .bq-page .bq-item--target-workspace .bq-mat-row,
   .bq-page .bq-item--target-workspace .bq-mat-row--mobile-card {
-    grid-template-columns: minmax(200px, 0.9fr) minmax(180px, 1fr) 74px auto;
+    grid-template-columns: minmax(200px, 0.9fr) minmax(180px, 1fr) max-content auto;
   }
 }
 
@@ -10763,6 +10794,18 @@
     grid-row: 3;
     justify-self: start;
     max-width: 84px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-row.bq-mat-row--planning {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 10px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-card-head .bq-target-editor--stacked {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    width: 100%;
+    max-width: none;
   }
 
   .bq-page .bq-item--target-workspace .bq-mat-allocation-summary {

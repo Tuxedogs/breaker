@@ -29,6 +29,8 @@ import toolOutputIcon from "@/assets/icons/component-stat-icons/19-tool-output.w
 const STAT_GROUP_ICONS: Record<string, string> = {
   additional: additionalIcon,
   ammunition: ammunitionIcon,
+  firingammunition: ammunitionIcon,
+  firingandammunition: ammunitionIcon,
   ballisticsanddamage: ballisticsDamageIcon,
   ballisticsdamage: ballisticsDamageIcon,
   ballistics: projectileIcon,

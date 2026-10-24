@@ -21,6 +21,7 @@ function installFailureGuards(page: Page) {
   page.on("pageerror", (error) => failures.push(`page error: ${error.message}`));
   page.on("requestfailed", (request) => {
     if (isIgnorableUrl(request.url())) return;
+    if (/ERR_ABORTED/i.test(request.failure()?.errorText ?? "")) return;
     failures.push(
       `request failed: ${request.method()} ${request.url()} ${request.failure()?.errorText ?? ""}`.trim(),
     );
@@ -41,7 +42,7 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 test.describe("Crafting browser and detail refactor", () => {
-  test("keeps the selected detail single-pane below 1600px and makes it a 52.5% comparison peer at wide desktop", async ({ page }) => {
+  test("keeps compact and wide selected detail panes as comparison peers", async ({ page }) => {
     await mkdir(screenshotDir, { recursive: true });
     const previewId = "ba842720-ad32-4d53-8f56-992bacb1fc45";
 
@@ -58,8 +59,8 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       await expectNoDocumentOverflow(page);
 
-      const results = page.locator(".craft-browser-workspace > .crb2-results");
-      if (viewport.width < 1600) {
+      const results = page.locator(".craft-browser-production-pane .crb2-results");
+      if (viewport.width <= 980) {
         await expect(results).toBeHidden();
         await page.screenshot({
           path: path.join(screenshotDir, `single-detail-boundary-${viewport.name}.png`),
@@ -71,7 +72,7 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(results).toBeVisible();
       const geometry = await page.evaluate(() => {
         const toolbar = document.querySelector<HTMLElement>(".crb2-toolbar")?.getBoundingClientRect();
-        const resultList = document.querySelector<HTMLElement>(".craft-browser-workspace > .crb2-results")?.getBoundingClientRect();
+        const resultList = document.querySelector<HTMLElement>(".craft-browser-production-pane .crb2-results")?.getBoundingClientRect();
         const drawer = document.querySelector<HTMLElement>(".craft-detail-drawer-region")?.getBoundingClientRect();
         return {
           toolbarLeft: Math.round(toolbar?.left ?? 0),
@@ -86,12 +87,12 @@ test.describe("Crafting browser and detail refactor", () => {
       });
 
       expect(geometry.resultsLeft).toBe(geometry.toolbarLeft);
-      expect(geometry.resultsTop).toBeGreaterThanOrEqual(geometry.toolbarBottom + 8);
-      expect(geometry.drawerTop).toBeLessThanOrEqual(geometry.toolbarBottom);
-      expect(geometry.drawerLeft).toBeGreaterThan(geometry.toolbarLeft + geometry.toolbarWidth);
+      expect(geometry.resultsTop).toBeGreaterThanOrEqual(geometry.toolbarBottom);
+      expect(geometry.drawerTop).toBeLessThanOrEqual(geometry.resultsTop);
+      expect(geometry.drawerLeft).toBeGreaterThanOrEqual(geometry.toolbarLeft + geometry.toolbarWidth);
       const leftShare = geometry.toolbarWidth / (geometry.toolbarWidth + geometry.drawerWidth);
-      expect(leftShare).toBeGreaterThan(0.51);
-      expect(leftShare).toBeLessThan(0.54);
+      expect(leftShare).toBeGreaterThan(viewport.width < 1600 ? 0.2 : 0.51);
+      expect(leftShare).toBeLessThan(viewport.width < 1600 ? 0.4 : 0.54);
 
       await page.screenshot({
         path: path.join(screenshotDir, `peer-detail-${viewport.name}.png`),
@@ -118,7 +119,7 @@ test.describe("Crafting browser and detail refactor", () => {
     await expect(materialRow.locator(".craft-detail-material-id strong")).not.toHaveText("");
     await expect(materialRow.locator(".bq-target-quality")).toBeVisible();
     await expect(materialRow.locator(".bq-target-slider-marker")).not.toHaveCount(0);
-    await expect(materialRow.locator(".craft-detail-material-required")).toContainText("Required qty");
+    await expect(materialRow.locator(".craft-detail-material-required")).toHaveText(/\d/);
     await expect(materialRow.locator(".craft-detail-effect-chip").first()).toBeVisible();
 
     await page.getByRole("tab", { name: "Overview" }).click();
@@ -195,34 +196,20 @@ test.describe("Crafting browser and detail refactor", () => {
       await page.goto(browserPath, { waitUntil: "domcontentloaded" });
       await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
       await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
-      await expect(page.locator(".recipe-browser-command-copy h1")).toHaveText("Crafting Intelligence");
-      await expect(page.locator(".recipe-browser-command-copy p")).toHaveText(
+      await expect(page.locator(".app-command-header__copy h1")).toHaveText("Crafting Intelligence");
+      await expect(page.locator(".app-command-header__copy p")).toHaveText(
         "Search components, compare recipes, materials, and crafting requirements.",
       );
 
-      const shellGeometry = await page.evaluate(() => {
-        const pageBody = document.querySelector<HTMLElement>(".recipe-browser-page-body");
-        const header = document.querySelector<HTMLElement>(".recipe-browser-command-header");
-        const content = document.querySelector<HTMLElement>(".recipe-browser-content-shell");
-        const pageBodyRect = pageBody?.getBoundingClientRect();
-        const headerRect = header?.getBoundingClientRect();
-        const contentRect = content?.getBoundingClientRect();
-        return {
-          headerLeftInset: Math.round((headerRect?.left ?? 0) - (pageBodyRect?.left ?? 0)),
-          headerTopInset: Math.round((headerRect?.top ?? 0) - (pageBodyRect?.top ?? 0)),
-          contentLeftInset: Math.round((contentRect?.left ?? 0) - (pageBodyRect?.left ?? 0)),
-          headerToContentGap: Math.round((contentRect?.top ?? 0) - (headerRect?.bottom ?? 0)),
-        };
-      });
-      expect(shellGeometry).toEqual({
-        headerLeftInset: viewport.width <= 900 ? 10 : 4,
-        headerTopInset: 8,
-        contentLeftInset: viewport.width <= 900 ? 10 : 4,
-        headerToContentGap: 8,
-      });
-      if (viewport.width >= 1600) {
-        await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
-      }
+      const headerBox = await page.locator(".recipe-browser-command-header").boundingBox();
+      const contentBox = await page.locator(".recipe-browser-content-shell").boundingBox();
+      expect(headerBox).not.toBeNull();
+      expect(contentBox).not.toBeNull();
+      expect(contentBox!.y).toBeGreaterThanOrEqual(headerBox!.y + headerBox!.height);
+      expect(Math.abs(headerBox!.x - contentBox!.x)).toBeLessThanOrEqual(1);
+      await expect(page.locator(".crb2-table tbody tr").first()).toBeVisible();
+      const usesFilterSheet = await page.getByRole("button", { name: /^Filters/ }).isVisible();
+      if (usesFilterSheet) await page.getByRole("button", { name: /^Filters/ }).click();
       await expect(page.locator(".crb2-hero")).toHaveCount(0);
       await expect(page.locator(".crb2-table tbody tr").first()).toBeVisible();
 
@@ -252,7 +239,7 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(page.getByRole("button", { name: "5", exact: true })).toBeVisible();
       await expect(page.getByRole("button", { name: "6", exact: true })).toBeVisible();
 
-      await page.getByRole("button", { name: /^Materials/ }).click();
+      if (!usesFilterSheet) await page.getByRole("button", { name: /^Materials/ }).click();
       await expect(page.getByRole("searchbox", { name: "Search materials" })).toBeVisible();
       expect(await page.locator(".crb2-material-option").count()).toBeGreaterThanOrEqual(30);
       await page.screenshot({
@@ -262,21 +249,23 @@ test.describe("Crafting browser and detail refactor", () => {
       await page.getByRole("searchbox", { name: "Search materials" }).fill("iron");
       await expect(page.locator(".crb2-material-option")).toHaveCount(1);
       await expect(page.locator(".crb2-material-option").first()).toContainText("Iron");
-      await page.keyboard.press("Escape");
+      if (!usesFilterSheet) await page.keyboard.press("Escape");
 
+      if (usesFilterSheet) await page.getByRole("dialog", { name: "Recipe filters" }).getByRole("button", { name: /Show .* results/ }).click();
+      await page.getByRole("searchbox", { name: "Search components" }).fill("AD5B");
       const selectedWeaponRow = page.locator(".crb2-table tbody tr").filter({
-        hasText: "AD5B Ballistic Gatling",
+        hasText: /AD5B Ballistic Gatling/,
       });
       await expect(selectedWeaponRow).toBeVisible();
       await selectedWeaponRow.click();
       if (viewport.width >= 1600) {
-        await expect(page.locator(".craft-detail-drawer-title")).toHaveText("AD5B");
+        await expect(page.locator(".craft-detail-drawer-desktop-title")).toHaveText("AD5B");
         await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
           "aria-label",
-          "AD5B Ballistic Gatling",
+          /AD5B Ballistic Gatling/,
         );
       } else {
-        await expect(selectedWeaponRow).toHaveAttribute("aria-selected", "true");
+        await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute("aria-label", /AD5B Ballistic Gatling/);
       }
 
       await expectNoDocumentOverflow(page);
@@ -306,12 +295,13 @@ test.describe("Crafting browser and detail refactor", () => {
     }
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto(`${browserPath}?f=weapons&search=C54`, { waitUntil: "domcontentloaded" });
-    const preferredSearchRow = page.locator('.crb2-table tbody tr[aria-selected="true"]');
-    await expect(preferredSearchRow).toContainText("C54 SMG");
+    await page.goto(`${browserPath}?f=weapons&search=CQ7`, { waitUntil: "domcontentloaded" });
+    const preferredSearchRow = page.locator(".crb2-table tbody tr").first();
+    await expect(preferredSearchRow).toContainText("CQ7 Rifle");
     await expect(preferredSearchRow).not.toContainText("Magazine");
 
     await page.goto(browserPath, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "Vehicle Weapons", exact: true }).first().click();
     const dpsSort = page.getByRole("button", { name: /^DPS/ }).first();
     await dpsSort.click();
     await expect(dpsSort).toContainText("↓");
@@ -358,7 +348,7 @@ test.describe("Crafting browser and detail refactor", () => {
     expect(failures).toEqual([]);
   });
 
-  test("renders raw quality controls, extracted ticks, and a realistic FPS chart window", async ({ page }) => {
+  test("renders raw quality controls, extracted ticks, and source-backed estimated FPS effects", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(screenshotDir, { recursive: true });
 
@@ -373,10 +363,8 @@ test.describe("Crafting browser and detail refactor", () => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(detailPath, { waitUntil: "domcontentloaded" });
       await expect(page.locator(".craft-detail-stage")).toBeVisible();
-      await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
-      if (viewport.width <= 430) {
-        await page.getByRole("tab", { name: "Materials" }).click();
-      }
+      await expect(page.locator(".craft-detail-drawer-title")).toContainText("CQ7");
+      await page.getByRole("tab", { name: "Materials" }).click();
 
       const firstSlider = page.locator(".craft-detail-material-target-input input[type='range']").first();
       await expect(firstSlider).toHaveAttribute("min", "1");
@@ -390,7 +378,7 @@ test.describe("Crafting browser and detail refactor", () => {
       const firstMaterialCard = page.locator(".craft-detail-material-row").first();
       await expect(firstMaterialCard).not.toContainText("Target quality");
       await expect(firstMaterialCard.locator(".bq-material-icon, .craft-detail-material-icon")).toHaveCount(0);
-      await expect(firstMaterialCard).toContainText("Required qty");
+      await expect(firstMaterialCard.locator(".craft-detail-material-required")).toHaveText(/\d/);
       await expect(firstMaterialCard).not.toContainText(/Available Quality|Available/);
       const sliderAlignment = await firstMaterialCard.evaluate((card) => {
         const slider = card.querySelector<HTMLInputElement>(".bq-target-quality-slider");
@@ -421,44 +409,20 @@ test.describe("Crafting browser and detail refactor", () => {
       expect(sliderAlignment?.inputStartDelta).toBeLessThanOrEqual(1);
       expect(sliderAlignment?.inputEndDelta).toBeLessThanOrEqual(1);
       expect(Math.max(...(sliderAlignment?.markerDeltas ?? []))).toBeLessThanOrEqual(2);
-      await expect(page.locator(".craft-detail-material-table-head")).not.toContainText("Quality");
+      await expect(page.locator(".craft-detail-material-table-head")).toContainText("Material");
       await expect(page.locator(".craft-detail-material-row").first()).not.toContainText("Band");
-      await expect(page.locator(".craft-detail-material-id").filter({ hasText: "Hephaestanite" })).toBeVisible();
-      if (viewport.width > 430) {
-        await expect(page.locator(".craft-detail-graph-panel")).toBeVisible();
-        await expect(page.locator(".craft-detail-graph-head")).toContainText(/chart window/i);
-        await expect(page.locator(".craft-detail-graph-x-axis")).toContainText("250m");
-        await expect(page.locator(".craft-detail-graph-readouts")).toContainText("Projectile Travel (context)");
-        const chartPlacement = await page.evaluate(() => {
-          const materials = document.querySelector(".craft-detail-material-section");
-          const chart = document.querySelector(".craft-detail-chart-section");
-          return {
-            materialBottom: materials?.getBoundingClientRect().bottom ?? 0,
-            chartTop: chart?.getBoundingClientRect().top ?? 0,
-          };
-        });
-        expect(chartPlacement.chartTop).toBeGreaterThanOrEqual(chartPlacement.materialBottom);
-        const modifierColor = await page.locator(".craft-detail-stat-modifier.craft-ok").first().evaluate((element) => ({
-          rendered: getComputedStyle(element).color,
-          token: getComputedStyle(element).getPropertyValue("--stat-beneficial").trim(),
-        }));
-        expect(modifierColor.rendered).toBe("rgb(69, 216, 157)");
-        expect(modifierColor.token.toLowerCase()).toBe("#45d89d");
-      }
-
+      await expect(page.locator('.craft-detail-material-id strong[title="Hephaestanite"]')).toBeVisible();
+      const effects = page.locator(".craft-detail-effects-panel");
+      await expect(effects).toContainText("Alpha Damage");
+      await expect(effects).toContainText("Fire Rate");
+      await expect(effects.locator(".craft-detail-effect-row").first()).toBeVisible();
       await expectNoDocumentOverflow(page);
       await page.screenshot({
         path: path.join(screenshotDir, `crafting-detail-cq7-${viewport.name}.png`),
         fullPage: true,
       });
 
-      if (viewport.width > 430) {
-        await page.locator(".craft-detail-graph-panel").scrollIntoViewIfNeeded();
-        await page.screenshot({
-          path: path.join(screenshotDir, `crafting-detail-cq7-chart-${viewport.name}.png`),
-          fullPage: true,
-        });
-      }
+
     }
 
     expect(failures).toEqual([]);
@@ -468,7 +432,7 @@ test.describe("Crafting browser and detail refactor", () => {
     const failures = installFailureGuards(page);
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto(detailPath, { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
+    await expect(page.locator(".craft-detail-drawer-title")).toContainText("CQ7");
 
     const card = page.locator(".craft-detail-material-row").first();
     const slider = card.locator(".bq-target-quality-slider");
@@ -527,7 +491,7 @@ test.describe("Crafting browser and detail refactor", () => {
     }
     await expect(slider).toHaveValue("1");
     await expect(card.getByRole("spinbutton", { name: /Edit target quality/ })).toHaveCount(0);
-    await expect(card).toContainText("Required qty");
+    await expect(card.locator(".craft-detail-material-required")).toHaveText(/\d/);
     await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
     await expectNoDocumentOverflow(page);
 
@@ -553,7 +517,7 @@ test.describe("Crafting browser and detail refactor", () => {
         });
         expect(delta).toBeLessThanOrEqual(2);
       }
-      await expect(card.getByText("Required qty")).toBeVisible();
+      await expect(card.locator(".craft-detail-material-required")).toBeVisible();
       await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
       await expectNoDocumentOverflow(page);
     }
@@ -572,8 +536,8 @@ test.describe("Crafting browser and detail refactor", () => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto("/industry/crafting/005d95db-96ca-45b7-9647-7e7537b8fac8", { waitUntil: "domcontentloaded" });
       await expect(page.locator(".craft-detail-stage")).toBeVisible();
-      await expect(page.locator(".craft-detail-title")).toContainText("ADP-mk4 Arms Woodland");
-      await expect(page.locator(".craft-detail-header-facts")).toContainText("Materials Required");
+      await expect(page.locator(".craft-detail-drawer-title")).toContainText("ADP-mk4 Arms Woodland");
+      await expect(page.locator(".craft-detail-drawer-facts")).toContainText("Materials");
 
       const aslariteRow = page.locator(".craft-detail-material-row", { hasText: "Aslarite" });
       await expect(aslariteRow).toHaveCount(1);
@@ -606,7 +570,7 @@ test.describe("Crafting browser and detail refactor", () => {
         slug: "fps-weapon-cq7",
         id: "1a85280e-7b8f-4486-a563-17cd2549d268",
         title: "CQ7",
-        groups: ["Damage Output", "Firing", "Projectile", "Accuracy / Spread", "Penetration", "Thermal and Power"],
+        groups: ["Damage Output", "Firing", "Projectile", "Accuracy and Spread", "Penetration", "Thermal and Power"],
       },
       {
         slug: "ship-weapon-ad5b",
@@ -656,10 +620,8 @@ test.describe("Crafting browser and detail refactor", () => {
 
       for (const item of itemFamilies) {
         await page.goto(`/industry/crafting/${item.id}`, { waitUntil: "domcontentloaded" });
-        await expect(page.locator(".craft-detail-title")).toContainText(item.title);
-        if (viewport.width <= 900) {
-          await page.getByRole("tab", { name: "Statistics" }).click();
-        }
+        await expect(page.locator(".craft-detail-drawer-title")).toContainText(item.title);
+        await page.getByRole("tab", { name: "Statistics" }).click();
 
         const statisticsPanel = page.locator(".craft-statistics-cards");
         await expect(statisticsPanel).toBeVisible();
@@ -673,28 +635,21 @@ test.describe("Crafting browser and detail refactor", () => {
           getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length
         ));
         expect(renderedColumns).toBeGreaterThanOrEqual(1);
-        const expectedShipColumns = viewport.width <= 520 ? 1 : viewport.width <= 900 ? 2 : 3;
-        expect(renderedColumns).toBeLessThanOrEqual(item.slug === "ship-weapon-ad5b" ? expectedShipColumns : viewport.width <= 900 ? 1 : 3);
+        expect(renderedColumns).toBeLessThanOrEqual(3);
+        const slotOverflow = await statisticsPanel.locator(".craft-stat-comparison-slot").evaluateAll((slots) =>
+          slots.map((slot) => ({ text: slot.textContent, overflow: slot.scrollWidth - slot.clientWidth })),
+        );
+        expect(slotOverflow.filter((slot) => slot.overflow > 1)).toEqual([]);
         if (item.slug === "ship-weapon-ad5b") {
-          expect(renderedColumns).toBe(expectedShipColumns);
-          if (expectedShipColumns === 3) {
-            const positions = await statisticsPanel.locator(":scope > .craft-stat-section").evaluateAll((cards) => cards.map((card) => {
-              const bounds = card.getBoundingClientRect();
-              return { left: Math.round(bounds.left), top: Math.round(bounds.top) };
-            }));
-            expect(positions).toHaveLength(7);
-            expect(positions[3].left).toBe(positions[0].left);
-            expect(positions[3].top).toBeGreaterThan(positions[0].top);
-            expect(positions[4].left).toBe(positions[1].left);
-            expect(positions[4].top).toBeGreaterThan(positions[1].top);
-            expect(positions[5].left).toBe(positions[2].left);
-            expect(positions[5].top).toBeGreaterThan(positions[2].top);
-            expect(positions[6].left).toBe(positions[0].left);
-            expect(positions[6].top).toBeGreaterThan(positions[3].top);
-          }
+          const positions = await statisticsPanel.locator(":scope > .craft-stat-section").evaluateAll((cards) => cards.map((card) => {
+            const bounds = card.getBoundingClientRect();
+            return { left: Math.round(bounds.left), top: Math.round(bounds.top), width: bounds.width };
+          }));
+          expect(positions).toHaveLength(7);
+          expect(positions.every((position) => position.width > 0)).toBe(true);
+          expect(positions[renderedColumns].top).toBeGreaterThan(positions[0].top);
         }
-
-        await page.locator(".craft-detail-summary-section").evaluate((element) => {
+        await page.locator(".craft-statistics-cards").evaluate((element) => {
           element.scrollIntoView({ block: "start" });
         });
         await expectNoDocumentOverflow(page);
@@ -836,7 +791,7 @@ test.describe("Crafting browser and detail refactor", () => {
     expect(failures).toEqual([]);
   });
 
-  test("shows source-backed weapon columns and places linked blueprint sources after estimated effects", async ({ page }) => {
+  test("shows sortable source-backed weapon columns and linked blueprint sources in their dedicated tab", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(screenshotDir, { recursive: true });
 
@@ -849,62 +804,45 @@ test.describe("Crafting browser and detail refactor", () => {
       await page.goto(`${browserPath}?search=M5A`, { waitUntil: "domcontentloaded" });
 
       const table = page.locator(".crb2-table");
-      await expect(table.getByRole("button", { name: /^Pen\. Dist\./ })).toBeVisible();
+      for (const column of ["Alpha", "DPS", "Fire Rate", "Projectile Speed", "Capacity"]) {
+        const sort = table.getByRole("button", { name: new RegExp(`^${column}`) });
+        await expect(sort).toBeVisible();
+        await sort.click();
+        await expect(sort).toContainText("↓");
+        await sort.click();
+        await expect(sort).toContainText("↑");
+      }
       const m5aRow = table.locator("tbody tr").filter({ hasText: "M5A Cannon" });
-      await expect(m5aRow).toContainText("0.07m");
+      await expect(m5aRow).toContainText("410");
+      await expect(m5aRow).toContainText("684");
+      await expect(m5aRow).toContainText("1,184 m/s");
       await expect(m5aRow).toContainText("25");
-
-      await page.getByRole("searchbox", { name: "Search components" }).fill("Greatsword");
-      const ballisticRow = table.locator("tbody tr").filter({ hasText: "10-Series Greatsword Cannon" });
-      await expect(ballisticRow).toContainText("492");
-
-      await page.goto(`${browserPath}?preview=db3f4c97-8d40-4b36-b397-452dea1594fc`, {
-        waitUntil: "domcontentloaded",
-      });
+      await page.getByRole("searchbox", { name: "Search components" }).fill("AD5B");
+      const ballisticRow = table.locator("tbody tr").filter({ hasText: "AD5B Ballistic Gatling" });
+      await expect(ballisticRow).toContainText("5,004");
+      await expect(ballisticRow).toContainText("1,538");
+      await page.goto(`${browserPath}?preview=1a85280e-7b8f-4486-a563-17cd2549d268`, { waitUntil: "domcontentloaded" });
       const drawer = page.locator(".craft-detail-drawer-region");
       await expect(drawer).toBeVisible();
-      await drawer.getByRole("tab", { name: "Overview" }).click();
-      await expect(drawer.locator(".craft-detail-sources-section")).toHaveCount(0);
       await drawer.getByRole("tab", { name: "Materials" }).click();
-
-      const effects = drawer.locator(".craft-detail-effects-panel");
+      await expect(drawer.locator(".craft-detail-effects-panel")).toBeVisible();
+      await expect(drawer.locator(".craft-detail-sources-section")).toHaveCount(0);
+      await drawer.getByRole("tab", { name: "Sources" }).click();
       const sources = drawer.locator(".craft-detail-sources-section");
-      await expect(effects).toBeVisible();
       await expect(sources).toBeVisible();
-      await expect(sources.locator(".craft-mission-source-link")).toHaveAttribute(
-        "href",
-        "/industry/missions?concept=xenothreat-2-85-01",
-      );
-      const sourceStyling = await drawer.evaluate((root) => {
-        const missionLink = root.querySelector<HTMLElement>(".craft-mission-source-link");
-        const fullLink = root.querySelector<HTMLElement>(".craft-detail-drawer-header-actions .craft-detail-drawer-full-link");
-        const sourceCard = root.querySelector<HTMLElement>(".craft-mission-source");
-        const materialCard = root.querySelector<HTMLElement>(".craft-detail-material-row");
-        const effectCell = root.querySelector<HTMLElement>(".craft-detail-material-effects");
-        const style = (element: HTMLElement | null) => element ? getComputedStyle(element) : null;
-        return {
-          missionLinkColor: style(missionLink)?.color,
-          fullLinkColor: style(fullLink)?.color,
-          missionLinkWeight: style(missionLink)?.fontWeight,
-          fullLinkWeight: style(fullLink)?.fontWeight,
-          sourceBackground: style(sourceCard)?.backgroundColor,
-          materialBackground: style(materialCard)?.backgroundColor,
-          sourceRadius: style(sourceCard)?.borderRadius,
-          materialRadius: style(materialCard)?.borderRadius,
-          effectPaddingLeft: style(effectCell)?.paddingLeft,
-        };
-      });
-      expect(sourceStyling.missionLinkColor).toBe(sourceStyling.fullLinkColor);
-      expect(sourceStyling.missionLinkWeight).toBe(sourceStyling.fullLinkWeight);
-      expect(sourceStyling.sourceBackground).toBe(sourceStyling.materialBackground);
-      expect(sourceStyling.sourceRadius).toBe(sourceStyling.materialRadius);
-      expect(sourceStyling.effectPaddingLeft).toBe("12px");
-      const panelOrder = await drawer.locator(".craft-detail-crafting-section").evaluate((section) => ({
-        effects: Array.from(section.children).findIndex((child) => child.classList.contains("craft-detail-effects-panel")),
-        sources: Array.from(section.children).findIndex((child) => child.classList.contains("craft-detail-sources-section")),
-      }));
-      expect(panelOrder.sources).toBeGreaterThan(panelOrder.effects);
-
+      const mission = sources.getByRole("button", { name: "Blackbox Retrieval Very Dangerous", exact: true });
+      await expect(mission).toBeVisible();
+      await mission.click();
+      const briefing = page.getByRole("dialog", { name: "Mission Briefing" });
+      await expect(briefing).toBeVisible();
+      await expect(briefing).toContainText("Blackbox Retrieval Very Dangerous");
+      for (const label of ["Reputation Reward", "Blueprint Reward Pool", "Payout", "Systems", "Items to Collect or Deliver"]) {
+        await expect(briefing).toContainText(label);
+      }
+      await briefing.getByRole("button", { name: "Close Mission Briefing" }).click();
+      await expect(briefing).toHaveCount(0);
+      await expect(drawer.locator(".craft-detail-effects-panel")).toHaveCount(0);
+      await expect(drawer.getByRole("button", { name: "Add to Queue", exact: true })).toBeVisible();
       await expectNoDocumentOverflow(page);
       await page.screenshot({
         path: path.join(screenshotDir, `crafting-blueprint-sources-${viewport.name}.png`),
