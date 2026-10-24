@@ -256,6 +256,7 @@ export default function CraftingModule() {
         <CraftingBrowserWorkspace
           selectedId={previewId}
           detailReady={previewRecipeReady}
+          detailLoading={previewLoading}
           layoutMode={layoutMode}
           toolbar={<CraftingFilterBar records={browserComponentCards} resultCount={resultCount} />}
           results={(

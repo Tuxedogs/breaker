@@ -90,6 +90,9 @@ function getFixtureComponentCardBrowserPage(requestUrl: string) {
 export const handlers = [
   ...localMiningApiPaths.map((path) => http.get(`*${path}`, () => passthrough())),
   http.post("*/api/mining/recommendations", () => passthrough()),
+  // Mission briefings resolve delivered variant details from the local API.
+  // Relative matching keeps this fixture escape limited to the current origin.
+  http.get("/api/missions/variant/:variantKey", () => passthrough()),
   http.get("*/api/crafting/component-cards/index", () => HttpResponse.json(componentCardIndexResponse)),
   http.get("*/api/crafting/component-cards/facets", () => HttpResponse.json(componentCardFacetsResponse)),
   http.get("*/api/crafting/component-cards/browse", () => HttpResponse.json(componentCardBrowseResponse)),

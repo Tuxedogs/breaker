@@ -1,7 +1,7 @@
-import { apiUrl } from "@/lib/apiUrl";
-import { parseJsonResponse } from "@/lib/safeJson";
-import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { validateComponentCatalogGeneration } from "@/lib/componentCatalogGeneration";
+import { apiUrl } from "./apiUrl";
+import { parseJsonResponse } from "./safeJson";
+import type { ComponentCardIndex, ComponentCardIndexRecord } from "./componentCardIndex";
+import { validateComponentCatalogGeneration } from "./componentCatalogGeneration";
 
 const COMPONENT_CARDS_INDEX_URL = "/api/crafting/component-cards/index";
 const COMPONENT_CARDS_FACETS_URL = "/api/crafting/component-cards/facets";
@@ -85,7 +85,8 @@ export async function getComponentCardIndexFromApi(): Promise<ComponentCardIndex
         );
       }
 
-      records.forEach((record) => componentCardsById.set(record.id.trim().toLowerCase(), record));
+      // Browse records are summaries, not full detail. Never seed the by-id
+      // cache with them: doing so drops delivered FPS projectile/spread fields.
       return {
         schemaVersion: index.schemaVersion ?? 1,
         generatedAt: index.sourceGeneratedAt ?? index.generatedAt ?? new Date().toISOString(),
@@ -169,8 +170,8 @@ export function readComponentCardById(id: string): ComponentCardIndexRecord | nu
 }
 
 export async function prepareComponentCards(ids: string[]): Promise<void> {
-  const missing = ids.some((id) => !componentCardsById.has(id.trim().toLowerCase()));
-  if (missing) await getComponentCardIndexFromApi();
+  await Promise.all([...new Set(ids.map((id) => id.trim().toLowerCase()).filter(Boolean))]
+    .map((id) => fetchComponentCardById(id)));
 }
 
 export async function resolveComponentCardById(

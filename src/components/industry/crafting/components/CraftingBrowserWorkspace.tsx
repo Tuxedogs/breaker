@@ -40,6 +40,7 @@ export default function CraftingBrowserWorkspace({
   results,
   detail,
   detailReady = false,
+  detailLoading = false,
   layoutMode,
 }: {
   selectedId: string | null;
@@ -47,6 +48,7 @@ export default function CraftingBrowserWorkspace({
   results: ReactNode;
   detail: ReactNode;
   detailReady?: boolean;
+  detailLoading?: boolean;
   layoutMode: CraftingBrowserLayoutMode;
 }) {
   const [connectorY, setConnectorY] = useState<number | null>(null);
@@ -156,6 +158,7 @@ export default function CraftingBrowserWorkspace({
       <aside
         className={`craft-browser-detail-pane craft-detail-drawer-region${detailReady ? " craft-detail-drawer-region--ready" : ""}`}
         aria-label="Fabrication inspection detail"
+        aria-busy={detailLoading}
       >
         {detail}
       </aside>

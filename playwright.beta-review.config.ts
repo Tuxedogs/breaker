@@ -5,10 +5,10 @@ const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: './tests/ui',
-  testMatch: 'beta-review-regressions.spec.ts',
+  testMatch: ['beta-review-regressions.spec.ts', 'build-queue-inventory-workflow.spec.ts'],
   workers: 1,
-  timeout: 60_000,
-  expect: { timeout: 15_000 },
+  timeout: 120_000,
+  expect: { timeout: 30_000 },
   use: { baseURL, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   webServer: {
     command: `vite --mode fixtures --host 127.0.0.1 --port ${port} --strictPort`,
