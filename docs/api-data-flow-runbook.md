@@ -134,6 +134,18 @@ The singular `offer`, `family`, and `variant` routes are canonical; plural alias
 
 ### Fitting
 
+#### Fitting request contract
+
+The following describes the client and server at commit `720417fe6d75bc1c88367f0096d34cfd8b36a935`:
+
+- `appendFittingBuildQuery` adds `channel=LIVE|PTU` and, when resolved, `buildId` to fitting client requests. Bootstrap can read `/api/v1/fitting/meta?channel=...`. The shared component store calls `ensureFittingBuildContext` before vehicle component-detail loads; the low-level `getFittingComponent` function itself does not enforce that precondition.
+- Successful server responses have `meta` and `data`, with `page` on paginated responses. Metadata contains `apiVersion`, `artifactSchemaVersion`, `channel`, `buildId`, and `generatedAt`. `readFittingMetaForChannel` throws if `meta.buildId` is absent; the generic response reader captures it when present rather than universally validating it. Build-context bootstrap throws if a build ID remains unresolved.
+- Ships, components, and compatible-components accept `limit` and `cursor`; the client requests `limit=200` and follows `page.nextCursor`. The server permits limits 1–200, default 50. The client caps each traversal at 100 pages: ship/component listing throws at the cap; compatible-components returns the collected result even if a cursor remains.
+- The client requests hardpoints with `format=flat`. The server also supports `format=tree`, which is its default when omitted.
+- For the generic GET reader, a 304 or empty successful body uses the supplied cached response if available; otherwise it retries once with `cache: "no-store"` and throws if still empty. The component-detail wrapper additionally falls back to cached detail on caught errors, without reporting that it is stale.
+- On a failed validate/calculate POST the client reads the problem response's `detail`, falling back to a status-based error. The server returns a problem document including `type`, `title`, `status`, `code`, `detail`, `instance`, `requestId`, and `errors` when applicable.
+- Adapter distinction: the Vercel fitting adapter reads and forwards validate/calculate request bodies. `server/index.ts` invokes the fitting handler before reading a body and does not pass it to the handler, so standalone POSTs do not receive the submitted body at this baseline.
+
 Read endpoints support `GET` and `HEAD`. Requests may select channel/build context; otherwise the server resolves `server-data/fitting/current.json`.
 
 | Method | Endpoint | Purpose |
@@ -319,6 +331,33 @@ The Moonbreaker commit or deployment record must identify:
 | Vite development | middleware in `vite.config.ts` | Serves the routed development contract from server data. It must not proxy static generated JSON. |
 | Standalone server | `server/index.ts` | Handles fitting, missions, mining, Build Queue requirements, and user state. Its current route coverage is not identical to Vercel/Vite; verify a route is mounted before using this runtime for crafting API testing. |
 | Browser | `apiUrl(...)` and domain clients | Calls same-origin routed endpoints. MSW may mock route responses, but must not reintroduce static file fallbacks. |
+
+### Standalone crafting and mining coverage
+
+At the pinned baseline, `server/index.ts` mounts no `/api/crafting/*` handler. The following cataloged routes are therefore not mounted by the standalone server:
+
+| Method | Unmounted route |
+| --- | --- |
+| GET | `/api/crafting/recipes/index` |
+| POST | `/api/crafting/recipes/batch` |
+| GET | `/api/crafting/recipes/:id` |
+| GET | `/api/crafting/component-cards/index` |
+| GET | `/api/crafting/component-cards/facets` |
+| GET | `/api/crafting/component-cards/browse` |
+| GET | `/api/crafting/component-cards/:id` |
+| GET | `/api/crafting/reference/crafted-properties` |
+| GET | `/api/crafting/reference/quality-quantization` |
+| GET | `/api/crafting/reference/material-quality-quantization` |
+| GET | `/api/crafting/reference/material-identity` |
+| GET | `/api/crafting/reference/refinery-yields` |
+| GET | `/api/crafting/blueprint-sources/index` |
+| GET | `/api/crafting/blueprint-sources?blueprintGuid=...` |
+| POST | `/api/crafting/blueprint-sources/batch` |
+| GET | `/api/crafting/blueprint-rewards/release-state` |
+| GET | `/api/crafting/blueprint-rewards/missions` |
+| GET | `/api/crafting/blueprint-rewards/missions/:contractId` |
+
+The standalone server mounts `handleMiningRoute`: all seven cataloged mining GET/HEAD routes and `POST /api/mining/recommendations` are mounted. This establishes routing coverage, not availability or validity of the underlying data files.
 
 ## Incident checklist
 
