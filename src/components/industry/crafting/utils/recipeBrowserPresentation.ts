@@ -1,6 +1,6 @@
-import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { quantumMetersToKilometers } from "../../../../lib/fitting/quantumDriveUnits";
-import { resolveWeaponDps } from "../../../../lib/fitting/fittingWeaponStats";
+import type { ComponentCardIndexRecord } from "../../../../lib/componentCardIndex.js";
+import { quantumMetersToKilometers } from "../../../../lib/fitting/quantumDriveUnits.js";
+import { resolveWeaponDps } from "../../../../lib/fitting/fittingWeaponStats.js";
 
 export type RecipeBrowserColumn = {
   key: string;
@@ -72,7 +72,7 @@ function numberValue(value: unknown): number | null {
   return null;
 }
 
-function titleCase(value: unknown): string {
+export function titleCase(value: unknown): string {
   if (typeof value !== "string" || !value.trim()) return "—";
   return value
     .replace(/([a-z])([A-Z])/g, "$1 $2")

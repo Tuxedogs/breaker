@@ -24,6 +24,7 @@ import FittingPerformanceGrid from "./FittingPerformanceGrid";
 import FittingSystemsPanel from "./FittingSystemsPanel";
 import FittingTopNav from "./FittingTopNav";
 import ShipHeroPanel from "./ShipHeroPanel";
+import "../../../pages/fitting-v31-layout.css";
 import WeaponStatsTab from "./WeaponStatsTab";
 
 export type FittingTerminalPageProps = {
@@ -191,25 +192,32 @@ export default function FittingTerminalPage({
     syncPipsFromDraws(pipAssignmentFromDraws(pipPower.draws));
   }, [shipId, portRows.length, pipPower.ready, pipPower.draws, syncPipsFromDraws]);
 
+  // Ship identity, view tabs and ship select. On Overview they head the ship panel;
+  // every other view (and loading) shows them at the top of that view's surface.
+  const workspaceBar = (
+    <FittingTopNav
+      activeTab={terminal.activeTab}
+      onTabChange={terminal.setActiveTab}
+      manufacturer={ship?.manufacturer ?? null}
+      shipName={ship?.name ?? "Select a ship"}
+      role={ship?.role ?? ship?.career ?? null}
+      ships={ships}
+      selectedShipKey={shipId}
+      onSelectShip={onSelectShip}
+      shipsLoading={shipsLoading}
+    />
+  );
+  const overviewVisible = terminal.activeTab === "overview" && !loading;
+
   return (
     <div className="fit-page fit-term-page">
-      <FittingTopNav
-        activeTab={terminal.activeTab}
-        onTabChange={terminal.setActiveTab}
-        manufacturer={ship?.manufacturer ?? null}
-        shipName={ship?.name ?? "Select a ship"}
-        role={ship?.role ?? ship?.career ?? null}
-        ships={ships}
-        selectedShipKey={shipId}
-        onSelectShip={onSelectShip}
-        shipsLoading={shipsLoading}
-      />
+      {overviewVisible ? null : workspaceBar}
 
       {loading && <p className="fit-term-loading">Loading fitting data…</p>}
 
-      {terminal.activeTab === "overview" && !loading && (
-        <div className="fit-term-body">
-          <div className={["fit-term-col", "fit-term-col--left", craftSide === "left" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
+      {overviewVisible && (
+        <div className="fit-term-body fit-v31-workspace">
+          <div className={["workspace-panel", "workspace-panel--filter", "fit-term-col", "fit-term-col--left", craftSide === "left" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
             <FittingSystemsPanel
               title="Offensive Systems"
               groups={offensiveGroups}
@@ -224,7 +232,8 @@ export default function FittingTerminalPage({
             />
             {craftSide === "left" ? craftDrawer : null}
           </div>
-          <div className="fit-term-center">
+          <div className="workspace-panel workspace-panel--primary fit-term-center">
+            {workspaceBar}
             <ShipHeroPanel
               shipId={shipId}
               manufacturer={ship?.manufacturer ?? null}
@@ -234,7 +243,7 @@ export default function FittingTerminalPage({
               selectedMeta={selectedMeta}
             />
           </div>
-          <div className={["fit-term-col", "fit-term-col--right", craftSide === "right" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
+          <div className={["workspace-panel", "workspace-panel--inspector", "fit-term-col", "fit-term-col--right", craftSide === "right" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
             <FittingSystemsPanel
               title="Defensive Systems"
               groups={defensiveCoreGroups}

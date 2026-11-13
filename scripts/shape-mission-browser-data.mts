@@ -12,6 +12,7 @@ import {
   type CompactMissionVariant,
 } from "./missions/project/browser-projection.mts";
 import { publishImmutableMissionGeneration } from "./missions/publication/write-artifacts.mts";
+import { syncVercelMissionBundle } from "./missions/publication/vercel-mission-bundle.mts";
 import {
   assertMissionPublicationGate,
   type MissionPublicationGateReceiptV1,
@@ -845,7 +846,7 @@ const legacyShapedRootFiles = [
   ...legacyMissionOutputFiles,
 ] as const;
 const legacyShardDirectories = ["families", "family-variants", "variants", "offers", "offer-variants"] as const;
-const missionShaperVersion = "moonbreaker_mission_shaper_v3_6_portable_source_provenance";
+const missionShaperVersion = "moonbreaker_mission_shaper_v3_7_compact_shards";
 const missionOfferGoldenManifestPath = path.resolve(
   "docs",
   "mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
@@ -3059,8 +3060,10 @@ async function writeJson(fileName: string, value: unknown): Promise<void> {
   await writeFile(path.join(stagingRoot, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+// Per-record shards are read only by the API, so they are written compactly; this
+// keeps the active generation inside the Vercel function size limit.
 async function writeJsonAt(root: string, fileName: string, value: unknown): Promise<void> {
-  await writeFile(path.join(root, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  await writeFile(path.join(root, fileName), `${JSON.stringify(value)}\n`, "utf8");
 }
 
 async function removeLegacyMissionOutputs(): Promise<void> {
@@ -4284,6 +4287,9 @@ await publishImmutableMissionGeneration({
   legacyRootFiles: legacyShapedRootFiles,
   legacyShardDirectories,
 });
+if (path.resolve(missionRoot) === path.resolve("server-data", "missions")) {
+  syncVercelMissionBundle(process.cwd());
+}
 
 console.log(
   `Shaped ${families.length} mission families, ${missionOffers.offers.length} offers, and ${variants.length} variants into generation ${generationId} at ${missionRoot}.`,

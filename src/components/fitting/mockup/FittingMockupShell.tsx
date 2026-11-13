@@ -1,3 +1,4 @@
+import WorkspacePanel from "../../shared/WorkspacePanel";
 import type { ReactNode } from "react";
 import type {
   HeroInspectView,
@@ -8,12 +9,13 @@ import type {
   TopBarView,
 } from "../../../lib/fitting/mockup/fittingMockupViewTypes";
 import FittingHero from "./FittingHero";
-import FittingRail from "./FittingRail";
 import FittingResourcesPanel from "./FittingResourcesPanel";
 import FittingStatsGrid from "./FittingStatsGrid";
 import FittingSystemsPanel from "./FittingSystemsPanel";
 import FittingTopBar from "./FittingTopBar";
+import FittingV31OfflinePreview from "./FittingV31OfflinePreview";
 import "./fitting-mockup-shell.css";
+import "./fitting-v31-layout.css";
 
 type FittingMockupShellProps = {
   topBar: TopBarView;
@@ -60,32 +62,40 @@ export default function FittingMockupShell({
   onStatCardAction,
   onSaveLoadout,
 }: FittingMockupShellProps) {
+  // A clearly labeled visual reference only when local fixtures cannot load ship data.
+  // The live Fitting API and all existing equipment interactions remain untouched.
+  if (import.meta.env.MODE === "fixtures" && errorMessage) {
+    return <FittingV31OfflinePreview />;
+  }
   return (
-    <main className="fm-shell" aria-label="Ship fitting overview">
-      <FittingTopBar view={topBar} onSelectShip={onSelectShip} onSaveLoadout={onSaveLoadout} />
-
+    <main className="fm-shell fm-v31-shell" aria-label="Ship fitting overview">
       {errorMessage ? <div className="fm-error">{errorMessage}</div> : null}
       {debugNode}
 
-      <FittingRail />
 
-      <FittingSystemsPanel
-        className="fm-offense-panel"
-        title="Offensive Systems"
-        groups={offensiveGroups}
-        emptyMessage={offensiveEmptyMessage}
-        onSelectRow={onSelectOffensiveRow}
-      />
+      <WorkspacePanel as="section" tone="filter" className="fm-v31-offense-frame" aria-label="Offensive equipment">
+        <FittingSystemsPanel
+          className="fm-offense-panel"
+          title="Offensive Systems"
+          groups={offensiveGroups}
+          emptyMessage={offensiveEmptyMessage}
+          onSelectRow={onSelectOffensiveRow}
+        />
+      </WorkspacePanel>
 
-      <FittingHero
-        asset={heroAsset}
-        inspect={heroInspect}
-        onExitInspect={onExitInspect}
-        onViewDetails={onViewHeroDetails}
-        selectorDrawer={selectorDrawer}
-      />
+      <WorkspacePanel as="section" tone="primary" className="fm-v31-hero-frame" aria-label="Selected ship">
+        <FittingHero
+          asset={heroAsset}
+          inspect={heroInspect}
+          onExitInspect={onExitInspect}
+          onViewDetails={onViewHeroDetails}
+          selectorDrawer={selectorDrawer}
+          header={<FittingTopBar view={topBar} onSelectShip={onSelectShip} onSaveLoadout={onSaveLoadout} />}
+        />
+        {errorMessage ? <p className="fm-v31-source-state" role="status">{errorMessage} Component swapping requires the configured Fitting API.</p> : null}
+      </WorkspacePanel>
 
-      <div className="fm-right-col">
+      <WorkspacePanel as="div" tone="inspector" className="fm-right-col">
         <FittingSystemsPanel
           title="Defensive Systems"
           groups={defensiveGroups}
@@ -93,7 +103,7 @@ export default function FittingMockupShell({
           onSelectRow={onSelectDefensiveRow}
         />
         <FittingResourcesPanel summary={resourceSummary} selectedDetail={selectedDetail} />
-      </div>
+      </WorkspacePanel>
 
       <FittingStatsGrid cards={statCards} onCardAction={onStatCardAction} />
     </main>

@@ -51,3 +51,17 @@ test("mergeCanonicalInventoryLocations keeps unknown custom user locations", () 
   assert.equal(merged.locations.length, canonicalInventoryLocations.length + 1);
   assert.ok(merged.locations.some((location) => location.id === "custom-hangar"));
 });
+
+test("explicit custom locations retain their persisted identity even when their display name matches canonical data", () => {
+  const custom: InventoryLocation = {
+    id: "8bb19af8-8a3a-4a0a-99c4-28112744900b",
+    name: "Levski",
+    source: "custom",
+    category: "custom",
+  };
+  const merged = mergeCanonicalInventoryLocations([custom]);
+
+  assert.ok(merged.locations.some((location) => location.id === "levski"));
+  assert.ok(merged.locations.some((location) => location.id === custom.id && location.source === "custom"));
+  assert.equal(merged.locationIdRemap.has(custom.id), false);
+});

@@ -1,0 +1,150 @@
+import type { SystemIconKind } from "../../components/fitting/terminal/SystemIcon";
+import type { PortBreakdownRow } from "../fitting/fittingPortGrouping";
+import { coolerPortIds, mapRowToPipCategory } from "../fitting/fittingPipPower";
+import type { PipCategory } from "../fitting/fittingTerminalTypes";
+import type { FittingSimulationPowerAllocation } from "../fitting/fittingApi";
+import type { FittingComponentAllocation } from "../fitting/fittingApi";
+
+export type FittingV2PowerColumn = {
+  key: string;
+  label: string;
+  category: PipCategory | null;
+  icon: SystemIconKind;
+  portId: string | null;
+  unavailableReason: string | null;
+  allocationStatus?: FittingComponentAllocation["allocationStatus"];
+  minimumSegments?: number | null;
+  maximumSegments?: number | null;
+  behavior: "segment_scaling" | "binary_enable" | "placeholder" | "unresolved";
+  provenance: "SOURCE_BACKED" | "DERIVED" | "MODELED_GAMEPLAY" | "EMPIRICAL" | "UNRESOLVED";
+};
+
+const ORDER: Record<SystemIconKind, number> = {
+  weapons: 0,
+  engines: 10,
+  shields: 20,
+  quantum: 30,
+  qed: 40,
+  emp: 40,
+  radar: 50,
+  lifeSupport: 60,
+  cooler: 70,
+};
+
+function searchable(row: PortBreakdownRow): string {
+  return [row.portId, row.portName, row.portType, row.portSubtype, row.portCategory, row.ruleCategory, row.equippedComponentName, row.componentCategory, row.componentSubtype]
+    .filter(Boolean).join(" ").toLowerCase();
+}
+
+function specialKind(row: PortBreakdownRow): "qed" | "emp" | null {
+  const text = searchable(row);
+  if (/\bqed\b|quantum enforcement|quantum interdiction|quantum dampen/.test(text)) return "qed";
+  if (/\bemp\b|electromagnetic pulse/.test(text)) return "emp";
+  return null;
+}
+
+function iconForCategory(category: PipCategory): SystemIconKind {
+  if (category === "cooler1" || category === "cooler2") return "cooler";
+  return category;
+}
+
+function labelForCategory(category: PipCategory): string {
+  return ({ weapons: "Weapons", engines: "Engines", shields: "Shields", quantum: "Quantum", radar: "Radar", lifeSupport: "Life Support", cooler1: "Cooler 1", cooler2: "Cooler 2" })[category];
+}
+
+export function buildFittingV2PowerColumns(portRows: readonly PortBreakdownRow[], allocated?: FittingSimulationPowerAllocation, componentAllocations: readonly FittingComponentAllocation[] = []): FittingV2PowerColumn[] {
+  const installed = portRows.filter((row) => row.equippedComponentKey);
+  const allocationByPort = new Map(componentAllocations.filter((item) => item.portId).map((item) => [item.portId!, item]));
+  const coolerIds = coolerPortIds([...installed]);
+  const categoryRows = new Map<PipCategory, PortBreakdownRow[]>();
+  const columns: FittingV2PowerColumn[] = [];
+
+  for (const row of installed) {
+    const contract = allocationByPort.get(row.portId);
+    const contractType = contract?.componentType.toLowerCase() ?? "";
+    const physicalCategory: PipCategory | null = contractType.includes("shield")
+      ? "shields"
+      : contractType.includes("radar")
+        ? "radar"
+        : contractType.includes("cooler")
+          ? (coolerIds.indexOf(row.portId) <= 0 ? "cooler1" : "cooler2")
+          : null;
+    if (contract && physicalCategory) {
+      const supported = contract.allocationStatus === "supported" && contract.segmentAllocationSupported;
+      columns.push({
+        key: `physical:${row.portId}`,
+        label: contract.displayName ?? row.equippedComponentName ?? row.portName ?? row.portId,
+        category: supported ? physicalCategory : null,
+        icon: iconForCategory(physicalCategory),
+        portId: row.portId,
+        unavailableReason: supported ? null : contract.allocationReason ?? "Component power allocation is unavailable.",
+        allocationStatus: contract.allocationStatus,
+        minimumSegments: contract.minimumSegments,
+        maximumSegments: contract.maximumSegments,
+        behavior: supported ? "segment_scaling" : "unresolved",
+        provenance: supported ? "SOURCE_BACKED" : "UNRESOLVED",
+      });
+      continue;
+    }
+    const special = specialKind(row);
+    if (special) {
+      columns.push({
+        key: `${special}:${row.portId}`,
+        label: special.toUpperCase(),
+        category: null,
+        icon: special,
+        portId: row.portId,
+        unavailableReason: null,
+        minimumSegments: 1,
+        maximumSegments: 1,
+        behavior: "binary_enable",
+        provenance: "MODELED_GAMEPLAY",
+      });
+      continue;
+    }
+    const category = mapRowToPipCategory(row, coolerIds);
+    if (!category) continue;
+    const rows = categoryRows.get(category) ?? [];
+    rows.push(row);
+    categoryRows.set(category, rows);
+  }
+
+  for (const [category, rows] of categoryRows) {
+    const physicalUnresolved = category === "shields" && rows.length > 1;
+    if (physicalUnresolved) {
+      rows.forEach((row, index) => columns.push({
+        key: `${category}:${row.portId}`,
+        label: `Shield ${index + 1}`,
+        category,
+        icon: "shields",
+        portId: row.portId,
+        unavailableReason: "Per-generator power distribution is unresolved by the current fitting power model.",
+        behavior: "unresolved",
+        provenance: "UNRESOLVED",
+      }));
+    } else {
+      const row = rows[0]!;
+      const modeled = category === "engines" || category === "quantum";
+      columns.push({
+        key: category,
+        label: labelForCategory(category),
+        category,
+        icon: iconForCategory(category),
+        portId: row.portId,
+        unavailableReason: null,
+        // Engines have established continuous allocation behavior even while
+        // their quantitative performance curve remains unresolved. Quantum is
+        // binary, but its required allocation stays bound to the simulation
+        // contract rather than being flattened to a made-up one-pip floor.
+        minimumSegments: category === "engines" ? 1 : undefined,
+        maximumSegments: category === "engines" ? 6 : undefined,
+        behavior: category === "quantum" ? "binary_enable" : "segment_scaling",
+        provenance: modeled ? "MODELED_GAMEPLAY" : "SOURCE_BACKED",
+      });
+    }
+  }
+
+  return columns
+    .filter((column) => column.portId != null && componentAllocations.length > 0 ? true : column.category === null || allocated === undefined || column.category in allocated)
+    .sort((left, right) => ORDER[left.icon] - ORDER[right.icon] || left.key.localeCompare(right.key));
+}

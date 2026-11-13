@@ -4,9 +4,11 @@ import type { PublicLocationEntry } from "../../../features/mining/types";
 export default function StantonLagrangeChildrenSummary({
   entry,
   compact = false,
+  placeholder = false,
 }: {
   entry: PublicLocationEntry;
   compact?: boolean;
+  placeholder?: boolean;
 }) {
   if (entry.systemName.toLowerCase() !== "stanton") return null;
 
@@ -15,7 +17,7 @@ export default function StantonLagrangeChildrenSummary({
     entry.matchedLocationCodes,
   );
 
-  if (resolved.children.length === 0) return null;
+  if (resolved.children.length === 0 && !placeholder) return null;
 
   return (
     <div
@@ -23,7 +25,7 @@ export default function StantonLagrangeChildrenSummary({
       aria-label={`${entry.locationName} physical locations`}
       role="list"
     >
-      {resolved.children.map((child) => (
+      {resolved.children.length === 0 ? <span className="mloc-lagrange-child-badge">Locations unavailable</span> : resolved.children.map((child) => (
         <span
           key={`${entry.locationKey}:lagrange:${child.code}`}
           className="mloc-lagrange-child-badge"

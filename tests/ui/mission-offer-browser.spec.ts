@@ -62,9 +62,21 @@ test.describe("Mission Browser offer-first schema 3", () => {
     await expect(page.locator(".mission-group-card").filter({ hasText: "[Black Box Recovery \u2014 Medium]" })).toHaveCount(2);
     await expect(page.getByText("BitZeros_BlackBoxRecovery_Nyx_Medium", { exact: true })).toHaveCount(0);
 
-    await page.goto("/industry/missions?search=BattagliaStory1");
-    await expect(page.locator(".mission-group-card")).toHaveCount(0);
-    await page.goto("/industry/missions?search=BattagliaStory1&status=Not%20for%20release");
-    await expect(page.locator(".mission-group-card").filter({ hasText: "BattagliaStory1" }).first()).toBeVisible();
+    // Not-for-release offers stay opt-in. The offer is taken from the published
+    // generation rather than hard-coded, because titles change between generations.
+    const catalog = await (await page.request.get("/api/missions/browser")).json() as {
+      offersByKey: Record<string, { offerKey: string; displayTitle: string; releaseFlags: string[] }>;
+    };
+    const titleCounts = new Map<string, number>();
+    for (const offer of Object.values(catalog.offersByKey)) titleCounts.set(offer.displayTitle, (titleCounts.get(offer.displayTitle) ?? 0) + 1);
+    const inactive = Object.values(catalog.offersByKey).find((offer) => (
+      offer.releaseFlags.length === 1 && offer.releaseFlags[0] === "Not for release" && titleCounts.get(offer.displayTitle) === 1
+    ));
+    expect(inactive).toBeTruthy();
+    const search = encodeURIComponent(inactive?.displayTitle ?? "");
+    await page.goto(`/industry/missions?search=${search}`);
+    await expect(page.locator(".mission-group-card").filter({ hasText: inactive?.displayTitle ?? "" })).toHaveCount(0);
+    await page.goto(`/industry/missions?search=${search}&status=Not%20for%20release`);
+    await expect(page.locator(".mission-group-card").filter({ hasText: inactive?.displayTitle ?? "" }).first()).toBeVisible();
   });
 });

@@ -189,3 +189,14 @@ test("an FPS weapon is the preferred search target over its magazine", () => {
     "weapon",
   );
 });
+
+
+test("V31b material match mode switches between all and any", () => {
+  const both = { ...record("vehicle", "shield"), id: "both", facets: { materials: ["beryl", "stileron"], materialNames: ["Beryl", "Stileron"] } };
+  const one = { ...record("vehicle", "shield"), id: "one", facets: { materials: ["beryl"], materialNames: ["Beryl"] } };
+  const unrelated = { ...record("vehicle", "shield"), id: "other", facets: { materials: ["tungsten"], materialNames: ["Tungsten"] } };
+  const data = [both, one, unrelated];
+  assert.deepEqual(filterRecipeBrowserRecords(data, new URLSearchParams("mt=beryl,stileron")).map((x) => x.id), ["both"]);
+  assert.deepEqual(filterRecipeBrowserRecords(data, new URLSearchParams("mt=beryl,stileron&mm=any")).map((x) => x.id).sort(), ["both", "one"]);
+  assert.deepEqual(filterRecipeBrowserRecords(data, new URLSearchParams("mt=beryl&mm=all")).map((x) => x.id).sort(), ["both", "one"]);
+});

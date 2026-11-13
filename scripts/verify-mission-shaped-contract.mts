@@ -97,6 +97,7 @@ const supportedOfferShaperVersions = [
   "moonbreaker_mission_shaper_v3_4_offer_reputation_runtime_titles",
   "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles",
   "moonbreaker_mission_shaper_v3_6_portable_source_provenance",
+  "moonbreaker_mission_shaper_v3_7_compact_shards",
 ];
 const expected = isOfferGeneration
   ? {

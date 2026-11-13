@@ -100,6 +100,13 @@ export default function BuildQueueCraftCard({
         <span className="bq-craft-card-main">
           <span className="bq-craft-card-cat">{typeLabel}</span>
           <span className="bq-craft-card-name">{itemName}</span>
+          <span className="bq-v31-card-status" data-status={item.status ?? "queued"}>
+            {item.status === "complete" ? "COMPLETED" : item.status === "active" ? "ACTIVE" : item.status === "paused" ? "PAUSED" : "PLANNED"}
+          </span>
+          <span className="bq-v31-card-summary">{item.quantity} {item.quantity === 1 ? "unit" : "units"} · {inventoryEnabled ? statusLabel : "Inventory disabled"}</span>
+          <span className="bq-v31-card-track" role="progressbar" aria-label={"Material allocation for " + itemName} aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+            <span style={{ width: progress + "%" }} />
+          </span>
           <span className={`bq-craft-card-status bq-craft-card-status--${inventoryEnabled ? statusClass : "queued"}`}>
             {inventoryEnabled ? statusLabel : "Queued"}
           </span>

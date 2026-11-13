@@ -27,7 +27,7 @@ The reader-first migration is complete for `LIVE` build `4.9.0-live.12232306`:
 - CIG localization keys with comma metadata such as `,P` resolve through the normalized source token. Runtime-selected titles remain bracketed placeholders, such as `[Black Box Recovery — Medium]`; unresolved NFR/WIP debug names are hidden from the default active catalog and remain available only through explicit inactive filters.
 - The Headhunters golden report passes 10 offer identities, 25 exact variants, 10 exact-title search checks, the Ghost runtime-placeholder check, and all protected invariant gates.
 - Full validation passes: 60/60 mission tests, 4/4 offer-first Playwright tests, all six blueprint-source routes, source and shaped verifiers, lint, API boundary checks, and production build.
-- `npm run ui:missions` targets the current schema-3 offer-first suite. Use `npm run ui:missions:legacy` only when deliberately validating the schema-2/source-3 rollback fixture.
+- Mission Browser UI retired on 2026-10-27; `/industry/missions` and its slug deep links redirect to Crafting. `npm run ui:legacy-routes` checks retirement redirects/navigation. Mission APIs, publication gates, schema-3/source-4/offer-1 contracts, and schema-2/source-3 pointer rollback remain supported. Historical browser requirements below describe the retired UI, not a current route inventory. See [retirement audit](legacy-page-retirement.md).
 
 The immutable generation receipt and contradiction ledger are recorded in `docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json`.
 

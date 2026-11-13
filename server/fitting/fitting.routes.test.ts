@@ -24,6 +24,24 @@ const bombId = "88888888-8888-4888-8888-888888888888";
 const bombRackId = "99999999-9999-4999-8999-999999999999";
 const templateMissileId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const missileControllerId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
+const radarId = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
+const relayId = "f1111111-1111-4111-8111-111111111111";
+const lifeSupportId = "f2222222-2222-4222-8222-222222222222";
+const batteryId = "f3333333-3333-4333-8333-333333333333";
+const empId = "f4444444-4444-4444-8444-444444444444";
+const quantumInterdictionId = "f5555555-5555-4555-8555-555555555555";
+const fuelTankId = "f6666666-6666-4666-8666-666666666666";
+const fuelIntakeId = "f7777777-7777-4777-8777-777777777777";
+const personalStorageId = "f8888888-8888-4888-8888-888888888888";
+const salvageFillerId = "fb111111-1111-4111-8111-111111111111";
+const salvageStorageId = "fb222222-2222-4222-8222-222222222222";
+const salvageEmitterId = "fb333333-3333-4333-8333-333333333333";
+const salvageSupporterId = "fb444444-4444-4444-8444-444444444444";
+const countermeasureLauncherId = "fb555555-5555-4555-8555-555555555555";
+const miningModifierId = "f9999999-9999-4999-8999-999999999999";
+const thrusterId = "fa111111-1111-4111-8111-111111111111";
+const legacyVtolThrusterId = "fa222222-2222-4222-8222-222222222222";
+const legacyNonVtolThrusterId = "fa333333-3333-4333-8333-333333333333";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -48,7 +66,7 @@ async function fixtureRoot(): Promise<string> {
     { entityClass: shipId, shipKey: shipId, name: "Test Ship", displayName: "Test Ship", vehicleType: "Spaceship", isGroundVehicle: false, confidence: "high", sourceFile: "D:/private/foundry/test-ship.xml" },
     { entityClass: "11111111-1111-4111-8111-111111111111", shipKey: "11111111-1111-4111-8111-111111111111", name: "Second Ship", displayName: "Second Ship", vehicleType: "Spaceship", isGroundVehicle: false, confidence: "high" },
   ];
-  records["ship_performance.json"] = [{ shipKey: shipId, scmSpeed: 200, confidence: "high" }];
+  records["ship_performance.json"] = [{ shipKey: shipId, scmSpeed: 200, boostRegenDelayAfterUse: 0.2, confidence: "high" }];
   records["ship_hardpoints.json"] = [{
     shipKey: shipId,
     confidence: "high",
@@ -64,6 +82,9 @@ async function fixtureRoot(): Promise<string> {
       { id: "power/main", portId: "power/main", portName: "Power plant", portType: "PowerPlant", editable: true, children: [] },
       { id: "cooler/main", portId: "cooler/main", portName: "Cooler", portType: "Cooler", editable: true, children: [] },
       { id: "shield/main", portId: "shield/main", portName: "Shield", portType: "Shield", editable: true, children: [] },
+      { id: "life_support/main", portId: "life_support/main", portName: "Life support", portType: "LifeSupportGenerator", editable: true, children: [] },
+      { id: "fuel/main", portId: "fuel/main", portName: "Fuel tank", portType: "FuelTank", editable: true, children: [] },
+      { id: "engine/main", portId: "engine/main", portName: "Engine", portType: "MainThruster", defaultItemRef: "TestThruster", editable: true, children: [] },
       { id: "weapon/main", portId: "weapon/main", portName: "Main weapon", portType: "WeaponGun", editable: true, children: [], confidence: "high", resolvedDefaultComponentKey: componentId.replaceAll("-", "_") },
       { id: "missile/main", portId: "missile/main", portName: "Missile", portType: "Missile", editable: true, children: [] },
       {
@@ -88,6 +109,7 @@ async function fixtureRoot(): Promise<string> {
   records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: {
     "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true },
     "missile/main": { portId: "missile/main", compatibilityStatus: "known", compatibleComponentKeys: [missileId, templateMissileId], portType: "Missile", editable: true },
+    "fuel/main": { portId: "fuel/main", compatibilityStatus: "known", compatibleComponentKeys: [fuelTankId], portType: "FuelTank", editable: true },
   } }];
   records["coolers.json"] = [{
     entityClass: componentId,
@@ -99,6 +121,15 @@ async function fixtureRoot(): Promise<string> {
     coolingGenerated: 10,
     powerInputMaximum: 1,
     powerInputMinimum: 0.5,
+    minimumPowerRequired: 0.5,
+    minimumPowerRequiredPips: 1,
+    maximumPowerRequired: 1,
+    maximumPowerRequiredPips: 2,
+    powerInputMinimumFraction: 0.5,
+    coolingCapacity: 20,
+    coolingGenerationRate: 10,
+    heatSink: 40,
+    transferRate: 3,
     powerDraw: 1,
     electromagneticEmission: 250,
     emSignatureNominal: 250,
@@ -113,11 +144,20 @@ async function fixtureRoot(): Promise<string> {
       { pips: 1, percentAssigned: 0.5, modifier: 0.7, range: "low", value: 10, privateSourcePath: "do/not/expose" },
       { pips: 2, percentAssigned: 1, modifier: 1, range: "high", value: 10 },
     ],
+    componentAllocation: {
+      allocationStatus: "supported",
+      allocationReason: null,
+      segmentAllocationSupported: true,
+      minimumSegments: 1,
+      maximumSegments: 2,
+      powerRanges: [],
+      provenance: { minimumSegments: "DERIVED FROM SOURCE", maximumSegments: "DIRECT SOURCE", powerRanges: "SOURCE GAP" },
+    },
     coolingGeneratedPowerFormula: "maximumOutput * allocation",
     coolingGeneratedPowerFormulaConfidence: "source_backed_for_coolers",
     confidence: "high",
   }];
-  records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, confidence: "high" }];
+  records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, powerOutput: 12, powerCapacity: 20, powerGenerationRate: 11, confidence: "high" }];
   records["quantum_drives.json"] = [{
     entityClass: quantumDriveId,
     componentKey: quantumDriveId.replaceAll("-", "_"),
@@ -136,6 +176,15 @@ async function fixtureRoot(): Promise<string> {
     maxCalibrationRequirement: 10000,
     quantumStageOneAccelRate: 376000,
     quantumStageTwoAccelRate: 11200000,
+    rangeEfficiency: 0.8,
+    splineCooldown: 8,
+    splineJumpSpeed: 9000,
+    calibrationProcessAngleLimit: 15,
+    calibrationWarningAngleLimit: 30,
+    travellingEmSignature: 14,
+    travellingIrSignature: 7,
+    engageSpeed: 250,
+    interdictionEffectTime: 5,
     confidence: "high",
   }];
   records["ship_weapons.json"] = [{
@@ -294,11 +343,206 @@ async function fixtureRoot(): Promise<string> {
       { pips: 1, value: 5 },
       { pips: 2, value: 12 },
     ],
+    hardeningFactor: 0.2,
+    reservePoolRegenRate: 2,
+    reservePoolRegenTime: 8,
     powerInputMaximum: 2,
     powerInputUnitType: "PowerSegment",
     powerDraw: 1,
     shieldResistanceByDamageType: { physical: { min: 0, max: 0.25, confidence: "high", sourcePath: "shield/resistance" } },
     shieldAbsorptionByDamageType: { physical: { min: 0, max: 0.45, confidence: "high", sourcePath: "shield/absorption" } },
+    confidence: "high",
+  }];
+  records["radars.json"] = [{
+    entityClass: radarId,
+    componentKey: radarId.replaceAll("-", "_"),
+    name: "Test Radar",
+    displayName: "Test Radar",
+    componentType: "radar",
+    aimAssistMinAssignmentDistance: 100,
+    aimAssistMaxAssignmentDistance: 1000,
+    aimAssistOutsideRangeBufferDistance: 25,
+    confidence: "high",
+  }];
+  records["relays.json"] = [{
+    entityClass: relayId,
+    componentKey: relayId,
+    name: "Test Relay",
+    displayName: "Test Relay",
+    componentType: "relay",
+    relayResourceNetwork: {
+      resourceNetworkItemType: "Relay",
+      isResourceNetworked: true,
+      isRelay: true,
+      isConnectedToRoom: false,
+      wirelessConnection: false,
+      defaultPriority: 50,
+      networkItemSourcePath: "private/relay/path",
+    },
+    confidence: "high",
+  }];
+  records["life_support.json"] = [{
+    entityClass: lifeSupportId,
+    componentKey: lifeSupportId,
+    name: "Test Life Support",
+    displayName: "Test Life Support",
+    componentType: "life_support",
+    powerInputMaximum: 1,
+    powerInputMinimum: 1,
+    powerInputUnitType: "PowerSegment",
+    stateResourceDeltas: [{
+      stateName: "Online",
+      stateSourcePath: "private/state/path",
+      deltas: [{
+        deltaNode: "ItemResourceDeltaConversion",
+        deltaSourcePath: "private/delta/path",
+        minimumConsumptionFraction: 1,
+        noOverGeneration: false,
+        storageDischarge: null,
+        resources: [
+          { direction: "consumption", resource: "Power", value: 1, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/power/path" },
+          { direction: "generation", resource: "LifeSupport", value: 0.5, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/life/path" },
+        ],
+      }],
+    }],
+    thermalHeatGeneration: { resource: "Power", baselineTemperatureChange: 0.8, unitKnown: false, unitUnknown: true, sourcePath: "private/thermal/path" },
+    confidence: "high",
+  }];
+  records["batteries.json"] = [{
+    entityClass: batteryId,
+    componentKey: batteryId,
+    name: "Test Battery",
+    displayName: "Test Battery",
+    componentType: "battery",
+    stateResourceDeltas: [{ stateName: "Online", deltas: [{
+      deltaNode: "ItemResourceDeltaStorage",
+      minimumConsumptionFraction: null,
+      noOverGeneration: null,
+      storageDischarge: 0,
+      resources: [
+        { direction: "consumption", resource: "Power", value: 2, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high" },
+        { direction: "generation", resource: "Power", value: 2, unitType: "PowerSegment", unitKnown: true, unitUnknown: false, unitConfidence: "high" },
+      ],
+    }] }],
+    confidence: "high",
+  }];
+  records["emps.json"] = [{
+    entityClass: empId,
+    componentKey: empId,
+    name: "Test EMP",
+    displayName: "Test EMP",
+    componentType: "emp",
+    emp: { chargeTime: { value: 26, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/emp/path", attribute: "chargeTime" } },
+    confidence: "high",
+  }];
+  records["quantum_interdiction_generators.json"] = [{
+    entityClass: quantumInterdictionId,
+    componentKey: quantumInterdictionId,
+    name: "Test Quantum Interdiction Generator",
+    displayName: "Test Quantum Interdiction Generator",
+    componentType: "quantum_interdiction_generator",
+    quantumInterdiction: {
+      generator: { basePowerDrawFraction: { value: 0.2, unit: "fraction", unitKnown: true, unitUnknown: false, sourcePath: "private/generator/path" } },
+      jammer: { jammerRange: { value: 5000, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/jammer/path" } },
+      pulse: { chargeTimeSecs: { value: 90, unit: "seconds", unitKnown: true, unitUnknown: false, sourcePath: "private/pulse/path" } },
+    },
+    confidence: "high",
+  }];
+  records["fuel_tanks.json"] = [{
+    entityClass: fuelTankId,
+    componentKey: fuelTankId,
+    name: "Test Hydrogen Tank",
+    displayName: "Test Hydrogen Tank",
+    componentType: "fuel_tank",
+    itemType: "FuelTank",
+    stateResourceDeltas: [{ stateName: "Online", deltas: [{
+      deltaNode: "ItemResourceDeltaStorage",
+      storageDischarge: 0,
+      resources: [
+        { direction: "consumption", resource: "Fuel", value: 10, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/fuel/consumption" },
+        { direction: "generation", resource: "Fuel", value: 10, unitType: "StandardResource", unitKnown: true, unitUnknown: false, unitConfidence: "high", sourcePath: "private/fuel/generation" },
+      ],
+    }] }],
+    fuelTankParams: {
+      hydrogenMaxFlowMultiplier: { value: 1, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/tank/params" },
+    },
+    resourceContainerCapacity: { value: 0.8, unitNode: "SStandardCargoUnit", unitField: "standardCargoUnits", unitKnown: false, unitUnknown: true, sourcePath: "private/tank/capacity" },
+    inclusiveResources: [{ reference: "de9f4d03-6b60-429d-9b26-9f2308bae973", sourcePath: "private/tank/resource" }],
+    defaultComposition: [{ entry: "de9f4d03-6b60-429d-9b26-9f2308bae973", weight: 1, sourcePath: "private/tank/composition" }],
+    confidence: "high",
+  }];
+  records["fuel_intakes.json"] = [{
+    entityClass: fuelIntakeId,
+    componentKey: fuelIntakeId,
+    name: "Test Fuel Intake",
+    displayName: "Test Fuel Intake",
+    componentType: "fuel_intake",
+    fuelIntakeParams: {
+      fuelPushRate: { value: 50, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/intake/rate" },
+      minimumRate: { value: 0.2, unit: null, unitKnown: false, unitUnknown: true, sourcePath: "private/intake/minimum" },
+    },
+    confidence: "high",
+  }];
+  records["personal_storage.json"] = [{
+    entityClass: personalStorageId,
+    componentKey: personalStorageId,
+    name: "Test Personal Storage",
+    displayName: "Test Personal Storage",
+    componentType: "personal_storage",
+    inventoryContainer: { containerParamsRef: "c5efc6cb-bbed-4e9c-a42b-623b30417ab0", canAutoStoreRestrictedItems: false, sourcePath: "private/storage/container" },
+    inventoryCapacity: { value: 343, unitNode: "SCentiCargoUnit", unitField: "centiSCU", unitKnown: false, unitUnknown: true, sourcePath: "private/storage/capacity" },
+    internalPorts: [{
+      name: "IP_Button",
+      displayName: "@LOC_EMPTY",
+      minSize: 0,
+      maxSize: 1,
+      acceptedTypes: [{ type: "ControlPanel", subTypes: ["DoorPart"], sourcePath: "private/storage/accepted" }],
+      sourcePath: "private/storage/port",
+    }],
+    confidence: "high",
+  }];
+  records["mining_modifiers.json"] = [{
+    entityClass: miningModifierId,
+    componentKey: miningModifierId,
+    name: "Test Mining Module",
+    displayName: "Test Mining Module",
+    componentType: "mining_modifier",
+    durationSeconds: 60,
+    shatterDamageModifier: -30,
+    instabilityModifier: 0.8,
+    resistanceModifier: 15.5,
+    fractureWindowSizeModifier: 1.2,
+    optimalChargeRateModifier: 1.25,
+    catastrophicChargeRateModifier: 0.75,
+    isOptimalRateGood: 1,
+    sourceFile: "private/mining/module.xml",
+    confidence: "high",
+  }];
+  records["thrusters.json"] = [{
+    entityClass: thrusterId,
+    componentKey: thrusterId,
+    name: "Test VTOL Thruster",
+    displayName: "Test VTOL Thruster",
+    componentType: "thruster",
+    thrustCapacity: 100,
+    onlyActiveInVtol: true,
+    onlyActiveInVtolProvenance: { sourcePath: "private/thruster/path", attribute: "onlyActiveInVTOL", confidence: "high" },
+    confidence: "high",
+  }, {
+    entityClass: legacyVtolThrusterId,
+    componentKey: legacyVtolThrusterId,
+    name: "Legacy VTOL Thruster",
+    displayName: "Legacy VTOL Thruster",
+    componentType: "thruster",
+    vtol: "true",
+    confidence: "high",
+  }, {
+    entityClass: legacyNonVtolThrusterId,
+    componentKey: legacyNonVtolThrusterId,
+    name: "Legacy Non-VTOL Thruster",
+    displayName: "Legacy Non-VTOL Thruster",
+    componentType: "thruster",
+    vtol: "false",
     confidence: "high",
   }];
   records["ship_armors.json"] = [{
@@ -314,6 +558,11 @@ async function fixtureRoot(): Promise<string> {
     confidence: "high",
   }];
   records["vehicle_ammo.json"] = [{ ammoParamsRecord: ammoId, ammoKey: ammoId.replaceAll("-", "_"), alphaDamageTotal: 10, damagePhysical: 10, basePenetrationDistance: 0.66, maxPenetrationThickness: 0.5, confidence: "high" }];
+  records["salvage_filler_stations.json"] = [{ entityClass: salvageFillerId, componentKey: salvageFillerId, name: "Filler", displayName: "Filler", componentType: "salvage_filler_station", confidence: "high", sourcePath: "private/filler" }];
+  records["salvage_internal_storage.json"] = [{ entityClass: salvageStorageId, componentKey: salvageStorageId, name: "Storage", displayName: "Storage", componentType: "salvage_internal_storage", confidence: "high", resourceContainerCapacity: { value: 12.5, unitNode: "SStandardCargoUnit", unitField: "standardCargoUnits", unitKnown: false, unitUnknown: true, sourcePath: "private/capacity" }, inclusiveResources: [{ reference: "resource-guid", sourcePath: "private/ref" }] }];
+  records["salvage_field_emitters.json"] = [{ entityClass: salvageEmitterId, componentKey: salvageEmitterId, name: "Emitter", displayName: "Emitter", componentType: "salvage_field_emitter", confidence: "high" }];
+  records["salvage_field_supporters.json"] = [{ entityClass: salvageSupporterId, componentKey: salvageSupporterId, name: "Supporter", displayName: "Supporter", componentType: "salvage_field_supporter", confidence: "high" }];
+  records["countermeasure_launchers.json"] = [{ entityClass: countermeasureLauncherId, componentKey: countermeasureLauncherId, name: "Countermeasure", displayName: "Countermeasure", componentType: "countermeasure_launcher", countermeasureLauncher: { ammoParamsRecord: "ammo-zero", initialAmmoCount: 0, maxAmmoCount: 0, maxRestockCount: 0, allowAmmoRepool: false, turnedOnByDefault: false, forceOn: false, asopSpawnState: "Disabled", sourcePath: "private/countermeasure" } }];
 
   await Promise.all(PUBLIC_REGISTRIES.map(async (name) => {
     await writeFile(path.join(fittingRoot, name), `${JSON.stringify(envelope(name.replace(/\.json$/, ""), records[name]), null, 2)}\n`, "utf8");
@@ -341,6 +590,20 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "bombs.json"));
     await unlink(path.join(fittingRoot, "bomb_racks.json"));
     await unlink(path.join(fittingRoot, "missile_controllers.json"));
+    await unlink(path.join(fittingRoot, "relays.json"));
+    await unlink(path.join(fittingRoot, "life_support.json"));
+    await unlink(path.join(fittingRoot, "batteries.json"));
+    await unlink(path.join(fittingRoot, "emps.json"));
+    await unlink(path.join(fittingRoot, "quantum_interdiction_generators.json"));
+    await unlink(path.join(fittingRoot, "fuel_tanks.json"));
+    await unlink(path.join(fittingRoot, "fuel_intakes.json"));
+    await unlink(path.join(fittingRoot, "personal_storage.json"));
+    await unlink(path.join(fittingRoot, "salvage_filler_stations.json"));
+    await unlink(path.join(fittingRoot, "salvage_internal_storage.json"));
+    await unlink(path.join(fittingRoot, "salvage_field_emitters.json"));
+    await unlink(path.join(fittingRoot, "salvage_field_supporters.json"));
+    await unlink(path.join(fittingRoot, "countermeasure_launchers.json"));
+    await unlink(path.join(fittingRoot, "mining_modifiers.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
     assert.equal(meta?.status, 200, JSON.stringify(meta?.body));
@@ -348,6 +611,11 @@ test("older datasets remain readable when additive ordnance registries are absen
     assert.equal(JSON.stringify(meta?.body).includes("missiles"), false);
     assert.equal(JSON.stringify(meta?.body).includes("bombs"), false);
     assert.equal(JSON.stringify(meta?.body).includes("missile_controllers"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("life_support"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("quantum_interdiction_generators"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("fuel_tanks"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("personal_storage"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("mining_modifiers"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -363,6 +631,7 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
 
     const ship = await handleFittingRoute("GET", `/api/v1/fitting/ships/${shipId}?${query}`, "test-request", root);
     assert.equal((ship?.body as { data: { mitigation: { hullHp: number | null } } }).data.mitigation.hullHp, null);
+    assert.equal((ship?.body as { data: { performance: { boostRegenDelayAfterUse: number | null } } }).data.performance.boostRegenDelayAfterUse, 0.2);
     assert.equal(JSON.stringify(ship?.body).includes("sourceFile"), false);
     assert.equal(JSON.stringify(ship?.body).includes(root), false);
 
@@ -375,6 +644,11 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     const coolerStats = (cooler?.body as { data: { stats: Record<string, number> } }).data.stats;
     assert.equal(coolerStats.powerInputMaximum, 1);
     assert.equal(coolerStats.powerInputMinimum, 0.5);
+    assert.equal(coolerStats.minimumPowerRequired, 0.5);
+    assert.equal(coolerStats.maximumPowerRequiredPips, 2);
+    assert.equal(coolerStats.powerInputMinimumFraction, 0.5);
+    assert.equal(coolerStats.coolingCapacity, 20);
+    assert.equal(coolerStats.transferRate, 3);
     assert.equal(coolerStats.emSignatureDecayRate, 0.15);
     assert.equal(coolerStats.selfRepairTime, 25.5);
     assert.equal(coolerStats.selfRepairBaselineHp, 28);
@@ -392,6 +666,12 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal("privateSourcePath" in (coolerData.coolingGeneratedByPowerPip[0] ?? {}), false);
     assert.equal(coolerData.coolingGeneratedPowerFormula, "maximumOutput * allocation");
     assert.equal(coolerData.coolingGeneratedPowerFormulaConfidence, "source_backed_for_coolers");
+
+    const powerPlant = await handleFittingRoute("GET", `/api/v1/fitting/components/${powerPlantId}?${query}`, "test-request", root);
+    const powerPlantStats = (powerPlant?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(powerPlantStats.powerOutput, 12);
+    assert.equal(powerPlantStats.powerCapacity, 20);
+    assert.equal(powerPlantStats.powerGenerationRate, 11);
 
     const armor = await handleFittingRoute("GET", `/api/v1/fitting/components/33333333-3333-4333-8333-333333333333?${query}`, "test-request", root);
     assert.equal((armor?.body as { data: { type: string; mitigation: { kind: string; deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.type, "armor");
@@ -454,6 +734,158 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal(quantumStats.maxCalibrationRequirement, 10000);
     assert.equal(quantumStats.quantumStageOneAccelRate, 376000);
     assert.equal(quantumStats.quantumStageTwoAccelRate, 11200000);
+    assert.equal(quantumStats.rangeEfficiency, 0.8);
+    assert.equal(quantumStats.splineCooldown, 8);
+    assert.equal(quantumStats.calibrationWarningAngleLimit, 30);
+    assert.equal(quantumStats.travellingEmSignature, 14);
+    assert.equal(quantumStats.interdictionEffectTime, 5);
+
+    const radar = await handleFittingRoute("GET", `/api/v1/fitting/components/${radarId}?${query}`, "test-request", root);
+    const radarStats = (radar?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(radarStats.aimAssistMinAssignmentDistance, 100);
+    assert.equal(radarStats.aimAssistOutsideRangeBufferDistance, 25);
+
+    const lifeSupport = await handleFittingRoute("GET", `/api/v1/fitting/components/${lifeSupportId}?${query}`, "test-request", root);
+    const lifeEngineering = (lifeSupport?.body as { data: { engineering: {
+      stateResources: Array<{ stateName: string; deltas: Array<{ resources: Array<{ direction: string; resource: string; value: number }> }> }>;
+      thermalHeatGeneration: { baselineTemperatureChange: number; unitUnknown: boolean };
+    } } }).data.engineering;
+    assert.equal(lifeEngineering.stateResources[0]?.stateName, "Online");
+    assert.deepEqual(
+      lifeEngineering.stateResources[0]?.deltas[0]?.resources.map(({ direction, resource, value }) => ({ direction, resource, value })),
+      [
+        { direction: "consumption", resource: "Power", value: 1 },
+        { direction: "generation", resource: "LifeSupport", value: 0.5 },
+      ],
+    );
+    assert.equal(lifeEngineering.thermalHeatGeneration.baselineTemperatureChange, 0.8);
+    assert.equal(lifeEngineering.thermalHeatGeneration.unitUnknown, true);
+    assert.equal(JSON.stringify(lifeSupport?.body).includes("sourcePath"), false);
+
+    const battery = await handleFittingRoute("GET", `/api/v1/fitting/components/${batteryId}?${query}`, "test-request", root);
+    const batteryDelta = (battery?.body as { data: { engineering: { stateResources: Array<{ deltas: Array<{ storageDischarge: number; resources: Array<{ direction: string }> }> }> } } }).data.engineering.stateResources[0]?.deltas[0];
+    assert.equal(batteryDelta?.storageDischarge, 0);
+    assert.deepEqual(batteryDelta?.resources.map(({ direction }) => direction), ["consumption", "generation"]);
+
+    const relay = await handleFittingRoute("GET", `/api/v1/fitting/components/${relayId}?${query}`, "test-request", root);
+    assert.equal((relay?.body as { data: { engineering: { relay: { isRelay: boolean; defaultPriority: number } } } }).data.engineering.relay.isRelay, true);
+    assert.equal((relay?.body as { data: { engineering: { relay: { defaultPriority: number } } } }).data.engineering.relay.defaultPriority, 50);
+
+    const emp = await handleFittingRoute("GET", `/api/v1/fitting/components/${empId}?${query}`, "test-request", root);
+    assert.equal((emp?.body as { data: { engineering: { emp: { chargeTime: { value: number; unitUnknown: boolean } } } } }).data.engineering.emp.chargeTime.value, 26);
+    assert.equal((emp?.body as { data: { engineering: { emp: { chargeTime: { unitUnknown: boolean } } } } }).data.engineering.emp.chargeTime.unitUnknown, true);
+
+    const quantumInterdiction = await handleFittingRoute("GET", `/api/v1/fitting/components/${quantumInterdictionId}?${query}`, "test-request", root);
+    const quantumEngineering = (quantumInterdiction?.body as { data: { engineering: { quantumInterdiction: {
+      generator: { basePowerDrawFraction: { value: number; unit: string } };
+      jammer: { jammerRange: { value: number; unitUnknown: boolean } };
+      pulse: { chargeTimeSecs: { value: number; unit: string } };
+    } } } }).data.engineering.quantumInterdiction;
+    assert.equal(quantumEngineering.generator.basePowerDrawFraction.unit, "fraction");
+    assert.equal(quantumEngineering.jammer.jammerRange.unitUnknown, true);
+    assert.equal(quantumEngineering.pulse.chargeTimeSecs.value, 90);
+
+    const fuelTank = await handleFittingRoute("GET", `/api/v1/fitting/components/${fuelTankId}?${query}`, "test-request", root);
+    const fuelTankEngineering = (fuelTank?.body as { data: { engineering: {
+      fuelTank: {
+        params: { hydrogenMaxFlowMultiplier: { value: number; unitUnknown: boolean } };
+        capacity: { value: number; unitNode: string; unitField: string; unitUnknown: boolean };
+        inclusiveResources: Array<{ reference: string }>;
+        defaultComposition: Array<{ entry: string; weight: number }>;
+      };
+    } } }).data.engineering.fuelTank;
+    assert.equal(fuelTankEngineering.params.hydrogenMaxFlowMultiplier.value, 1);
+    assert.equal(fuelTankEngineering.params.hydrogenMaxFlowMultiplier.unitUnknown, true);
+    assert.deepEqual(fuelTankEngineering.capacity, {
+      value: 0.8,
+      unitNode: "SStandardCargoUnit",
+      unitField: "standardCargoUnits",
+      unitKnown: false,
+      unitUnknown: true,
+    });
+    assert.equal(fuelTankEngineering.inclusiveResources[0]?.reference, "de9f4d03-6b60-429d-9b26-9f2308bae973");
+    assert.equal(fuelTankEngineering.defaultComposition[0]?.weight, 1);
+
+    const fuelIntake = await handleFittingRoute("GET", `/api/v1/fitting/components/${fuelIntakeId}?${query}`, "test-request", root);
+    const fuelIntakeEngineering = (fuelIntake?.body as { data: { engineering: { fuelIntake: {
+      fuelPushRate: { value: number; unitUnknown: boolean };
+      minimumRate: { value: number; unitUnknown: boolean };
+    } } } }).data.engineering.fuelIntake;
+    assert.equal(fuelIntakeEngineering.fuelPushRate.value, 50);
+    assert.equal(fuelIntakeEngineering.minimumRate.unitUnknown, true);
+
+    const personalStorage = await handleFittingRoute("GET", `/api/v1/fitting/components/${personalStorageId}?${query}`, "test-request", root);
+    const personalStorageEngineering = (personalStorage?.body as { data: { engineering: { personalStorage: {
+      inventoryContainer: { containerParamsRef: string; canAutoStoreRestrictedItems: boolean };
+      capacity: { value: number; unitNode: string; unitUnknown: boolean };
+      internalPorts: Array<{ name: string; acceptedTypes: Array<{ type: string; subTypes: string[] }> }>;
+    } } } }).data.engineering.personalStorage;
+    assert.equal(personalStorageEngineering.inventoryContainer.canAutoStoreRestrictedItems, false);
+    assert.equal(personalStorageEngineering.capacity.value, 343);
+    assert.equal(personalStorageEngineering.capacity.unitNode, "SCentiCargoUnit");
+    assert.deepEqual(personalStorageEngineering.internalPorts[0]?.acceptedTypes[0]?.subTypes, ["DoorPart"]);
+    assert.equal(JSON.stringify(fuelTank?.body).includes("sourcePath"), false);
+    assert.equal(JSON.stringify(personalStorage?.body).includes("private/storage"), false);
+
+    for (const [id, type] of [[salvageFillerId, "salvage_filler_station"], [salvageStorageId, "salvage_internal_storage"], [salvageEmitterId, "salvage_field_emitter"], [salvageSupporterId, "salvage_field_supporter"]] as const) {
+      const detail = await handleFittingRoute("GET", `/api/v1/fitting/components/${id}?${query}`, "test-request", root);
+      const data = (detail?.body as { data: { type: string; engineering: { salvage: { type: string; resourceContainer: { capacity: { value: number; unitNode: string; unitField: string }; inclusiveResources: Array<{ reference: string }> } | null } } } }).data;
+      assert.equal(data.type, type);
+      assert.equal(data.engineering.salvage.type, type);
+      assert.equal(JSON.stringify(detail?.body).includes("sourcePath"), false);
+      if (type === "salvage_internal_storage") {
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.value, 12.5);
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.unitNode, "SStandardCargoUnit");
+        assert.equal(data.engineering.salvage.resourceContainer?.capacity.unitField, "standardCargoUnits");
+        assert.equal(data.engineering.salvage.resourceContainer?.inclusiveResources[0]?.reference, "resource-guid");
+      }
+    }
+    const countermeasure = await handleFittingRoute("GET", `/api/v1/fitting/components/${countermeasureLauncherId}?${query}`, "test-request", root);
+    const countermeasureData = (countermeasure?.body as { data: { type: string; engineering: { countermeasureLauncher: Record<string, unknown> } } }).data;
+    assert.equal(countermeasureData.type, "countermeasure_launcher");
+    assert.deepEqual(countermeasureData.engineering.countermeasureLauncher, {
+      ammoParamsRecord: "ammo-zero", initialAmmoCount: 0, maxAmmoCount: 0, maxRestockCount: 0,
+      allowAmmoRepool: false, turnedOnByDefault: false, forceOn: false, asopSpawnState: "Disabled",
+    });
+    assert.equal(JSON.stringify(countermeasure?.body).includes("sourcePath"), false);
+    const countermeasureList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=countermeasure_launcher&${query}`, "test-request", root);
+    assert.equal((countermeasureList?.body as { data: Array<{ id: string }> }).data[0]?.id, countermeasureLauncherId);
+
+    const miningModifier = await handleFittingRoute("GET", `/api/v1/fitting/components/${miningModifierId}?${query}`, "test-request", root);
+    const miningModifierData = (miningModifier?.body as { data: { type: string; stats: Record<string, number> } }).data;
+    assert.equal(miningModifierData.type, "mining_modifier");
+    assert.equal(miningModifierData.stats.durationSeconds, 60);
+    assert.equal(miningModifierData.stats.shatterDamageModifier, -30);
+    assert.equal(miningModifierData.stats.fractureWindowSizeModifier, 1.2);
+    assert.equal(miningModifierData.stats.isOptimalRateGood, 1);
+    assert.equal(JSON.stringify(miningModifier?.body).includes("sourceFile"), false);
+
+    const miningModifierList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=mining_modifier&${query}`, "test-request", root);
+    assert.equal((miningModifierList?.body as { data: Array<{ id: string; type: string }> }).data[0]?.id, miningModifierId);
+
+    const thruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${thrusterId}?${query}`, "test-request", root);
+    assert.equal((thruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, true);
+    assert.equal(JSON.stringify(thruster?.body).includes("onlyActiveInVtolProvenance"), false);
+    assert.equal(JSON.stringify(thruster?.body).includes("private/thruster"), false);
+    const legacyVtolThruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${legacyVtolThrusterId}?${query}`, "test-request", root);
+    const legacyNonVtolThruster = await handleFittingRoute("GET", `/api/v1/fitting/components/${legacyNonVtolThrusterId}?${query}`, "test-request", root);
+    assert.equal((legacyVtolThruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, true);
+    assert.equal((legacyNonVtolThruster?.body as { data: { thruster: { onlyActiveInVtol: boolean | null } } }).data.thruster.onlyActiveInVtol, false);
+
+    const fuelTankCalculated = await handleFittingRoute("POST", `/api/v1/fitting/calculate?${query}`, "test-request", root, {
+      shipId,
+      loadout: { "fuel/main": fuelTankId },
+      options: { compareToStock: false },
+    });
+    assert.equal(fuelTankCalculated?.status, 200);
+    assert.equal(
+      (fuelTankCalculated?.body as { data: { componentCountsByType: Record<string, number> } }).data.componentCountsByType.fuel_tank,
+      1,
+    );
+
+    const lifeSupportList = await handleFittingRoute("GET", `/api/v1/fitting/components?type=life_support&${query}`, "test-request", root);
+    assert.equal((lifeSupportList?.body as { data: Array<{ id: string; type: string }> }).data[0]?.id, lifeSupportId);
+    assert.equal((lifeSupportList?.body as { data: Array<{ type: string }> }).data[0]?.type, "life_support");
 
     const shieldData = (shield?.body as {
       data: {
@@ -464,6 +896,10 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
         };
       };
     }).data.mitigation;
+    const shieldStats = (shield?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(shieldStats.hardeningFactor, 0.2);
+    assert.equal(shieldStats.reservePoolRegenRate, 2);
+    assert.equal(shieldStats.reservePoolRegenTime, 8);
     assert.equal(shieldData.damagedRegenDelay, 4);
     assert.equal(shieldData.downedRegenDelay, 8);
     assert.deepEqual(shieldData.regenByPowerPip.map(({ pips, value }) => ({ pips, value })), [
@@ -562,6 +998,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     });
     assert.equal(calculate?.status, 200);
     assert.equal((calculate?.body as { data: { scope: string } }).data.scope, "custom_loadout");
+    const allocation = (calculate?.body as { data: { componentAllocations: Array<Record<string, unknown>> } }).data.componentAllocations.find((entry) => entry.portId === "weapon/main");
+    assert.equal(allocation?.allocationStatus, "supported");
+    assert.equal(allocation?.minimumSegments, 1);
+    assert.equal(allocation?.maximumSegments, 2);
+    assert.equal((allocation?.provenance as Record<string, string>).powerRanges, "SOURCE GAP");
     assert.equal("simulation" in (calculate?.body as { data: Record<string, unknown> }).data, false);
 
     const ordnance = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
@@ -608,6 +1049,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
             capacitySegments: { value: number };
             weaponPoolCapacitySegments: { value: number; sources: Array<{ path: string; value: number }> };
             allocatedSegments: { value: number; sources: Array<{ path: string; value: number }> };
+            categories: {
+              weapons: { maximumSegments: { value: number | null } };
+              cooler1: { minimumSegments: { value: number | null }; exactAllocationCurve: Array<{ segments: number; value: { value: number | null } }> };
+              engines: { componentCount: number; addressability: string };
+            };
           };
           cooling: { utilizationPercent: { value: number } };
           shields: {
@@ -620,6 +1066,11 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     }).data.simulation;
     assert.equal(simulation.power.capacitySegments.value, 10);
     assert.equal(simulation.power.weaponPoolCapacitySegments.value, 4);
+    assert.equal(simulation.power.categories.weapons.maximumSegments.value, 4);
+    assert.equal(simulation.power.categories.cooler1.minimumSegments.value, 0.5);
+    assert.equal(simulation.power.categories.engines.componentCount, 1);
+    assert.equal(simulation.power.categories.engines.addressability, "bounds-unavailable");
+    assert.deepEqual(simulation.power.categories.cooler1.exactAllocationCurve.map((point) => [point.segments, point.value.value]), [[1, 10], [2, 10]]);
     assert.ok(simulation.power.weaponPoolCapacitySegments.sources.some(
       (entry) => entry.path.includes("FixedPowerPool") && entry.value === 4,
     ));
@@ -636,6 +1087,28 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     assert.equal(simulation.weaponsSummary.totalDamage.value, 6000);
     assert.equal(simulation.weaponsSummary.dps.value, 100);
     assert.equal(JSON.stringify(simulated?.body).includes("sourceFile"), false);
+
+    const lifeSupportSimulated = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId,
+      loadout: {
+        "power/main": powerPlantId,
+        "life_support/main": lifeSupportId,
+      },
+      options: { compareToStock: false },
+      simulation: {
+        modelVersion: "fitting-simulation-v1",
+        durationSeconds: 60,
+        powerAllocation: { weapons: 0, engines: 0, quantum: 0, radar: 0, shields: 0, lifeSupport: 1, cooler1: 0, cooler2: 0 },
+      },
+    });
+    assert.equal(lifeSupportSimulated?.status, 200);
+    const lifeSupportSimulation = (lifeSupportSimulated?.body as {
+      data: { simulation: { power: { allocatedSegments: { value: number | null } }; missingInputs: Array<{ componentId: string; path: string }> } };
+    }).data.simulation;
+    assert.equal(lifeSupportSimulation.power.allocatedSegments.value, null);
+    assert.ok(lifeSupportSimulation.missingInputs.some(
+      (entry) => entry.componentId === lifeSupportId && entry.path === "powerCategory",
+    ));
 
     const turretSimulated = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
       shipId,

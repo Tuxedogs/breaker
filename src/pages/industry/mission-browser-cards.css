@@ -6,7 +6,7 @@
 }
 
 .mb-family-block {
-  --mission-accent: var(--mb-teal);
+  --mission-accent: var(--mb-accent);
   position: relative;
   min-width: 0;
   border-radius: var(--ops-radius-nested);
@@ -32,7 +32,7 @@
   overflow: hidden;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  background: var(--mb-surface-deep);
+  background: var(--mb-surface-2);
   box-shadow: none;
   color: inherit;
   text-align: left;
@@ -47,11 +47,11 @@
 }
 
 .mission-group-card:focus-visible {
-  border-color: var(--mb-focus);
+  border-color: var(--mb-focus-ring);
 }
 
 .mb-family-block.is-selected .mission-group-card {
-  border-color: color-mix(in srgb, var(--mission-accent) 62%, var(--mb-focus));
+  border-color: color-mix(in srgb, var(--mission-accent) 62%, var(--mb-focus-ring));
   background: var(--mb-surface-selected);
 }
 
@@ -79,7 +79,7 @@
   height: 42px;
   border: 1px solid color-mix(in srgb, var(--mission-accent) 48%, var(--mb-border));
   border-radius: var(--ops-radius-nested);
-  background: rgba(4, 10, 16, 0.72);
+  background: color-mix(in srgb, var(--mb-canvas) 72%, transparent);
   color: var(--mission-accent);
   font-size: var(--app-text-meta);
   font-weight: 800;
@@ -94,7 +94,7 @@
 .mission-group-card__title {
   display: block;
   overflow: hidden;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: var(--app-text-title-sm);
   font-weight: 700;
   line-height: 1.15;
@@ -106,7 +106,7 @@
   display: block;
   margin-top: 3px;
   overflow: hidden;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
   line-height: 1.2;
   text-overflow: ellipsis;
@@ -120,7 +120,7 @@
   height: 28px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-title);
   transition: border-color 140ms ease, color 140ms ease;
 }
@@ -152,7 +152,7 @@
 }
 
 .mission-group-card__metrics small {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -163,7 +163,7 @@
 .mission-group-card__metrics strong {
   display: block;
   overflow: hidden;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: var(--app-text-body);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
@@ -182,7 +182,7 @@
 
 .mission-card-legal,
 .mission-card-matches {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
   line-height: 1.25;
 }
@@ -195,7 +195,7 @@
 .mission-card-matches {
   display: block;
   margin-top: 6px;
-  color: rgba(125, 211, 252, 0.8);
+  color: color-mix(in srgb, var(--mb-accent) 80%, transparent);
 }
 
 .mb-badge,
@@ -208,8 +208,8 @@
   padding: 2px 7px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  background: rgba(255, 255, 255, 0.025);
-  color: var(--mb-text-muted);
+  background: color-mix(in srgb, var(--mb-text-1) 2.5%, transparent);
+  color: var(--mb-text-2);
   font-size: var(--app-text-chip);
   font-weight: 700;
   letter-spacing: 0.035em;
@@ -227,82 +227,82 @@
 }
 
 .mission-rep-reward-text {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
 
 .mb-badge.is-type {
-  border-color: rgba(125, 211, 252, 0.32);
-  background: rgba(56, 189, 248, 0.08);
-  color: #9bdcff;
+  border-color: color-mix(in srgb, var(--mb-accent) 32%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
+  color: var(--mb-accent);
 }
 
 .mb-badge.is-blueprint {
-  border-color: rgba(77, 184, 168, 0.36);
-  background: rgba(77, 184, 168, 0.08);
-  color: #75d8ca;
+  border-color: color-mix(in srgb, var(--mb-accent) 36%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
+  color: var(--mb-accent);
 }
 
 .mb-badge.is-verified,
 .mb-badge.is-green {
-  border-color: rgba(110, 231, 160, 0.36);
-  background: rgba(110, 231, 160, 0.08);
-  color: var(--mb-positive);
+  border-color: color-mix(in srgb, var(--mb-good) 36%, transparent);
+  background: color-mix(in srgb, var(--mb-good) 8%, transparent);
+  color: var(--mb-good);
 }
 
 .mb-badge.is-unverified,
 .mb-badge.is-amber {
-  border-color: rgba(255, 178, 26, 0.34);
-  background: rgba(255, 178, 26, 0.08);
-  color: var(--mb-amber);
+  border-color: color-mix(in srgb, var(--mb-warn) 34%, transparent);
+  background: color-mix(in srgb, var(--mb-warn) 8%, transparent);
+  color: var(--mb-warn);
 }
 
 .mb-badge.is-red {
-  border-color: rgba(255, 113, 133, 0.34);
-  background: rgba(255, 113, 133, 0.08);
-  color: var(--mb-negative);
+  border-color: color-mix(in srgb, var(--mb-bad) 34%, transparent);
+  background: color-mix(in srgb, var(--mb-bad) 8%, transparent);
+  color: var(--mb-bad);
 }
 
 .mb-badge.is-violet {
-  border-color: rgba(167, 139, 250, 0.32);
-  background: rgba(167, 139, 250, 0.08);
-  color: #c4b5fd;
+  border-color: color-mix(in srgb, var(--mb-accent) 32%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
+  color: var(--mb-accent);
 }
 
 .mb-badge.is-muted,
 .mb-badge.is-neutral {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
 }
 
 .mission-rep-scope--hauling {
-  --mission-accent: #5eead4;
+  --mission-accent: var(--mb-accent);
 }
 
 .mission-rep-scope--ship-combat,
 .mission-rep-scope--security {
-  --mission-accent: #fb7185;
+  --mission-accent: var(--mb-bad);
 }
 
 .mission-rep-scope--salvage,
 .mission-rep-scope--refuel {
-  --mission-accent: #6ee7a0;
+  --mission-accent: var(--mb-good);
 }
 
 .mission-rep-scope--standing {
-  --mission-accent: #c4b5fd;
+  --mission-accent: var(--mb-accent);
 }
 
 .mission-rep-scope--bounty {
-  --mission-accent: #fbbf24;
+  --mission-accent: var(--mb-warn);
 }
 
 .mission-rep-scope--courier {
-  --mission-accent: #7dd3fc;
+  --mission-accent: var(--mb-accent);
 }
 
 .mission-rep-scope--mixed,
 .mission-rep-scope--unknown {
-  --mission-accent: #94a3b8;
+  --mission-accent: var(--mb-text-3);
 }

@@ -5,6 +5,11 @@ import { getComponentCardsRoot } from "../config/componentCardsRoot.js";
 import { resolveDataset } from "../fitting/datasetResolver.js";
 import { loadRegistry } from "../fitting/registryStore.js";
 import { loadCraftingBlueprintSourceGuidSet } from "./craftingBlueprintSources.routes.js";
+import type { ComponentCardIndexRecord } from "../../src/lib/componentCardIndex.js";
+import {
+  parseRecipeBrowserSort,
+  sortRecipeBrowserRecords,
+} from "../../src/components/industry/crafting/utils/recipeBrowserSort.js";
 
 type RouteResult = { status: number; body: unknown };
 
@@ -235,7 +240,10 @@ function matchesBrowserQuery(record: BrowserRecord, url: URL, materialFilterValu
       ...(Array.isArray(facets?.materials) ? facets.materials : []),
       ...(Array.isArray(facets?.materialNames) ? facets.materialNames : []),
     ].filter((value): value is string => typeof value === "string");
-    if (!values.some((value) => materialFilters.has(value))) return false;
+    const allSelected = url.searchParams.get("mm") !== "any";
+    if (allSelected
+      ? ![...materialFilters].every((value) => values.includes(value))
+      : !values.some((value) => materialFilters.has(value))) return false;
   }
 
   const search = (url.searchParams.get("search") ?? url.searchParams.get("q") ?? "").trim().toLowerCase();
@@ -275,7 +283,14 @@ function pickVariantRepresentative(records: BrowserRecord[]): BrowserRecord {
 }
 
 function browserSummary(record: BrowserRecord): BrowserRecord {
-  const { searchText: _searchText, searchTokens: _searchTokens, description: _description, descriptionSourceKey: _descriptionSourceKey, materials: _materials, source: _source, card: _card, ...summary } = record;
+  const summary = { ...record };
+  delete summary.searchText;
+  delete summary.searchTokens;
+  delete summary.description;
+  delete summary.descriptionSourceKey;
+  delete summary.materials;
+  delete summary.source;
+  delete summary.card;
   return summary;
 }
 
@@ -296,9 +311,19 @@ async function loadBrowserPage(url: URL): Promise<unknown> {
     if (!key) ungrouped.push(record);
     else groups.set(key, [...(groups.get(key) ?? []), record]);
   }
-  const grouped = [...ungrouped, ...[...groups.values()].map(pickVariantRepresentative)].sort((a, b) => compareBrowserRecords(a, b, search));
+  const defaultOrder = [...ungrouped, ...[...groups.values()].map(pickVariantRepresentative)].sort((a, b) => compareBrowserRecords(a, b, search));
+  // Column sorting applies to the whole filtered set before pagination, using the
+  // same ordering contract (and the same summary fields) the client renders.
+  const sort = parseRecipeBrowserSort(url.searchParams);
+  const grouped = sort
+    ? sortRecipeBrowserRecords(defaultOrder.map(browserSummary) as unknown as ComponentCardIndexRecord[], sort) as unknown as BrowserRecord[]
+    : defaultOrder;
   const requestedPage = Math.max(1, Number(url.searchParams.get("pg") ?? "1") || 1);
-  const requestedLimit = Math.max(1, Math.min(40, Number(url.searchParams.get("limit") ?? "40") || 40));
+  // limit=all returns the whole filtered list (Crafting renders it unpaged);
+  // numeric limits keep the original 40-row cap.
+  const requestedLimit = url.searchParams.get("limit") === "all"
+    ? Math.max(1, grouped.length)
+    : Math.max(1, Math.min(40, Number(url.searchParams.get("limit") ?? "40") || 40));
   const page = Math.min(requestedPage, Math.max(1, Math.ceil(grouped.length / requestedLimit)));
   const offset = (page - 1) * requestedLimit;
   const pageRecords = grouped.slice(offset, offset + requestedLimit);

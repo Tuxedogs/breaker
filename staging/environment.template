@@ -1,0 +1,16 @@
+# Template only. Enter values through authorized secret handling, never commit filled copies.
+# Existing Vercel project -> Preview -> Git branch staging, for EVERY key below.
+# Do not change Production or generic Preview scopes.
+BREAKER_ENVIRONMENT=staging
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+DATABASE_URL=
+NEON_PROJECT_ID=
+NEON_BRANCH_ID=
+# Vercel must inject VERCEL_ENV=preview, VERCEL_GIT_COMMIT_REF=staging,
+# VERCEL_PROJECT_ID=prj_EoP7acRV8sQtRM4NnzsCQWb7Qlpz.
+# No service-role key, owner DB credentials, PG*, POSTGRES_* or unpooled aliases.
+# DATABASE_URL must identify the approved staging-only host/database/restricted role
+# and include sslmode=require. No production environment file should be loaded.

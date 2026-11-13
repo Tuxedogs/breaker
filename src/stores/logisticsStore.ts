@@ -39,8 +39,10 @@ import {
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
 import {
+  buildInventoryLocationLookup,
   mergeCanonicalInventoryLocations,
   remapInventoryEntryLocationIds,
+  resolveInventoryLocationByInput,
 } from "../lib/logistics/inventoryLocationOptions";
 import {
   getLotAvailableAmountAfterReservations,
@@ -172,6 +174,7 @@ interface LogisticsStoreState {
   setInventoryUi: (patch: Partial<InventoryUiState>) => void;
   setInventorySync: (patch: Partial<InventorySyncState>) => void;
   addLocation: (location: InventoryLocation) => void;
+  createCustomInventoryLocationAsync: (name: string) => Promise<InventoryLocation>;
   updateLocation: (location: InventoryLocation) => void;
   deleteLocation: (id: string) => void;
   addInventoryEntries: (entries: InventoryEntry[]) => void;
@@ -840,6 +843,94 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       addLocation: (location) => {
         fireAndForgetInventoryMutation(set, get, persistOnlineInventoryLocation(location), "add location");
         set((state) => ({ locations: [...state.locations, location] }));
+      },
+      createCustomInventoryLocationAsync: async (name) => {
+        const normalizedName = name.trim().replace(/\s+/g, " ");
+        if (!normalizedName) throw new Error("Enter a location name.");
+        if (normalizedName.length > 120) throw new Error("Location names must be 120 characters or fewer.");
+
+        const initialState = get();
+        const existing = resolveInventoryLocationByInput(
+          normalizedName,
+          buildInventoryLocationLookup(initialState.locations),
+        );
+        if (existing) throw new Error(`Location already exists. Select ${existing.name} instead.`);
+
+        const blockReason = getInventoryAddReadinessBlockReasonFromState(initialState);
+        if (blockReason) throw new Error(blockReason);
+        const auth = getOnlinePersistenceAuth();
+        if (!auth.accessToken || !auth.userId) {
+          throw new Error("Authentication required. Sign in again to sync.");
+        }
+
+        const localId = globalThis.crypto?.randomUUID?.()
+          ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const draft: InventoryLocation = {
+          id: localId,
+          name: normalizedName,
+          source: "custom",
+          category: "custom",
+        };
+
+        set((state) => ({
+          inventorySync: {
+            ...state.inventorySync,
+            isSyncing: true,
+            pendingMutationCount: state.inventorySync.pendingMutationCount + 1,
+          },
+        }));
+
+        try {
+          const result = await runOnlinePersistenceMutation(() => syncOnlinePersistenceState(
+            auth.accessToken as string,
+            { locations: [draft] },
+          ));
+          const currentAuth = getOnlinePersistenceAuth();
+          if (currentAuth.userId !== auth.userId || get().inventorySync.loadedForUserId !== auth.userId) {
+            throw new Error("Inventory account changed while the custom location was being created. Review the active account and try again.");
+          }
+
+          const savedId = result.idMap?.locations?.[localId];
+          const saved = result.locations.find((location) => location.id === savedId);
+          if (!saved || saved.source !== "custom") {
+            throw new Error("The custom location was not confirmed by the inventory server.");
+          }
+
+          set((state) => {
+            const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+            return {
+              locations: state.locations.some((location) => location.id === saved.id)
+                ? state.locations
+                : [...state.locations, saved],
+              inventorySync: {
+                ...state.inventorySync,
+                status: "synced",
+                isSyncing: pendingMutationCount > 0,
+                hasUnsyncedChanges: pendingMutationCount > 0,
+                pendingMutationCount,
+                lastSyncedAt: new Date().toISOString(),
+                syncError: undefined,
+              },
+            };
+          });
+          return saved;
+        } catch (error) {
+          if (getOnlinePersistenceAuth().userId === auth.userId) {
+            set((state) => {
+              const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+              return {
+                inventorySync: {
+                  ...state.inventorySync,
+                  status: "error",
+                  isSyncing: pendingMutationCount > 0,
+                  pendingMutationCount,
+                  syncError: error instanceof Error ? error.message : String(error),
+                },
+              };
+            });
+          }
+          throw error instanceof Error ? error : new Error(String(error));
+        }
       },
       updateLocation: (location) => {
         fireAndForgetInventoryMutation(set, get, persistOnlineInventoryLocation(location), "update location");

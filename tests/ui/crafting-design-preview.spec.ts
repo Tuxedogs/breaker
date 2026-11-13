@@ -53,11 +53,11 @@ test.describe("Crafting coded design preview", () => {
       { name: "1280x720", width: 1280, height: 720 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto(previewPath, { waitUntil: "domcontentloaded" });
+      await page.goto(`${previewPath}?search=AD5B`, { waitUntil: "domcontentloaded" });
       await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
       await expect(page.getByTestId("crafting-design-preview")).toBeVisible();
       await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
-      await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
+      await expect(page.locator(".craft-v31-lab-title")).toHaveAttribute(
         "aria-label",
         /AD5B Ballistic Gatling/,
       );
@@ -126,7 +126,7 @@ test.describe("Crafting coded design preview", () => {
   test("keeps prototype controls interactive and leaves production routing intact", async ({ page }) => {
     const failures = installFailureGuards(page);
     await page.setViewportSize({ width: 1680, height: 945 });
-    await page.goto(previewPath, { waitUntil: "domcontentloaded" });
+    await page.goto(`${previewPath}?search=AD5B`, { waitUntil: "domcontentloaded" });
     await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
     await page.getByRole("button", { name: "Clear all" }).click();
     await expect(page).toHaveURL(previewPath);
@@ -137,7 +137,7 @@ test.describe("Crafting coded design preview", () => {
     const cq7 = page.locator(".crb2-table tbody tr", { hasText: "CQ7" });
     await expect(cq7).toBeVisible();
     await cq7.click();
-    await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
+    await expect(page.locator(".craft-v31-lab-title")).toHaveAttribute(
       "aria-label",
       /CQ7/,
     );
@@ -154,9 +154,8 @@ test.describe("Crafting coded design preview", () => {
     await expect(page).toHaveURL(/(?:\?|&)sz=5(?:&|$)/);
 
     await page.getByRole("button", { name: "Clear all" }).click();
-    await page.getByRole("button", { name: "Next" }).click();
-    await expect(page).toHaveURL(/(?:\?|&)pg=2(?:&|$)/);
-    await expect(page.locator(".crb2-pager")).toContainText("Page 2");
+    // The browser shows the whole filtered list; there is no pager.
+    await expect(page.locator(".crb2-pager")).toHaveCount(0);
 
     await page.goto(`${productionPath}?preview=ba842720-ad32-4d53-8f56-992bacb1fc45`, {
       waitUntil: "domcontentloaded",

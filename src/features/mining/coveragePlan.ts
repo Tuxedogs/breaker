@@ -70,7 +70,7 @@ function demandLabel(material: RequiredMaterial): string {
 
 function locationFitScore(location: PublicLocationEntry): number {
   if (Number.isFinite(location.routeTargetabilityScore)) return location.routeTargetabilityScore ?? 0;
-  if (Number.isFinite(location.score)) return location.score;
+  if (typeof location.score === "number" && Number.isFinite(location.score)) return location.score;
   return 0;
 }
 

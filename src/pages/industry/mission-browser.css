@@ -6,24 +6,8 @@
 
 .mb-page,
 .mission-workspace-modal-shell {
-  --mb-canvas: var(--ops-canvas);
-  --mb-surface: var(--ops-surface-primary);
-  --mb-surface-deep: var(--ops-surface-deep);
-  --mb-surface-row: var(--ops-surface-row);
-  --mb-surface-hover: var(--ops-surface-hover);
-  --mb-surface-selected: var(--ops-surface-selected);
-  --mb-border: var(--ops-border-default);
-  --mb-border-soft: var(--ops-border-soft);
-  --mb-text: var(--void-text-main);
-  --mb-text-muted: var(--void-text-muted);
-  --mb-text-dim: var(--void-text-dim);
-  --mb-focus: var(--ops-focus-ring);
-  --mb-positive: var(--stat-beneficial);
-  --mb-negative: var(--stat-detrimental);
-  --mb-amber: var(--void-accent-amber);
-  --mb-teal: var(--void-accent-teal);
-  color: var(--mb-text);
-  font-family: var(--font-primary, Rajdhani, sans-serif);
+  color: var(--mb-text-1);
+  font-family: var(--mb-font-ui);
 }
 
 .mb-page *,
@@ -40,6 +24,6 @@
 .mission-workspace-modal-shell input:focus-visible,
 .mission-workspace-modal-shell select:focus-visible,
 .mission-workspace-modal-shell summary:focus-visible {
-  outline: 2px solid var(--mb-focus);
+  outline: 2px solid var(--mb-focus-ring);
   outline-offset: 2px;
 }

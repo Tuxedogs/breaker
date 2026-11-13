@@ -1,0 +1,301 @@
+/* V31b offline fitting reference. Not connected to the Fitting API. */
+.fit-v31-offline {
+  --fit-line: #315162;
+  --fit-panel: var(--mb-ops-surface-panel);
+  --fit-accent: #4ed0e7;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 100%;
+  background: #071521;
+  color: #e7f3fa;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 11px;
+}
+.fit-v31-offline button, .fit-v31-offline select {font:inherit;}
+.fit-v31-offline .fm-v31-appbar {
+  grid-column: 1/-1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  height: 48px;
+  padding: 0 23px;
+  background: #05101a;
+  border-bottom: 1px solid #3698b6;
+  color: #8fb5c7;
+  letter-spacing: .05em;
+  font-size: 10px;
+}
+.fit-v31-offline .fm-v31-appbar .fit-v31-offline-brand {
+  color:#f3f9fb;
+  border-right:1px solid #385163;
+  padding-right:18px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.fit-v31-offline .fm-v31-appbar small {
+  margin-left:auto;
+  font-size:9px;
+  color:#5de0ed;
+  white-space:nowrap;
+}
+.fit-v31-offline-rail {
+  grid-column:1;
+  grid-row:2/4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  padding:15px 8px;
+  border-right:1px solid var(--fit-line);
+  background:#061522;
+}
+.fit-v31-offline-rail > a,.fit-v31-offline-rail > span {
+  display:grid;
+  place-items:center;
+  width:43px;
+  height:43px;
+  margin-bottom:7px;
+  text-decoration:none;
+  color:#87b1c4;
+  border:1px solid transparent;
+  font-size:20px;
+}
+.fit-v31-offline-rail > span[aria-current="page"] {
+  color:var(--fit-accent);
+  background:#123344;
+  border-color:#2a879f;
+}
+.fit-v31-offline-hero {
+  grid-column:1;
+  grid-row:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:16px 25px;
+  background:radial-gradient(ellipse at 84% 25%,rgba(80,132,156,.16),transparent 45%),linear-gradient(110deg,#091c2b,#071522);
+  border-bottom:1px solid #2c5060;
+}
+.fit-v31-offline-hero span {
+  color:#62ddef;
+  font-weight:700;
+  font-size:10px;
+  letter-spacing:.15em;
+}
+.fit-v31-offline-hero h1 {
+  margin:5px 0 3px;
+  color:#f1f7fa;
+  font-size:30px;
+  font-weight:400;
+  letter-spacing:.16em;
+}
+.fit-v31-offline-hero p {margin:0;color:#a7c3d1;}
+.fit-v31-offline-hero-tags {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.fit-v31-offline-hero-tags span {
+  padding:7px 10px;
+  border:1px solid #3d6675;
+  font-size:9px;
+  letter-spacing:.07em;
+  color:#c4e8f4;
+}
+.fit-v31-offline-hero-tags span+span {color:#f4be78;border-color:#b08d53;}
+.fit-v31-offline-workspace {
+  grid-column:1;
+  grid-row:2;
+  display:grid;
+  grid-template-columns:210px minmax(0,1fr) 315px;
+  gap:1px;
+  min-width:0;
+  min-height:calc(100dvh - 167px);
+  background:var(--mb-ops-surface-separator);
+}
+.fit-v31-offline-workspace > * {min-width:0;background:var(--mb-ops-surface-panel);padding:13px 12px;}
+.fit-v31-offline-ship-select {display:block;margin-bottom:12px;}
+.fit-v31-offline-ship-select > span {display:block;font-size:0;height:0;overflow:hidden;}
+.fit-v31-offline-ship-select select {
+  width:100%;
+  height:39px;
+  padding:0 10px;
+  color:#eff6f9;
+  background:#102839;
+  border:1px solid #355e71;
+}
+.fit-v31-offline-schematic {
+  padding:7px;
+  border:1px solid #2f5365;
+  color:#45cce9;
+  background:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(83,175,199,.055) 20px),
+    #0b2131;
+}
+.fit-v31-offline-schematic svg {display:block;width:100%;height:auto;}
+.fit-v31-offline-schematic small {display:block;margin:3px 0;color:#54b6d1;font-size:9px;}
+.fit-v31-offline-context {margin:14px 0 16px;color:#8ea9bd;font-size:9px;}
+.fit-v31-offline-context strong {color:#d3e8f5;font-weight:600;}
+.fit-v31-offline-subhead {display:flex;justify-content:space-between;margin:0 0 11px;font-size:10px;font-weight:700;letter-spacing:.04em;}
+.fit-v31-offline-subhead small {color:#82a5b8;font-weight:500;font-size:9px;}
+.fit-v31-offline-components {display:flex;flex-direction:column;gap:7px;}
+.fit-v31-offline-components button {
+  display:grid;
+  grid-template-columns:21px minmax(0,1fr) 9px;
+  align-items:center;
+  gap:6px;
+  padding:10px 8px;
+  min-height:55px;
+  width:100%;
+  background:#102a3b;
+  border:1px solid #31576a;
+  color:#dceef6;
+  cursor:pointer;
+  text-align:left;
+}
+.fit-v31-offline-components button.is-selected {
+  border-color:#4acde6;
+  background:#123e53;
+  box-shadow:inset 3px 0 0 #5bd5eb;
+}
+.fit-v31-offline-components button>span:first-child{color:var(--fit-accent);font-size:18px;}
+.fit-v31-offline-components button strong {display:block;font-size:11px;font-weight:700;text-transform:uppercase;}
+.fit-v31-offline-components button small {display:block;margin-top:4px;color:#a1baca;font-size:9px;}
+.fit-v31-offline-components button>span:last-child {color:#69c8df;}
+.fit-v31-offline-note,.fit-v31-offline-notice {
+  margin-top:13px;
+  padding:11px;
+  color:#aac5d2;
+  background:#102a3b;
+  border:1px solid #305568;
+  line-height:1.55;
+}
+.fit-v31-offline-center {display:flex;flex-direction:column;gap:9px;}
+.fit-v31-offline-import {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:10px 12px;
+  border:1px solid #315466;
+  background:#0c2232;
+}
+.fit-v31-offline-import strong{color:#56d4e9;font-size:10px;}
+.fit-v31-offline-import small{color:#8fb3c5;font-size:9px;}
+.fit-v31-offline-diagram{border:1px solid #365d71;background:#081925;padding:10px;}
+.fit-v31-offline-diagram .fm-v31-heading {margin-bottom:0;}
+.fit-v31-offline-views {display:flex;justify-content:flex-end;gap:4px;margin:0 0 9px;}
+.fit-v31-offline-views button,.fit-v31-offline-zoom button {
+  min-height:29px;
+  padding:6px 12px;
+  color:#9bd4e8;
+  background:#0e2939;
+  border:1px solid #356074;
+  cursor:pointer;
+}
+.fit-v31-offline-views button.is-active {background:#153e51;border-color:#41c9e1;}
+.fit-v31-offline-views button:disabled {opacity:.5;cursor:not-allowed;}
+.fit-v31-offline-stage {
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:400px;
+  height:min(38vw,490px);
+  overflow:hidden;
+  border:1px solid #274555;
+  background:radial-gradient(circle at center,#143445,#071725 78%);
+}
+.fit-v31-offline-image-area {
+  width:min(96%,1050px);
+  aspect-ratio:1140/425;
+  position:relative;
+  transform-origin:center;
+  transition:transform .15s ease;
+}
+.fit-v31-offline-image-area img{display:block;width:100%;height:100%;object-fit:contain;}
+.fit-v31-offline-hit {
+  position:absolute;
+  display:grid;
+  place-items:center;
+  width:29px;
+  height:29px;
+  padding:0;
+  border:2px solid #ffc85c;
+  background:rgba(16,28,32,.48);
+  box-shadow:0 0 0 3px rgba(2,12,21,.55);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+}
+.fit-v31-offline-hit>span {display:block;width:9px;height:9px;border-radius:50%;background:currentColor;}
+.fit-v31-offline-hit--power {color:#58dbb5;border-color:#58dbb5;}
+.fit-v31-offline-hit--shield {color:#5fe4ef;border-color:#5fe4ef;}
+.fit-v31-offline-hit--quantum {color:#8cacff;border-color:#8cacff;}
+.fit-v31-offline-hit--weapons,.fit-v31-offline-hit--racks,.fit-v31-offline-hit--missiles {color:#ffcc64;border-color:#ffcc64;}
+.fit-v31-offline-hit.is-selected {outline:2px solid #e7f6fa;outline-offset:3px;}
+.fit-v31-offline-stage-label,.fit-v31-offline-stage-source {
+  position:absolute;
+  left:12px;
+  color:#6b9cb4;
+  font-size:9px;
+  text-transform:uppercase;
+}
+.fit-v31-offline-stage-label{top:10px;}
+.fit-v31-offline-stage-source{bottom:12px;max-width:60%;}
+.fit-v31-offline-zoom {position:absolute;right:9px;bottom:9px;display:flex;align-items:center;gap:5px;}
+.fit-v31-offline-zoom output{min-width:38px;text-align:center;font-size:10px;color:#c9deec;}
+.fit-v31-offline-zoom button {padding:6px 9px;}
+.fit-v31-offline-legend {display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:10px 0 2px;}
+.fit-v31-offline-legend button {padding:5px 9px;border:1px solid transparent;background:transparent;color:#a6bdcd;font-size:10px;cursor:pointer;}
+.fit-v31-offline-legend button.is-active{border-color:#43869b;background:#143547;color:#d8f5ff;}
+.fit-v31-offline-legend label{margin-left:auto;white-space:nowrap;color:#a5c3d2;font-size:10px;}
+.fit-v31-offline-installed {display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:10px;}
+.fit-v31-offline-installed>div:first-child span {color:#62d9eb;font-size:9px;letter-spacing:.07em;}
+.fit-v31-offline-installed h2 {margin:6px 0 0;font-size:19px;}
+.fit-v31-offline-installed>button{padding:9px 12px;background:#17495b;border:1px solid #3c7b92;color:#aac9d3;cursor:not-allowed;}
+.fit-v31-offline-installed-row {grid-column:1/-1;display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:15px 5px;border-top:1px solid #315161;color:#dfeaf3;}
+.fit-v31-offline-installed-row span{color:#a5c4d2;}
+.fit-v31-offline-right>.fm-v31-heading {margin-bottom:12px;}
+.fit-v31-offline-stats {padding:13px;border:1px solid #365669;background:#0e2533;}
+.fit-v31-offline-stats-title {display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.fit-v31-offline-stats-title strong{font-size:14px;}
+.fit-v31-offline-stats-title small{color:#76a9b8;font-size:9px;}
+.fit-v31-offline-tabs {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:13px;border-bottom:1px solid #32576b;}
+.fit-v31-offline-tabs button {min-width:0;padding:9px 3px;background:transparent;border:0;color:#9ab8c8;font-size:10px;cursor:pointer;}
+.fit-v31-offline-tabs button.is-active{background:#16536b;color:#f2fafd;border-bottom:2px solid #50cfea;}
+.fit-v31-offline-stat-list>div {display:flex;justify-content:space-between;gap:8px;padding:11px 0;border-bottom:1px solid #305366;color:#b8d5df;font-size:11px;}
+.fit-v31-offline-stat-list b{white-space:nowrap;color:#f0f7fa;}
+.fit-v31-offline-inspector{margin-top:17px;padding-top:15px;border-top:1px solid #365b6c;}
+.fit-v31-offline-inspector>span{color:#63cfe7;font-size:10px;text-transform:uppercase;}
+.fit-v31-offline-inspector h2{margin:9px 0;font-size:18px;}
+.fit-v31-offline-inspector p{color:#9bbacb;line-height:1.6;}
+.fit-v31-offline-inspector a{display:inline-block;padding:8px 12px;border:1px solid #378da5;background:#113749;color:#bce8f7;text-decoration:none;}
+@media(max-width:1180px){
+  .fit-v31-offline-workspace{grid-template-columns:210px minmax(0,1fr);}
+  .fit-v31-offline-right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .fit-v31-offline-right>.fm-v31-heading{grid-column:1/-1;}
+}
+@media(max-width:720px){
+  .fit-v31-offline{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;}
+  .fit-v31-offline .fm-v31-appbar{padding:0 10px;gap:8px;}
+  .fit-v31-offline .fm-v31-appbar .fit-v31-offline-brand{font-size:9px;padding-right:7px;}
+  .fit-v31-offline .fm-v31-appbar small{display:none;}
+  .fit-v31-offline-hero{flex-direction:column;align-items:start;gap:12px;padding:16px 12px;}
+  .fit-v31-offline-hero h1{font-size:21px;}
+  .fit-v31-offline-rail{padding:10px 2px;}
+  .fit-v31-offline-rail>a,.fit-v31-offline-rail>span{width:40px;height:40px;}
+  .fit-v31-offline-workspace{display:flex;flex-direction:column;min-width:0;}
+  .fit-v31-offline-workspace>*{padding:12px;}
+  .fit-v31-offline-right{display:block;}
+  .fit-v31-offline-views{justify-content:flex-start;margin:6px 0;}
+  .fit-v31-offline-stage{height:350px;min-height:350px;}
+  .fit-v31-offline-hit{width:23px;height:23px;}
+}
+
+/* View controls need their own row, never overlap the section heading. */
+.fit-v31-offline-diagram .fm-v31-heading small { display:none; }
+.fit-v31-offline-views { margin:0 0 10px; }

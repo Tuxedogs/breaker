@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   hasMissionConceptBookmark,
   hasMissionOfferBookmark,
@@ -42,6 +42,8 @@ import {
   missionConceptPath,
   missionConceptSlug,
   resolveLegacyMissionConcept,
+  MISSION_RETURN_PARAM,
+  safeInternalReturnPath,
 } from "@/lib/missionUrls";
 import "@/components/industry/crafting/recipe-browser.css";
 import "./mission-browser.css";
@@ -2523,10 +2525,18 @@ export default function MissionBrowserPage() {
   const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
   const conceptsByKey = useMemo(() => new Map(Object.entries(catalog?.conceptsByKey ?? {})), [catalog]);
   const allOffersByKey = useMemo(() => new Map(Object.entries(catalog?.offersByKey ?? {})), [catalog]);
-  const offersByKey = useMemo(() => new Map(
+  // The full mission catalog is the default; `scope=blueprint` narrows it to
+  // offers that award crafting blueprints (plus Wikelo), as the retired page did.
+  const blueprintScope = searchParams.get("scope") === "blueprint";
+  const returnPath = safeInternalReturnPath(searchParams.get(MISSION_RETURN_PARAM));
+  const returnLabel = returnPath?.startsWith("/industry/crafting") ? "Crafting"
+    : returnPath?.startsWith("/logistics") ? "Logistics"
+    : returnPath?.startsWith("/fitting") ? "Fitting"
+    : "previous page";
+  const offersByKey = useMemo(() => (blueprintScope ? new Map(
     Array.from(allOffersByKey.entries()).filter(([, offer]) => eligibleMissionOfferKeys !== null
       && isEligibleCraftingMission(offer, eligibleMissionOfferKeys)),
-  ), [allOffersByKey, eligibleMissionOfferKeys]);
+  ) : allOffersByKey), [allOffersByKey, blueprintScope, eligibleMissionOfferKeys]);
   const isOfferCatalog = catalog?.schemaVersion === 3;
   const query = searchParams.get("search") ?? "";
   const provider = searchParams.get("provider") ?? "";
@@ -3077,19 +3087,6 @@ export default function MissionBrowserPage() {
   return (
     <div className="mb-page">
       <div className="mb-shell">
-        <header className="mb-page-heading">
-          <div>
-            <span>Contract Registry</span>
-            <h1>Mission Browser</h1>
-          </div>
-          <div className="mb-page-heading__summary">
-            <strong>{activeView === "full" ? "Full Registry" : activeView === "faction" ? "Faction View" : "Reputation View"}</strong>
-            <span>{loading || eligibleMissionOfferKeys === null ? "Loading missions" : error || eligibilityError ? "Registry unavailable" : isOfferCatalog
-              ? `${offerProjection.visibleOfferCount} offer${offerProjection.visibleOfferCount === 1 ? "" : "s"}`
-              : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
-          </div>
-        </header>
-
         <div className="mb-filter-toolbar">
           <div className="mb-filter-shell scintel-filter-shell ops-primary-card">
             <div className="scintel-filter-header crb-row--search mb-filter-header">
@@ -3105,6 +3102,17 @@ export default function MissionBrowserPage() {
                   />
                 </label>
               </div>
+              <div className="mb-filter-summary" role="status">
+                <strong>{activeView === "full" ? "Full Registry" : activeView === "faction" ? "Faction View" : "Reputation View"}</strong>
+                <span>{loading || (blueprintScope && eligibleMissionOfferKeys === null) ? "Loading missions" : error || (blueprintScope && eligibilityError) ? "Registry unavailable" : isOfferCatalog
+                  ? `${offerProjection.visibleOfferCount} offer${offerProjection.visibleOfferCount === 1 ? "" : "s"}`
+                  : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
+              </div>
+              {returnPath && (
+                <Link className="mb-return-link" to={returnPath} data-testid="mission-return-link">
+                  ← Back to {returnLabel}
+                </Link>
+              )}
             </div>
             <div className="scintel-filter-body">
               <div className="crb-row mb-filter-row" aria-label="Mission browser filters">
@@ -3113,6 +3121,10 @@ export default function MissionBrowserPage() {
                 <select value={reward} onChange={(event) => setParam("reward", event.target.value)} aria-label="Filter by reward">
                   <option value="">All rewards</option>
                   {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.key === "credits-calculated" ? AUEC_REWARD_NOT_REPORTED : item.label}</option>)}
+                </select>
+                <select value={blueprintScope ? "blueprint" : ""} onChange={(event) => setParam("scope", event.target.value)} aria-label="Filter by blueprint rewards">
+                  <option value="">All missions</option>
+                  <option value="blueprint">Blueprint rewards only</option>
                 </select>
                 <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)} aria-label="Filter by reputation reward path"><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
                 <select value={status} onChange={(event) => setParam("status", event.target.value)} aria-label="Filter by status"><option value="">All statuses</option>{statuses.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
@@ -3160,6 +3172,19 @@ export default function MissionBrowserPage() {
 
         {loading && <div className="mb-state">Loading shaped mission registry...</div>}
         {error && <div className="mb-state is-error">{error}</div>}
+        {!loading && !error && isOfferCatalog && selectedOfferKey && !selectedOffer
+          && !(blueprintScope && eligibleMissionOfferKeys === null) && (
+          <div className="mb-state is-error" role="status" data-testid="mission-offer-link-unresolved">
+            {allOffersByKey.has(selectedOfferKey)
+              ? `Mission offer "${selectedOfferKey}" is outside the Blueprint rewards filter. Choose All missions to open it.`
+              : `Mission offer "${selectedOfferKey}" is not in the published mission data${catalog?.generationId ? ` (generation ${catalog.generationId})` : ""}. The link may be from an older data generation.`}
+          </div>
+        )}
+        {!loading && !error && isOfferCatalog && catalog && searchParams.get("variant") && !selectedOfferKey && (
+          <div className="mb-state is-error" role="status" data-testid="mission-variant-link-unresolved">
+            {`Mission contract "${searchParams.get("variant")}" is not in the published mission data${catalog.generationId ? ` (generation ${catalog.generationId})` : ""}. The source may reference a contract from a different data generation.`}
+          </div>
+        )}
         {!loading && !error && catalog && (
           <div className="mb-results-shell">
             <main className="mb-family-list">

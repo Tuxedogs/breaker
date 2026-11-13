@@ -1,0 +1,313 @@
+
+
+@media (min-width: 1600px) {
+  .logi-inv-page .logi-inv-workspace { grid-template-columns: minmax(230px, 272px) minmax(0, 1fr) minmax(250px, 306px); gap: 14px; min-height: calc(100dvh - 245px); align-items: stretch; } }
+@media (min-width: 2200px) {
+  .logi-inv-page .logi-inv-workspace { grid-template-columns: 282px minmax(0, 1fr) 326px; gap: 16px; } }
+@media (max-width: 760px) {}
+@media (max-width: 899px) {
+  .logi-inv-page .logi-inv-workspace { display: flex; flex-direction: column; } }
+.logi-inv-page .logi-inv-workspace {
+  display: grid;
+  grid-template-columns: minmax(218px, 260px) minmax(0, 1fr);
+  min-width: 0;
+  margin-top: 12px;
+  color: var(--text-primary);
+  gap: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(132, 151, 164, 0.25);
+  border-radius: 0;
+  background: #06090c;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+}
+@media (max-width: 760px) {
+  .logi-inv-page .logi-inv-workspace { gap: 8px; margin-top: 8px; margin: 0; } }
+@media (min-width: 900px) {
+
+  .logi-inv-page .logi-inv-workspace {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    overflow: hidden;
+  } }
+/* Inventory three-panel presentation derived from V31b. All stock remains sourced
+   from the existing logistics store; no fixture data or locations are injected. */
+/* Share the Mining desktop sidebar scale, with the primary Inventory workspace
+   occupying the middle and the lot inspector remaining right-aligned. */
+@media (min-width: 1250px) {
+  .logi-inv-page .logi-inv-workspace {
+    grid-template-columns: 260px minmax(0, 1fr) 315px;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 1px;
+  }
+  .logi-inv-page .logi-inv-workspace > .logi-inv-workspace-location-rail {
+    grid-column: 1; grid-row: 1;
+  }
+  .logi-inv-page .logi-inv-workspace > .logi-inv-workspace-lots {
+    grid-column: 2; grid-row: 1;
+  }
+  .logi-inv-page .logi-inv-workspace > .logi-inv-workspace-inspector {
+    grid-column: 3; grid-row: 1; min-height: 0;
+  }
+}
+.logi-inv-workspace .logi-inv-workspace-location-rail { background: var(--mb-ops-surface-quiet); }
+.logi-inv-workspace .logi-inv-workspace-location-groups { padding: 7px 8px 18px; }
+.logi-inv-workspace .logi-inv-workspace-location {
+  display: grid;
+  grid-template-columns: 67px minmax(0,1fr);
+  grid-template-rows: minmax(68px,auto);
+  column-gap: 0;
+  align-items: stretch;
+  padding: 0;
+  margin: 0 0 5px;
+  min-height: 70px;
+  width: 100%;
+  background: var(--mb-ops-surface-row);
+  border: 1px solid var(--mb-border);
+  text-align: left;
+}
+.logi-inv-workspace .logi-inv-workspace-location:hover { background: var(--mb-ops-surface-hover); }
+.logi-inv-workspace .logi-inv-workspace-location.is-selected {
+  background: var(--mb-ops-surface-selected);
+  border-color: var(--mb-accent);
+  box-shadow: inset 3px 0 var(--mb-accent);
+}
+.logi-inv-v31-location-art {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  grid-column: 1;
+  grid-row: 1;
+  overflow: hidden;
+  min-height: 68px;
+  border-right: 1px solid var(--mb-border);
+  background:
+    linear-gradient(90deg, rgba(2,10,18,.62),transparent),
+    repeating-linear-gradient(125deg,transparent 0 17px,rgba(67,126,151,.20) 18px 19px,transparent 20px 34px),
+    radial-gradient(circle at 68% 36%,#34677a,#0a1d2b 70%);
+  color: var(--mb-accent);
+}
+.logi-inv-v31-location-art::after {
+  content: "";
+  position: absolute;
+  inset: 7px 13px;
+  border: 1px solid rgba(127,197,211,.15);
+  transform: skewY(-14deg);
+}
+.logi-inv-v31-location-art > span { font: 400 22px/1 var(--mb-font-ui); opacity: .82; }
+.logi-inv-v31-location-copy {
+  display: flex;
+  flex-direction: column;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: stretch;
+  justify-content: center;
+  min-width: 0;
+  padding: 8px 9px;
+  gap: 5px;
+}
+.logi-inv-workspace .logi-inv-workspace-location-name {
+  font: 700 12px/1.2 var(--mb-font-ui);
+  color: var(--mb-text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.logi-inv-workspace .logi-inv-workspace-location-meta {
+  font: 400 10px/1.2 var(--mb-font-ui);
+  color: var(--mb-text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.logi-inv-workspace .logi-inv-workspace-location-count {
+  display: block;
+  font: 500 10px/1.2 var(--mb-font-ui);
+  color: var(--mb-accent);
+}
+.logi-inv-page .logi-inv-workspace-inspector {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+.logi-inv-page .logi-inv-workspace-inspector > .logi-inv-workspace-inspector-heading,
+.logi-inv-page .logi-inv-workspace-inspector > .logi-inv-workspace-inspector-visual,
+.logi-inv-page .logi-inv-workspace-inspector > .logi-inv-workspace-inspector-badges,
+.logi-inv-page .logi-inv-workspace-inspector > .logi-inv-workspace-inspector-facts,
+.logi-inv-page .logi-inv-workspace-inspector > .logi-inv-workspace-inspector-actions {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+.logi-inv-workspace .logi-inv-v31-overview { width: 100%; min-width: 0; padding: 16px 14px 20px; }
+.logi-inv-v31-overview-hero {
+  border: 1px solid var(--mb-border);
+  background: #112b3b;
+  padding: 15px;
+}
+.logi-inv-v31-overview-hero small {
+  color: var(--mb-accent);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font: 700 10px/1.2 var(--mb-font-ui);
+}
+.logi-inv-v31-overview-hero h2 {
+  margin: 9px 0 8px;
+  font: 700 20px/1.15 var(--mb-font-ui);
+  color: var(--mb-text-1);
+}
+.logi-inv-v31-overview-hero p,
+.logi-inv-v31-overview-materials p {
+  color: var(--mb-text-2);
+  font: 400 11px/1.5 var(--mb-font-ui);
+  margin: 0;
+}
+.logi-inv-v31-overview-stats {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  border: 1px solid var(--mb-border);
+  border-top: 0;
+  margin: 0;
+}
+.logi-inv-v31-overview-stats div { padding: 11px 7px; border-right: 1px solid var(--mb-border); min-width: 0; }
+.logi-inv-v31-overview-stats div:last-child { border-right: 0; }
+.logi-inv-v31-overview-stats dt { color: var(--mb-text-2); font: 600 9px/1.2 var(--mb-font-ui); text-transform: uppercase; }
+.logi-inv-v31-overview-stats dd { color: var(--mb-accent); margin: 7px 0 0; font: 700 19px/1 var(--mb-font-ui); }
+.logi-inv-v31-overview-materials { margin-top: 18px; }
+.logi-inv-v31-overview-materials h3 {
+  font: 700 11px/1.3 var(--mb-font-ui);
+  text-transform: uppercase;
+  margin: 0 0 9px;
+  color: var(--mb-text-1);
+}
+.logi-inv-v31-overview-materials table { border-collapse: collapse; width: 100%; font: 500 11px/1.3 var(--mb-font-ui); }
+.logi-inv-v31-overview-materials th { background: #153344; text-align: left; color: var(--mb-text-2); font-size: 9px; text-transform: uppercase; }
+.logi-inv-v31-overview-materials th,
+.logi-inv-v31-overview-materials td { padding: 9px; border: 1px solid var(--mb-border); }
+.logi-inv-v31-overview-materials th:last-child,
+.logi-inv-v31-overview-materials td:last-child { text-align: right; }
+@media(max-width:1100px) {
+  .logi-inv-workspace .logi-inv-workspace-location { grid-template-columns: 55px minmax(0,1fr); }
+  .logi-inv-v31-location-art { min-height: 62px; }
+}
+
+/* V31 warehouse photography remains decorative; counts and locations stay live. */
+.logi-inv-workspace .logi-inv-v31-location-art {
+  background-image:linear-gradient(90deg, rgba(2,10,18,.17),rgba(3,13,22,.22)),url("/assets/inventory/v31-warehouse-art.jpg");
+  background-size:cover;
+  background-position:center 52%;
+  color:#5ad5eb;
+}
+.logi-inv-workspace .logi-inv-workspace-location-groups > section:nth-of-type(2) .logi-inv-v31-location-art {
+  filter:hue-rotate(22deg) saturate(.86);
+}
+.logi-inv-workspace .logi-inv-workspace-location-groups > section:nth-of-type(3) .logi-inv-v31-location-art {
+  filter:hue-rotate(174deg) saturate(.6);
+}
+.logi-inv-workspace .logi-inv-v31-location-art > span {
+  text-shadow:0 1px 7px #051523;
+  font-size:19px;
+  color:#8cebf9;
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse {
+  position:relative;
+  min-height:650px;
+  padding:14px 12px;
+  overflow:hidden;
+  background:#081823;
+  border:1px solid #244154;
+}
+.logi-inv-workspace .logi-inv-v31-vacant-slots {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(134px,1fr));
+  grid-auto-rows:154px;
+  gap:7px;
+  align-content:start;
+}
+.logi-inv-workspace .logi-inv-v31-vacant-slots > span {
+  display:block;
+  border:1px solid var(--mb-ops-surface-separator);
+  border-radius:3px;
+  background:linear-gradient(140deg,rgba(47,78,92,.19),transparent 60%),#081622;
+  box-shadow:inset 0 0 0 1px rgba(3,14,22,.55);
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse-copy {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:min(90%,390px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  padding:24px 20px;
+  border:1px solid #3a6375;
+  background:rgba(9,27,40,.95);
+  box-shadow:0 10px 45px #020e19;
+  color:#e7f4fa;
+  text-align:center;
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse-icon {
+  color:#51cfe9;
+  font-size:32px;
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse-copy strong {
+  font:700 17px/1.2 "Segoe UI",sans-serif;
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse-copy p {
+  margin:0;
+  font:400 11px/1.6 "Segoe UI",sans-serif;
+  color:#a8c4d2;
+}
+.logi-inv-workspace .logi-inv-v31-empty-warehouse-copy button {
+  padding:9px 18px;
+  cursor:pointer;
+  border:1px solid #4ec8e0;
+  background:#13485b;
+  color:#e5f9ff;
+  font:600 11px/1.2 "Segoe UI",sans-serif;
+}
+@media(max-width:730px) {
+  .logi-inv-workspace .logi-inv-v31-empty-warehouse {min-height:480px;}
+  .logi-inv-workspace .logi-inv-v31-vacant-slots {grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:120px;}
+  .logi-inv-workspace .logi-inv-v31-empty-warehouse-copy {padding:18px 14px;}
+}
+
+/* V31 physical-lot inspector: four independent counters and material totals.
+   Aggregate inventory records are never mislabeled as physical boxes. */
+.logi-inv-workspace .logi-inv-v31-overview-stats {
+  grid-template-columns: repeat(4, minmax(0,1fr));
+}
+.logi-inv-workspace .logi-inv-v31-overview-stats > div { padding: 10px 5px; }
+.logi-inv-workspace .logi-inv-v31-overview-stats dt {
+  font-size: 8px;
+  line-height: 1.35;
+  min-height: 23px;
+}
+.logi-inv-workspace .logi-inv-v31-overview-stats dd { font-size: 18px; }
+.logi-inv-workspace .logi-inv-v31-overview-materials table {
+  width: 100%;
+  table-layout: auto;
+}
+.logi-inv-workspace .logi-inv-v31-overview-materials th,
+.logi-inv-workspace .logi-inv-v31-overview-materials td {
+  padding: 8px 4px;
+  font-size: 9px;
+  overflow-wrap: anywhere;
+}
+.logi-inv-workspace .logi-inv-v31-overview-materials th:last-child,
+.logi-inv-workspace .logi-inv-v31-overview-materials td:last-child {
+  text-align: right;
+}
+.logi-inv-workspace .logi-inv-v31-aggregate-note {
+  margin: 9px 1px 0;
+  font: 500 10px/1.5 "Segoe UI", sans-serif;
+  color: #a7becc;
+}

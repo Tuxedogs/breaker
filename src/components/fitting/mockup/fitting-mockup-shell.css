@@ -17,7 +17,7 @@
   --fm-rail-w: 64px;
   --fm-left-w: 320px;
   --fm-right-w: 390px;
-  --fm-top-row-h: minmax(0, 520px);
+  --fm-top-row-h: minmax(0, calc(520px + var(--fm-head-h) + var(--fm-gap)));
   --fm-stats-row-h: minmax(320px, 1fr);
   --fm-workspace-gap: 10px;
   --fm-stats-min-h: 320px;
@@ -31,16 +31,16 @@
 
   display: grid;
   grid-template-columns: var(--fm-rail-w) var(--fm-left-w) minmax(0, 1fr) var(--fm-right-w);
-  grid-template-rows: var(--fm-head-h) var(--fm-top-row-h) var(--fm-stats-row-h);
+  grid-template-rows: var(--fm-top-row-h) var(--fm-stats-row-h);
   position: relative;
   width: 100%;
-  height: 100vh;
-  max-height: 100vh;
+  height: 100%;
+  max-height: 100%;
   overflow: hidden;
   padding: 0;
   gap: var(--fm-gap);
   color: var(--fm-text);
-  font-family: var(--font-primary, "Rajdhani", system-ui, sans-serif);
+  font-family: var(--mb-font-ui, "Segoe UI", system-ui, sans-serif);
   font-size: var(--mock-type-base);
   background: var(--fm-bg);
 }
@@ -54,15 +54,13 @@
 /* ── Top bar ── */
 
 .fm-topbar {
-  grid-column: 1 / -1;
-  grid-row: 1;
   display: grid;
+  flex: 0 0 auto;
   grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
-  min-height: 0;
-  height: var(--fm-head-h);
-  padding: 0 0.5rem;
+  min-height: var(--fm-head-h);
+  padding: 0.35rem 0.5rem;
   border-bottom: 1px solid var(--fm-border);
   background: linear-gradient(180deg, rgba(8, 11, 14, 0.92), rgba(5, 8, 10, 0.72));
 }
@@ -80,7 +78,7 @@
 
 .fm-topbar-copy { min-width: 0; }
 .fm-topbar-mfg { display: block; font-size: var(--mock-type-2xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fm-muted); }
-.fm-topbar-copy h1 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fm-topbar-copy h2 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fm-topbar-role { display: block; font-size: var(--mock-type-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fm-muted); }
 
 .fm-topbar-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; }
@@ -147,7 +145,7 @@
 
 .fm-rail {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -158,24 +156,25 @@
 
 .fm-offense-panel {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
   min-height: 0;
   overflow: hidden;
 }
 
 .fm-hero {
   grid-column: 3;
-  grid-row: 2;
+  grid-row: 1;
   min-height: 0;
   min-width: 0;
   height: 100%;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .fm-right-col {
   grid-column: 4;
-  grid-row: 2 / 4;
+  grid-row: 1 / 3;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   min-height: 0;
@@ -185,7 +184,7 @@
 
 .fm-stats-grid {
   grid-column: 1 / 4;
-  grid-row: 3;
+  grid-row: 2;
   min-height: var(--fm-stats-min-h);
   height: 100%;
   display: grid;
@@ -204,7 +203,7 @@
 
 .fm-error {
   position: absolute;
-  top: calc(var(--fm-head-h) + var(--fm-gap));
+  top: var(--fm-gap);
   left: 0.5rem;
   right: 0.5rem;
   z-index: 20;
@@ -412,7 +411,7 @@
 
 .fm-fixture-banner {
   position: absolute;
-  top: calc(var(--fm-head-h) + var(--fm-gap) + 0.45rem);
+  top: calc(var(--fm-head-h) + 0.45rem);
   left: calc(var(--fm-rail-w) + var(--fm-left-w) + (var(--fm-gap) * 2) + 0.45rem);
   z-index: 18;
   padding: 0.2rem 0.42rem;
@@ -842,13 +841,13 @@
 @media (max-width: 900px) {
   .fm-shell {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
     height: auto;
     max-height: none;
-    min-height: 100vh;
+    min-height: 100%;
     overflow: auto;
   }
-  .fm-topbar { grid-column: 1; grid-row: auto; height: auto; min-height: var(--fm-head-h); }
+  .fm-topbar { height: auto; min-height: var(--fm-head-h); }
   .fm-rail { grid-column: 1; grid-row: auto; flex-direction: row; overflow-x: auto; }
   .fm-offense-panel { grid-column: 1; grid-row: auto; }
   .fm-hero { grid-column: 1; grid-row: auto; min-height: 22rem; }

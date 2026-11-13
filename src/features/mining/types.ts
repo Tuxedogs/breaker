@@ -186,7 +186,8 @@ export interface PublicLocationEntry {
     materialName: string;
     miningType: string;
   }>;
-  score: number;
+  score?: number;
+  discoveryStatus?: "unranked";
   routeTargetabilityScore?: number;
   routeTargetabilityLabel?: "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
   routeScores?: Array<{
@@ -229,6 +230,7 @@ export interface PublicLocationEntry {
       recommendationScore?: number;
       selectedQuality?: number;
       thresholdChance?: number | null;
+      qualityThreshold?: number;
       qualitySourceScope?: string | null;
       qualitySourceFamily?: string | null;
       qualityDistributionName?: string | null;
@@ -284,6 +286,8 @@ export interface MiningRecommendationRequest {
   manualDemand: ManualMiningDemandItem[];
   favoriteLocationIds: string[];
   filters: MiningPlannerFilters;
+  /** Optional server/fallback eligibility gate; this does not model a ship's breakability or cargo constraints. */
+  allowedMiningMethods?: string[];
   rankingMode?: "quality" | "quantity" | "balanced";
   /** Placeholder for future refinery context (active refinery, processing speed, etc.). */
   refineryContext: null;

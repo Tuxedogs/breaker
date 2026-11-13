@@ -1,26 +1,35 @@
-import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import "@fontsource/ibm-plex-sans-condensed/400.css";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { getPlanetAsset, type PlanetAsset } from "../../../features/mining/planetAssets";
+import { getLocationTopography } from "../../../features/mining/topographyAssets";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import {
   getStaticEncounterRankingRow,
   getStaticLocationAttemptedJoinKeys,
+  getStaticLocationEnvironment,
   getStaticLocationDisplayName,
   getStaticMaterialQualityRow,
+  getStaticMaterialKey,
   getStaticMethodBiasForLocation,
   getStaticResourcesForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import {
+  buildMiningLocationSurveyPresentation,
+  compareMiningMethodMaterialEntries,
+  type MiningSpawnCompetitionMember,
+  type MiningSelectedSpawnCompetitionPool,
+} from "../../../features/mining/miningPresentationModels";
+import {
   buildDemandRows,
   buildResourceRows,
-  formatPercent,
-  methodBiasToneClass,
+  formatMiningProbability,
   miningMethodBadge,
+  pickWeightedQualityChances,
   qualityChanceHeader,
   resourceRowMaterialKey,
-  scoreToneClass,
 } from "./miningFormatters";
 import type { DemandRow, ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
@@ -28,9 +37,25 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
-import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
-import surfaceShipMiningIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
-import vehicleMiningExosuitIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
+import MiningEnvironmentStatus from "./MiningEnvironmentStatus";
+import {
+  buildMiningLocationCompetitionPools,
+  formatMiningCompetitionPercentagePoints,
+  miningCompetitionPoolCoverage,
+  miningCompetitionMaterialColor,
+  miningCompetitionProbabilitySummary,
+  miningCompetitionSourceLabel,
+  buildMiningLocationOccurrenceRatings,
+  miningOccurrenceRatingForRow,
+  type MiningOccurrenceRating,
+} from "./miningCompetitionPresentation";
+import { MiningDetailViewToggle, MiningGlossary, MiningOccurrencePips, MiningOccurrenceRatingLabel } from "./MiningReadingAids";
+import { miningOccurrenceRatingTitle, useMiningDetailView, type MiningDetailView } from "./miningDetailView";
+import { miningMethodPresentation } from "./miningMethodPresentation";
+import { formatSignature, groupByMethod, mineableSignatureFor, partitionAlsoAtRows, sortByMaterialName, uniqueBestKey } from "./miningMaterialsPanel";
+import MiningMethodIcon from "./MiningMethodIcon";
+
+const HEADER_METHOD_SLOT_ORDER = ["Hand", "Ship", "Vehicle"] as const;
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -168,20 +193,14 @@ function MiningSourceBadge({
   );
 }
 
-function MiningMethodDemandCell({ value }: { value: string | null | undefined }) {
-  return <span className="mdet-method-text">{value || "Unknown"}</span>;
-}
-
 function MiningOccurrenceCell({ row }: { row: DemandRow | ResourceRow }) {
   if (row.occurrence.mode === "legacy") {
     return <MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={"sourceTitle" in row ? row.sourceTitle : undefined} />;
   }
-  const title = `Primary share: ${row.occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.name}. Spawn roll: ${row.occurrence.spawnRollProbabilityLabel} is the chance that one game-data roll selects both the pool and ${row.name}. Location rank: ${row.occurrence.locationRankLabel} among places using the same mining method. These values describe game-data weights, not a guaranteed percentage of scanned rocks.`;
+  const title = `Primary share: ${row.occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.name}. This is a game-data weight, not a guaranteed percentage of scanned rocks.`;
   return (
     <div className="mdet-occurrence" title={title}>
-      <strong>{row.occurrence.primaryRockShareLabel} primary</strong>
-      <span>{row.occurrence.spawnRollProbabilityLabel} spawn roll</span>
-      <span>{row.occurrence.locationRankLabel}</span>
+      <strong>{row.occurrence.primaryRockShareLabel}</strong>
     </div>
   );
 }
@@ -195,7 +214,9 @@ function TraceMaterialList({ row, mobile = false }: { row: DemandRow | ResourceR
           <span className="mdet-trace-branch" aria-hidden="true">↳</span>
           <span className="mdet-trace-copy">
             <strong>{trace.name}</strong>
-            <span>{trace.compositionRangeLabel} · {trace.qualityRangeLabel}</span>
+            <span title={trace.compositionRangeLabel +  " \u00b7 " + trace.qualityRangeLabel}>{mobile
+                ? trace.compositionRangeLabel +  " \u00b7 " + trace.qualityRangeLabel
+                : trace.compositionRangeLabel.replace(/\s*composition$/i, "")}</span>
           </span>
         </li>
       ))}
@@ -203,42 +224,302 @@ function TraceMaterialList({ row, mobile = false }: { row: DemandRow | ResourceR
   );
 }
 
-function MiningMaterialCell({ row }: { row: DemandRow | ResourceRow }) {
+function materialRowSource(row: DemandRow | ResourceRow, staticResourceRows: ReturnType<typeof getStaticResourcesForLocation>) {
+  return staticResourceRows.find((candidate) =>
+    `${getStaticMaterialKey(candidate)}:${candidate.resolvedMineableClass}:${(candidate.sources ?? []).map((item) => item.groupName ?? item.spawnType ?? "unknown").sort().join("|")}` === row.associationKey);
+}
+
+export type MiningMaterialsTableVariant = "selected" | "also" | "profile";
+
+// Display-only table. Values come from the static index rows and the existing
+// MINEABLE_SIGNATURES source; formatting happens here at render time only.
+export function MiningMaterialsTable({ rows, staticResourceRows, staticMiningIndex, label, variant, view = "simple", ratings }: {
+  rows: Array<DemandRow | ResourceRow>;
+  label: string;
+  variant: MiningMaterialsTableVariant;
+  view?: MiningDetailView;
+  ratings?: ReadonlyMap<string, MiningOccurrenceRating>;
+  staticResourceRows: ReturnType<typeof getStaticResourcesForLocation>;
+  staticMiningIndex: StaticMiningIndex | null;
+}) {
+  const items = rows.map((row) => {
+    const source = materialRowSource(row, staticResourceRows);
+    const chances = source ? pickWeightedQualityChances(getStaticMaterialQualityRow(source, staticMiningIndex), source) : undefined;
+    return {
+      row,
+      method: miningMethodBadge(row.miningType)?.label ?? row.miningType,
+      encounter: row.occurrence.mode === "probability" ? source?.primaryRockShare : undefined,
+      rating: row.occurrence.mode === "probability" && ratings ? miningOccurrenceRatingForRow(source, ratings) : undefined,
+      locationRank: source?.candidateMaterialEncounterRank ?? null,
+      locationRankOutOf: source?.candidateMaterialEncounterRankOutOf ?? null,
+      bestLocationOutOf: source?.candidateMaterialEncounterRank === 1 ? source.candidateMaterialEncounterRankOutOf ?? null : undefined,
+      quality800: chances?.["800"],
+      quality900: chances?.["900"],
+      composition: source?.compositionAveragePercentage,
+      signature: mineableSignatureFor(row.name),
+    };
+  });
+  type Item = (typeof items)[number];
+  const keyOf = (item: Item) => item.row.associationKey;
+  const highlight = variant !== "also";
+  const best = {
+    encounter: highlight ? uniqueBestKey(items, keyOf, (item) => item.encounter) : undefined,
+    quality800: highlight ? uniqueBestKey(items, keyOf, (item) => item.quality800) : undefined,
+    quality900: highlight ? uniqueBestKey(items, keyOf, (item) => item.quality900) : undefined,
+  };
+  const groups = variant === "selected" ? [{ method: "", items }] : groupByMethod(items, (item) => item.method);
+  const detailed = view === "detailed";
+  const showComposition = variant === "profile" && detailed;
+  const showRank = variant === "selected" && detailed;
+  const columnCount = showComposition || showRank ? 6 : 5;
+  const percent = (value: number | null | undefined, decimals: number, scale = 100) =>
+    typeof value === "number" && Number.isFinite(value) ? `${(value * scale).toFixed(decimals)}%` : "Unknown";
+  const bestClass = (key: string | undefined, rowKey: string) => key === rowKey ? "mining-selected-best" : undefined;
+  const traceText = (row: DemandRow | ResourceRow) => row.occurrence.traceMaterials
+    .map((trace) => `${trace.name} ${trace.compositionRangeLabel.replace(/\s*composition$/i, "")}`).join(" · ");
+
+  return <table className={`mining-resource-index-table mining-selected-table mining-selected-table--${variant}`}
+    style={{ "--mb-font-numeric": '"IBM Plex Sans Condensed", sans-serif' } as CSSProperties}
+    aria-label={label}>
+    <colgroup>
+      <col className="mining-resource-col--material" /><col className="mining-resource-col--encounter" />
+      <col className="mining-resource-col--quality" /><col className="mining-resource-col--quality" />
+      <col className="mining-resource-col--signatures" />
+      {(showComposition || showRank) && <col className="mining-resource-col--yield" />}
+    </colgroup>
+    <thead>
+      <tr className="mining-selected-quality-header">
+        <td colSpan={2} aria-hidden="true" />
+        <th scope="colgroup" colSpan={2}>Quality</th>
+        <td colSpan={showComposition || showRank ? 2 : 1} aria-hidden="true" />
+      </tr>
+      <tr>
+        <th scope="col">Material</th>
+        <th scope="col">Encounter</th>
+        <th scope="col" title={qualityProbabilityTooltip("800+")}>800+</th>
+        <th scope="col" title={qualityProbabilityTooltip("900+")}>900+</th>
+        <th scope="col">{variant === "selected" ? "Signature · ×2 · ×3" : "Signature"}</th>
+        {showComposition && <th scope="col">Composition</th>}
+        {showRank && <th scope="col" title="This location ranked against every location that has the material">Location rank</th>}
+      </tr>
+    </thead>
+    {groups.map((group) => <tbody key={group.method || "selected"}>
+      {group.method && <tr className="mining-selected-group"><th scope="rowgroup" colSpan={columnCount}>{group.method}</th></tr>}
+      {group.items.map(({ row, encounter, rating, bestLocationOutOf, locationRank, locationRankOutOf, quality800, quality900, composition, signature }) => <tr key={row.associationKey} className={`mining-resource-row mining-resource-row--${row.status}`}>
+        <td className="mdet-mat-name">
+          {variant === "selected" ? <>
+            <div className="mining-materials-name-line">
+              <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={16} />
+              {bestLocationOutOf !== undefined && <span className="mining-best-location" title={`Ranked first of ${bestLocationOutOf ?? "all"} locations for ${row.name}`}>
+                <span aria-hidden="true">★</span> Best location{bestLocationOutOf ? ` · 1 of ${bestLocationOutOf}` : ""}
+              </span>}
+            </div>
+            {detailed && row.occurrence.traceMaterials.length > 0 && <div className="mining-selected-traces" title={row.occurrence.traceMaterialsLabel}>{traceText(row)}</div>}
+          </> : <div className="mining-materials-name-line">
+            <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={variant === "also" ? 14 : 16} />
+            {detailed && row.occurrence.traceMaterials.length > 0 && <span className="mining-selected-traces" title={row.occurrence.traceMaterialsLabel}>{traceText(row)}</span>}
+          </div>}
+        </td>
+        <td className={bestClass(best.encounter, row.associationKey)}>
+          {rating ? <span className="mining-selected-encounter">
+            <MiningOccurrenceRatingLabel rating={rating} materialName={row.name} />
+            {detailed && <span className="mining-selected-encounter-share">{typeof encounter === "number" && Number.isFinite(encounter) ? percent(encounter, 1) : formatMiningCompetitionPercentagePoints(rating.share)}</span>}
+          </span> : typeof encounter === "number" && Number.isFinite(encounter) ? <span className="mining-selected-encounter">
+            <span className="mining-selected-bar-track" aria-hidden="true"><span className="mining-selected-bar" style={{ width: `${Math.min(100, Math.max(0, encounter * 100))}%`, minWidth: encounter > 0 ? 2 : 0 }} /></span>
+            <span>{percent(encounter, 1)}</span>
+          </span> : <MiningOccurrenceCell row={row} />}
+        </td>
+        <td className={bestClass(best.quality800, row.associationKey)}>{percent(quality800, 1)}</td>
+        <td className={bestClass(best.quality900, row.associationKey)}>{percent(quality900, 2)}</td>
+        <td className="mdet-signatures-cell">
+          {signature ? <>
+            <span className="mining-materials-signature-base">{formatSignature(signature.base)}</span>
+            {variant === "selected" && (signature.x2 !== undefined || signature.x3 !== undefined) && <span className="mining-materials-signature-multiples">
+              {signature.x2 !== undefined && <span>×2 {formatSignature(signature.x2)}</span>}
+              {signature.x3 !== undefined && <span>×3 {formatSignature(signature.x3)}</span>}
+            </span>}
+          </> : "—"}
+        </td>
+        {showComposition && <td className="mining-materials-composition">{percent(composition, 1, 1)}</td>}
+        {showRank && <td className="mining-materials-composition">{typeof locationRank === "number" ? `${locationRank} of ${locationRankOutOf ?? "?"}` : "Unknown"}</td>}
+      </tr>)}
+    </tbody>)}
+  </table>;
+}
+
+const POOL_NOUN: Record<string, string> = { hand: "hand", ship: "ship", vehicle: "vehicle" };
+
+/** Simple view: one card per selected material found here. Display only. */
+function MiningMaterialCards({ rows, staticResourceRows, staticMiningIndex, ratings }: {
+  rows: Array<DemandRow | ResourceRow>;
+  staticResourceRows: ReturnType<typeof getStaticResourcesForLocation>;
+  staticMiningIndex: StaticMiningIndex | null;
+  ratings: ReadonlyMap<string, MiningOccurrenceRating>;
+}) {
+  const percent = (value: number | null | undefined, decimals: number) =>
+    typeof value === "number" && Number.isFinite(value) ? `${(value * 100).toFixed(decimals)}%` : "Unknown";
+  return <div className="mining-material-cards" role="list" aria-label="Selected materials at this location">
+    {rows.map((row) => {
+      const source = materialRowSource(row, staticResourceRows);
+      const chances = source ? pickWeightedQualityChances(getStaticMaterialQualityRow(source, staticMiningIndex), source) : undefined;
+      const rating = row.occurrence.mode === "probability" ? miningOccurrenceRatingForRow(source, ratings) : undefined;
+      const presentation = miningMethodPresentation(row.miningType);
+      const methodLabel = miningMethodBadge(row.miningType)?.label ?? row.miningType;
+      const pool = presentation.iconKey ? POOL_NOUN[presentation.iconKey] : methodLabel.toLowerCase();
+      const signature = mineableSignatureFor(row.name);
+      const bestOutOf = source?.candidateMaterialEncounterRank === 1 ? source.candidateMaterialEncounterRankOutOf ?? null : undefined;
+      const share = rating?.share ?? null;
+      return <article key={row.associationKey} role="listitem" className={`mining-material-card mining-resource-row--${row.status}`}>
+        <div className="mining-material-card-top">
+          <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={18} />
+          {presentation.iconKey
+            ? <span className="mining-material-card-method" title={`${methodLabel} mining`}><MiningMethodIcon methodKey={presentation.iconKey} className="mining-material-card-method-icon" /><span className="sr-only">{methodLabel} mining</span></span>
+            : <span className="mining-material-card-method">{methodLabel}</span>}
+        </div>
+        {rating ? <div className="mining-material-card-occ" title={miningOccurrenceRatingTitle(rating, row.name)}>
+          <div className="mining-material-card-occ-word">
+            <b className={rating.band ? undefined : "is-unrated"}>{rating.label}</b>
+            {share !== null && <span>{formatMiningCompetitionPercentagePoints(share)} of {pool} rocks</span>}
+          </div>
+          <MiningOccurrencePips rating={rating} />
+        </div> : <div className="mining-material-card-occ"><MiningOccurrenceCell row={row} /></div>}
+        <div className="mining-material-card-facts">
+          <div>Quality 800+<strong>{percent(chances?.["800"], 1)}</strong></div>
+          <div>Signature<strong>{signature ? formatSignature(signature.base) : "\u2014"}</strong></div>
+        </div>
+        {bestOutOf !== undefined && <div><span className="mining-best-location" title={`Ranked first of ${bestOutOf ?? "all"} locations for ${row.name}`}>
+          <span aria-hidden="true">★</span> Best location{bestOutOf ? ` \u00b7 1 of ${bestOutOf}` : ""}
+        </span></div>}
+      </article>;
+    })}
+  </div>;
+}
+
+type CompetitionLinkProps = {
+  active: boolean;
+  accentColor: string;
+  onBlur: (relatedTarget: EventTarget | null) => void;
+  onFocus: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: (relatedTarget: EventTarget | null) => void;
+};
+
+function competitionAccentStyle(accentColor: string): CSSProperties {
+  return { "--mdet-competition-color": accentColor } as CSSProperties;
+}
+
+function CompetitionMember({ member, selected, link }: { member: MiningSpawnCompetitionMember; selected: boolean; link: CompetitionLinkProps }) {
+  const probabilitySummary = miningCompetitionProbabilitySummary(member);
   return (
-    <div className="mdet-material-cell">
-      <MaterialNameCell name={row.name} miningMethod={row.miningType} />
-      <TraceMaterialList row={row} />
-    </div>
+    <li
+      className={`mdet-competition-member${selected ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+      data-competition-material-key={member.materialKey}
+      data-linked-active={link.active ? "true" : undefined}
+      style={competitionAccentStyle(link.accentColor)}
+      title={probabilitySummary}
+      aria-label={`${member.materialName}. ${probabilitySummary}. ${selected ? "Selected material" : "Other pool material"}.`}
+      tabIndex={0}
+      onMouseEnter={link.onMouseEnter}
+      onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
+      onFocus={link.onFocus}
+      onBlur={(event) => link.onBlur(event.relatedTarget)}
+    >
+      <span className="mdet-competition-key" aria-hidden="true" />
+      <span className="mdet-competition-member-name">{member.materialName}</span>
+      <span className="sr-only">{selected ? "Selected" : "Competing"}</span>
+      <strong>{formatMiningCompetitionPercentagePoints(member.relativeProbability)}</strong>
+    </li>
   );
 }
 
-function MiningMethodCell({ row, value }: { row: DemandRow | ResourceRow; value: string }) {
+function MiningCompetitionPool({ pool }: { pool: MiningSelectedSpawnCompetitionPool }) {
+  const [activeMaterialKey, setActiveMaterialKey] = useState<string | null>(null);
+  const coverage = miningCompetitionPoolCoverage(pool.members);
+  const coverageSummary = coverage.hasUnavailableShare
+    ? "One or more published pool shares are unavailable."
+    : coverage.unrepresentedShare && coverage.unrepresentedShare > 0
+      ? `${formatMiningCompetitionPercentagePoints(coverage.knownShare)} of this source pool is represented by published location records; ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)} remains unrepresented.`
+      : null;
+  const linkProps = (member: MiningSpawnCompetitionMember): CompetitionLinkProps => {
+    const materialKey = member.materialKey;
+    const clearUnlessLinked = (relatedTarget: EventTarget | null) => {
+      const linkedKey = typeof HTMLElement !== "undefined" && relatedTarget instanceof HTMLElement
+        ? relatedTarget.dataset.competitionMaterialKey
+        : undefined;
+      if (linkedKey === materialKey) return;
+      setActiveMaterialKey((current) => current === materialKey ? null : current);
+    };
+    return {
+      active: activeMaterialKey === materialKey,
+      accentColor: miningCompetitionMaterialColor(member.materialKey || member.materialName),
+      onBlur: clearUnlessLinked,
+      onFocus: () => setActiveMaterialKey(materialKey),
+      onMouseEnter: () => setActiveMaterialKey(materialKey),
+      onMouseLeave: clearUnlessLinked,
+    };
+  };
+
+  const sourceLabel = miningCompetitionSourceLabel(pool.sourceGroup).replace(/-mining spawn pool$/i, " pool").replace(/ spawn pool$/i, " pool");
+  // Legend: selected members first (with values), competitors after, quieter.
+  const legendMembers = [...pool.selectedMembers, ...pool.members.filter((member) => !pool.selectedMembers.includes(member))];
   return (
-    <div className="mdet-method-cell">
-      <MiningMethodDemandCell value={value} />
-      {row.occurrence.mode === "probability" && (
-        <span className="mdet-method-availability">{row.occurrence.methodAvailabilityLabel} available</span>
-      )}
+    <div className="mdet-competition-pool">
+      <div className="mdet-competition-copy">
+        <strong className="mdet-competition-target" title={`Source group: ${pool.sourceGroup}`}>{sourceLabel}</strong>
+        <small title={coverageSummary ?? undefined}>
+          {pool.competitorCount} competing{coverage.unrepresentedShare && coverage.unrepresentedShare > 0 ? ` · ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)} unrepresented` : coverage.hasUnavailableShare ? " · shares unavailable" : ` resource${pool.competitorCount === 1 ? "" : "s"}`}
+        </small>
+      </div>
+      <div className="mdet-competition-bar" role="list" aria-label={`Spawn-pool shares for ${sourceLabel}${coverageSummary ? `. ${coverageSummary}` : ""}`}>
+        {pool.members.map((member) => {
+          const share = typeof member.relativeProbability === "number" && Number.isFinite(member.relativeProbability)
+            ? Math.max(member.relativeProbability, 0)
+            : 0;
+          const link = linkProps(member);
+          const probabilitySummary = miningCompetitionProbabilitySummary(member);
+          const selected = pool.selectedMembers.includes(member);
+          return (
+            <span
+              key={`${pool.sourceGroup}:${member.materialKey}:bar`}
+              className={`mdet-competition-segment${selected ? " is-target" : ""}${link.active ? " is-linked-active" : ""}`}
+              role="listitem"
+              tabIndex={0}
+              data-competition-material-key={member.materialKey}
+              data-linked-active={link.active ? "true" : undefined}
+              style={{ ...competitionAccentStyle(link.accentColor), width: `${share}%` }}
+              title={`${member.materialName}. ${probabilitySummary}`}
+              aria-label={`${member.materialName}. ${probabilitySummary}. ${selected ? "Selected material" : "Other pool material"}.`}
+              onMouseEnter={link.onMouseEnter}
+              onMouseLeave={(event) => link.onMouseLeave(event.relatedTarget)}
+              onFocus={link.onFocus}
+              onBlur={(event) => link.onBlur(event.relatedTarget)}
+            />
+          );
+        })}
+        {coverage.unrepresentedShare !== null && coverage.unrepresentedShare > 0 && (
+          <span
+            className="mdet-competition-segment mdet-competition-segment--unrepresented"
+            role="listitem"
+            style={{ width: `${coverage.unrepresentedShare}%` }}
+            title={`Unrepresented in published location records: ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)}`}
+            aria-label={`Unrepresented in published location records: ${formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)}. No resources are inferred for this share.`}
+          />
+        )}
+      </div>
+      <ul className="mdet-competition-members">
+        {legendMembers.map((member) => (
+          <CompetitionMember key={`${pool.sourceGroup}:${member.materialKey}`} member={member} selected={pool.selectedMembers.includes(member)} link={linkProps(member)} />
+        ))}
+        {coverage.unrepresentedShare !== null && coverage.unrepresentedShare > 0 && (
+          <li className="mdet-competition-member mdet-competition-member--unrepresented">
+            <span className="mdet-competition-key" aria-hidden="true" />
+            <span className="mdet-competition-member-name">Unrepresented</span>
+            <strong>{formatMiningCompetitionPercentagePoints(coverage.unrepresentedShare)}</strong>
+          </li>
+        )}
+      </ul>
     </div>
   );
-}
-
-const MINING_METHOD_ICON_ASSETS = {
-  hand: handMiningMultitoolIcon,
-  ship: surfaceShipMiningIcon,
-  vehicle: vehicleMiningExosuitIcon,
-} as const;
-
-function miningMethodIconKey(method: string): keyof typeof MINING_METHOD_ICON_ASSETS {
-  const normalized = method.toLowerCase();
-  if (normalized.includes("hand")) return "hand";
-  if (normalized.includes("vehicle")) return "vehicle";
-  return "ship";
-}
-
-function MiningMethodIcon({ method }: { method: string }) {
-  const methodKey = miningMethodIconKey(method);
-  return <img className={`mdet-method-icon mdet-method-icon--${methodKey}`} src={MINING_METHOD_ICON_ASSETS[methodKey]} alt="" aria-hidden="true" />;
 }
 
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
@@ -268,16 +549,17 @@ function MiningMobileMaterialCard({
   row,
   mode,
   qualityHeader,
+  view,
+  rating,
 }: {
   row: DemandRow | ResourceRow;
   mode: "demand" | "resource";
   qualityHeader: string;
+  view: MiningDetailView;
+  rating?: MiningOccurrenceRating;
 }) {
-  const methodValue = mode === "demand"
-    ? (row as DemandRow).coverage === "Missing"
-      ? "Missing"
-      : row.miningType
-    : row.miningType || "Unknown";
+  const detailed = view === "detailed";
+  const methodValue = row.miningType || "Unknown";
   const methodBadge = miningMethodBadge(methodValue);
   const methodLabel = methodBadge?.label ?? (methodValue || "Unknown");
   const primaryQualityLabel = mode === "demand"
@@ -297,22 +579,27 @@ function MiningMobileMaterialCard({
           <span className={`mdet-mobile-source-chip${methodBadge ? ` mloc-badge ${methodBadge.className}` : ""}`}>
             {methodLabel}
           </span>
-          {probabilityOccurrence
-            ? <MobileMaterialStatusPill label={`${row.occurrence.primaryRockShareLabel} primary`} status={row.status} />
-            : <MobileMaterialStatusPill label={row.densityLabel} status={row.status} />}
+          {"coverage" in row && row.coverage !== "Covered" && row.coverage !== row.densityLabel && <MobileMaterialStatusPill label={row.coverage} status={row.status} />}
+          {rating
+            ? <span className="mdet-mobile-occurrence"><MiningOccurrenceRatingLabel rating={rating} materialName={row.name} />{detailed && <small>{row.occurrence.primaryRockShareLabel}</small>}</span>
+            : probabilityOccurrence
+              ? <MobileMaterialStatusPill label={`${row.occurrence.primaryRockShareLabel} primary`} status={row.status} />
+              : <MobileMaterialStatusPill label={row.densityLabel} status={row.status} />}
         </div>
-        <TraceMaterialList row={row} mobile />
+        {detailed && <TraceMaterialList row={row} mobile />}
       </div>
       <div
         className="mdet-mobile-stat-grid"
         title={"sourceTitle" in row ? row.sourceTitle : undefined}
       >
-        {probabilityOccurrence && <MiningMobileStat label="Spawn Roll" value={row.occurrence.spawnRollProbabilityLabel} />}
-        {probabilityOccurrence && <MiningMobileStat label="Location Rank" value={row.occurrence.locationRankLabel} />}
-        {probabilityOccurrence && <MiningMobileStat label="Method Available" value={row.occurrence.methodAvailabilityLabel} />}
+        {detailed && probabilityOccurrence && <MiningMobileStat label="Method Available" value={row.occurrence.methodAvailabilityLabel} />}
         <MiningMobileStat label={qualityHeader} value={primaryQualityLabel} />
         <MiningMobileStat label="900+ Quality" value={row.quality900Label} />
-        <MiningMobileStat label="Composition" value={row.compositionLabel} />
+        {detailed && <MiningMobileStat label="Composition" value={row.compositionLabel} />}
+         <div className="mdet-mobile-signatures" aria-label="Signatures pending">
+           <span className="mdet-mobile-stat-label">Sigs</span>
+           <div className="mdet-signature-badges" aria-hidden="true" />
+         </div>
       </div>
     </article>
   );
@@ -322,10 +609,16 @@ function MiningMobileMaterialList({
   rows,
   mode,
   qualityHeader,
+  view,
+  ratings,
+  staticResourceRows,
 }: {
   rows: Array<DemandRow | ResourceRow>;
   mode: "demand" | "resource";
   qualityHeader: string;
+  view: MiningDetailView;
+  ratings: ReadonlyMap<string, MiningOccurrenceRating>;
+  staticResourceRows: ReturnType<typeof getStaticResourcesForLocation>;
 }) {
   return (
     <div className="mdet-mobile-material-list">
@@ -335,6 +628,8 @@ function MiningMobileMaterialList({
           row={row}
           mode={mode}
           qualityHeader={qualityHeader}
+          view={view}
+          rating={row.occurrence.mode === "probability" ? miningOccurrenceRatingForRow(materialRowSource(row, staticResourceRows), ratings) : undefined}
         />
       ))}
     </div>
@@ -345,40 +640,29 @@ export function LocationDetail({
   entry,
   activeDemandMaterials,
   buildQueueMaterialKeys,
+  selectedMaterials,
   locationMaterialKeys,
   staticMiningIndex,
+  staticIndexStatus,
   planetAssetMap,
   starred,
   onToggleStar,
   hideHeader = false,
-  contextSummary,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
+  selectedMaterials: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
+  staticIndexStatus: "loading" | "loaded" | "error";
   planetAssetMap?: Map<string, PlanetAsset> | null;
   starred?: boolean;
   onToggleStar?: (e: MouseEvent<HTMLButtonElement>) => void;
   hideHeader?: boolean;
-  contextSummary?: {
-    scopeLabel: string;
-    selectedMaterialCount: number;
-    totalMaterialCount: number;
-    rankedLocationCount: number;
-  };
+  /** Ranked-list coverage for this location (same projection as the "N of M" row readout). */
+  coverage?: { covered: number; total: number };
 }) {
-  const coveredBQ = useMemo(
-    () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
-    [locationMaterialKeys, buildQueueMaterialKeys],
-  );
-  const missingBQ = useMemo(
-    () => [...buildQueueMaterialKeys].filter((key) => !locationMaterialKeys.includes(key)),
-    [locationMaterialKeys, buildQueueMaterialKeys],
-  );
-  const total = coveredBQ.length + missingBQ.length;
-  const coveragePct = total > 0 ? Math.round((coveredBQ.length / total) * 100) : 0;
   const debugJoinLogKeyRef = useRef<string | null>(null);
 
   const staticResourceRows = useMemo(
@@ -402,10 +686,12 @@ export function LocationDetail({
     return map;
   }, [activeDemandMaterials]);
 
+  const activeMaterialKeys = useMemo(() => new Set([...selectedMaterials, ...buildQueueMaterialKeys]), [selectedMaterials, buildQueueMaterialKeys]);
+
   // Pure transform — no hooks inside
   const demandRows = useMemo(
-    () => buildDemandRows(entry, buildQueueMaterialKeys, locationMaterialKeys, demandMaterialByKey, staticResourceRows, staticMiningIndex),
-    [entry, buildQueueMaterialKeys, locationMaterialKeys, demandMaterialByKey, staticResourceRows, staticMiningIndex],
+    () => buildDemandRows(entry, activeMaterialKeys, locationMaterialKeys, demandMaterialByKey, staticResourceRows, staticMiningIndex, staticIndexStatus),
+    [entry, activeMaterialKeys, locationMaterialKeys, demandMaterialByKey, staticResourceRows, staticMiningIndex, staticIndexStatus],
   );
 
   const resourceRows = useMemo(
@@ -413,7 +699,14 @@ export function LocationDetail({
     [entry, staticResourceRows, staticMiningIndex],
   );
 
-  const coveredDemandRows = useMemo(() => demandRows.filter((r) => r.status !== "missing"), [demandRows]);
+  // The profile tables describe materials found at this location. Missing or
+  // unresolved selections remain visible in the coverage chips, not as source rows.
+  const selectedDemandRows = useMemo(
+    () => demandRows
+      .filter((row) => row.coverage === "Covered" || row.coverage === "Indexed · Not eligible")
+      .sort(compareMiningMethodMaterialEntries),
+    [demandRows],
+  );
 
   // Dev-mode logging
   useEffect(() => {
@@ -440,191 +733,170 @@ export function LocationDetail({
   }, [entry, staticMiningIndex, staticResourceRows]);
 
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
+  const locationTitleMatch = locationDisplayName.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+  const locationTitle = locationTitleMatch?.[1] ?? locationDisplayName;
+  const locationSubtitle = locationTitleMatch?.[2] ?? null;
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap ?? null, locationDisplayName) ?? getPlanetAsset(planetAssetMap ?? null, entry.locationName);
+  // Location records do not expose a verified celestial parent for orbital areas.
+  // Resolve body maps by exact CIG display/alias names; use location-matched art
+  // or a neutral orbital backdrop when no surface map exists.
+  const topographyHero = getLocationTopography(entry.systemName, locationDisplayName)
+    ?? getLocationTopography(entry.systemName, entry.locationName);
+  const heroBackdrop = topographyHero ?? planetAsset?.headerImage2x ?? planetAsset?.headerImage ?? null;
+  const locationArtworkStyle = planetAsset
+    ? {
+      "--mdet-header-art-fit": planetAsset.headerFit,
+      "--mdet-header-art-position": `${planetAsset.headerPositionX}% ${planetAsset.headerPositionY}%`,
+      "--mdet-header-art-width": `${planetAsset.headerArtWidth}%`,
+    } as CSSProperties
+    : undefined;
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
-  const locationMethodMixItems = useMemo(
-    () => getStaticMethodBiasForLocation(entry, staticMiningIndex)
-      .filter((item) => Number.isFinite(item.share) && item.share > 0)
-      .sort((a, b) => b.share - a.share),
+  const locationMethodBias = useMemo(
+    () => getStaticMethodBiasForLocation(entry, staticMiningIndex),
     [entry, staticMiningIndex],
   );
-  const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
-  const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
-  const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
+  const survey = useMemo(
+    () => buildMiningLocationSurveyPresentation(
+      getStaticLocationEnvironment(entry, staticMiningIndex),
+      locationMethodBias,
+    ),
+    [entry, locationMethodBias, staticMiningIndex],
+  );
+  const surveyMethodsBySlot = useMemo(() => {
+    const methodsBySlot = new Map<string, (typeof locationMethodBias)[number]>();
+    for (const item of locationMethodBias) {
+      const slot = miningMethodBadge(item.method)?.label;
+      if (slot && !methodsBySlot.has(slot)) methodsBySlot.set(slot, item);
+    }
+    return methodsBySlot;
+  }, [locationMethodBias]);
+  const qualityHeader = qualityChanceHeader();
+  const competitionPools = useMemo(
+    () => buildMiningLocationCompetitionPools({
+      selectedMaterialKeys: activeMaterialKeys,
+      staticResourceRows,
+      staticIndexStatus,
+    }),
+    [activeMaterialKeys, staticIndexStatus, staticResourceRows],
+  );
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
     [demandRows],
   );
+  // State A (selection present at this location): Also-at excludes every selected
+  // material. State B (no selection here): one Material Profile with every row.
+  const hasSelectedRows = selectedDemandRows.length > 0;
+  // Selected rows read alphabetically by material on desktop and mobile alike.
+  const selectedRowsByName = useMemo(
+    () => sortByMaterialName(selectedDemandRows, (row) => row.name),
+    [selectedDemandRows],
+  );
   const otherLocationMaterialRows = useMemo(() => {
-    const rows = hasBuildQueueTarget
-      ? resourceRows.filter((row) => !demandedMaterialKeys.has(resourceRowMaterialKey(row)))
+    const rows = hasSelectedRows
+      ? partitionAlsoAtRows(resourceRows, demandedMaterialKeys, resourceRowMaterialKey)
       : resourceRows;
-    const byMaterial = new Map<string, ResourceRow>();
-    for (const row of rows) {
-      const key = resourceRowMaterialKey(row);
-      const existing = byMaterial.get(key);
-      if (!existing || (row.sourceWeight ?? -1) > (existing.sourceWeight ?? -1)) byMaterial.set(key, row);
-    }
-    return [...byMaterial.values()];
-  }, [demandedMaterialKeys, hasBuildQueueTarget, resourceRows]);
-
-  const materialProfileTitle = hasBuildQueueTarget ? "Other materials at this location" : "Material profile";
-  const selectedDemandMaterialCount = activeDemandMaterials.length;
-  const hasSingleDemandMaterial = selectedDemandMaterialCount === 1 && demandRows.length === 1;
-  const hasMultipleDemandMaterials = selectedDemandMaterialCount > 1;
-  const selectedDemandRow = hasSingleDemandMaterial ? demandRows[0] : null;
-  const singleDemandMethodLabel = selectedDemandRow?.coverage === "Missing"
-    ? "Missing"
-    : selectedDemandRow?.miningType || "Unknown";
-
+    return [...rows].sort(compareMiningMethodMaterialEntries);
+  }, [demandedMaterialKeys, hasSelectedRows, resourceRows]);
+  const [detailView, setDetailView] = useMiningDetailView();
+  const detailed = detailView === "detailed";
+  const occurrenceRatings = useMemo(
+    () => staticIndexStatus === "loaded" ? buildMiningLocationOccurrenceRatings(staticResourceRows) : new Map<string, MiningOccurrenceRating>(),
+    [staticIndexStatus, staticResourceRows],
+  );
+  const heroPlatesContent = <>
+    <MiningEnvironmentStatus environment={survey.environment} locationKind={entry.locationKind} />
+    <div className={`mdet-plate mdet-plate--equipment mdet-method-rack${locationMethodBias.length === 0 ? " is-unavailable" : ""}`} aria-label="Source-backed location mining method eligibility. It does not verify ship equipment-specific fracture feasibility, scanned-rock success, or recoverable or refined SCU.">
+      <span className="mdet-plate-key">Equipment · share of rocks</span>
+      <span className="mdet-equipment-row">
+        {HEADER_METHOD_SLOT_ORDER.map((slot) => {
+          const item = surveyMethodsBySlot.get(slot);
+          if (!item) return null;
+          const label = miningMethodBadge(item.method)?.label ?? item.method;
+          const presentation = miningMethodPresentation(item.method);
+          return <span className={`mdet-method-rack-item${item.share > 0 ? "" : " is-absent"}`} key={item.method} title={`${label}: ${formatMiningProbability(item.share)} modeled source share. Method eligibility does not verify equipped-head fracture feasibility, scanned-rock success, or recovered/refined SCU.`}>
+            {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : null}
+            <span className="mdet-method-label">{label}</span>
+            <em className="mdet-method-rack-value">{formatMiningProbability(item.share)}</em>
+          </span>;
+        })}
+        {locationMethodBias.length === 0 && <span className="mdet-method-rack-unavailable">Methods unavailable</span>}
+      </span>
+    </div>
+  </>;
+  const viewTools = <span className="mdet-section-tools">
+    <MiningGlossary />
+    <MiningDetailViewToggle view={detailView} onChange={setDetailView} />
+  </span>;
+  const heroPlates = <div className="mdet-hero-plates">{heroPlatesContent}</div>;
+  // Found = selected materials with a location row here (eligible or not).
+  const foundSelectedCount = new Set(selectedDemandRows.map((row) => row.key)).size;
+  const missingSelectedNames = [...activeMaterialKeys]
+    .filter((key) => !selectedDemandRows.some((row) => row.key === key))
+    .map((key) => demandRows.find((row) => row.key === key)?.name ?? canonicalMiningMaterial({ materialKey: key }).label);
   return (
     <div className={`mdet-panel${hideHeader ? " mdet-panel--inline-mobile" : ""}`}>
-      {!hideHeader && (
-        <div className="mdet-header">
-          <div className="mdet-thumb" aria-hidden="true">
-            {planetAsset ? (
-              <img
-                src={planetAsset.main}
-                srcSet={`${planetAsset.main2x} 2x`}
-                alt=""
-                className="mdet-thumb-img"
-              />
+      <div className={`mdet-survey-stage${planetAsset ? " mdet-survey-stage--artwork" : ""}${hideHeader ? " mdet-survey-stage--inline" : ""}`} style={locationArtworkStyle}>
+        {!hideHeader && (
+          <div className={`mdet-header mdet-source-card has-art${topographyHero ? " has-topography" : heroBackdrop ? " has-location-art" : " has-orbital-background"}`}>
+            {heroBackdrop ? (
+              <div className="mdet-hero-topography" aria-hidden="true"
+                style={{ backgroundImage: `url("${heroBackdrop}")` }} />
             ) : (
-              <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
+              <div className="mdet-hero-orbital" aria-hidden="true" />
             )}
+            {onToggleStar && (
+              <>
+                <button
+                  type="button"
+                  className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
+                  onClick={onToggleStar}
+                  aria-pressed={starred}
+                  aria-label={starred ? "Remove saved" : "Save"}
+                  aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
+                  {...bookmarkTooltip.triggerProps}
+                >
+                  <MiningBookmarkIcon />
+                </button>
+                {bookmarkTooltip.tooltip}
+              </>
+            )}
+            <div className="mdet-header-left">
+              <div className="mdet-label"><span className="mdet-label-system">{entry.systemName} system</span></div>
+              <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
+                {locationTitle}
+                {locationSubtitle && <small>{locationSubtitle}</small>}
+              </div>
+              {isLagrangeChildGroup && <div className="mdet-meta">
+                <StantonLagrangeChildrenSummary entry={entry} compact />
+              </div>}
+            </div>
+            {heroPlates}
           </div>
-          <div className="mdet-header-left">
-            <div className="mdet-label">Location Profile</div>
-            <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
-              {locationDisplayName}
-            </div>
-            <div className="mdet-meta">
-              {!isLagrangeChildGroup && (
-                <span className="mdet-system-text">{entry.systemName} <span>system</span></span>
-              )}
-              <StantonLagrangeChildrenSummary entry={entry} compact />
-            </div>
-          </div>
-          {locationMethodMixItems.length > 0 && (
-            <div className="location-method-stat-grid">
-              {locationMethodMixItems.map((item) => {
-                const displayMethod = miningMethodBadge(item.method)?.label ?? item.method;
-                return (
-                  <div key={`method-mix:${item.method}`} className={`location-stat-chip location-method-stat-chip location-method-stat-chip--${displayMethod.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}>
-                    <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location."><span className="mdet-method-label"><MiningMethodIcon method={item.method} />{displayMethod}</span></InfoTip></div>
-                    <div
-                      className={`location-stat-value ${methodBiasToneClass(item.share)}`}
-                      title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}
-                    >
-                      {formatPercent(item.share)}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          {onToggleStar && (
-            <>
-              <button
-                type="button"
-                className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
-                onClick={onToggleStar}
-                aria-pressed={starred}
-                aria-label={starred ? "Remove saved" : "Save"}
-                aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
-                {...bookmarkTooltip.triggerProps}
-              >
-                <MiningBookmarkIcon />
-              </button>
-              {bookmarkTooltip.tooltip}
-            </>
-          )}
-        </div>
+        )}
+        {hideHeader && <div className="mdet-hero-plates mdet-hero-plates--inline">{heroPlatesContent}</div>}
+      </div>
+
+      {detailed && survey.methods.length > 0 && (
+        <p className="mdet-method-breakdown mdet-method-breakdown--standalone" title="Modeled source share by mining method. Method eligibility only; it does not verify equipped-head fracture feasibility, scanned-rock success, or recovered/refined SCU.">
+          <span className="mdet-method-breakdown-label">Source share</span>
+          {survey.methods.map((item) => (
+            <span key={item.method} className={item.share > 0 ? "is-present" : undefined}>
+              {item.method} <strong>{formatMiningProbability(item.share)}</strong>
+            </span>
+          ))}
+        </p>
       )}
 
-      {!hideHeader && contextSummary && (
-        <div className="mining-detail-context" aria-label="Mining view context">
-          <span className="mining-detail-context__item mining-detail-context__item--scope">{contextSummary.scopeLabel}</span>
-          <span className="mining-detail-context__item"><strong>{contextSummary.selectedMaterialCount}</strong> selected</span>
-          <span className="mining-detail-context__item"><strong>{contextSummary.totalMaterialCount}</strong> materials</span>
-          <span className="mining-detail-context__item"><strong>{contextSummary.rankedLocationCount}</strong> ranked locations</span>
-        </div>
+      {staticIndexStatus === "loading" && (
+        <p className="mdet-reference-note" role="status">
+          Loading source-backed location detail…
+        </p>
       )}
-
-      {((!hasMultipleDemandMaterials && total > 0) || hasMultipleDemandMaterials || hasSingleDemandMaterial) && (
-        <div className={`location-stat-chip-grid${hasMultipleDemandMaterials ? " location-stat-chip-grid--coverage" : " location-stat-chip-grid--single"}${hasSingleDemandMaterial && selectedDemandRow?.occurrence.mode === "probability" ? " location-stat-chip-grid--probability" : ""}`}>
-          <div className="location-stat-ledger-label">{hasMultipleDemandMaterials ? "Queue Coverage" : "Material Fit"}</div>
-          {!hasMultipleDemandMaterials && total > 0 && (
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>
-              <div className={`location-stat-value ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
-            </div>
-          )}
-
-          {hasMultipleDemandMaterials && (
-            <>
-              <div className="location-stat-chip">
-                <div className="location-stat-label">COVERED</div>
-                <div className={`location-stat-value ${coveredBQ.length > 0 ? "mloc-score--best" : "mloc-score--poor"}`}>{coveredBQ.length}</div>
-              </div>
-              <div className="location-stat-chip">
-                <div className="location-stat-label">MISSING</div>
-                <div className={`location-stat-value ${missingBQ.length > 0 ? "mloc-score--poor" : "mloc-score--best"}`}>{missingBQ.length}</div>
-              </div>
-              <div className="location-coverage-progress">
-                <span><strong>{coveredBQ.length} of {total}</strong> materials</span>
-                <span>{coveragePct}%</span>
-                <span className="location-coverage-track"><span style={{ width: `${coveragePct}%` }} /></span>
-              </div>
-            </>
-          )}
-
-          {hasSingleDemandMaterial && selectedDemandRow && (
-            <>
-              <div className="location-stat-chip">
-                <div className="location-stat-label"><InfoTip text="Mining method for the selected material at this location.">METHOD</InfoTip></div>
-                <div className="location-stat-value">{singleDemandMethodLabel}</div>
-                {selectedDemandRow.occurrence.mode === "probability" && (
-                  <div className="location-stat-subvalue">{selectedDemandRow.occurrence.methodAvailabilityLabel} available</div>
-                )}
-              </div>
-              {selectedDemandRow.occurrence.mode === "probability" ? (
-                <>
-                  <div className="location-stat-chip">
-                    <div className="location-stat-label"><InfoTip text={`Of the primary rocks in this mining pool, ${selectedDemandRow.occurrence.primaryRockShareLabel} are ${selectedDemandRow.name}.`}>PRIMARY ROCK SHARE</InfoTip></div>
-                    <div className="location-stat-value">{selectedDemandRow.occurrence.primaryRockShareLabel}</div>
-                  </div>
-                  <div className="location-stat-chip">
-                    <div className="location-stat-label"><InfoTip text={`A single game-data spawn roll has a ${selectedDemandRow.occurrence.spawnRollProbabilityLabel} chance to select both this mining pool and ${selectedDemandRow.name}. This is not the percentage of scanned rocks you are guaranteed to see.`}>SPAWN ROLL</InfoTip></div>
-                    <div className="location-stat-value">{selectedDemandRow.occurrence.spawnRollProbabilityLabel}</div>
-                  </div>
-                  <div className="location-stat-chip">
-                    <div className="location-stat-label"><InfoTip text={`This location is ${selectedDemandRow.occurrence.locationRankLabel} for ${selectedDemandRow.name} when compared only with locations using the same mining method.`}>LOCATION RANK</InfoTip></div>
-                    <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.occurrence.locationRankLabel}</div>
-                  </div>
-                </>
-              ) : (
-                <div className="location-stat-chip">
-                  <div className="location-stat-label"><InfoTip text="Location-specific encounter presentation retained for this material.">ENCOUNTER TIER</InfoTip></div>
-                  <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
-                </div>
-              )}
-              <div className="location-stat-chip">
-                <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></div>
-                <div className="location-stat-value">{selectedDemandRow.targetQualityChanceLabel}</div>
-              </div>
-              <div className="location-stat-chip">
-                <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></div>
-                <div className="location-stat-value">{selectedDemandRow.quality900Label}</div>
-              </div>
-              <div className="location-stat-chip">
-                <div className="location-stat-label"><InfoTip text="Average material composition inside an encountered source for the selected material. This is not encounter chance.">COMPOSITION / YIELD</InfoTip></div>
-                <div className="location-stat-value">{selectedDemandRow.compositionLabel}</div>
-              </div>
-            </>
-          )}
-        </div>
+      {staticIndexStatus === "error" && (
+        <p className="mdet-reference-note" role="status">
+          The location reference index is unavailable. Source-backed detail fields may be unavailable.
+        </p>
       )}
 
       {entry.nearbyStations.length > 0 && (
@@ -637,76 +909,65 @@ export function LocationDetail({
       )}
 
   
-      {demandRows.length > 0 && (
+      {hasSelectedRows && (
         <div className="mining-demand-breakdown">
-          <div className="mdet-section-label mdet-section-label--demand">Selected materials at this location</div>
-          <table className="mining-resource-index-table">
-            <colgroup>
-              <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
-              <col className="mining-resource-col--encounter" /><col className="mining-resource-col--quality" />
-              <col className="mining-resource-col--quality" /><col className="mining-resource-col--yield" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
-              </tr>
-            </thead>
-            <tbody>
-              {coveredDemandRows.map((row) => (
-                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
-                  <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
-                  <td><MiningOccurrenceCell row={row} /></td>
-                  <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
-                  <td className="mdet-mat-score">{row.quality900Label}</td>
-                  <td className="mdet-mat-score">{row.compositionLabel}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <MiningMobileMaterialList rows={coveredDemandRows} mode="demand" qualityHeader={qualityHeader} />
+          <div className="mdet-section-label">
+            <span>{detailed ? "Selected materials" : "Your materials here"} <span className="mining-materials-section-meta">· {foundSelectedCount} of {activeMaterialKeys.size} found{missingSelectedNames.length > 0 ? ` · ${missingSelectedNames.join(", ")} not found here` : ""}</span></span>
+            {viewTools}
+          </div>
+          {!detailed && <MiningMaterialCards rows={selectedRowsByName} staticResourceRows={staticResourceRows} staticMiningIndex={staticMiningIndex} ratings={occurrenceRatings} />}
+          {detailed && <><MiningMaterialsTable variant="selected" label="Selected materials at this location" rows={selectedRowsByName} staticResourceRows={staticResourceRows} staticMiningIndex={staticMiningIndex} view={detailView} ratings={occurrenceRatings} />
+          <MiningMobileMaterialList rows={selectedRowsByName} mode="demand" qualityHeader={qualityHeader} view={detailView} ratings={occurrenceRatings} staticResourceRows={staticResourceRows} /></>}
         </div>
       )}
 
-      {otherLocationMaterialRows.length > 0 && (
+      {competitionPools.length > 0 && (
+        <section className="mdet-competition" aria-label="Direct spawn competition">
+          <div className="mdet-competition-head">
+            <span className="mdet-competition-heading">What else spawns in the same pool</span>
+            <span className="mdet-competition-hint">Direct Spawn Competition</span>
+          </div>
+          {competitionPools.map((pool) => <MiningCompetitionPool key={pool.sourceGroup} pool={pool} />)}
+        </section>
+      )}
+
+      {hasSelectedRows && otherLocationMaterialRows.length > 0 && (
+        <div className="mining-resource-index mining-materials-also">
+          <div className="mdet-section-label">
+            <span>{detailed ? "Other materials at this location" : "Also found here"}</span>
+            {!detailed && <button type="button" className="mining-materials-linkbtn" onClick={() => setDetailView("detailed")}>Show full table</button>}
+          </div>
+          {!detailed ? (
+            <ul className="mining-materials-also-chips" aria-label="Also found here">
+              {otherLocationMaterialRows.map((row) => {
+                const rating = row.occurrence.mode === "probability" ? miningOccurrenceRatingForRow(materialRowSource(row, staticResourceRows), occurrenceRatings) : undefined;
+                const method = (miningMethodBadge(row.miningType)?.label ?? row.miningType).toLowerCase();
+                return <li key={row.associationKey} title={rating ? miningOccurrenceRatingTitle(rating, row.name) : undefined}>
+                  <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={14} />
+                  <em>{rating ? `${rating.label} · ${method}` : method}</em>
+                </li>;
+              })}
+            </ul>
+          ) : <>
+            <MiningMaterialsTable variant="also" label="Other materials at this location" rows={otherLocationMaterialRows} staticResourceRows={staticResourceRows} staticMiningIndex={staticMiningIndex} view={detailView} ratings={occurrenceRatings} />
+            <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" view={detailView} ratings={occurrenceRatings} staticResourceRows={staticResourceRows} />
+          </>}
+        </div>
+      )}
+
+      {!hasSelectedRows && otherLocationMaterialRows.length > 0 && (
         <div className="mining-resource-index">
           <div className="mdet-section-label">
-            {materialProfileTitle}
+            <span>Material profile <span className="mining-materials-section-meta">· {otherLocationMaterialRows.length} materials at {locationTitle}</span></span>
+            {viewTools}
           </div>
-          <table className="mining-resource-index-table mining-resource-index-table--continuation">
-            <colgroup>
-              <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
-              <col className="mining-resource-col--encounter" /><col className="mining-resource-col--quality" />
-              <col className="mining-resource-col--quality" /><col className="mining-resource-col--yield" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("800+")}>800+</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
-              </tr>
-            </thead>
-            <tbody>
-              {otherLocationMaterialRows.map((row) => (
-                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
-                  <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.miningType || "Unknown"} /></td>
-                  <td><MiningOccurrenceCell row={row} /></td>
-                  <td className="mdet-mat-score">{row.qualityLabel}</td>
-                  <td className="mdet-mat-score">{row.quality900Label}</td>
-                  <td className="mdet-mat-score">{row.compositionLabel}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" />
+          <MiningMaterialsTable variant="profile" label="Material profile at this location" rows={otherLocationMaterialRows} staticResourceRows={staticResourceRows} staticMiningIndex={staticMiningIndex} view={detailView} ratings={occurrenceRatings} />
+          <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" view={detailView} ratings={occurrenceRatings} staticResourceRows={staticResourceRows} />
         </div>
+      )}
+
+      {selectedDemandRows.length === 0 && otherLocationMaterialRows.length === 0 && (
+        <p className="mdet-empty-readout">No material rows are available for this location.</p>
       )}
     </div>
   );

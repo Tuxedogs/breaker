@@ -1,16 +1,24 @@
 import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 import type { PublicLocationEntry } from "../../../features/mining/types";
+import type { JournalHabitatReport } from "../../../features/source/sourceResources";
+import { SourceReportedBadges } from "./JournalLocation";
 import {
+  getStaticLocationEnvironment,
   getStaticLocationDisplayName,
   getStaticMethodBiasForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
+import { buildMiningLocationSurveyPresentation } from "../../../features/mining/miningPresentationModels";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
-import { miningMethodBadge } from "./miningFormatters";
+import { formatMiningProbability, getLocationSelectedCoverage, systemBadgeClass } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
-import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
+import { isStantonLagrangeGroup } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
+import MaterialCoverageChips from "./MaterialCoverageChips";
+import { buildDemandRows } from "./miningFormatters";
+import { getStaticResourcesForLocation } from "../../../features/mining/staticMiningIndex";
+import { canonicalMiningMaterial } from "../../../features/mining/materialIdentity";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 export function LocationListItem({
@@ -21,43 +29,64 @@ export function LocationListItem({
   locationMaterialKeys,
   staticMiningIndex,
   planetAssetMap,
+  journalReports = [],
   starred,
   selected,
+  alternate = false,
+  collapsed = false,
+  showSystemBadge,
   onSelect,
   onToggleStar,
 }: {
-  rank?: number;
+  rank?: { visualLabel: string; accessibleLabel: string; tooltip: string | null; tieGroupSize: number };
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
   planetAssetMap: Map<string, PlanetAsset> | null;
+  journalReports?: JournalHabitatReport[];
   starred: boolean;
   selected: boolean;
+  /** Queue route location after coverage is already complete. */
+  alternate?: boolean;
+  collapsed?: boolean;
+  showSystemBadge: boolean;
   onSelect: () => void;
   onToggleStar: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
-  const coveredBQ = useMemo(
-    () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
-    [locationMaterialKeys, buildQueueMaterialKeys]
+  const { covered: coveredCount, total: totalRelevant } = useMemo(
+    () => getLocationSelectedCoverage({ entry, locationMaterialKeys, selectedMaterials, buildQueueMaterialKeys }),
+    [entry, locationMaterialKeys, selectedMaterials, buildQueueMaterialKeys],
   );
-  const coveredSelected = useMemo(
-    () => locationMaterialKeys.filter((key) => selectedMaterials.has(key)),
-    [locationMaterialKeys, selectedMaterials]
-  );
-
-  const hasBuildQueueDemand = buildQueueMaterialKeys.size > 0;
-  const primaryCovered = hasBuildQueueDemand ? coveredBQ : coveredSelected;
-  const totalRelevant = hasBuildQueueDemand ? buildQueueMaterialKeys.size : selectedMaterials.size;
-  const coveragePct = totalRelevant > 0 ? Math.round((primaryCovered.length / totalRelevant) * 100) : 0;
+  const chips = useMemo(() => {
+    const targets = new Set([...selectedMaterials, ...buildQueueMaterialKeys]);
+    const rows = buildDemandRows(entry, targets, locationMaterialKeys, new Map(), getStaticResourcesForLocation(entry, staticMiningIndex), staticMiningIndex);
+    // Ranked rows show only the selected materials this location covers;
+    // uncovered selections never render here (the count stays in the label).
+    return [...targets].flatMap((key) => {
+      const row = rows.find((item) => item.key === key);
+      if (row?.coverage !== "Covered") return [];
+      return [{ key, name: row.name ?? canonicalMiningMaterial({ materialKey: key }).label, coverage: row.coverage }];
+    });
+  }, [entry, selectedMaterials, buildQueueMaterialKeys, locationMaterialKeys, staticMiningIndex]);
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
-  const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
+  const isLagrangeChildGroup = isStantonLagrangeGroup(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
-  const methodMixItems = useMemo(
-    () => getStaticMethodBiasForLocation(entry, staticMiningIndex).filter((item) => item.share > 0),
+  const rankTooltip = useMiningHoverTooltip(rank?.tooltip ?? "");
+  const survey = useMemo(
+    () => buildMiningLocationSurveyPresentation(
+      getStaticLocationEnvironment(entry, staticMiningIndex),
+      getStaticMethodBiasForLocation(entry, staticMiningIndex),
+    ),
     [entry, staticMiningIndex],
+  );
+  // Retain modeled method shares in the row's accessible label and the
+  // Location Profile, without displaying method text in the ranked list.
+  const methodBreakdown = useMemo(
+    () => survey.methods.map((item) => `${item.method} ${formatMiningProbability(item.share)}`).join(", "),
+    [survey.methods],
   );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -67,22 +96,32 @@ export function LocationListItem({
     }
   };
 
-  const demandBar = totalRelevant > 0 ? coveragePct : null;
-  const methodLabel = methodMixItems.length > 0
-    ? methodMixItems.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
-    : entry.locationKind || entry.spawnType || "Unavailable";
-
   return (
     <div
-      className={`mlist-item${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
+      className={`mlist-item${collapsed ? " mlist-item--collapsed" : ""}${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}${alternate ? " mlist-item--alternate" : ""}`}
       onClick={onSelect}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        if (rank?.tooltip) rankTooltip.triggerProps.onKeyDown(event);
+        handleKeyDown(event);
+      }}
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`${selected ? "Collapse" : "Select"} ${locationDisplayName} mining location`}
+      aria-label={`${rank?.accessibleLabel ? `${rank.accessibleLabel}. ` : ""}${selected ? "Selected" : "Select"} ${locationDisplayName} mining location${survey.methods.length > 0 ? `. Modeled method shares: ${methodBreakdown}` : ""}`}
+      aria-describedby={rankTooltip.open ? rankTooltip.tooltipId : undefined}
+      onMouseEnter={rank?.tooltip ? rankTooltip.triggerProps.onMouseEnter : undefined}
+      onMouseLeave={rank?.tooltip ? rankTooltip.triggerProps.onMouseLeave : undefined}
+      onFocus={rank?.tooltip ? rankTooltip.triggerProps.onFocus : undefined}
+      onBlur={rank?.tooltip ? rankTooltip.triggerProps.onBlur : undefined}
     >
-      {rank !== undefined && <span className="mlist-item-rank" aria-hidden="true">{rank}</span>}
+      {rank && (
+        <span
+          className={`mlist-item-rank${rank.tieGroupSize > 1 ? " mlist-item-rank--tied" : ""}`}
+          aria-hidden="true"
+        >
+          {rank.visualLabel}
+        </span>
+      )}
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (
           <img
@@ -92,34 +131,27 @@ export function LocationListItem({
             className="mlist-item-thumb-img"
           />
         ) : (
-          <span className="mlist-item-thumb-fallback">{locationDisplayName.slice(0, 1).toUpperCase()}</span>
+          <span className="mlist-item-thumb-fallback">{isLagrangeChildGroup ? "" : locationDisplayName.slice(0, 1).toUpperCase()}</span>
         )}
       </div>
       <div className="mlist-item-body">
-        <div className="mlist-item-head">
-          <span className="mlist-item-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
-            {locationDisplayName}
-          </span>
-        </div>
-        <div className="mlist-item-sub">
-          {!isLagrangeChildGroup && (
-            <span className="mlist-system-text">{entry.systemName}</span>
+        <div className="mlist-item-head" title={isLagrangeChildGroup ? entry.locationName : undefined}>
+          {isLagrangeChildGroup ? <StantonLagrangeChildrenSummary entry={entry} compact placeholder /> : (
+            <span className="mlist-item-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
+              {locationDisplayName}
+            </span>
           )}
-          <StantonLagrangeChildrenSummary entry={entry} compact />
-          <span className="mlist-method-text">{methodLabel}</span>
         </div>
-      </div>
-      {demandBar !== null && (
-        <div className="mlist-item-coverage">
-          <span className="mlist-bar-label"><strong>{primaryCovered.length}</strong> of {totalRelevant} </span>
-          <div className="mlist-bar-track">
-            <div
-              className={`mlist-bar-fill${demandBar >= 100 ? " mlist-bar-fill--full" : demandBar >= 60 ? " mlist-bar-fill--good" : ""}`}
-              style={{ width: `${demandBar}%` }}
-            />
+        {showSystemBadge && !isLagrangeChildGroup && (
+          <div className="mlist-item-sub">
+            <span className={`mlist-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="mlist-item-coverage" aria-label={totalRelevant > 0 ? `${coveredCount} of ${totalRelevant} request-eligible, quality-supported materials covered` : "No selected materials"}>
+        {chips.length > 0 && <MaterialCoverageChips materials={chips} />}
+        <SourceReportedBadges reports={journalReports} />
+      </div>
       <button
         type="button"
         className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
@@ -132,6 +164,7 @@ export function LocationListItem({
         <MiningBookmarkIcon />
       </button>
       {bookmarkTooltip.tooltip}
+      {rankTooltip.tooltip}
     </div>
   );
 }

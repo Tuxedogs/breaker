@@ -1,0 +1,159 @@
+/* Exact V31b compact mobile navigation, shared by four operational modules.
+   Preserve each page's component tree and interaction state while switching views. */
+.workspace-mobile-nav { display: none; }
+@media (max-width: 719px) {
+  .app-page-shell.app-page-shell--mobile-views {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr);
+    overflow: hidden;
+    padding: 0;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views > .workspace-mobile-nav {
+    display: block;
+    position: relative;
+    grid-row: 1;
+    grid-column: 1;
+    width: 100%;
+    height: 54px;
+    z-index: 10;
+    background: #0a1926;
+    border-bottom: 1px solid var(--mb-ops-surface-separator, #294758);
+  }
+  .workspace-mobile-nav__tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    height: 100%;
+  }
+  .workspace-mobile-nav__tabs button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 0;
+    padding: 4px;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--mb-ops-text-secondary, #9db7c9);
+    font: 600 11px/15px var(--mb-font-ui, "Segoe UI", sans-serif);
+    cursor: pointer;
+  }
+  .workspace-mobile-nav__tabs button small {
+    font-size: 9px;
+    line-height: 12px;
+    letter-spacing: .06em;
+    opacity: .74;
+  }
+  .workspace-mobile-nav__tabs button.is-active {
+    background: #142b3b;
+    border-bottom-color: var(--mb-accent, #55c8df);
+    color: var(--mb-ops-text-primary, #e8edf2);
+  }
+  .workspace-mobile-nav__tabs button:focus-visible {
+    outline: 2px solid var(--mb-accent, #55c8df);
+    outline-offset: -2px;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views > :is(.bq-page,.logi-inv-page,.fit-v31-offline,.fm-shell) {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  /* Build Queue: no desktop stack and no redundant ledger overlay. */
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="build"] .bq-page .bq-v31-workspace {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="build"] .bq-v31-workspace > :is(.bq-queue-col,.bq-center-col,.bq-summary-col) {
+    display: none;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="queue"] .bq-v31-workspace > .bq-queue-col,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="detail"] .bq-v31-workspace > .bq-center-col,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="sourcing"] .bq-v31-workspace > .bq-summary-col {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(100dvh - 102px);
+    height: auto;
+    position: relative;
+    inset: auto;
+  }
+  /* Inventory: select the view without resetting active location or lot. */
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="inventory"] .logi-inv-workspace {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="inventory"] .logi-inv-workspace > :is(.logi-inv-workspace-location-rail,.logi-inv-workspace-lots,.logi-inv-workspace-inspector) {
+    display: none;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="locations"] .logi-inv-workspace > .logi-inv-workspace-location-rail,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="lots"] .logi-inv-workspace > .logi-inv-workspace-lots,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="inspector"] .logi-inv-workspace > .logi-inv-workspace-inspector {
+    display: flex;
+    width: 100%;
+    min-height: calc(100dvh - 102px);
+    max-height: none;
+    height: auto;
+    overflow: visible;
+    position: relative;
+  }
+  /* Fitting offline and API-backed panels use the same navigation. */
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fit-v31-offline {
+    display: block;
+    height: auto;
+    min-height: 0;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fit-v31-offline-hero {
+    display: none;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fit-v31-offline-workspace {
+    display: block;
+    height: auto;
+    min-height: 0;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fit-v31-offline-workspace > :is(.fit-v31-offline-left,.fit-v31-offline-center,.fit-v31-offline-right) {
+    display: none;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="ship"] .fit-v31-offline-workspace > .fit-v31-offline-left,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="loadout"] .fit-v31-offline-workspace > .fit-v31-offline-center,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="details"] .fit-v31-offline-workspace > .fit-v31-offline-right {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: calc(100dvh - 102px);
+    max-height: none;
+    overflow: visible;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fm-shell.fm-v31-shell {
+    display: block;
+    height: auto;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-module="fitting"] .fm-v31-shell > :is(.fm-v31-offense-frame,.fm-v31-hero-frame,.fm-right-col,.fm-stats-grid) {
+    display: none;
+  }
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="ship"] .fm-v31-shell > .fm-v31-offense-frame,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="loadout"] .fm-v31-shell > .fm-v31-hero-frame,
+  .app-page-shell.app-page-shell--workspace.app-page-shell--mobile-views[data-workspace-view="details"] .fm-v31-shell > :is(.fm-right-col,.fm-stats-grid) {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: calc(100dvh - 102px);
+    overflow: visible;
+  }
+}

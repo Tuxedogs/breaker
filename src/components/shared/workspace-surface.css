@@ -1,0 +1,167 @@
+/* Canonical V31 operational workspace shell.
+   Mining's current full-bleed layout and compact region labels are the visual authority.
+   Do not add page-specific outer gutters or header bars on these routes. */
+.app-page-shell.app-page-shell--workspace {
+  --mb-shell-gap: 0px;
+  --mb-shell-padding: 0px;
+  --ws-sidebar-width: 335px;
+  --ws-secondary-width: 380px;
+  gap: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+.app-page-shell--workspace > :is(.mine-page,.craft-page,.bq-page,.logi-inv-page,.fm-shell,.fit-v31-offline,.rp-page) {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  font-family: var(--mb-font-ui, "Segoe UI", sans-serif);
+  font-size: 12px;
+  line-height: normal;
+}
+.app-page-shell--workspace .craft-page .recipe-browser-page-body.is-browser {
+  padding: 0;
+  gap: 0;
+}
+.app-page-shell--workspace .craft-page .craft-browser-v31-workspace,
+.app-page-shell--workspace .logi-inv-workspace {
+  width: 100%;
+  max-width: 100%;
+  border: 0;
+}
+.app-page-shell--workspace .bq-page .bq-v31-workspace {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.app-page-shell--workspace .bq-page .bq-v31-workspace > * { min-width: 0; max-width: 100%; }
+
+/* Numbered workspace title bars were removed at the component level.
+   Content starts at the panel top, without a blank title row. */
+.app-page-shell--workspace .craft-browser-v31-workspace .crb2-toolbar--sidebar {
+  padding-top: 15px;
+}
+.app-page-shell--workspace .logi-inv-workspace .logi-inv-workspace-global-search {
+  padding-top: 15px;
+}
+.app-page-shell--workspace .bq-page .bq-queue-selector {
+  padding-top: 15px;
+}
+.app-page-shell--workspace .bq-page .bq-center-shell {
+  padding-top: 15px;
+}
+.app-page-shell--workspace .bq-page .bq-v31-sourcing-context {
+  position: relative;
+  margin-top: 15px;
+}
+.app-page-shell--workspace .bq-page .bq-v31-sourcing-context .bq-summary-collapse--sourcing {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  justify-self: end;
+  min-height: 24px;
+}
+.app-page-shell--workspace .bq-page .bq-v31-sourcing-context > span {
+  grid-column: 1;
+  align-self: center;
+}
+/* Shared composition primitives. Feature components continue to own data and events. */
+.app-page-shell--workspace .workspace-panel {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0;
+  font-family: var(--mb-font-ui, "Segoe UI", sans-serif);
+}
+.app-page-shell--workspace .workspace-panel--filter,
+.app-page-shell--workspace .workspace-panel--inspector {
+  background: var(--mb-ws-panel);
+}
+.app-page-shell--workspace .workspace-panel--primary {
+  background: var(--mb-ws-panel-alt);
+}
+.app-page-shell--workspace .workspace-metric-strip {
+  box-sizing: border-box;
+  min-width: 0;
+  border-color: var(--mb-ops-border-strong);
+  background: var(--mb-ops-surface-raised);
+  font-variant-numeric: tabular-nums;
+}
+.app-page-shell--workspace [data-workspace-tabs] {
+  min-width: 0;
+  font-family: var(--mb-font-ui, "Segoe UI", sans-serif);
+}
+.app-page-shell--workspace [data-workspace-tabs] button {
+  min-width: 0;
+  cursor: pointer;
+}
+.app-page-shell--workspace [data-workspace-tabs] button:focus-visible {
+  outline: 2px solid var(--mb-accent);
+  outline-offset: -2px;
+}
+
+/* Peer panels follow Mining's low-contrast surface separation. */
+.app-page-shell--workspace .craft-browser-v31-workspace,
+.app-page-shell--workspace .bq-page .bq-v31-workspace { gap: 1px; background: var(--mb-ws-gutter, var(--mb-border)); }
+.app-page-shell--workspace .craft-browser-v31-workspace .craft-v31-filter-pane,
+.app-page-shell--workspace .logi-inv-workspace .logi-inv-workspace-location-rail,
+.app-page-shell--workspace .bq-page .bq-queue-col {
+  background: var(--mb-ws-panel, #0a1420);
+}
+.app-page-shell--workspace .craft-browser-v31-workspace .craft-browser-production-pane,
+.app-page-shell--workspace .logi-inv-workspace .logi-inv-workspace-lots,
+.app-page-shell--workspace .bq-page .bq-center-col {
+  background: var(--mb-ws-panel-alt, #0a1521);
+}
+.app-page-shell--workspace .craft-browser-v31-workspace .craft-browser-detail-pane,
+.app-page-shell--workspace .logi-inv-workspace .logi-inv-workspace-inspector,
+.app-page-shell--workspace .bq-page .bq-summary-col {
+  background: var(--mb-ws-panel, #0a1420);
+}
+/* Fitting panels use the same three surface tones and 1px gutter as Crafting. */
+.app-page-shell--workspace .fm-v31-shell,
+.app-page-shell--workspace .fit-v31-offline-workspace {
+  background: var(--mb-ws-gutter, var(--mb-border));
+}
+.app-page-shell--workspace .fm-v31-shell .fm-v31-offense-frame,
+.app-page-shell--workspace .fit-v31-offline-workspace > :first-child {
+  background: var(--mb-ws-panel, #0a1420);
+}
+.app-page-shell--workspace .fm-v31-shell .fm-v31-hero-frame,
+.app-page-shell--workspace .fit-v31-offline-workspace > :nth-child(2) {
+  background: var(--mb-ws-panel-alt, #0a1521);
+}
+.app-page-shell--workspace .fm-v31-shell .fm-right-col,
+.app-page-shell--workspace .fit-v31-offline-workspace > :nth-child(3) {
+  background: var(--mb-ws-panel, #0a1420);
+}
+/* Legacy Fitting Terminal and Refinery use the same Crafting panel tones. */
+.app-page-shell--workspace .fit-v31-workspace {
+  background: var(--mb-ws-gutter, var(--mb-border));
+}
+.app-page-shell--workspace .fit-v31-workspace .fit-term-col--left,
+.app-page-shell--workspace .rp-layout > .rp-target-panel {
+  background: var(--mb-ws-panel, #0a1420);
+}
+.app-page-shell--workspace .fit-v31-workspace .fit-term-center,
+.app-page-shell--workspace .rp-layout > .rp-comparison-panel {
+  background: var(--mb-ws-panel-alt, #0a1521);
+}
+.app-page-shell--workspace .fit-v31-workspace .fit-term-col--right,
+.app-page-shell--workspace .rp-layout > .rp-recommendation-panel {
+  background: var(--mb-ws-panel, #0a1420);
+}
+/* Normalizing the Crafting browser reaches all three panes, not just its outer shell. */
+.app-page-shell--workspace .craft-browser-v31-workspace .crb2-toolbar--sidebar {
+  font-family: var(--mb-font-ui);
+}
+@media (max-width: 699px) {
+  .app-page-shell--workspace .bq-page .bq-v31-workspace,
+  .app-page-shell--workspace .bq-page .bq-queue-col {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}

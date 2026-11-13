@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { getComponentCardBrowserPage, type ComponentCardBrowserPage } from "@/lib/componentCardIndexApi";
+import { getComponentCardBrowserPage, getComponentCardIndex, type ComponentCardBrowserPage } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
 import "./recipe-browser.css";
 
@@ -14,12 +14,27 @@ export default function CraftingLayout() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const isBrowserRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting";
+  const isDesignPreviewRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting/design-preview";
   const hasSelectedDetail = isBrowserRoute && Boolean(searchParams.get("preview"));
   const browserRequestParams = new URLSearchParams(searchParams);
   browserRequestParams.delete("preview");
   const browserRequestKey = browserRequestParams.toString();
 
   useEffect(() => {
+    if (isDesignPreviewRoute) {
+      let cancelled = false;
+      getComponentCardIndex().then((index) => {
+        if (cancelled) return;
+        setComponentCards(index.records);
+        setComponentCardFacets(index.facets);
+        setLoading(false);
+      }).catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : "Failed to load crafting browser");
+        setLoading(false);
+      });
+      return () => { cancelled = true; };
+    }
     if (!isBrowserRoute) return;
     const controller = new AbortController();
     queueMicrotask(() => {
@@ -36,7 +51,7 @@ export default function CraftingLayout() {
         query.set("saved", "");
       }
     }
-    getComponentCardBrowserPage(query, 40, controller.signal)
+    getComponentCardBrowserPage(query, "all", controller.signal)
       .then((page) => {
         if (controller.signal.aborted) return;
         setBrowserPage(page);
@@ -52,7 +67,7 @@ export default function CraftingLayout() {
         setLoading(false);
       });
     return () => controller.abort();
-  }, [browserRequestKey, isBrowserRoute]);
+  }, [browserRequestKey, isBrowserRoute, isDesignPreviewRoute]);
 
   const contextValue = useMemo(
     () => ({ componentCards, componentCardFacets, loading, error, browserPage }),
@@ -63,21 +78,6 @@ export default function CraftingLayout() {
     <CraftingContext.Provider value={contextValue}>
       <div className="craft-page craft-planner-shell component-results-browser">
         <div className={`recipe-browser-page-body${isBrowserRoute ? " is-browser" : ""}${hasSelectedDetail ? " is-detail-preview" : ""}`}>
-          {isBrowserRoute ? (
-            <header className="recipe-browser-command-header">
-              <span className="recipe-browser-command-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 4h14v16H5z" />
-                  <path d="m8 9 4-3 4 3-4 3-4-3Z" />
-                  <path d="M8 15h8" />
-                </svg>
-              </span>
-              <div className="recipe-browser-command-copy">
-                <h1>Crafting Intelligence</h1>
-                <p>Search components, compare recipes, materials, and crafting requirements.</p>
-              </div>
-            </header>
-          ) : null}
           <div className="recipe-browser-content-shell">
             <div className="component-browser-body">
               <Outlet />

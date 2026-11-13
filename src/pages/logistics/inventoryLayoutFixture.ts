@@ -1,5 +1,5 @@
 import { inventoryLocations, materialTemplates, rarityCatalog } from "../../data/logistics/seed";
-import type { InventoryEntry, MaterialTemplate } from "../../types/logistics";
+import type { BuildQueueItem, InventoryEntry, MaterialTemplate } from "../../types/logistics";
 import type { InventoryPageFixture } from "./InventoryPage";
 
 const fixtureLocationId = "levski";
@@ -24,6 +24,7 @@ function entry(
   rarity: InventoryEntry["rarity"],
   container: string,
   boxSize: number | null = quantity,
+  locationId = fixtureLocationId,
 ): InventoryEntry {
   return {
     id,
@@ -35,7 +36,7 @@ function entry(
     qualityBand: Math.max(1, Math.ceil(quality / 100)),
     unitType: "scu",
     boxSize,
-    locationId: fixtureLocationId,
+    locationId,
     container,
     rarity,
     createdAt: now,
@@ -43,11 +44,68 @@ function entry(
   };
 }
 
+function aggregateEntry(
+  id: string,
+  materialId: string,
+  quantity: number,
+  quality: number,
+  rarity: InventoryEntry["rarity"],
+  locationId = fixtureLocationId,
+): InventoryEntry {
+  return {
+    id,
+    recordKind: "aggregate",
+    materialId,
+    materialType: materialTypeFor(materialId),
+    quantity,
+    quality,
+    qualityBand: Math.max(1, Math.ceil(quality / 100)),
+    unitType: "scu",
+    locationId,
+    rarity,
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+const fixtureBuildQueue: BuildQueueItem[] = [
+  {
+    id: "fixture-active-craft",
+    recipeId: "fixture-industrial-craft",
+    itemName: "Industrial Fabrication Test",
+    quantity: 1,
+    status: "active",
+    reservedAllocations: [{
+      id: "fixture-reservation-active",
+      materialId: "savrilium",
+      inventoryEntryId: "fixture-levski-savrilium-a",
+      quantityReserved: 12,
+      quality: 942,
+      rarity: rarityCatalog.legendary,
+    }],
+  },
+  {
+    id: "fixture-complete-craft",
+    recipeId: "fixture-complete-craft",
+    itemName: "Completed Fabrication Test",
+    quantity: 1,
+    status: "complete",
+    reservedAllocations: [{
+      id: "fixture-reservation-complete",
+      materialId: "savrilium",
+      inventoryEntryId: "fixture-levski-savrilium-b",
+      quantityReserved: 32,
+      quality: 942,
+      rarity: rarityCatalog.legendary,
+    }],
+  },
+];
+
 export const inventoryLayoutFixture: InventoryPageFixture = {
   materials: fixtureMaterials,
-  locations: inventoryLocations.filter((location) => location.id === fixtureLocationId),
+  locations: inventoryLocations.filter((location) => [fixtureLocationId, "orison", "port-tressler", "arc-l1"].includes(location.id)),
   selectedLocationId: fixtureLocationId,
-  buildQueue: [],
+  buildQueue: fixtureBuildQueue,
   inventoryUi: {
     selectedLocationId: fixtureLocationId,
     searchQuery: "",
@@ -69,7 +127,9 @@ export const inventoryLayoutFixture: InventoryPageFixture = {
     entry("fixture-levski-pressurized-ice", "pressurizedice", 45, 711, rarityCatalog.rare, "CRYO-01", 45),
     entry("fixture-levski-feynmaline", "feynmaline", 24, 561, rarityCatalog.uncommon, "ROCK-01", 24),
     entry("fixture-levski-stileron", "stileron", 6, 974, rarityCatalog.legendary, "ST-01", 6),
-    entry("fixture-levski-tungsten", "tungsten", 18, 455, rarityCatalog.common, "WG-01", 18),
+    aggregateEntry("fixture-levski-tungsten", "tungsten", 18, 455, rarityCatalog.common),
     entry("fixture-levski-hadanite", "hadanite", 12, 887, rarityCatalog.epic, "FPS-01", 12),
+    entry("fixture-transfer-failure", "tungsten", 987654, 0, rarityCatalog.common, "FREIGHT-LONG-IDENTIFIER-0001", 987654),
+    entry("fixture-orison-savrilium", "savrilium", 1, 1000, rarityCatalog.legendary, "ORI-SV-01", 1, "orison"),
   ],
 };

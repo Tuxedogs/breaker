@@ -4,6 +4,7 @@ import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
+import { resolveComponentImageUrl } from "@/lib/componentImageResolver";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -18,38 +19,15 @@ import {
 import {
   getRecipeBrowserColumnWidth,
   getRecipeBrowserFamily,
+  titleCase,
   type RecipeBrowserColumn,
   type RecipeBrowserFamily,
 } from "../utils/recipeBrowserPresentation";
+import GradeClassText from "./GradeClassText";
+import { classToneClass, gradeToneClass } from "../utils/componentGradeClass";
 import type { CraftingBrowserLayoutMode } from "../utils/craftingBrowserLayout";
 
 const SAVED_BLUEPRINT_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
-const MOBILE_TABLET_RESULTS_PER_PAGE = 18;
-const DESKTOP_RESULTS_PER_PAGE = 40;
-const DESKTOP_MIN_WIDTH = 981;
-
-function resolveResultsPerPage(viewportWidth: number): number {
-  return viewportWidth >= DESKTOP_MIN_WIDTH
-    ? DESKTOP_RESULTS_PER_PAGE
-    : MOBILE_TABLET_RESULTS_PER_PAGE;
-}
-
-function useResultsPerPage(): number {
-  const [resultsPerPage, setResultsPerPage] = useState(() => {
-    if (typeof window === "undefined") return MOBILE_TABLET_RESULTS_PER_PAGE;
-    return resolveResultsPerPage(window.innerWidth);
-  });
-
-  useEffect(() => {
-    const update = () => setResultsPerPage(resolveResultsPerPage(window.innerWidth));
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  return resultsPerPage;
-}
-
 function readStoredStringSet(key: string): Set<string> {
   if (typeof window === "undefined" || !window.localStorage) return new Set();
   try {
@@ -61,6 +39,19 @@ function readStoredStringSet(key: string): Set<string> {
   } catch {
     return new Set();
   }
+}
+
+function RecipeComponentThumbnail({ imageUrl }: { imageUrl: string | null }) {
+  // Never substitute a generic category icon for a component's own render.
+  // An unmapped or failed image keeps the reference's blueprint glyph.
+  const [failed, setFailed] = useState(false);
+  return (
+    <span className="craft-v31-recipe-mark" aria-hidden="true">
+      {imageUrl && !failed
+        ? <img src={imageUrl} alt="" loading="lazy" onError={() => setFailed(true)} />
+        : <span className="craft-v31-recipe-symbol">▧</span>}
+    </span>
+  );
 }
 
 function ComponentBrowserState({ title, body }: { title: string; body: string }) {
@@ -173,7 +164,7 @@ function RecipeResultsTable({
     <section className="crb2-table-section" aria-labelledby={`crb2-family-${family.key}`}>
       <header>
         <h3 id={`crb2-family-${family.key}`}>{family.label}</h3>
-        <span>{records.length} on this page</span>
+        <span>{records.length} blueprints</span>
       </header>
       <div className="crb2-table-scroll">
         <table className={`crb2-table${layoutMode === "compact-split" ? " crb2-table--compact" : ""}`}>
@@ -218,7 +209,14 @@ function RecipeResultsTable({
                     <span className="crb2-row-name" title={record.name}>{record.name}</span>
                   </th>
                   {columns.map((column) => (
-                    <td key={column.key}>{column.value(record)}</td>
+                    <td key={column.key}>
+                      {column.key === "gradeClass" ? (
+                        <GradeClassText parts={[
+                          record.grade ? { text: record.grade, tone: gradeToneClass(record.grade) } : null,
+                          record.class ? { text: titleCase(record.class), tone: classToneClass(record.class) } : null,
+                        ]} />
+                      ) : column.value(record)}
+                    </td>
                   ))}
                 </tr>
               );
@@ -237,12 +235,10 @@ function RecipeResultsTable({
           {sortedRecords.map((record) => {
             const iconUrl = getComponentCategoryIconUrl(record);
             const classification = [
-              record.size !== null ? `S${record.size}` : null,
-              record.grade ? `Grade ${record.grade}` : null,
-              record.class,
-            ]
-              .filter(Boolean)
-              .join(" · ");
+              record.size !== null ? { text: `S${record.size}`, tone: "" } : null,
+              record.grade ? { text: `Grade ${record.grade}`, tone: gradeToneClass(record.grade) } : null,
+              record.class ? { text: titleCase(record.class), tone: classToneClass(record.class) } : null,
+            ].filter(Boolean);
             return (
               <button
                 key={record.id}
@@ -257,7 +253,7 @@ function RecipeResultsTable({
                 <span className="crb2-mobile-card-copy crafting-identity-copy">
                   <strong className="crafting-item-name">{record.name}</strong>
                   <span className="crb2-mobile-card-type crafting-family-label">{record.typeLabel}</span>
-                  {classification ? <small className="crafting-meta-line">{classification}</small> : null}
+                  {classification.length ? <small className="crafting-meta-line"><GradeClassText parts={classification} /></small> : null}
                 </span>
                 <span className="crb2-mobile-card-chevron" aria-hidden="true">›</span>
               </button>
@@ -276,6 +272,10 @@ export default function ComponentResultsBrowser({
   previewId,
   onPreviewRecord,
   autoSelectFirstRecord = true,
+  presentation = "table",
+  isRecipeQueued,
+  isBlueprintSourceVerified,
+  isBlueprintUnavailable,
   layoutMode,
   serverPage,
 }: {
@@ -286,25 +286,18 @@ export default function ComponentResultsBrowser({
   previewId?: string | null;
   onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
   autoSelectFirstRecord?: boolean;
+  isBlueprintSourceVerified?: (record: ComponentCardIndexRecord) => boolean | null;
+  /** True when every known blueprint source is disabled in the current release. */
+  isBlueprintUnavailable?: (record: ComponentCardIndexRecord) => boolean;
+  presentation?: "table" | "index";
   layoutMode: CraftingBrowserLayoutMode;
   serverPage?: { totalRecords: number; page: number; limit: number } | null;
 }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const savedOnly = searchParams.get("bk") === "1";
+  const selectedMaterialIds = new Set((searchParams.get("mt") ?? "").split(",").map((value) => value.trim()).filter(Boolean));
+  const materialMatchMode = searchParams.get("mm") === "any" ? "any" : "all";
   const search = getRecipeBrowserSearchParam(searchParams);
-  const page = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
-  const resultsPerPage = useResultsPerPage();
-
-  const setPage = useCallback((value: number | ((previous: number) => number)) => {
-    setSearchParams((previous) => {
-      const next = new URLSearchParams(previous);
-      const currentPage = Math.max(1, Number(next.get("pg") ?? "1") || 1);
-      const resolved = typeof value === "function" ? value(currentPage) : value;
-      if (resolved <= 1) next.delete("pg");
-      else next.set("pg", String(resolved));
-      return next;
-    }, { replace: true });
-  }, [setSearchParams]);
 
   const [savedBlueprintIds, setSavedBlueprintIds] = useState<Set<string>>(
     () => readStoredStringSet(SAVED_BLUEPRINT_STORAGE_KEY),
@@ -375,22 +368,11 @@ export default function ComponentResultsBrowser({
       ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
       : compareRecipeBrowserRecords);
     return { groupedRecords: grouped };
-  }, [filteredRecords, records, savedOnly, search, serverPage]);
+  }, [filteredRecords, records, search, serverPage]);
 
   
-  const pageLimit = serverPage?.limit ?? resultsPerPage;
-  const totalResultCount = serverPage ? serverPage.totalRecords : groupedRecords.length;
-  const totalPages = Math.max(1, Math.ceil(totalResultCount / pageLimit));
-  const visiblePage = serverPage ? serverPage.page : Math.min(page, totalPages);
-  const pageStart = (visiblePage - 1) * pageLimit;
-  const pageRecords = useMemo(
-    () => serverPage ? groupedRecords : groupedRecords.slice(pageStart, pageStart + pageLimit),
-    [groupedRecords, pageLimit, pageStart, savedOnly, serverPage],
-  );
-
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, setPage, totalPages]);
+  // The whole filtered list is shown; there is no paging.
+  const pageRecords = groupedRecords;
 
   const selectedCandidate = pageRecords.find((record) => record.id === (previewId ?? selectedId));
   const preferredRecord = pickPreferredRecipeBrowserSearchRecord(pageRecords, search);
@@ -453,8 +435,69 @@ export default function ComponentResultsBrowser({
     <main className="crb2-results">
       
 
-      <div className="crb2-list" aria-label="Component results">
-        {tableGroups.map(({ family, records: familyRecords }) => (
+      {presentation === "index" ? (
+        <div className="craft-v31-index-intro" aria-live="polite">
+          {selectedMaterialIds.size
+            ? "Recipes using " + (materialMatchMode === "all" ? "every" : "any") + " selected material"
+            : "Browse recipes and investigate their quality response."}
+        </div>
+      ) : null}
+      <div className={presentation === "index" ? "crb2-list craft-v31-recipe-list" : "crb2-list"} aria-label="Component results">
+        {presentation === "index" ? pageRecords.map((record) => {
+          const componentImageUrl = resolveComponentImageUrl({
+            entityClass: record.entityClass,
+            componentId: record.id,
+            componentName: record.name,
+            componentType: record.type,
+            size: record.size,
+            className: record.class,
+          });
+          const materials = record.materials?.length
+            ? record.materials.map((material) => material.name)
+            : record.facets.materialNames;
+          const ids = record.facets?.materials ?? [];
+          const names = record.facets?.materialNames ?? [];
+          const selectedMaterialMatches = [...selectedMaterialIds].filter((value) => ids.includes(value) || names.includes(value)).length;
+          const isPreviewOnly = isBlueprintSourceVerified?.(record) === false;
+          const isUnavailable = isPreviewOnly || Boolean(isBlueprintUnavailable?.(record));
+          return (
+            <button
+              key={record.id}
+              type="button"
+              className={"craft-v31-recipe-row" + (selectedRecord?.id === record.id ? " is-active" : "") + (isUnavailable ? " is-unavailable" : "")}
+              aria-pressed={selectedRecord?.id === record.id}
+              title={isPreviewOnly
+                ? "Recipe preview only: no verified obtainable in-game blueprint source"
+                : isUnavailable ? "Unavailable: every blueprint source is disabled in the current release" : undefined}
+              data-crafting-record-id={record.id}
+              onClick={() => selectRecord(record)}
+            >
+              <RecipeComponentThumbnail key={record.id} imageUrl={componentImageUrl} />
+              <span className="craft-v31-recipe-copy">
+                <strong title={record.name}>{record.name}</strong>
+                <small>
+                  {isUnavailable ? <span className="craft-v31-recipe-unavailable">{isPreviewOnly ? "Preview only" : "Unavailable"} · </span> : null}
+                  {record.typeLabel}{record.size !== null ? " · S" + record.size : ""}{record.grade ? " · Grade " + record.grade : ""} · {materials.length} materials
+                </small>
+                <span className="craft-v31-material-chips">
+                  {materials.slice(0,4).map((name, index) => (
+                    <span
+                      key={record.id + ":" + name + ":" + index}
+                      className={selectedMaterialIds.has(ids[index] ?? "") || selectedMaterialIds.has(name) ? "is-matching" : undefined}
+                    >{name}</span>
+                  ))}
+                  {materials.length > 4 ? <span>{"+" + (materials.length - 4)}</span> : null}
+                  {!materials.length ? <span>No material records</span> : null}
+                </span>
+              </span>
+              <span className="craft-v31-recipe-end" aria-hidden="true">
+                {selectedMaterialIds.size
+                  ? String(selectedMaterialMatches) + "/" + String(selectedMaterialIds.size)
+                  : isRecipeQueued(record) ? "QUEUED" : isPreviewOnly ? "PREVIEW" : "›"}
+              </span>
+            </button>
+          );
+        }) : tableGroups.map(({ family, records: familyRecords }) => (
           <RecipeResultsTable
             key={family.key}
             family={family}
@@ -466,29 +509,11 @@ export default function ComponentResultsBrowser({
         ))}
       </div>
 
-      <footer className="crb2-pager" aria-label="Component results pages">
-        <span>
-          Showing {pageStart + 1}–{Math.min(pageStart + pageRecords.length, totalResultCount)}
-          {" "}of {totalResultCount}
-        </span>
-        <div>
-          <button
-            type="button"
-            onClick={() => setPage((current) => Math.max(1, current - 1))}
-            disabled={visiblePage <= 1}
-          >
-            Previous
-          </button>
-          <span>Page {visiblePage} / {totalPages}</span>
-          <button
-            type="button"
-            onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-            disabled={visiblePage >= totalPages}
-          >
-            Next
-          </button>
+      {presentation === "index" ? (
+        <div className="craft-v31-index-note">
+          Recipe requirements and availability come from the extracted crafting catalog. Unverified blueprints remain preview-only.
         </div>
-      </footer>
+      ) : null}
     </main>
   );
 }

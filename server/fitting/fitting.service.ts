@@ -14,6 +14,7 @@ const COMPONENT_FILES = [
   ["bomb_racks.json", "bomb_rack"],
   ["missile_controllers.json", "missile_controller"],
   ["mining_lasers.json", "mining_laser"],
+  ["mining_modifiers.json", "mining_modifier"],
   ["salvage_heads.json", "salvage_head"],
   ["salvage_modifiers.json", "salvage_modifier"],
   ["fuel_nozzles.json", "fuel_nozzle"],
@@ -23,6 +24,19 @@ const COMPONENT_FILES = [
   ["coolers.json", "cooler"],
   ["quantum_drives.json", "quantum_drive"],
   ["radars.json", "radar"],
+  ["relays.json", "relay"],
+  ["life_support.json", "life_support"],
+  ["batteries.json", "battery"],
+  ["emps.json", "emp"],
+  ["quantum_interdiction_generators.json", "quantum_interdiction_generator"],
+  ["fuel_tanks.json", "fuel_tank"],
+  ["fuel_intakes.json", "fuel_intake"],
+  ["personal_storage.json", "personal_storage"],
+  ["salvage_filler_stations.json", "salvage_filler_station"],
+  ["salvage_internal_storage.json", "salvage_internal_storage"],
+  ["salvage_field_emitters.json", "salvage_field_emitter"],
+  ["salvage_field_supporters.json", "salvage_field_supporter"],
+  ["countermeasure_launchers.json", "countermeasure_launcher"],
   ["thrusters.json", "thruster"],
 ] as const;
 
@@ -39,6 +53,15 @@ function booleanValue(value: unknown): boolean {
 
 function nullableBooleanValue(value: unknown): boolean | null {
   return typeof value === "boolean" ? value : null;
+}
+
+function legacyBooleanValue(value: unknown): boolean | null {
+  if (typeof value === "boolean") return value;
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "true" || normalized === "1") return true;
+  if (normalized === "false" || normalized === "0") return false;
+  return null;
 }
 
 function objectValue(value: unknown): Record<string, unknown> | null {
@@ -178,11 +201,26 @@ export function componentType(row: Row, fallback: string): string {
     thruster: "thruster",
     mining_laser: "mining_laser",
     weaponmining: "mining_laser",
+    mining_modifier: "mining_modifier",
+    miningmodifier: "mining_modifier",
     salvage_head: "salvage_head",
     salvagehead: "salvage_head",
     salvage_modifier: "salvage_modifier",
     salvagemodifier: "salvage_modifier",
     fuel_nozzle: "fuel_nozzle",
+    relay: "relay",
+    life_support: "life_support",
+    battery: "battery",
+    emp: "emp",
+    quantum_interdiction_generator: "quantum_interdiction_generator",
+    fuel_tank: "fuel_tank",
+    fuel_intake: "fuel_intake",
+    personal_storage: "personal_storage",
+    salvage_filler_station: "salvage_filler_station",
+    salvage_internal_storage: "salvage_internal_storage",
+    salvage_field_emitter: "salvage_field_emitter",
+    salvage_field_supporter: "salvage_field_supporter",
+    countermeasure_launcher: "countermeasure_launcher",
   };
   return aliases[raw] ?? "other";
 }
@@ -309,6 +347,33 @@ export function componentStats(row: Row): Record<string, number | null> {
     powerInputMinimum: "powerInputMinimum",
     powerInputMaximumPips: "powerInputMaximumPips",
     powerInputMinimumPips: "powerInputMinimumPips",
+    minimumPowerRequired: "minimumPowerRequired",
+    minimumPowerRequiredPips: "minimumPowerRequiredPips",
+    maximumPowerRequired: "maximumPowerRequired",
+    maximumPowerRequiredPips: "maximumPowerRequiredPips",
+    powerInputMinimumFraction: "powerInputMinimumFraction",
+    powerOutput: "powerOutput",
+    powerCapacity: "powerCapacity",
+    powerGenerationRate: "powerGenerationRate",
+    coolingCapacity: "coolingCapacity",
+    coolingGenerationRate: "coolingGenerationRate",
+    heatSink: "heatSink",
+    transferRate: "transferRate",
+    reservePoolRegenRate: "reservePoolRegenRate",
+    reservePoolRegenTime: "reservePoolRegenTime",
+    hardeningFactor: "hardeningFactor",
+    rangeEfficiency: "rangeEfficiency",
+    splineCooldown: "splineCooldown",
+    splineJumpSpeed: "splineJumpSpeed",
+    calibrationProcessAngleLimit: "calibrationProcessAngleLimit",
+    calibrationWarningAngleLimit: "calibrationWarningAngleLimit",
+    travellingEmSignature: "travellingEmSignature",
+    travellingIrSignature: "travellingIrSignature",
+    engageSpeed: "engageSpeed",
+    interdictionEffectTime: "interdictionEffectTime",
+    aimAssistMinAssignmentDistance: "aimAssistMinAssignmentDistance",
+    aimAssistMaxAssignmentDistance: "aimAssistMaxAssignmentDistance",
+    aimAssistOutsideRangeBufferDistance: "aimAssistOutsideRangeBufferDistance",
     maxPenetrationThickness: "maxPenetrationThickness",
     distortionResistance: "distortionResistance",
     crossSection: "crossSection",
@@ -324,6 +389,12 @@ export function componentStats(row: Row): Record<string, number | null> {
     extractionPower: "extractionPower",
     instabilityModifier: "instabilityModifier",
     resistanceModifier: "resistanceModifier",
+    isOptimalRateGood: "isOptimalRateGood",
+    durationSeconds: "durationSeconds",
+    shatterDamageModifier: "shatterDamageModifier",
+    fractureWindowSizeModifier: "fractureWindowSizeModifier",
+    optimalChargeRateModifier: "optimalChargeRateModifier",
+    catastrophicChargeRateModifier: "catastrophicChargeRateModifier",
     fractureWindowSize: "fractureWindowSize",
     optimalChargeRate: "optimalChargeRate",
     laserRange: "laserRange",
@@ -480,6 +551,191 @@ function componentCooler(row: Row, fallbackType: string): Record<string, unknown
     coolingGeneratedByPowerPip: powerCurvePoints(row.coolingGeneratedByPowerPip),
     coolingGeneratedPowerFormula: text(row.coolingGeneratedPowerFormula),
     coolingGeneratedPowerFormulaConfidence: text(row.coolingGeneratedPowerFormulaConfidence),
+  };
+}
+
+function componentThruster(row: Row, fallbackType: string): Record<string, unknown> | null {
+  if (componentType(row, fallbackType) !== "thruster") return null;
+  return {
+    onlyActiveInVtol: nullableBooleanValue(row.onlyActiveInVtol) ?? legacyBooleanValue(row.vtol),
+  };
+}
+
+function engineeringAttributeMap(value: unknown): Record<string, Record<string, unknown>> | null {
+  const source = objectValue(value);
+  if (!source) return null;
+  const output: Record<string, Record<string, unknown>> = {};
+  for (const [name, raw] of Object.entries(source)) {
+    const field = objectValue(raw);
+    if (!field) continue;
+    output[name] = {
+      value: numberValue(field.value),
+      unit: text(field.unit),
+      unitKnown: nullableBooleanValue(field.unitKnown),
+      unitUnknown: nullableBooleanValue(field.unitUnknown),
+    };
+  }
+  return Object.keys(output).length > 0 ? output : null;
+}
+
+function engineeringStateResources(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((rawState) => {
+    const state = objectValue(rawState);
+    if (!state) return [];
+    const deltas = (arrayValue(state.deltas) ?? []).flatMap((rawDelta) => {
+      const delta = objectValue(rawDelta);
+      if (!delta) return [];
+      const resources = (arrayValue(delta.resources) ?? []).flatMap((rawResource) => {
+        const resource = objectValue(rawResource);
+        if (!resource) return [];
+        return [{
+          direction: text(resource.direction),
+          resource: text(resource.resource),
+          value: numberValue(resource.value),
+          unitType: text(resource.unitType),
+          unitKnown: nullableBooleanValue(resource.unitKnown),
+          unitUnknown: nullableBooleanValue(resource.unitUnknown),
+          unitConfidence: text(resource.unitConfidence),
+        }];
+      });
+      return [{
+        deltaNode: text(delta.deltaNode),
+        minimumConsumptionFraction: numberValue(delta.minimumConsumptionFraction),
+        noOverGeneration: nullableBooleanValue(delta.noOverGeneration),
+        storageDischarge: numberValue(delta.storageDischarge),
+        resources,
+      }];
+    });
+    return [{ stateName: text(state.stateName), deltas }];
+  });
+}
+
+function engineeringCapacity(value: unknown): Record<string, unknown> | null {
+  const capacity = objectValue(value);
+  if (!capacity) return null;
+  return {
+    value: numberValue(capacity.value),
+    unitNode: text(capacity.unitNode),
+    unitField: text(capacity.unitField),
+    unitKnown: nullableBooleanValue(capacity.unitKnown),
+    unitUnknown: nullableBooleanValue(capacity.unitUnknown),
+  };
+}
+
+function engineeringReferences(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const row = objectValue(raw);
+    if (!row) return [];
+    return [{ reference: text(row.reference) }];
+  });
+}
+
+function engineeringComposition(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const row = objectValue(raw);
+    if (!row) return [];
+    return [{ entry: text(row.entry), weight: numberValue(row.weight) }];
+  });
+}
+
+function engineeringInternalPorts(value: unknown): Array<Record<string, unknown>> {
+  return (arrayValue(value) ?? []).flatMap((raw) => {
+    const port = objectValue(raw);
+    if (!port) return [];
+    const acceptedTypes = (arrayValue(port.acceptedTypes) ?? []).flatMap((rawAccepted) => {
+      const accepted = objectValue(rawAccepted);
+      if (!accepted) return [];
+      return [{
+        type: text(accepted.type),
+        subTypes: (arrayValue(accepted.subTypes) ?? []).flatMap((subType) => text(subType) ?? []),
+      }];
+    });
+    return [{
+      name: text(port.name),
+      displayName: text(port.displayName),
+      minSize: numberValue(port.minSize),
+      maxSize: numberValue(port.maxSize),
+      acceptedTypes,
+    }];
+  });
+}
+
+function componentEngineering(row: Row): Record<string, unknown> | null {
+  const engineeringType = componentType(row, "other");
+  const stateResources = engineeringStateResources(row.stateResourceDeltas);
+  const thermal = objectValue(row.thermalHeatGeneration);
+  const relay = objectValue(row.relayResourceNetwork);
+  const emp = engineeringAttributeMap(row.emp);
+  const rawQuantum = objectValue(row.quantumInterdiction);
+  const quantumInterdiction = rawQuantum ? {
+    generator: engineeringAttributeMap(rawQuantum.generator),
+    jammer: engineeringAttributeMap(rawQuantum.jammer),
+    pulse: engineeringAttributeMap(rawQuantum.pulse),
+  } : null;
+  const fuelTankParams = engineeringAttributeMap(row.fuelTankParams);
+  const resourceContainerCapacity = engineeringCapacity(row.resourceContainerCapacity);
+  const inclusiveResources = engineeringReferences(row.inclusiveResources);
+  const defaultComposition = engineeringComposition(row.defaultComposition);
+  const fuelIntakeParams = engineeringAttributeMap(row.fuelIntakeParams);
+  const rawInventoryContainer = objectValue(row.inventoryContainer);
+  const inventoryCapacity = engineeringCapacity(row.inventoryCapacity);
+  const internalPorts = engineeringInternalPorts(row.internalPorts);
+  const personalStorage = rawInventoryContainer || inventoryCapacity || internalPorts.length > 0 ? {
+    inventoryContainer: rawInventoryContainer ? {
+      containerParamsRef: text(rawInventoryContainer.containerParamsRef),
+      canAutoStoreRestrictedItems: nullableBooleanValue(rawInventoryContainer.canAutoStoreRestrictedItems),
+    } : null,
+    capacity: inventoryCapacity,
+    internalPorts,
+  } : null;
+  const fuelTank = fuelTankParams || resourceContainerCapacity || inclusiveResources.length > 0 || defaultComposition.length > 0 ? {
+    params: fuelTankParams,
+    capacity: resourceContainerCapacity,
+    inclusiveResources,
+    defaultComposition,
+  } : null;
+  const salvage = new Set(["salvage_filler_station", "salvage_internal_storage", "salvage_field_emitter", "salvage_field_supporter"]).has(engineeringType) ? {
+    type: engineeringType,
+    resourceContainer: engineeringType === "salvage_internal_storage" && (resourceContainerCapacity || inclusiveResources.length > 0) ? {
+      capacity: resourceContainerCapacity,
+      inclusiveResources,
+    } : null,
+  } : null;
+  const rawCountermeasure = objectValue(row.countermeasureLauncher);
+  const countermeasureLauncher = engineeringType === "countermeasure_launcher" && rawCountermeasure ? {
+    ammoParamsRecord: text(rawCountermeasure.ammoParamsRecord),
+    initialAmmoCount: numberValue(rawCountermeasure.initialAmmoCount),
+    maxAmmoCount: numberValue(rawCountermeasure.maxAmmoCount),
+    maxRestockCount: numberValue(rawCountermeasure.maxRestockCount),
+    allowAmmoRepool: nullableBooleanValue(rawCountermeasure.allowAmmoRepool),
+    turnedOnByDefault: nullableBooleanValue(rawCountermeasure.turnedOnByDefault),
+    forceOn: nullableBooleanValue(rawCountermeasure.forceOn),
+    asopSpawnState: text(rawCountermeasure.asopSpawnState),
+  } : null;
+  if (stateResources.length === 0 && !thermal && !relay && !emp && !quantumInterdiction && !fuelTank && !fuelIntakeParams && !personalStorage && !salvage && !countermeasureLauncher) return null;
+  return {
+    stateResources,
+    thermalHeatGeneration: thermal ? {
+      resource: text(thermal.resource),
+      baselineTemperatureChange: numberValue(thermal.baselineTemperatureChange),
+      unitKnown: nullableBooleanValue(thermal.unitKnown),
+      unitUnknown: nullableBooleanValue(thermal.unitUnknown),
+    } : null,
+    relay: relay ? {
+      resourceNetworkItemType: text(relay.resourceNetworkItemType),
+      isResourceNetworked: nullableBooleanValue(relay.isResourceNetworked),
+      isRelay: nullableBooleanValue(relay.isRelay),
+      isConnectedToRoom: nullableBooleanValue(relay.isConnectedToRoom),
+      wirelessConnection: nullableBooleanValue(relay.wirelessConnection),
+      defaultPriority: numberValue(relay.defaultPriority),
+    } : null,
+    emp,
+    quantumInterdiction,
+    fuelTank,
+    fuelIntake: fuelIntakeParams,
+    personalStorage,
+    salvage,
+    countermeasureLauncher,
   };
 }
 
@@ -662,6 +918,7 @@ export async function getShip(selection: DatasetSelection, shipIdInput: string, 
       boostSpeedBackward: numberValue(performanceRow.boostSpeedBackward),
       boostCapacity: numberValue(performanceRow.boostCapacity),
       boostRegen: numberValue(performanceRow.boostRegen),
+      boostRegenDelayAfterUse: numberValue(performanceRow.boostRegenDelayAfterUse),
     },
   };
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(row);
@@ -790,6 +1047,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "bomb_rack",
     "missile_controller",
     "mining_laser",
+    "mining_modifier",
     "salvage_head",
     "salvage_modifier",
     "fuel_nozzle",
@@ -799,6 +1057,19 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "cooler",
     "quantum_drive",
     "radar",
+    "relay",
+    "life_support",
+    "battery",
+    "emp",
+    "quantum_interdiction_generator",
+    "fuel_tank",
+    "fuel_intake",
+    "personal_storage",
+    "salvage_filler_station",
+    "salvage_internal_storage",
+    "salvage_field_emitter",
+    "salvage_field_supporter",
+    "countermeasure_launcher",
     "thruster",
     "other",
   ];
@@ -830,6 +1101,10 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   if (weapon) data.weapon = weapon;
   const cooler = componentCooler(found.row, found.fallbackType);
   if (cooler) data.cooler = cooler;
+  const thruster = componentThruster(found.row, found.fallbackType);
+  if (thruster) data.thruster = thruster;
+  const engineering = componentEngineering(found.row);
+  if (engineering) data.engineering = engineering;
   const ordnance = componentOrdnance(found.row, found.fallbackType);
   if (ordnance) data.ordnance = ordnance;
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);

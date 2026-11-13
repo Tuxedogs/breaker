@@ -1,4 +1,5 @@
 import type { PublicLocationEntry } from "../../../features/mining/types";
+import type { CoveragePlan } from "../../../features/mining/coveragePlan";
 import {
   formatStaticMethodFit,
   formatStaticQualityChanceFromChances,
@@ -15,6 +16,30 @@ import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../fe
 import type { RequiredMaterial } from "../../../features/mining/types";
 import type { MaterialOccurrenceDisplay, MiningQueueScope, QualityDisplay, DemandRow, ResourceRow } from "./miningTypes";
 import { findRouteScoreForMaterial } from "./miningScoring";
+
+/**
+ * Selected-material coverage for one ranked location, exactly as the ranked list
+ * shows it ("2 of 3"): recommender-eligible keys (or the location's indexed keys
+ * when the recommender did not report any) intersected with the active targets.
+ * Shared by the ranked row and the Location Profile so both read one projection.
+ */
+export function getLocationSelectedCoverage({
+  entry,
+  selectedMaterials,
+  buildQueueMaterialKeys,
+}: {
+  entry: PublicLocationEntry;
+  locationMaterialKeys: string[];
+  selectedMaterials: ReadonlySet<string>;
+  buildQueueMaterialKeys: ReadonlySet<string>;
+}): { covered: number; total: number } {
+  const eligibleMaterialKeys = entry.requiredMaterials?.map((material) => material.materialKey ?? material.materialId) ?? [];
+  const targets = new Set([...selectedMaterials, ...buildQueueMaterialKeys]);
+  return {
+    covered: eligibleMaterialKeys.filter((key) => targets.has(key)).length,
+    total: targets.size,
+  };
+}
 
 export function spawnTypeLabel(spawnType: string): string {
   const s = spawnType.toLowerCase();
@@ -112,7 +137,7 @@ export function isQuantaniumKey(key: string): boolean {
 }
 
 export function buildQualityDisplay(
-  signals: { qualityChance?: number | null; qualityIgnored?: boolean; thresholdChance?: number | null; selectedQuality?: number } | undefined,
+  signals: { qualityChance?: number | null; qualityIgnored?: boolean; thresholdChance?: number | null; selectedQuality?: number; qualityThreshold?: number } | undefined,
   materialKey: string,
 ): QualityDisplay {
   if (!signals) return { kind: "none" };
@@ -120,7 +145,7 @@ export function buildQualityDisplay(
   const chance = signals.qualityChance ?? signals.thresholdChance;
   if (chance === null || chance === undefined) return { kind: "none" };
   const pct = Math.round(chance * 100);
-  const threshold = signals.selectedQuality;
+  const threshold = signals.qualityThreshold ?? signals.selectedQuality;
   const prefix = threshold != null ? `${threshold}+: ` : "";
   return { kind: "chance", label: `${prefix}${pct}%` };
 }
@@ -188,7 +213,8 @@ export function demandMaterialLabel(material: RequiredMaterial | undefined, fall
     ?? fallbackKey;
 }
 
-export function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string {
+export function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name" | "materialKey">): string {
+  if (typeof row.materialKey === "string") return row.materialKey;
   return canonicalMiningMaterial({
     materialKey: row.key.includes(":") ? undefined : row.key,
     materialId: row.key.includes(":") ? undefined : row.key,
@@ -205,8 +231,8 @@ export function sourceStatus(sourceWeight: number | undefined): "strong" | "mode
   return "low";
 }
 
-export function qualityChanceHeader(hasBuildQueueTarget: boolean): string {
-  return hasBuildQueueTarget ? "Target Quality Chance" : "800+";
+export function qualityChanceHeader(): string {
+  return "800+";
 }
 
 export function qualityChanceTooltip(hasBuildQueueTarget: boolean): string {
@@ -434,46 +460,70 @@ export function qualitySourceFamilyLabel(sourceName: string | undefined): string
 export function buildDemandRows(
   entry: PublicLocationEntry,
   buildQueueMaterialKeys: Set<string>,
-  locationMaterialKeys: string[],
+  _locationMaterialKeys: string[],
   demandMaterialByKey: Map<string, RequiredMaterial>,
   staticResourceRows: ReturnType<typeof getStaticResourcesForLocation>,
   staticMiningIndex: StaticMiningIndex | null,
+  staticIndexStatus: "loading" | "loaded" | "error" = staticMiningIndex ? "loaded" : "error",
 ): DemandRow[] {
   if (buildQueueMaterialKeys.size === 0) return [];
-  const coveredSet = new Set(locationMaterialKeys);
-  const staticRowsByKey = new Map(staticResourceRows.map((row) => [getStaticMaterialKey(row), row]));
+  // Coverage comes only from the existing recommendation contract, never presence.
+  const coveredSet = new Set(entry.requiredMaterials?.map((material) =>
+    canonicalMiningMaterialKey(material.materialKey ?? material.materialId)) ?? []);
+  // An unresolved location join or failed/loading index cannot confirm absence.
+  const locationResolved = staticIndexStatus === "loaded" && staticResourceRows.length > 0;
+  const staticRowsByKey = new Map<string, typeof staticResourceRows>();
+  for (const staticRow of staticResourceRows) {
+    const key = getStaticMaterialKey(staticRow);
+    const rows = staticRowsByKey.get(key) ?? [];
+    rows.push(staticRow);
+    staticRowsByKey.set(key, rows);
+  }
   const rows: DemandRow[] = [];
   for (const key of buildQueueMaterialKeys) {
     const routeScoreEntry = findRouteScoreForMaterial(entry, key);
     const covered = coveredSet.has(key);
-    const staticRow = staticRowsByKey.get(key);
-    const qualityRow = staticRow ? getStaticMaterialQualityRow(staticRow, staticMiningIndex) : null;
     const demandMaterial = demandMaterialByKey.get(key);
-    const targetThreshold = demandMaterial?.selectedQuality ?? routeScoreEntry?.selectedQuality ?? routeScoreEntry?.signals.selectedQuality ?? 800;
-    const densityScore = staticRow ? getStaticDensityScore(staticRow, staticMiningIndex) ?? routeScoreEntry?.signals.encounterPct : routeScoreEntry?.signals.encounterPct;
-    const occurrence = staticRow ? buildOccurrenceDisplay(staticRow, staticMiningIndex, key) : null;
-    const sw = staticRow && occurrence?.mode === "probability"
-      ? occurrenceRankWeight(staticRow, staticMiningIndex)
-      : densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
-    const signal = covered ? encounterSignalFromWeight(sw) : "Unknown";
-    const st = covered ? encounterStatusFromSignal(signal) : "missing";
-    const rowStatus = st === "none" ? "low" : st;
-    rows.push({
-      name: staticRow?.materialName ?? demandMaterialLabel(demandMaterial, routeScoreEntry?.displayName ?? key),
-      key,
-      miningType: staticRow ? displayMiningMethodLabel(staticRow.resolvedMineableClass) : routeScoreEntry?.signals.selectedMethod ?? "Not indexed",
-      coverage: covered ? "Covered" : "Missing",
-      targetQualityChanceLabel: covered && staticRow
-        ? formatThresholdChance(pickWeightedQualityChances(qualityRow, staticRow), targetThreshold)
-        : "Unknown",
-      quality900Label: covered && staticRow
-        ? formatStaticQualityChanceDecimalBelow1(pickWeightedQualityChances(qualityRow, staticRow), "900")
-        : "Unknown",
-      densityLabel: covered ? formatEncounterTier(sw) : "Missing",
-      compositionLabel: covered && staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
-      sourceStrength: signal,
-      sourceWeight: sw,
-      occurrence: occurrence ?? {
+    const indexed = (entry.indexedResources ?? []).filter((resource) =>
+      canonicalMiningMaterial({ materialId: resource.materialId, materialName: resource.materialName }).key === key);
+    const staticAssociations = staticRowsByKey.get(key);
+    const associations: Array<(typeof staticResourceRows)[number] | undefined> = staticAssociations ?? indexed.map(() => undefined);
+    if (associations.length === 0) associations.push(undefined);
+    let associationIndex = 0;
+    for (const staticRow of associations) {
+      const indexedResource = staticRow ? undefined : indexed[associationIndex++];
+      const present = Boolean(staticRow || indexedResource);
+      const availability = covered ? "Covered" : present ? "Indexed · Not eligible" : locationResolved ? "Not present" : "Unknown";
+      const qualityRow = staticRow ? getStaticMaterialQualityRow(staticRow, staticMiningIndex) : null;
+      const densityScore = staticRow ? getStaticDensityScore(staticRow, staticMiningIndex) : covered ? routeScoreEntry?.signals.encounterPct : undefined;
+      const occurrence = staticRow ? buildOccurrenceDisplay(staticRow, staticMiningIndex, key) : null;
+      const sw = staticRow && occurrence?.mode === "probability"
+        ? occurrenceRankWeight(staticRow, staticMiningIndex)
+        : densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
+      const signal = present || covered ? encounterSignalFromWeight(sw) : "Unknown";
+      const st = covered ? encounterStatusFromSignal(signal) : "missing";
+      const rowStatus = st === "none" ? "low" : st;
+      const associationKey = staticRow
+        ? `${key}:${staticRow.resolvedMineableClass}:${(staticRow.sources ?? []).map((source) => source.groupName ?? source.spawnType ?? "unknown").sort().join("|")}`
+        : `${key}:${indexedResource?.miningType ?? "unresolved"}`;
+      rows.push({
+        name: staticRow?.materialName ?? demandMaterialLabel(demandMaterial, routeScoreEntry?.displayName ?? key),
+        key,
+        materialKey: key,
+        associationKey,
+        miningType: staticRow ? displayMiningMethodLabel(staticRow.resolvedMineableClass) : indexedResource ? displayMiningMethodLabel(indexedResource.miningType) : covered ? routeScoreEntry?.signals.selectedMethod ?? "Unknown" : "Unknown",
+        coverage: availability,
+        targetQualityChanceLabel: staticRow
+          ? formatThresholdChance(pickWeightedQualityChances(qualityRow, staticRow), 800)
+          : "Unknown",
+        quality900Label: staticRow
+          ? formatStaticQualityChanceDecimalBelow1(pickWeightedQualityChances(qualityRow, staticRow), "900")
+          : "Unknown",
+        densityLabel: present || covered ? formatEncounterTier(sw) : availability,
+        compositionLabel: staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
+        sourceStrength: signal,
+        sourceWeight: sw,
+        occurrence: occurrence ?? {
         mode: "legacy",
         primaryRockShareLabel: "Unknown",
         spawnRollProbabilityLabel: "Unknown",
@@ -481,9 +531,10 @@ export function buildDemandRows(
         methodAvailabilityLabel: "Unknown",
         traceMaterialsLabel: "None indexed",
         traceMaterials: [],
-      },
-      status: rowStatus as "strong" | "moderate" | "low" | "missing",
-    });
+        },
+        status: rowStatus as "strong" | "moderate" | "low" | "missing",
+      });
+    }
   }
   return rows;
 }
@@ -527,6 +578,8 @@ export function buildResourceRows(
       return {
         name: row.materialName || canonical.label || "Unknown Material",
         key: key || `${row.systemKey}:${row.locationKey}:${row.materialId || row.materialName}`,
+        materialKey: key,
+        associationKey: `${key}:${row.resolvedMineableClass}:${(row.sources ?? []).map((source) => source.groupName ?? source.spawnType ?? "unknown").sort().join("|")}`,
         miningType: displayMiningMethodLabel(row.resolvedMineableClass),
         qualityLabel: formatStaticQualityChanceFromChances(weightedChances),
         quality900Label: formatStaticQualityChanceDecimalBelow1(weightedChances, "900"),
@@ -554,6 +607,8 @@ export function buildResourceRows(
     return {
       name: r.materialName,
       key,
+      materialKey: canonicalMiningMaterialKey(key),
+      associationKey: `${canonicalMiningMaterialKey(key)}:${(r as { miningType?: string }).miningType ?? "unknown"}`,
       miningType: displayMiningMethodLabel((r as { miningType?: string }).miningType ?? ""),
       qualityLabel: qualityDisplay.kind === "ignored" ? "N/A" : qualityDisplay.kind === "chance" ? qualityDisplay.label : "Unknown",
       quality900Label: "Unknown",
@@ -573,4 +628,28 @@ export function buildResourceRows(
       status: st,
     };
   });
+}
+
+/**
+ * One plain sentence summarising the existing coverage plan route. It reads
+ * the planned order and coverage counts only; it never re-plans the route.
+ */
+export function miningRouteSentence(
+  plan: CoveragePlan | null | undefined,
+  nameOf: (entry: PublicLocationEntry) => string,
+): string | null {
+  if (!plan || plan.totalMaterials === 0) return null;
+  const stops = plan.locations
+    .filter((location) => !location.isAfterCompletion && location.newCoverage.length > 0)
+    .map((location) => nameOf(location.entry));
+  if (stops.length === 0) return null;
+  const route = stops.length === 1
+    ? stops[0]
+    : stops.length <= 3
+      ? `${stops.slice(0, -1).join(", ")}, then ${stops[stops.length - 1]}`
+      : `${stops.slice(0, 3).join(", ")}, then ${stops.length - 3} more stop${stops.length - 3 === 1 ? "" : "s"}`;
+  const coverage = plan.coveredCount >= plan.totalMaterials
+    ? plan.totalMaterials === 1 ? "covers your material" : `covers all ${plan.totalMaterials} materials`
+    : `covers ${plan.coveredCount} of ${plan.totalMaterials} materials`;
+  return `Visit ${route}: ${coverage}.`;
 }

@@ -4,6 +4,7 @@ import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
 import { handleFittingRoute } from "./routes/fitting.routes";
 import { handleMissionsRoute } from "./routes/missions.routes";
 import { handleMiningRoute } from "./routes/mining.routes";
+import { handleSourceRoute } from "./routes/source.routes";
 import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "../src/server/user/buildQueueRoute";
 import { handleUserInventoryRoute } from "../src/server/user/inventoryRoute";
@@ -45,6 +46,7 @@ export function createServer() {
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleMissionsRoute(request.method ?? "GET", rawUrl, body) ??
           await handleMiningRoute(request.method ?? "GET", rawUrl, body) ??
+          await handleSourceRoute(request.method ?? "GET", rawUrl) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {
         response.writeHead(404, { "content-type": "application/json" });

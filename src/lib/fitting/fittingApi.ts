@@ -202,6 +202,7 @@ export type FittingShipDetail = FittingShipSummary & {
     boostSpeedBackward?: number | null;
     boostCapacity?: number | null;
     boostRegen?: number | null;
+    boostRegenDelayAfterUse?: number | null;
   };
 };
 
@@ -254,7 +255,30 @@ export type FittingCalculationCategory = {
   unavailableReason: string | null;
   derived: Record<string, string | number | boolean | null>;
   extracted?: Record<string, unknown>;
+  individualPlants?: FittingPowerPlant[];
+  aggregateGeneration?: FittingAggregateGeneration;
 };
+
+export type FittingComponentAllocation = {
+  portId: string | null;
+  componentKey: string | null;
+  componentType: string;
+  displayName?: string | null;
+  allocationStatus: "supported" | "unsupported" | "unresolved";
+  allocationReason: string | null;
+  segmentAllocationSupported: boolean;
+  minimumSegments: number | null;
+  maximumSegments: number | null;
+  powerRanges: Array<Record<string, unknown>>;
+  provenance: Record<string, string>;
+  shieldHP?: number | null;
+  regenRate?: number | null;
+  activeIdentityKnown?: boolean | null;
+  activeStatus?: string | null;
+};
+
+export type FittingPowerPlant = { componentId: string; portId: string | null; displayName: string | null; size: number | null; generation: number | null };
+export type FittingAggregateGeneration = { available: boolean; status: string; installedPlantCount: number; generation?: number | null; reason: string | null };
 
 export type FittingCalculation = {
   shipId: string;
@@ -262,6 +286,7 @@ export type FittingCalculation = {
   resolutionStatus: string;
   componentCountsByType: Record<string, number>;
   categories: Partial<Record<"power" | "cooling" | "shields" | "weapons" | "ordnance" | "quantum" | "radar" | "performance", FittingCalculationCategory>>;
+  componentAllocations?: FittingComponentAllocation[];
   warnings: string[];
 };
 
@@ -286,6 +311,7 @@ export type FittingCalculateResult = {
   resolutionStatus: string;
   componentCountsByType: Record<string, number>;
   categories: FittingCalculation["categories"];
+  componentAllocations?: FittingComponentAllocation[];
   summary: {
     firepower: { weaponAlphaTotal: number | null; weaponDpsTotal: number | null; weaponCount: number; confidence: FittingConfidence; inferred: boolean };
     ordnance: {
@@ -345,6 +371,28 @@ export type FittingSimulationMetric = {
   sources: FittingSimulationSourceFact[];
 };
 
+export type FittingSimulationAllocationCurvePoint = {
+  segments: number;
+  value: FittingSimulationMetric;
+};
+
+export type FittingSimulationCategoryAllocationMetadata = {
+  minimumSegments: FittingSimulationMetric;
+  nominalSegments: FittingSimulationMetric;
+  maximumSegments: FittingSimulationMetric;
+  exactAllocationCurve: FittingSimulationAllocationCurvePoint[];
+  unavailableReason: string | null;
+  unitType: string | null;
+  addressability: "selectable-pips" | "non-pip-unit" | "bounds-unavailable" | "component-family-missing" | "distribution-unresolved" | "no-component-installed";
+  componentCount: number;
+  perComponent: Array<{
+    componentId: string;
+    minimumSegments: FittingSimulationMetric;
+    maximumSegments: FittingSimulationMetric;
+    exactAllocationCurve: FittingSimulationAllocationCurvePoint[];
+  }>;
+};
+
 export type FittingSimulationMissingInput = {
   componentId: string | null;
   mountId: string | null;
@@ -385,6 +433,7 @@ export type FittingSimulationResult = {
     allocatedSegments: FittingSimulationMetric;
     marginSegments: FittingSimulationMetric;
     allocatedByCategory: FittingSimulationPowerAllocation;
+    categories: Record<FittingSimulationPowerCategory, FittingSimulationCategoryAllocationMetadata>;
   };
   cooling: {
     capacity: FittingSimulationMetric;
@@ -650,6 +699,33 @@ export type FittingComponentStats = {
   powerInputMinimum?: number | null;
   powerInputMaximumPips?: number | null;
   powerInputMinimumPips?: number | null;
+  minimumPowerRequired?: number | null;
+  minimumPowerRequiredPips?: number | null;
+  maximumPowerRequired?: number | null;
+  maximumPowerRequiredPips?: number | null;
+  powerInputMinimumFraction?: number | null;
+  powerOutput?: number | null;
+  powerCapacity?: number | null;
+  powerGenerationRate?: number | null;
+  coolingCapacity?: number | null;
+  coolingGenerationRate?: number | null;
+  heatSink?: number | null;
+  transferRate?: number | null;
+  reservePoolRegenRate?: number | null;
+  reservePoolRegenTime?: number | null;
+  hardeningFactor?: number | null;
+  rangeEfficiency?: number | null;
+  splineCooldown?: number | null;
+  splineJumpSpeed?: number | null;
+  calibrationProcessAngleLimit?: number | null;
+  calibrationWarningAngleLimit?: number | null;
+  travellingEmSignature?: number | null;
+  travellingIrSignature?: number | null;
+  engageSpeed?: number | null;
+  interdictionEffectTime?: number | null;
+  aimAssistMinAssignmentDistance?: number | null;
+  aimAssistMaxAssignmentDistance?: number | null;
+  aimAssistOutsideRangeBufferDistance?: number | null;
   maxPenetrationThickness?: number | null;
   distortionResistance?: number | null;
   crossSection?: number | null;
@@ -665,6 +741,12 @@ export type FittingComponentStats = {
   extractionPower?: number | null;
   instabilityModifier?: number | null;
   resistanceModifier?: number | null;
+  isOptimalRateGood?: number | null;
+  durationSeconds?: number | null;
+  shatterDamageModifier?: number | null;
+  fractureWindowSizeModifier?: number | null;
+  optimalChargeRateModifier?: number | null;
+  catastrophicChargeRateModifier?: number | null;
   fractureWindowSize?: number | null;
   optimalChargeRate?: number | null;
   laserRange?: number | null;
@@ -764,12 +846,114 @@ export type FittingOrdnanceDetail = {
   ports: Array<{ name: string | null; minSize: number | null; maxSize: number | null }>;
 };
 
+export type FittingEngineeringAttribute = {
+  value: number | null;
+  unit: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+};
+
+export type FittingEngineeringResource = {
+  direction: string | null;
+  resource: string | null;
+  value: number | null;
+  unitType: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+  unitConfidence: string | null;
+};
+
+export type FittingEngineeringCapacity = {
+  value: number | null;
+  unitNode: string | null;
+  unitField: string | null;
+  unitKnown: boolean | null;
+  unitUnknown: boolean | null;
+};
+
+export type FittingThrusterDetail = {
+  onlyActiveInVtol: boolean | null;
+};
+
+export type FittingEngineeringDetail = {
+  stateResources: Array<{
+    stateName: string | null;
+    deltas: Array<{
+      deltaNode: string | null;
+      minimumConsumptionFraction: number | null;
+      noOverGeneration: boolean | null;
+      storageDischarge: number | null;
+      resources: FittingEngineeringResource[];
+    }>;
+  }>;
+  thermalHeatGeneration: {
+    resource: string | null;
+    baselineTemperatureChange: number | null;
+    unitKnown: boolean | null;
+    unitUnknown: boolean | null;
+  } | null;
+  relay: {
+    resourceNetworkItemType: string | null;
+    isResourceNetworked: boolean | null;
+    isRelay: boolean | null;
+    isConnectedToRoom: boolean | null;
+    wirelessConnection: boolean | null;
+    defaultPriority: number | null;
+  } | null;
+  emp: Record<string, FittingEngineeringAttribute> | null;
+  quantumInterdiction: {
+    generator: Record<string, FittingEngineeringAttribute> | null;
+    jammer: Record<string, FittingEngineeringAttribute> | null;
+    pulse: Record<string, FittingEngineeringAttribute> | null;
+  } | null;
+  fuelTank: {
+    params: Record<string, FittingEngineeringAttribute> | null;
+    capacity: FittingEngineeringCapacity | null;
+    inclusiveResources: Array<{ reference: string | null }>;
+    defaultComposition: Array<{ entry: string | null; weight: number | null }>;
+  } | null;
+  fuelIntake: Record<string, FittingEngineeringAttribute> | null;
+  personalStorage: {
+    inventoryContainer: {
+      containerParamsRef: string | null;
+      canAutoStoreRestrictedItems: boolean | null;
+    } | null;
+    capacity: FittingEngineeringCapacity | null;
+    internalPorts: Array<{
+      name: string | null;
+      displayName: string | null;
+      minSize: number | null;
+      maxSize: number | null;
+      acceptedTypes: Array<{ type: string | null; subTypes: string[] }>;
+    }>;
+  } | null;
+  salvage: {
+    type: "salvage_filler_station" | "salvage_internal_storage" | "salvage_field_emitter" | "salvage_field_supporter";
+    resourceContainer: {
+      capacity: FittingEngineeringCapacity | null;
+      inclusiveResources: Array<{ reference: string | null }>;
+    } | null;
+  } | null;
+  countermeasureLauncher: {
+    ammoParamsRecord: string | null;
+    initialAmmoCount: number | null;
+    maxAmmoCount: number | null;
+    maxRestockCount: number | null;
+    allowAmmoRepool: boolean | null;
+    turnedOnByDefault: boolean | null;
+    forceOn: boolean | null;
+    asopSpawnState: string | null;
+  } | null;
+};
+
 export type FittingComponentDetail = FittingComponentSummary & {
   stats: FittingComponentStats;
   mitigation: FittingComponentMitigation | null;
   weapon?: FittingWeaponDetail;
   cooler?: FittingCoolerDetail;
+  thruster?: FittingThrusterDetail;
   ordnance?: FittingOrdnanceDetail;
+  engineering?: FittingEngineeringDetail;
 };
 
 export type FittingPortConstraint = {

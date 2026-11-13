@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { BuildQueueProductQualitySummary } from "../../lib/logistics/buildQueueCraftStats";
 import type { CraftStatViewModel } from "../../lib/crafting/craftStatViewModel";
 import { CraftStatisticsCards } from "../shared/CraftStatisticsCards";
@@ -87,7 +86,6 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
 }
 
 export function BuildQueueCraftStatisticsPanel({ model, selectionId = model.title, hasError = false }: { model: CraftStatViewModel; selectionId?: string; hasError?: boolean }) {
-  const [activeView, setActiveView] = useState<"performance" | "engineering">("performance");
   const hasStatistics = model.comparisonGroups.length > 0 || model.overviewGroups.length > 0;
   const phase = model.status === "loading" ? "loading" : model.status !== "ready" ? (hasError ? "error" : "unavailable") : hasStatistics ? "ready" : "empty";
 
@@ -95,25 +93,9 @@ export function BuildQueueCraftStatisticsPanel({ model, selectionId = model.titl
     <section className={`bq-component-statistics bq-component-statistics--${phase} bq-workspace-card`} data-bq-stats-status={phase} data-bq-stats-category={model.category} data-bq-stats-selection={selectionId} aria-label="Component statistics" aria-busy={phase === "loading"}>
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
-        <div className="bq-stat-view-tabs" role="tablist" aria-label="Component statistic views">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeView === "performance"}
-            className={activeView === "performance" ? "is-active" : ""}
-            onClick={() => setActiveView("performance")} disabled={phase === "loading"}
-          >Performance</button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeView === "engineering"}
-            className={activeView === "engineering" ? "is-active" : ""}
-            onClick={() => setActiveView("engineering")} disabled={phase === "loading"}
-          >Engineering</button>
-        </div>
       </header>
-      <div key={`${selectionId}:${phase}:${activeView}`} className="bq-component-statistics-body bq-component-statistics-content">
-        <CraftStatisticsCards model={model} view={activeView} hasError={hasError} className="bq-stat-unmodified-column" />
+      <div key={`${selectionId}:${phase}`} className="bq-component-statistics-body bq-component-statistics-content">
+        <CraftStatisticsCards model={model} hasError={hasError} className="bq-stat-unmodified-column" />
       </div>
     </section>
   );

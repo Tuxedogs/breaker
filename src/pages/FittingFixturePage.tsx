@@ -86,6 +86,17 @@ function simulationState(input: {
         "capacity - allocated",
       ),
       allocatedByCategory: { ...DEFAULT_PIP_ASSIGNMENT },
+      categories: Object.fromEntries(Object.keys(DEFAULT_PIP_ASSIGNMENT).map((category) => [category, {
+        minimumSegments: metric(0, "fixture no minimum allocation"),
+        nominalSegments: metric(null, "fixture nominal allocation unavailable"),
+        maximumSegments: metric(category === "weapons" ? 4 : null, category === "weapons" ? "fixture Foundry WeaponGun FixedPowerPool poolSize" : "fixture source-backed category maximum unavailable"),
+        exactAllocationCurve: [],
+        unavailableReason: category === "weapons" ? null : "Fixture has no source-backed category maximum.",
+        unitType: "PowerSegment",
+        addressability: category === "weapons" ? "selectable-pips" : "bounds-unavailable",
+        componentCount: category === "weapons" ? 1 : 0,
+        perComponent: [],
+      }])) as unknown as FittingSimulationResult["power"]["categories"],
     },
     cooling: {
       capacity: metric(input.coolingCapacity, "sum(cooler capacity)"),

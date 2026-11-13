@@ -1,0 +1,193 @@
+/* Active Fitting route: V31b-aligned single-hull layout.
+   This layout preserves the existing equipped-slot selection and swap drawers. */
+.fm-v31-shell .fm-rail {
+  grid-column:1;
+  grid-row:1 / -1;
+  background: #071521;
+  border-right: 1px solid var(--fm-border);
+  padding: 10px 6px;
+  gap: 6px;
+}
+.fm-v31-shell .fm-v31-offense-frame,
+.fm-v31-shell .fm-v31-hero-frame,
+.fm-v31-shell .fm-right-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #081724;
+}
+.fm-v31-shell .fm-v31-offense-frame { grid-column:1;grid-row:1; }
+.fm-v31-shell .fm-v31-hero-frame { grid-column:2;grid-row:1; }
+.fm-v31-shell .fm-v31-offense-frame > .fm-offense-panel {
+  display:flex;
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+  overflow:auto;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:#091a27;
+}
+.fm-v31-shell .fm-v31-hero-frame > .fm-hero {
+  flex:1 1 auto;
+  min-height:0;
+  height:auto;
+  width:100%;
+  overflow:hidden;
+  margin:0;
+  border:0;
+  border-radius:0;
+}
+.fm-v31-shell .fm-v31-hero-frame .fm-topbar {
+  min-height:58px;
+  --fm-head-h:58px;
+}
+.fm-v31-shell .fm-right-col > .fm-panel {
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  border:0;
+  border-radius:0;
+  background:#091a27;
+}
+.fm-v31-shell .fm-right-col > .fm-resources-panel {
+  flex:0 0 auto;
+  max-height:47%;
+  overflow-y:auto;
+}
+.fm-v31-shell .fm-stats-grid > * {
+  min-height:0;
+  height:auto;
+  min-width:0;
+  overflow:hidden;
+  border-radius:2px;
+}
+.fm-v31-shell .fm-stat-card,
+.fm-v31-shell .fm-stat-card * { min-width:0; }
+.fm-v31-shell .fm-stat-card span,
+.fm-v31-shell .fm-stat-card strong,
+.fm-v31-shell .fm-stat-card dd,
+.fm-v31-shell .fm-stat-card td { overflow-wrap:anywhere; }
+.fm-v31-shell .fm-v31-source-state {
+  flex:0 0 auto;
+  padding:8px 12px;
+  margin:0;
+  border-top:1px solid var(--fm-border);
+  color:var(--fm-muted);
+  font:500 11px/1.35 var(--mb-font-ui,"Segoe UI",sans-serif);
+  background:#0d202d;
+}
+@media(max-width:1299px){
+  .fm-v31-shell .fm-rail { grid-column:1;grid-row:1 / -1; }
+  .fm-v31-shell .fm-v31-offense-frame { grid-column:1;grid-row:1; }
+  .fm-v31-shell .fm-v31-hero-frame { grid-column:2;grid-row:1; }
+}
+@media(max-width:759px){
+  .fm-shell.fm-v31-shell{
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+  }
+  .fm-v31-shell .fm-rail{flex:0 0 auto;flex-direction:row;min-height:50px;overflow-x:auto;}
+  .fm-v31-shell .fm-v31-heading>small{display:none;}
+  .fm-v31-shell .fm-topbar{grid-template-columns:minmax(0,1fr) auto;gap:5px;}
+}
+
+/* Shared V31b-sized top bar and reserved grid row. */
+.fm-shell.fm-v31-shell {
+  --fm-bg: #061421;
+  --fm-panel: var(--mb-ops-surface-raised);
+  --fm-panel-2: var(--mb-ops-surface-row);
+  --fm-border: var(--mb-border,rgba(94,153,180,.24));
+  --fm-accent: var(--mb-accent,#4bd1e5);
+  --fm-text: var(--mb-text-1,var(--mb-ops-text-primary));
+  --fm-muted: var(--mb-text-2,#9eb6c6);
+  --fm-rail-w: 64px;
+  --fm-left-w: 225px;
+  --fm-right-w: 320px;
+  --fm-gap: 1px;
+  --fm-stats-min-h: 0px;
+  --mock-type-micro: 10px;
+  --mock-type-2xs: 11px;
+  --mock-type-xs: 11px;
+  --mock-type-sm: 12px;
+  --mock-type-base: 12px;
+  grid-template-columns: minmax(250px,var(--fm-left-w)) minmax(0,1fr) minmax(290px,var(--fm-right-w));
+  gap: 1px;
+  font-family: var(--mb-font-ui,"Segoe UI",sans-serif);
+  background: var(--fm-border);
+  grid-template-rows: minmax(250px,58%) minmax(200px,1fr);
+}
+.fm-v31-shell .fm-v31-appbar {
+  grid-column:1 / -1;
+  grid-row:1;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  min-width:0;
+  min-height:48px;
+  padding:0 20px;
+  border-bottom:1px solid var(--fm-border);
+  background:#060f19;
+  color:var(--fm-text);
+  font:600 10px/1.2 var(--mb-font-ui,"Segoe UI",sans-serif);
+  letter-spacing:.05em;
+}
+.fm-v31-shell .fm-v31-appbar-brand {
+  display:inline-flex;
+  align-items:center;
+  flex:0 0 auto;
+  gap:12px;
+  white-space:nowrap;
+}
+.fm-v31-shell .fm-v31-appbar-brand b {color:var(--fm-accent);font-size:14px;}
+.fm-v31-shell .fm-v31-appbar-breadcrumb{
+  color:var(--fm-muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.fm-v31-shell .fm-v31-appbar > small{
+  margin-left:auto;
+  color:var(--fm-accent);
+  font:600 9px/1.2 var(--mb-font-ui,"Segoe UI",sans-serif);
+  white-space:nowrap;
+}
+.fm-v31-shell .fm-v31-offense-frame,
+.fm-v31-shell .fm-v31-hero-frame {grid-row:1;}
+.fm-v31-shell .fm-right-col { grid-column:3; gap:0;grid-row:1 / 3;}
+.fm-v31-shell .fm-stats-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:minmax(210px,auto);
+  gap:8px;
+  height:100%;
+  min-height:0;
+  padding:8px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-content:start;
+  background:#071521;grid-row:2;grid-column:1 / 3;}
+.fm-v31-shell .fm-error {display:none;}
+@media(max-width:1299px){
+  .fm-shell.fm-v31-shell {
+    grid-template-columns:58px minmax(215px,26%) minmax(0,1fr);
+    height:auto;
+    max-height:none;
+    overflow-y:auto;grid-template-rows:minmax(380px,55vh) auto auto;}
+  .fm-v31-shell .fm-v31-offense-frame,
+  .fm-v31-shell .fm-v31-hero-frame {grid-row:1;}
+  .fm-v31-shell .fm-right-col { grid-column:2 / -1;min-height:330px;grid-row:2;}
+  .fm-v31-shell .fm-stats-grid {grid-column:2 / -1;min-height:400px;grid-row:3;}
+}
+@media(max-width:759px){
+  .fm-v31-shell .fm-v31-appbar {order:0; width:100%; min-height:48px; padding:0 12px;}
+  .fm-v31-shell .fm-v31-appbar > small {display:none;}
+  .fm-v31-shell .fm-v31-hero-frame {min-height:390px;order:2;}
+  .fm-v31-shell .fm-v31-offense-frame {min-height:250px;order:3;}
+  .fm-v31-shell .fm-right-col {min-height:300px;order:4;}
+  .fm-v31-shell .fm-stats-grid {display:flex;flex-direction:column;overflow:visible;min-height:0;order:5;}
+}

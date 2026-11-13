@@ -1,5 +1,5 @@
-import type { FittingComponentStats } from "./fittingApi";
-import { formatNumber } from "./fittingPortGrouping";
+import type { FittingComponentStats } from "./fittingApi.js";
+import { formatNumber } from "./fittingPortGrouping.js";
 
 export type WeaponStatSlice = Pick<
   FittingComponentStats,

@@ -110,11 +110,14 @@ export function matchesRecipeBrowserSearch(
 function recordUsesMaterialFilter(
   record: ComponentCardIndexRecord,
   materialFilters: Set<string>,
+  mode: "all" | "any",
 ): boolean {
   const materials = Array.isArray(record.facets?.materials) ? record.facets.materials : [];
   const materialNames = Array.isArray(record.facets?.materialNames) ? record.facets.materialNames : [];
-  return materials.some((id) => materialFilters.has(id))
-    || materialNames.some((name) => materialFilters.has(name));
+  const values = new Set([...materials, ...materialNames]);
+  return mode === "all"
+    ? [...materialFilters].every((value) => values.has(value))
+    : [...materialFilters].some((value) => values.has(value));
 }
 
 function normalizeRecipeBrowserCategoryType(
@@ -240,7 +243,7 @@ export function matchesRecipeBrowserAppliedFilters(
   }
   if (gradeFilters.size > 0 && !gradeFilters.has(record.grade ?? "")) return false;
   if (classFilters.size > 0 && !classFilters.has((record.class ?? "").toLowerCase())) return false;
-  if (materialFilters.size > 0 && !recordUsesMaterialFilter(record, materialFilters)) return false;
+  if (materialFilters.size > 0 && !recordUsesMaterialFilter(record, materialFilters, searchParams.get("mm") === "any" ? "any" : "all")) return false;
   if (savedOnly && options.savedBlueprintIds && !options.savedBlueprintIds.has(record.id)) return false;
   return true;
 }

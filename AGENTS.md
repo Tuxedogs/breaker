@@ -2,6 +2,39 @@
 
 You are working on Moonbreaker / Scintel.
 
+## Operating Philosophy
+
+Breaker is a solo hobby project, not an enterprise SaaS platform. Optimize for working features, development speed, simplicity, and maintainability. This section takes precedence over conflicting process guidance in other docs, handoffs, or audits.
+
+* No enterprise engineering by default. Do not add abstractions, release gates, CI workflows, frameworks, monitoring, or infrastructure unless the gate below is met.
+* Local development stays frictionless. Staging verification, deployment configuration, and production-isolation checks must not block local dev, builds, or tests. Production protections belong at deployment boundaries.
+* Staging is a test deployment with isolated data and working authentication. Keep the staging safeguards that already work; do not expand them without justification.
+* Prefer the smallest correct solution. No speculative future-proofing, large refactors, or scope beyond the task.
+* Testing is proportional to risk. Preserve existing domain tests (calculations, crafting, inventory, data integrity) and add domain tests when domain logic changes. Do not build validation infrastructure for trivial visual changes.
+* Urgent work is limited to user-facing failures, data-loss risks, and security problems. Other risks go to the backlog.
+* No unsolicited engineering projects. If infrastructure seems necessary, say so in one line in the report; do not implement it.
+* Preserve what works. Do not remove infrastructure, tests, or PRs by category; evaluate each on whether it works, whether it creates friction, and what actually needs to change. Never weaken production data isolation, expose secrets, or delete meaningful domain tests.
+
+Adding process or infrastructure requires all of:
+
+1. A demonstrated need, credible risk, or measurable development bottleneck, named in the task or report. Preventing obvious problems qualifies.
+2. Complexity proportional to that risk.
+3. Tux's approval in the current task.
+
+### Release Policy
+
+There is no broad feature freeze. Normal feature development continues while beta is prepared. Keep each release focused.
+
+Public beta is GO when all of the following are true:
+
+* Discord authentication works end to end on staging.
+* Inventory writes persist.
+* Production isolation is verified: staging cannot read or write production data.
+* Core domain tests pass.
+* No known critical security or data-loss issue is open.
+
+Nothing else is a beta prerequisite.
+
 ## Repository Locations
 
 * Main UI repository: `D:/Moonbreaker`
@@ -23,7 +56,7 @@ For operational API, generated-data, publication, and deployment work, use:
 
 Mission agents must treat `server-data/missions/current.json` as the runtime selector. The current legal tuple is mission schema 3 / source contract 4 / offer schema 1. Schema 2 / source 3 remains a supported pointer rollback only. Never mix versions or edit an immutable generation in place.
 
-For visual work, use `moonbreaker_design_canon.md` as the detailed design authority and the current page source as implementation truth. Page-specific accepted canon linked from that file remains authoritative for its stated scope.
+For visual work, use `moonbreaker_design_canon.md` as the detailed design authority, `docs/CINEMATIC_VISUAL_DIRECTION.md` as the LOCKED 2026-10-29 cinematic target, and the current page source as functional implementation truth. Page-specific accepted canon remains authoritative for data meaning, behavior, and controls; older visual examples are not a veto on the new target.
 
 ## Working Style
 
@@ -196,11 +229,27 @@ The product should feel like a dark, premium spacecraft operations interface:
 * No giant empty voids
 * No decorative effects that interfere with data
 
-The global color, card, border, and highlight system is currently being audited.
+LOCKED (2026-10-29): Breaker's future homepage is a cinematic five-slice module gateway: **Fitting (WIP), Craft, Build, Mine, Inventory**. Fitting is disabled; the other slices enter real existing modules. Each has full-height environmental artwork, softly diffused boundaries, minimal text, and restrained, accessible interactions. Do not recreate the old telemetry-card Dashboard as the new landing design. This is a visual design lock, **not permission to alter production routing or delete existing Dashboard behavior today**.
 
-Do not treat the current Dashboard palette or the blue, teal, and purple page family as the final global standard until that audit is approved.
+The approved interactive Mining concept is the new **visual quality benchmark**; the existing Mining implementation remains the **functional and dense-workspace reference**. Mining's segmented Direct Spawn Competition bars are mandatory in the redesigned location detail, between Selected Materials and Other Materials. Retain source-pool separation, actual delivered relative probabilities, canonical material colors, selected/competing roles, linkage, and unrepresented-share semantics. Redesign their appearance, not their mathematics. Preserve `getDisplayedLocationRank`: `T-{value}` signals a tied modeled rank (not a tier), ordinary numerals represent non-ties, and `R{value}` represents route order. Preserve the rank tooltip/accessibility explanation and actual score/coverage tie semantics.
 
-Detailed page and design guidance belongs in `moonbreaker_design_canon.md` rather than being duplicated here.
+Preserve the shared `--mb-*` palette, `AppPageShell`, the no-hero rule for operational pages, and domain logic. The navigation gateway is a deliberate exception to the operational no-page-header rule. The art creates atmosphere; opaque working surfaces protect readability. No heavy animation, per-module UI palette forks, fake data, or baked-in artwork text.
+
+Detailed rules and implementation sequence are in `docs/CINEMATIC_VISUAL_DIRECTION.md` and `moonbreaker_design_canon.md`; read them before any homepage or module redesign.
+
+## Styling rules (enforced by `npm run style:check`)
+- The only styling vocabulary is the `--mb-*` tokens in src/styles/tokens.css.
+- Never add hex/rgb/hsl colors, raw font-family, raw border-radius, `!important`,
+  or new custom properties outside tokens.css. The style ratchet fails the build if you do.
+- One interactive accent: `--mb-accent` for selection, focus, active. Semantic colors
+  (`--mb-good`, `--mb-bad`, `--mb-warn`, `--mb-info`) carry meaning only, never decoration.
+- No command/page header on **operational modules**. `AppPageShell` owns their full-height working content; do not add `CommandHeader`, page titles, heroes or banners above the workspace. The approved cinematic **homepage gateway is the explicit navigation-only exception**.
+- Mining's **existing implementation** is the functional and compact-control reference. The owner-approved cinematic prototype is the **new visual direction** (see `docs/CINEMATIC_VISUAL_DIRECTION.md`). Crafting is the reference only for
+  the detail drawer/dialog, long-form detail sections, mobile filter sheet and charts; never
+  copy its colors, fonts, spacing or known issues (see `moonbreaker_design_canon.md`).
+- Do not read from or copy styles out of src/archive or src/pages/_archive.
+- A styling task is done only when `npm run style:check` passes and you ran
+  `node scripts/style-ratchet.mjs --update` to lock in reductions.
 
 ## UI Implementation Rules
 
@@ -218,7 +267,7 @@ For visual work:
 * Avoid hiding important data merely to simplify layout.
 * Keep peer workflow regions as peer surfaces; do not nest a full statistics or allocation workspace inside an identity header.
 
-For responsive work, inspect at minimum:
+For layout or responsive changes, inspect:
 
 * `1920×1080`
 * `2560×1440`
@@ -230,13 +279,15 @@ For an existing responsive logistics hierarchy, use `768×900` as the standard c
 
 ## Visual Validation
 
-Tests and builds are not sufficient validation for UI work.
+Scale visual validation to the change.
 
-Visual changes require:
+Layout and component changes require:
 
-* A deterministic populated state or fixture
-* Screenshot review at the requested resolutions
-* Manual inspection of hierarchy, overflow, clipping, contrast, and density
+* A populated state (existing fixture or real data)
+* Review at the relevant resolutions
+* Inspection of hierarchy, overflow, clipping, contrast, and density
+
+Small visual tweaks (color, spacing, copy, a single control) need a quick check of the affected page, not a fixture or multi-resolution pass.
 
 Do not claim a visual task is complete solely because the build passes.
 
@@ -263,8 +314,12 @@ At minimum for TypeScript, React, or stylesheet changes:
 
 ```bash
 npm run lint
-npm run build
+tsc -b && npm run build:isolated-ui
 ```
+
+`npm run dev`, `npm run build`, and `npm run preview` use `vite.local-fixtures.config.ts` and need no staging credentials. The guarded staging build is `npm run build:staging`; it refuses outside the verified Vercel staging Preview by design, and Vercel runs it as the build command. That refusal is not a blocker to report.
+
+Local Playwright configs start only `vite.local-fixtures.config.ts`; `npm run test:playwright-configs` enforces this. Known fixture gaps are listed in `docs/KNOWN_TEST_FAILURES.md`.
 
 Also run targeted tests when the changed code has an existing test suite.
 
@@ -275,7 +330,7 @@ Report:
 * Behavior intentionally preserved
 * Tests run
 * Build result
-* Screenshot or fixture route used
+* Screenshot or fixture route used, for layout or component changes
 * Any unresolved visual or data limitations
 
 ## Stop Conditions
@@ -290,3 +345,11 @@ Do not continue into:
 * API redesign
 * Calculation changes
 * Additional speculative features unless the task explicitly requests them.
+
+## Codex Orchestration
+
+The primary Codex session is the orchestrator. Reuse the project-scoped roles in `.codex/agents/` only when their bounded expertise will cost less than direct work. The durable routing, handoff, vault-memory, and recovery rules are in `docs/agents/HIERARCHY.md`, `docs/agents/HANDOFF_CONTRACT.md`, and the authoritative vault note `D:\Vaults\Star Citizen Projects\Projects\Breaker\20 Architecture\Codex Orchestration.md`.
+
+Before a non-trivial task, establish the actual repository, worktree, branch, HEAD, and dirty state. Do not assume that the current directory is the intended worktree. Preserve unrelated WIP, particularly the active Mining workstream and the paused Fitting V2 checkpoint.
+
+Use the Obsidian vault as durable project memory, not chat summaries. Start from the hub and relevant concise index note; read the smallest set of task-relevant notes and current repository evidence. Vault notes record decisions, current state, ownership, and checkpoints; source code and accepted runtime selectors remain the authority for executable behavior and live data.

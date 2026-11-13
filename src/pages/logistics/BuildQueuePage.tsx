@@ -1,6 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent, type PointerEvent as ReactPointerEvent } from "react";
+import WorkspaceTabs from "../../components/shared/WorkspaceTabs";
+import WorkspacePanel from "../../components/shared/WorkspacePanel";
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent } from "react";
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
+import BuildQueueV31Overview from "../../components/logistics/BuildQueueV31Overview";
+import { useShellBreadcrumbDetail } from "../../components/dashboard/shellNavigation";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
 import BuildQueueSelector from "../../components/logistics/BuildQueueSelector";
 import {
@@ -11,10 +15,11 @@ import { getInventoryFreshnessBlockReason } from "../../lib/logistics/inventoryF
 import { getActiveInventoryEntries, type SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { computePhysicalAvailabilityCoverage } from "../../lib/logistics/shortages";
+import { getQueuePotentialSources } from "../../lib/logistics/queuePotentialSources";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
-import type { BuildQueue, BuildQueueItem, RecipeTemplate } from "../../types/logistics";
+import type { BuildQueue, BuildQueueItem } from "../../types/logistics";
 import { createLocalBuildQueueId, normalizeBuildQueueState } from "../../lib/logistics/buildQueues";
 import {
   createBuildQueueCompletionSnapshot,
@@ -30,8 +35,8 @@ import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
+import "../../components/logistics/build-v31-layout.css";
 
-const MAX_QUEUE_SLOTS = 12;
 const FIXTURE_READ_ONLY_MESSAGE = "Build Queue fixture is read-only.";
 
 function formatSummaryNumber(value: number): string {
@@ -39,18 +44,13 @@ function formatSummaryNumber(value: number): string {
   return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
-type QueueTab = "active" | "completed";
+type QueueTab = "all" | "active" | "planned" | "completed";
 type DragDestinationId = string | "completed" | "new-queue";
 
 function sortQueueItems(items: BuildQueueItem[]) {
   return items.slice().sort(
     (a, b) => Number(b.priorityActive ?? false) - Number(a.priorityActive ?? false) || (a.priority ?? 0) - (b.priority ?? 0),
   );
-}
-
-function getQueueItemLabel(item: BuildQueueItem, recipes: RecipeTemplate[]) {
-  const recipe = recipes.find((entry) => entry.id === item.recipeId);
-  return item.itemName ?? recipe?.name ?? item.recipeId;
 }
 
 function useIsMobileQueueLayout() {
@@ -82,7 +82,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [summaryCollapsed, setSummaryCollapsed] = useState(false);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const [inventoryEnabled, setInventoryEnabled] = useState(true);
-  const [queueTab, setQueueTab] = useState<QueueTab>("active");
+  const [queueTab, setQueueTab] = useState<QueueTab>("all");
   const [draggingEntryId, setDraggingEntryId] = useState<string | null>(null);
   const [queueDropIndex, setQueueDropIndex] = useState<number | null>(null);
   const [dragDestinationId, setDragDestinationId] = useState<DragDestinationId | null>(null);
@@ -126,11 +126,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [fixtureQueues, setFixtureQueues] = useState<BuildQueue[]>(() => initialFixtureState.queues);
   const [fixtureActiveQueueId, setFixtureActiveQueueId] = useState(() => initialFixtureState.activeQueueId);
   const isMobileQueueLayout = useIsMobileQueueLayout();
-  const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const queueListRef = useRef<HTMLDivElement>(null);
   const dragDestinationRef = useRef<DragDestinationId | null>(null);
-  const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
-  const suppressMobileSelectorTapRef = useRef(false);
 
   useEffect(() => {
     if (isFixture) return;
@@ -162,6 +159,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const storeUpdateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const storeUpdateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
   const storeUpdateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
+  const storeAddBuildQueueItem = useLogisticsStore((s) => s.addBuildQueueItem);
   const storeReorderBuildQueueItems = useLogisticsStore((s) => s.reorderBuildQueueItems);
   const storeMoveBuildQueueItem = useLogisticsStore((s) => s.moveBuildQueueItem);
   const storeRemoveBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
@@ -290,10 +288,6 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     () => getQueueLedgerModel({ buildQueue: activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId }),
     [activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId],
   );
-  const physicalCoverage = useMemo(
-    () => computePhysicalAvailabilityCoverage(inventoryEntries, activeBuildQueueItems, recipeInputsByRecipeId),
-    [activeBuildQueueItems, inventoryEntries, recipeInputsByRecipeId],
-  );
   const materialNameById = useMemo(() => Object.fromEntries(materials.map((material) => [material.id, material.name])), [materials]);
   const freshnessBlockReason = isFixture
     ? FIXTURE_READ_ONLY_MESSAGE
@@ -338,7 +332,13 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     () => sortQueueItems(activeBuildQueueItems.filter((item) => item.status === "complete")).map((item) => ({ item })),
     [activeBuildQueueItems],
   );
-  const visibleRows = queueTab === "active" ? activeRows : completedRows;
+  const plannedRows = activeRows.filter(({ item }) => !item.status || item.status === "queued");
+  const inProgressRows = activeRows.filter(({ item }) => item.status === "active" || item.status === "paused");
+  const visibleRows = queueTab === "all"
+    ? [...activeRows, ...completedRows]
+    : queueTab === "planned"
+      ? plannedRows
+      : queueTab === "active" ? inProgressRows : completedRows;
   const resolvedSelectedItemId = useMemo(() => {
     if (visibleRows.length === 0) return null;
     if (selectedItemId && visibleRows.some((row) => row.item.id === selectedItemId)) {
@@ -348,52 +348,26 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   }, [visibleRows, selectedItemId]);
 
   const selectedRow = visibleRows.find((row) => row.item.id === resolvedSelectedItemId) ?? null;
+  // V31 sources the currently inspected build, not all queued crafts together.
+  const physicalCoverage = useMemo(
+    () => selectedRow
+      ? computePhysicalAvailabilityCoverage(inventoryEntries, [selectedRow.item], recipeInputsByRecipeId)
+      : [],
+    [selectedRow?.item, inventoryEntries, recipeInputsByRecipeId],
+  );
+  const potentialSources = useMemo(
+    () => getQueuePotentialSources(physicalCoverage, inventoryEntries, locations, buildQueue),
+    [physicalCoverage, inventoryEntries, locations, buildQueue],
+  );
+  const selectedItemName = selectedRow?.item.itemName
+    ?? recipes.find((recipe) => recipe.id === selectedRow?.item.recipeId)?.name;
+  useShellBreadcrumbDetail(selectedItemName);
 
   function getItemTypeLabel(item: BuildQueueItem): string | undefined {
     const blueprintId = item.blueprint_id?.trim();
     if (!blueprintId) return undefined;
     return typeLabelByBlueprintId[blueprintId];
   }
-  function handleMobileSelectorPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "mouse") return;
-    mobileSelectorPointerRef.current = {
-      id: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-    };
-    suppressMobileSelectorTapRef.current = false;
-  }
-
-  function handleMobileSelectorPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const pointer = mobileSelectorPointerRef.current;
-    if (!pointer || pointer.id !== event.pointerId) return;
-
-    if (
-      Math.abs(event.clientX - pointer.startX) > 6 ||
-      Math.abs(event.clientY - pointer.startY) > 6
-    ) {
-      suppressMobileSelectorTapRef.current = true;
-    }
-  }
-
-  function handleMobileSelectorPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
-    const pointer = mobileSelectorPointerRef.current;
-    if (!pointer || pointer.id !== event.pointerId) return;
-
-    mobileSelectorPointerRef.current = null;
-
-    if (!suppressMobileSelectorTapRef.current) return;
-
-    window.setTimeout(() => {
-      suppressMobileSelectorTapRef.current = false;
-    }, 0);
-  }
-
-  function handleMobileSelectorClick(itemId: string) {
-    if (suppressMobileSelectorTapRef.current) return;
-    setSelectedItemId(itemId);
-  }
-
   function handleStatusChange(id: string, status: NonNullable<BuildQueueItem["status"]>) {
     if (!isFixture && status === "complete" && freshnessBlockReason) {
       setInventoryGuardMessage(freshnessBlockReason);
@@ -405,6 +379,26 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       setQueueTab("completed");
       setSelectedItemId(id);
     }
+  }
+
+  function duplicateBuildQueueItem(item: BuildQueueItem) {
+    if (isFixture) {
+      flagFixtureReadOnly();
+      return;
+    }
+    // A duplicate is a new planned item with the same material/quality target.
+    // It must never inherit existing physical lot reservations.
+    storeAddBuildQueueItem(item.recipeId, item.quantity, {
+      blueprint_id: item.blueprint_id,
+      itemId: item.itemId,
+      itemName: item.itemName,
+      finalProductQualityBand: item.finalProductQualityBand,
+      finalProductQualityAverage: item.finalProductQualityAverage,
+      finalProductRarity: item.finalProductRarity,
+      materialRequirements: item.materialRequirements,
+      blueprintSources: item.blueprintSources,
+    });
+    setQueueTab("planned");
   }
 
   function clearDragState() {
@@ -598,29 +592,12 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       {inventoryGuardMessage ? (
         <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
       ) : null}
-      <header className="bq-command-header">
-        <span className="bq-command-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z" /><path d="m8 9 4-3 4 3-4 3-4-3Z" /><path d="M8 15h8" /></svg>
-        </span>
-        <div className="bq-command-copy"><h1>Build Queue</h1><p>Plan crafts, reserve physical materials, and review component outcomes.</p></div>
-        <div className="bq-channel-status" role="group" aria-label="Dataset channels">
-          <button type="button" className="is-active" disabled aria-current="true" aria-describedby="bq-channel-status-note" title="LIVE is the active dataset. Channel switching is not available yet.">
-            LIVE: {datasetBuilds.live.status === "available" ? datasetBuilds.live.buildId : datasetBuilds.live.status === "loading" ? "Loading" : "Unavailable"}
-          </button>
-          <button type="button" disabled aria-describedby="bq-channel-status-note" title={datasetBuilds.ptu.status === "available" ? "PTU dataset metadata is available. Channel switching is not available yet." : "PTU dataset data is unavailable. Channel switching is not available yet."}>
-            PTU: {datasetBuilds.ptu.status === "available" ? datasetBuilds.ptu.buildId : datasetBuilds.ptu.status === "loading" ? "Loading" : "Unavailable"}
-          </button>
-        </div>
-        <span id="bq-channel-status-note" className="sr-only">Channel switching is not available yet.</span>
-      </header>
-      <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
-        <aside className="bq-queue-col" aria-label="Build queue list">
-          <header className="bq-queue-col-head">
-            <span className="bq-queue-col-title">
-              Build Queue <em>{activeRows.length}/{MAX_QUEUE_SLOTS}</em>
-            </span>
-          </header>
-
+      <div className="bq-page-title-sr" role="status" aria-label="Dataset availability">
+        LIVE: {datasetBuilds.live.status === "available" ? datasetBuilds.live.buildId : datasetBuilds.live.status}
+        ; PTU: {datasetBuilds.ptu.status === "available" ? datasetBuilds.ptu.buildId : datasetBuilds.ptu.status}
+      </div>
+      <div className={`bq-v31-workspace${summaryCollapsed ? " bq-v31-workspace--summary-collapsed" : ""}`}>
+        <WorkspacePanel as="aside" tone="filter" className="bq-queue-col" aria-label="Build queue list">
           <BuildQueueSelector
             key={queueRenameRequestToken}
             queues={buildQueues}
@@ -633,36 +610,24 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
           />
 
           <div className="bq-queue-col-body">
-            <div className="bq-queue-tabs" role="tablist" aria-label="Queue sections">
-              <button
-                type="button"
-                role="tab"
-                className={`bq-queue-tab${queueTab === "active" ? " is-active" : ""}`}
-                aria-selected={queueTab === "active"}
-                onClick={() => setQueueTab("active")}
-              >
-                <span className="bq-queue-tab-label">Active</span>
-                <span className="bq-queue-tab-count">{activeRows.length}</span>
-              </button>
-              <button
-                type="button"
-                role="tab"
-                className={`bq-queue-tab${queueTab === "completed" ? " is-active" : ""}`}
-                aria-selected={queueTab === "completed"}
-                onClick={() => setQueueTab("completed")}
-              >
-                <span className="bq-queue-tab-label">Completed</span>
-                <span className="bq-queue-tab-count">{completedRows.length}</span>
-              </button>
-            </div>
-
+            <WorkspaceTabs
+              className="bq-queue-tabs bq-v31-status-tabs"
+              tabClassName="bq-queue-tab"
+              labelClassName="bq-queue-tab-label"
+              countClassName="bq-queue-tab-count"
+              label="Queue sections"
+              value={queueTab}
+              onChange={setQueueTab}
+              options={[
+                { value: "all", label: "All", count: activeRows.length + completedRows.length },
+                { value: "active", label: "Active", count: inProgressRows.length },
+                { value: "planned", label: "Planned", count: plannedRows.length },
+                { value: "completed", label: "Completed", count: completedRows.length },
+              ]}
+            />
             <div
               ref={queueListRef}
               className="bq-queue-list"
-              onPointerDown={handleMobileSelectorPointerDown}
-              onPointerMove={handleMobileSelectorPointerMove}
-              onPointerUp={handleMobileSelectorPointerEnd}
-              onPointerCancel={handleMobileSelectorPointerEnd}
               onDragOver={(event) => {
                 if (!draggingEntryId) return;
                 event.preventDefault();
@@ -675,36 +640,10 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
             >
             {visibleRows.length === 0 ? (
               <div className="bq-empty-state">
-                {queueTab === "active" ? "No builds queued yet." : "No completed crafts yet."}
+                {queueTab === "completed" ? "No completed crafts yet." : queueTab === "planned" ? "No planned crafts." : "No builds in this view."}
               </div>
-            ) : isMobileQueueLayout ? (
-              visibleRows.map((row, index) => {                const selected = row.item.id === resolvedSelectedItemId;
-                const itemLabel = getQueueItemLabel(row.item, recipes);
-                return (
-                  <button
-                    key={row.item.id}
-                    ref={(node) => {
-                      mobileSelectorRefs.current[row.item.id] = node;
-                    }}
-                    type="button"
-                    className={[
-                      "bq-queue-pill",
-                      selected ? "is-selected" : "",
-                      row.item.id === allocationOwnerHighlightId ? "allocation-owner-highlight" : "",
-                      row.item.status === "complete" ? "is-complete" : "",                    ].filter(Boolean).join(" ")}
-                    aria-current={selected ? "true" : undefined}
-                    aria-label={`Select queue item ${index + 1}: ${itemLabel}`}
-                    onClick={() => handleMobileSelectorClick(row.item.id)}
-                  >
-                    <span className="bq-queue-pill-index">{index + 1}</span>
-                    <span className="bq-queue-pill-name">{itemLabel}</span>
-                    <span className="bq-queue-pill-state">{row.item.status === "complete" ? "Completed" : "Active"}</span>
-                    <span className="bq-queue-pill-dot" aria-hidden="true" />
-                  </button>
-                );
-              })
             ) : visibleRows.map((row, index) => {
-              const activeDrag = queueTab === "active" && Boolean(draggingEntryId);
+              const activeDrag = queueTab !== "completed" && Boolean(draggingEntryId);
               const remainingIndex = activeRows
                 .filter((entry) => entry.item.id !== draggingEntryId)
                 .findIndex((entry) => entry.item.id === row.item.id);
@@ -787,11 +726,25 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               </button>
             </div>
           ) : null}
-        </aside>
+        </WorkspacePanel>
 
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
             <div className="bq-center-shell">
+               <BuildQueueV31Overview
+                 item={selectedRow.item}
+                 recipes={recipes}
+                 recipeInputsByRecipeId={recipeInputsByRecipeId}
+                 inventory={inventoryEntries}
+                 materialNameById={materialNameById}
+                 typeLabel={getItemTypeLabel(selectedRow.item)}
+                 onStatusChange={handleStatusChange}
+                 onRemove={removeBuildQueueItem}
+                 onDuplicate={duplicateBuildQueueItem}
+                 readOnly={isFixture}
+               />
+               <details className="bq-v31-advanced-controls">
+                 <summary>Allocation controls and build actions</summary>
               <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}
@@ -815,6 +768,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               inventoryEnabled={inventoryEnabled}
               onInventoryEnabledChange={setInventoryEnabled}
               />
+               </details>
             </div>
           ) : (
             <div className="bq-empty-state bq-empty-state--center">Select a craft from the queue to begin allocation.</div>
@@ -823,7 +777,9 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
 
         <QueueLedger
           ledger={queueLedger}
+          selectedItemName={selectedItemName ?? null}
           physicalCoverage={physicalCoverage}
+          potentialSources={potentialSources}
           materialNameById={materialNameById}
           formatValue={formatSummaryNumber}
           collapsed={summaryCollapsed}

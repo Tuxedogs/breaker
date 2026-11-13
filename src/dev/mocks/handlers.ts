@@ -60,7 +60,9 @@ function getFixtureComponentCardBrowserPage(requestUrl: string) {
   ].sort(search
     ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
     : compareRecipeBrowserRecords);
-  const limit = Math.max(1, Math.min(40, Number(searchParams.get("limit") ?? "40") || 40));
+  const limit = searchParams.get("limit") === "all"
+    ? Math.max(1, browserRecords.length)
+    : Math.max(1, Math.min(40, Number(searchParams.get("limit") ?? "40") || 40));
   const requestedPage = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
   const page = Math.min(requestedPage, Math.max(1, Math.ceil(browserRecords.length / limit)));
   const pageRecords = browserRecords.slice((page - 1) * limit, page * limit);
@@ -89,7 +91,16 @@ function getFixtureComponentCardBrowserPage(requestUrl: string) {
 
 export const handlers = [
   ...localMiningApiPaths.map((path) => http.get(`*${path}`, () => passthrough())),
+  // Read-only Source catalog is served by the local fixture server, not mocked.
+  http.get("*/api/source/catalog", () => passthrough()),
   http.post("*/api/mining/recommendations", () => passthrough()),
+  // Mission briefings resolve delivered variant details from the local API.
+  // Relative matching keeps this fixture escape limited to the current origin.
+  http.get("/api/missions/variant/:variantKey", () => passthrough()),
+  // Mission Browser registry and Refinery Planner yields come from tracked server-data
+  // files served by the fixture server (vite.local-fixtures.config.ts).
+  http.get("/api/missions/browser", () => passthrough()),
+  http.get("/api/crafting/reference/refinery-yields", () => passthrough()),
   http.get("*/api/crafting/component-cards/index", () => HttpResponse.json(componentCardIndexResponse)),
   http.get("*/api/crafting/component-cards/facets", () => HttpResponse.json(componentCardFacetsResponse)),
   http.get("*/api/crafting/component-cards/browse", () => HttpResponse.json(componentCardBrowseResponse)),
@@ -118,11 +129,13 @@ export const handlers = [
   )),
   http.get("*/api/crafting/component-cards/:id", ({ params }) => {
     const record = componentCards.get(String(params.id).toLowerCase());
-    return record ? HttpResponse.json(record) : HttpResponse.json({ error: "Unknown fixture component card" }, { status: 404 });
+    // Cards outside the curated set fall through to the fixture server's server-data lookup.
+    return record ? HttpResponse.json(record) : passthrough();
   }),
   http.get("*/api/crafting/recipes/:id", ({ params }) => {
     const shard = recipeShards.get(String(params.id).toLowerCase());
-    return shard ? HttpResponse.json(shard) : HttpResponse.json({ error: "Unknown fixture recipe" }, { status: 404 });
+    // Recipes outside the curated set fall through to the fixture server's server-data lookup.
+    return shard ? HttpResponse.json(shard) : passthrough();
   }),
   http.post("*/api/crafting/recipes/batch", async ({ request }) => {
     const payload = await request.json() as { blueprintGuids?: unknown };

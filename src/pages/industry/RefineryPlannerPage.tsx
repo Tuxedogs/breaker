@@ -1,3 +1,5 @@
+import WorkspaceMetricStrip from "../../components/shared/WorkspaceMetricStrip";
+import WorkspacePanel from "../../components/shared/WorkspacePanel";
 import { useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 
@@ -196,23 +198,9 @@ export default function RefineryPlannerPage() {
 
   return (
     <main className="rp-page">
-      <header className="rp-header">
-        <div>
-          <p className="rp-breadcrumb"><span>Industry</span><i>/</i><strong>Refinery</strong></p>
-          <h1>Refinery Planner</h1>
-          <p>Find the best refinery for each material and estimate refined output from raw input.</p>
-        </div>
-        <div className="rp-yield-callout">
-          <span>Base refinery yield</span>
-          <strong>{BASE_REFINERY_YIELD * 100}%</strong>
-          <small>Refined output = raw input x 40% x (1 + bonus%)</small>
-        </div>
-      </header>
-
       <div className="rp-layout">
-        <section className="rp-panel rp-target-panel">
-          <div className="rp-panel-heading">
-            <div><span>01</span><h2>Raw Input Builder</h2></div>
+        <WorkspacePanel as="section" tone="filter" className="rp-panel rp-target-panel" aria-label="Raw input builder">
+          <div className="rp-target-actions">
             <button type="button" onClick={() => setTargets([])} disabled={targets.length === 0}>Clear all</button>
           </div>
           <div className="rp-form">
@@ -283,10 +271,14 @@ export default function RefineryPlannerPage() {
             ))}
           </div>
           <div className="rp-panel-summary"><span>Total Raw Input</span><strong>{formatScu(totalRawInput)}</strong></div>
-        </section>
+        </WorkspacePanel>
 
-        <section className="rp-panel rp-comparison-panel">
-          <div className="rp-panel-heading"><div><span>02</span><h2>Strategy Comparison</h2></div></div>
+        <WorkspacePanel as="section" tone="primary" className="rp-panel rp-comparison-panel" aria-label="Refinery strategy comparison">
+          <div className="rp-yield-callout rp-yield-callout--standalone">
+            <span>Base refinery yield</span>
+            <strong>{BASE_REFINERY_YIELD * 100}%</strong>
+            <small>Refined output = raw input x 40% x (1 + bonus%)</small>
+          </div>
           <div className="rp-mode-tabs" role="tablist" aria-label="Refinery comparison mode">
             {([
               ["optimized", "Optimized Per Material", "Best refinery for each material"],
@@ -298,11 +290,11 @@ export default function RefineryPlannerPage() {
               </button>
             ))}
           </div>
-          <div className="rp-summary-rail">
+          <WorkspaceMetricStrip className="rp-summary-rail">
             <article className={mode === "optimized" ? "is-active is-positive" : "is-positive"}><span>Optimized Output</span><strong>{formatScu(optimizedOutput)}</strong><small>Best refinery for every material</small></article>
             <article className={mode === "single" ? "is-active" : ""}><span>Best Single Output</span><strong>{formatScu(comparisons?.single?.totalRefinedOutputScu)}</strong><small>{comparisons?.single?.refineryName ?? "No refinery available"}</small></article>
             <article className={mode === "selected" ? "is-active is-selected" : "is-selected"}><span>Selected Output</span><strong>{formatScu(selectedOutput)}</strong><small>{selectedDelta === undefined ? "Choose one refinery" : `${formatDelta(selectedDelta)} vs optimized`}</small></article>
-          </div>
+          </WorkspaceMetricStrip>
           <div className="rp-selected-comparison">
             <label htmlFor="rp-selected-refinery">Selected refinery comparison</label>
             <select id="rp-selected-refinery" value={selectedRefineryId} onChange={(event) => setSelectedRefineryId(event.target.value)}>
@@ -330,10 +322,9 @@ export default function RefineryPlannerPage() {
               {targets.length > 0 && <tfoot><tr><td colSpan={4}>Selected refined output</td><td>{formatScu(selectedOutput)}</td></tr></tfoot>}
             </table>
           </div>
-        </section>
+        </WorkspacePanel>
 
-        <aside className="rp-panel rp-recommendation-panel">
-          <div className="rp-panel-heading"><div><span>03</span><h2>Best Refineries</h2></div></div>
+        <WorkspacePanel as="aside" tone="inspector" className="rp-panel rp-recommendation-panel" aria-label="Best refineries">
           <div className="rp-recommendation-list">
             {targets.length === 0 ? <p className="rp-empty">Add raw input to see refinery recommendations.</p> : targets.map((target) => {
               const recommendation = optimizedByMaterial.get(target.materialId);
@@ -361,7 +352,7 @@ export default function RefineryPlannerPage() {
             <div><dt>Systems covered</dt><dd>{recommendedSystems.size}</dd></div>
             <div className="is-positive"><dt>Optimized output</dt><dd>{formatScu(optimizedOutput)}</dd></div>
           </dl>
-        </aside>
+        </WorkspacePanel>
       </div>
     </main>
   );

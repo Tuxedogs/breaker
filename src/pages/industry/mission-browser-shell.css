@@ -1,6 +1,5 @@
 .mb-page {
   min-height: 100%;
-  padding: 16px;
   background: var(--mb-canvas);
 }
 
@@ -10,26 +9,13 @@
   margin: 0 auto;
 }
 
-.mb-page-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 64px;
-  margin-bottom: 10px;
-  padding: 10px 14px;
-  border: 1px solid var(--mb-border-soft);
-  border-radius: var(--ops-radius-primary);
-  background: var(--ops-header-band);
-}
-
-.mb-page-heading > div:first-child > span,
-.mb-page-heading__summary span,
+.mb-filter-summary span,
 .mb-group-header > div > span,
 .mb-filter-meta__label,
 .mb-kicker,
 .mb-section-heading,
 .mb-inline-heading {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -37,24 +23,17 @@
   text-transform: uppercase;
 }
 
-.mb-page-heading h1 {
-  margin: 2px 0 0;
-  color: var(--mb-text);
-  font-size: var(--app-text-page-title);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.05;
-}
-
-.mb-page-heading__summary {
+.mb-filter-summary {
   display: grid;
+  flex: 0 0 auto;
+  margin-left: auto;
   justify-items: end;
   gap: 2px;
   text-align: right;
 }
 
-.mb-page-heading__summary strong {
-  color: var(--mb-text);
+.mb-filter-summary strong {
+  color: var(--mb-text-1);
   font-size: var(--app-text-meta);
   font-weight: 700;
 }
@@ -88,7 +67,7 @@
   top: 50%;
   left: 12px;
   z-index: 1;
-  color: rgba(125, 211, 252, 0.82);
+  color: color-mix(in srgb, var(--mb-accent) 82%, transparent);
   font-size: var(--app-text-title-sm);
   transform: translateY(-50%);
 }
@@ -99,13 +78,13 @@
   padding: 0 12px 0 32px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  background: var(--mb-surface-deep);
-  color: var(--mb-text);
+  background: var(--mb-surface-2);
+  color: var(--mb-text-1);
   font-size: var(--app-text-body);
 }
 
 .mb-browser-search input::placeholder {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
 }
 
 .mb-filter-row {
@@ -123,15 +102,15 @@
   padding: 0 30px 0 10px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  background-color: var(--mb-surface-deep);
-  color: var(--mb-text-muted);
+  background-color: var(--mb-surface-2);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
   font-weight: 600;
 }
 
 .mb-filter-row select:hover {
-  border-color: rgba(125, 211, 252, 0.38);
-  color: var(--mb-text);
+  border-color: color-mix(in srgb, var(--mb-accent) 38%, transparent);
+  color: var(--mb-text-1);
 }
 
 .mb-filter-meta {
@@ -161,16 +140,16 @@
 .mb-view-selector .craft-frl-chip {
   min-height: 30px;
   border-color: var(--mb-border-soft);
-  background: var(--mb-surface-deep);
-  color: var(--mb-text-muted);
+  background: var(--mb-surface-2);
+  color: var(--mb-text-2);
   font-size: var(--app-text-chip);
 }
 
 .mb-view-selector .craft-frl-chip:hover,
 .mb-view-selector .craft-frl-chip--active {
-  border-color: rgba(125, 211, 252, 0.46);
-  background: rgba(56, 189, 248, 0.09);
-  color: var(--mb-text);
+  border-color: color-mix(in srgb, var(--mb-accent) 46%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 9%, transparent);
+  color: var(--mb-text-1);
 }
 
 .mb-results-shell,
@@ -204,7 +183,7 @@
 .mb-archetype-header h3,
 .mb-scope-header h3 {
   margin: 2px 0 0;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: var(--app-text-title);
   font-weight: 700;
   line-height: 1.1;
@@ -216,14 +195,14 @@
 .mb-scope-header p {
   display: block;
   margin-top: 3px;
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-meta);
   line-height: 1.25;
 }
 
 .mb-group-header > strong {
   flex: 0 0 auto;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
   font-variant-numeric: tabular-nums;
 }
@@ -240,7 +219,7 @@
 
 .mission-category-lane__header {
   padding-block: 9px;
-  background: rgba(255, 255, 255, 0.012);
+  background: color-mix(in srgb, var(--mb-text-1) 1.2%, transparent);
 }
 
 .mission-path-lane__header {
@@ -263,7 +242,7 @@
   height: 34px;
   border: 1px solid currentColor;
   border-radius: var(--ops-radius-nested);
-  color: var(--mission-accent, var(--mb-teal));
+  color: var(--mission-accent, var(--mb-accent));
   opacity: 0.9;
 }
 
@@ -280,12 +259,12 @@
 }
 
 .mission-path-lane__reward-note strong {
-  color: var(--mission-accent, var(--mb-text));
+  color: var(--mission-accent, var(--mb-text-1));
   font-size: var(--app-text-meta);
 }
 
 .mission-path-lane__reward-note > span {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-meta);
 }
 
@@ -307,14 +286,14 @@
 .mb-zero-results span,
 .mb-empty-note,
 .mb-muted {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-body);
 }
 
 .mb-state.is-error,
 .mission-selected-state.is-error,
 .mission-dossier-detail-state.is-error {
-  color: var(--mb-negative);
+  color: var(--mb-bad);
 }
 
 .mb-zero-results strong {
@@ -325,10 +304,10 @@
 .mb-pagination button {
   min-height: var(--app-control-height);
   padding: 0 12px;
-  border: 1px solid rgba(125, 211, 252, 0.32);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 32%, transparent);
   border-radius: var(--ops-radius-nested);
-  background: rgba(56, 189, 248, 0.07);
-  color: var(--mb-text);
+  background: color-mix(in srgb, var(--mb-accent) 7%, transparent);
+  color: var(--mb-text-1);
   cursor: pointer;
 }
 
@@ -341,8 +320,8 @@
   padding: 10px 12px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-primary);
-  background: var(--mb-surface);
-  color: var(--mb-text-muted);
+  background: var(--mb-surface-1);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
 }
 
@@ -358,7 +337,25 @@
 }
 
 .mb-briefing {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-body);
   line-height: 1.6;
+}
+
+.mb-return-link {
+  align-self: center;
+  justify-self: end;
+  padding: 4px 10px;
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-sm);
+  color: var(--mb-accent);
+  font: 500 0.8rem/1.2 var(--mb-font-ui);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mb-return-link:hover,
+.mb-return-link:focus-visible {
+  border-color: var(--mb-accent);
+  outline: none;
 }

@@ -183,17 +183,18 @@
   background: transparent;
 }
 .sdock-table-wrap::-webkit-scrollbar-thumb {
-  background: rgba(130,150,160,0.18);
-  border-radius: 2px;
+  background: var(--mb-border);
+  border-radius: var(--mb-radius-sm);
 }
 .sdock-table-wrap::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 153, 0, 0.24);
+  background: var(--mb-border-hover);
 }
 
 .sdock-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: var(--font-primary);
+  table-layout: auto;
+  font-family: var(--mb-font-ui);
   font-size: inherit;
 }
 
@@ -201,25 +202,26 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: rgba(5, 13, 16, 0.98);
+  background: var(--mb-surface-2);
   padding: 5px 8px 4px;
   text-align: left;
   font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--void-text-dim);
-  border-bottom: 1px solid rgba(130, 150, 160, 0.14);
+  color: var(--mb-text-3);
+  border-bottom: 1px solid var(--mb-border);
   white-space: nowrap;
 }
 
-.sdock-table thead th.sdock-th-values {
-  text-align: left;
+.sdock-table thead th:first-child {
+  padding-left: 12px;
 }
 
 .sdock-table tbody tr {
   cursor: pointer;
-  border-bottom: 1px solid rgba(130, 150, 160, 0.09);
+  border-bottom: 1px solid var(--mb-border-soft);
+  box-shadow: inset 2px 0 0 transparent;
   transition: background 0.1s;
 }
 
@@ -228,79 +230,85 @@
 }
 
 .sdock-table tbody tr:hover {
-  background: rgba(255, 153, 0, 0.035);
+  background: var(--mb-surface-hover);
 }
 
 .sdock-table tbody tr.sdock-row-active {
-  background: linear-gradient(90deg, rgba(255, 153, 0, 0.09) 0%, rgba(255, 153, 0, 0.032) 58%, transparent 100%);
-  border-left: 2px solid rgba(255, 153, 0, 0.58);
-}
-
-.sdock-table tbody tr.sdock-row-active:hover {
-  background: linear-gradient(90deg, rgba(255, 153, 0, 0.12) 0%, rgba(255, 153, 0, 0.048) 58%, transparent 100%);
+  background: var(--mb-surface-selected);
+  box-shadow: inset 2px 0 0 var(--mb-accent);
 }
 
 .sdock-table td {
-  padding: 5px 8px;
-  color: var(--void-text-main);
-  vertical-align: middle;
+  padding: 4px 8px;
+  color: var(--mb-text-2);
+  vertical-align: top;
 }
 
 .sdock-td-name {
+  width: 1%;
   white-space: nowrap;
-  min-width: 110px;
-  padding-left: 10px;
+  min-width: 112px;
+  padding-left: 12px;
+  line-height: 20px;
   font-weight: inherit;
 }
 
 .sdock-row-active .sdock-td-name {
-  padding-left: 8px;
+  color: var(--mb-text-1);
 }
 
+/* selection marker: shape as well as color, so it does not rely on color alone */
 .sdock-active-dot {
   display: inline-block;
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--void-accent-amber);
-  margin-right: 5px;
-  flex-shrink: 0;
+  background: var(--mb-accent);
+  margin-right: 6px;
   vertical-align: middle;
   position: relative;
   top: -1px;
 }
 
-/* values cell: chips in a wrapping flex row */
 .sdock-td-values {
-  padding: 4px 8px 4px 0;
-  font-weight: inherit;
+  padding-left: 4px;
+  border-left: 1px solid var(--mb-border-soft);
 }
 
-.sdock-values-wrap {
+/* signature badges, shared by the table and the minimized dock */
+.sdock-sig-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
   align-items: center;
+  min-width: 0;
 }
 
-.sdock-val-chip {
-  font-family: var(--font-primary);
-  font-weight: inherit;
+.sdock-sig-badge {
+  box-sizing: border-box;
+  min-width: 6.6ch;
+  padding: 0 5px;
+  font-family: var(--mb-font-numeric);
   font-size: inherit;
+  font-weight: inherit;
   font-variant-numeric: tabular-nums;
-  color: rgba(222, 247, 249, 0.82);
-  background: rgba(0,0,0,0.34);
-  border: 1px solid rgba(130, 150, 160, 0.14);
-  border-radius: 2px;
-  padding: 1px 5px;
+  line-height: 18px;
+  text-align: right;
   white-space: nowrap;
-  line-height: 1.5;
+  color: var(--mb-text-2);
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-sm);
 }
 
-.sdock-row-active .sdock-val-chip {
-  color: #fff7e8;
-  border-color: rgba(255, 153, 0, 0.28);
-  background: rgba(255, 153, 0, 0.065);
+.sdock-row-active .sdock-sig-badge,
+.sdock-pinned-row .sdock-sig-badge {
+  color: var(--mb-text-1);
+  border-color: var(--mb-border);
+}
+
+.sdock-row-active .sdock-sig-badge {
+  background: var(--mb-surface-row);
 }
 
 /* empty state */
@@ -578,16 +586,17 @@ body:has([aria-modal="true"]) .sdock-pinned-strip {
 
 /* rows area */
 .sdock-pinned-body {
-  padding: 5px 8px 7px;
+  max-width: 460px;
+  padding: 3px 8px 5px;
 }
 
 .sdock-pinned-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 3px;
+  display: grid;
+  grid-template-columns: minmax(84px, max-content) minmax(0, 1fr);
+  align-items: start;
+  column-gap: 8px;
   padding: 4px 0;
-  border-bottom: 1px solid rgba(110, 118, 119, 0.247);
+  border-bottom: 1px solid var(--mb-border-soft);
 }
 
 .sdock-pinned-row:last-child {
@@ -595,31 +604,11 @@ body:has([aria-modal="true"]) .sdock-pinned-strip {
 }
 
 .sdock-pinned-row-name {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: inherit;
   font-weight: inherit;
-  color: #f5fdff;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  margin-right: 2px;
-  text-shadow: 0 1px 10px rgba(255,255,255,0.12);
-}
-
-.sdock-pinned-row-values {
-  display: contents;
-}
-
-
-.sdock-pinned-sig-muted {
-font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: inherit;
-  font-variant-numeric: tabular-nums;
-  color: var(--void-text-muted);
-  background: #00000040;
-  border: 1px solid rgba(130,150,160,.1);
-  border-radius: 2px;
-  padding: 1px 5px;
+  line-height: 20px;
+  color: var(--mb-text-1);
   white-space: nowrap;
 }
 
@@ -636,8 +625,5 @@ font-family: var(--font-primary);
   }
   .sdock-table-wrap {
     max-height: 260px;
-  }
-  .sdock-values-wrap {
-    flex-wrap: wrap;
   }
 }

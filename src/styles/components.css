@@ -14,6 +14,11 @@
     --app-sticky-top: 4.75rem;
   }
 
+
+  /* The shared command header keeps its default Crafting identity treatment,
+     while allowing workflows with a primary selector to center it against the
+     full workspace rather than the remaining space after page actions. */
+
   .page-hero-shell {
     border: var(--border-panel);
     border-radius: 4px;
@@ -316,28 +321,6 @@
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-  }
-
-  body.alpha-threshold-page .app-nav-band {
-    position: fixed;
-    inset-inline: 0;
-    top: 0;
-    z-index: 1200;
-  }
-
-  body.alpha-threshold-page {
-    overflow: hidden;
-  }
-
-  body.alpha-threshold-page .app-nav-band--alpha-tool {
-    border-bottom-color: rgb(255 255 255 / 0.08);
-    background:
-      linear-gradient(180deg, rgb(8 12 20 / 0.86) 0%, rgb(8 12 20 / 0.4) 100%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.08),
-      0 6px 18px rgb(0 0 0 / 0.2);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
   }
 
   .app-nav-shell {
@@ -1111,3 +1094,4 @@ outline: 2px solid rgb(148 163 184 / 0.4);
   font-weight: 700;
   letter-spacing: 0;
 }
+

@@ -1,18 +1,69 @@
 # Moonbreaker Design Canon
 
-Updated: 2026-09-25
+Updated: 2026-10-29 (LOCKED cinematic homepage and module visual target; Mining functional baseline)
 
 This canon describes the visual system currently implemented across Moonbreaker / Scintel. It is the default reference for new UI work and for page-by-page visual refinement.
 
 It does not approve every existing page-level rule. The shared tokens and interaction roles are authoritative; page-local composition must still be judged against the workflow it supports.
 
-## Crafting Is the Reference Implementation
+## Decision log
+LOCKED = agents must not revisit it. Ideas to change a LOCKED item go in docs/DESIGN_BACKLOG.md
+and work continues. The owner unlocks one by writing "unlock #N" in chat. Backlog is reviewed
+weekly, never mid-task.
 
-The Crafting Recipe Browser is the primary reference implementation for Breaker’s application UI. New pages and major redesigns should inherit its visual hierarchy, density, surface treatment, interaction language, responsive behavior, and overall restraint unless the page has a functional reason to diverge.
+| # | Decision | Status |
+|---|---|---|
+| 1 | Existing Mining is the functional/control/density reference; the cinematic 2026-10-29 prototype is the new visual-quality target; Crafting only supplies specific drawer/dialog/chart patterns | LOCKED |
+| 2 | Cyan is the single structural accent; good/bad/warn/quality keep their meaning | LOCKED |
+| 3 | Operational pages have no command/hero header; AppPageShell owns full height. Cinematic homepage navigation is an explicit exception | LOCKED |
+| 4 | Shell gutter is --mb-shell-padding (8px) and the only outer spacing | LOCKED |
+| 5 | Frozen pages: Blueprint Tracker, Armor/Alpha Threshold, Doctrine | LOCKED |
+| 6 | Radius scale: sm 2px controls, md 4px panels, lg 6px floating layers | OPEN until you reply "lock it", then LOCKED |
+| 7 | Section label + hairline breakup component: opt-in, rules above | OPEN until first use, then LOCKED |
+| 8 | Fonts: Segoe UI (system-ui fallback) is the single UI, display and numeric face, matching V31 as rendered; hierarchy comes from V31 sizes, weights and spacing; numeric data uses tabular numerals; mono Share Tech Mono for IDs/codes only; no Inter, Rajdhani or Roboto Mono | LOCKED 2026-11-05 (owner decision) |
+| 9 | Local runs use only vite.local-fixtures.config.ts; the staging guard is never loosened; release verification happens on the Vercel staging Preview | LOCKED |
+| 10 | style/unify never merges directly into a release branch; a landing plan (what lands, what is excluded) is required first | LOCKED |
+| 11 | Home target is cinematic five vertical modules: Fitting WIP, Craft, Build, Mine, Inventory; minimal motion; implementation separately authorized | LOCKED 2026-10-29 |
+| 12 | Mining restyle retains direct-spawn competitor bars and `T-{value}` tie notation (normal numeric ranks and `R{value}` route ordering); no semantic/math changes | LOCKED 2026-10-29 |
+## Functional Reference Implementations: Mining Primary, Crafting Secondary
 
-The goal is not to make every Breaker page identical. The goal is to make every page unmistakably part of the same application. Crafting is the visual grammar, not a page template: adapt its principles to each workflow and do not force its exact DOM structure onto unrelated pages.
+**Scope clarification (2026-10-29):** This section governs existing controls, density, data workspaces, and shared styling foundations. The cinematic reference in `docs/CINEMATIC_VISUAL_DIRECTION.md` is the target for future visual composition and environmental artwork. It expressly authorizes a Mining visual redesign without replacing the established workflow or competition/ranking semantics.
+
+Mining is the primary reference implementation for Breaker’s application UI. Its palette, surfaces, borders, typography, filter bar, tables and rows, selection, and status treatment define the shared `--mb-*` tokens in `src/styles/tokens.css`. New pages and major redesigns should inherit Mining’s visual hierarchy, density, surface treatment, and interaction language unless the page has a functional reason to diverge.
+
+Crafting is the secondary reference, and only for patterns Mining does not have:
+
+- Detail drawer and dialog
+- Long-form detail sections
+- Mobile filter sheet
+- Charts
+
+Crafting’s colors, fonts, and spacing never override Mining’s. Where a Crafting pattern is adopted, restyle it with `--mb-*` tokens.
+
+Known Crafting issues that must not be propagated:
+
+- Table typography is too small.
+- Component classes and grades are not color coded.
+- Component header artwork clips into the top of the view.
+- “Materials” is not accent colored; it should be.
+- The Add to Queue CTA is not styled correctly.
+- “Bookmarked” uses a star instead of the established bookmark icon.
+
+One interactive accent: cyan (`--mb-accent`) for selection, focus, and active state. Good, bad, warn, quality, and rarity colors keep their meaning.
+
+The goal is not to make every Breaker page identical. The goal is to make every page unmistakably part of the same application. Mining is the visual grammar, not a page template: adapt its principles to each workflow and do not force its exact DOM structure onto unrelated pages.
 
 Next Fabrication Run remains the accepted composition benchmark for its specific operational handoff; it is not the global visual benchmark or a universal three-column template.
+
+## Owner-approved cinematic visual lock (2026-10-29)
+
+**Use `docs/CINEMATIC_VISUAL_DIRECTION.md` as the exact future-state composition and implementation contract.** The 2026-10-29 interactive five-slice gateway and Mining concept are the approved visual-quality benchmarks. The existing Mining page is still the source of functional workflow, compact control, row, filter, table, and data behavior. A historical screenshot cannot overrule the newly approved atmospheric visual target.
+
+The homepage **target** is a full-height five-slice navigational gateway (Fitting WIP, Craft, Build, Mine, Inventory), with distinct industrial/scifi environment art, soft luminous boundaries, quiet bottom-aligned labels and lightweight hover/focus treatment. Fitting is visibly disabled until ready. No heavy animation. This is not a production deployment instruction. The gateway is an explicit exception to the operational no-page-header rule.
+
+Module pages remain data-first workspaces with atmospheric artwork placed intentionally around opaque, readable UI. Mining is the first visual implementation pilot; preserve Filters & Materials, Ranked Locations, Location Detail, the segmented source-backed **Direct Spawn Competition bars** after Selected Materials and before Other Materials, and their canonical pool/probability semantics. Preserve `getDisplayedLocationRank` notation: **`T-{value}` means tied modeled rank** with a shared first rank, normal numerals mean non-ties, and `R{value}` means route order. Do not turn tied ranks into invented tiers, sequential positions, or badge decoration. Keep explanatory focus/hover labels.
+
+Production visuals must be independent of image artwork, use existing `--mb-*` styling and `AppPageShell`, preserve operational readability and source truth, and receive owner review before broad rollout. Artwork color moods do not create separate interaction palettes.
 
 ## Core Visual Character
 
@@ -34,24 +85,24 @@ Pages establish hierarchy primarily through spacing, elevation, border contrast,
 
 Primary work surfaces should read clearly against the application canvas. Nested surfaces become progressively quieter rather than progressively brighter. Borders should be thin and restrained: they define structure without turning every component into a card. Large card grids are appropriate only when the underlying information is genuinely card-shaped; operational tables, browsers, lists, inspectors, and queues remain dense.
 
-## Page Shell and Headers
+## Page Shell (No Page Header)
 
-Crafting establishes the preferred Breaker page rhythm: a clear application-level header followed by the working surface, with compact deliberate spacing between major regions. Where appropriate, reuse:
+Breaker pages have no command or page header. The working content fills the entire available vertical space, starting at the top of the shell, with compact deliberate spacing between major regions. Page identity comes from the navigation and the content itself. Where appropriate, reuse:
 
 ```css
 display: grid;
-grid-template-rows: 48px minmax(0, 1fr);
+grid-template-rows: minmax(0, 1fr);
 gap: 8px;
 padding: 8px;
 ```
 
 Workflows may change the grid structure but should retain this rhythm. Use `minmax(0, 1fr)` and `min-height: 0` correctly so browsers and tables own scrolling rather than the entire shell.
 
-Page headers are application headers, not marketing heroes. They provide concise page identity, optional short operational context, and relevant status or utility actions without consuming excessive vertical space. Crafting is the baseline for header height, spacing, typography, and relationship to the working surface.
+Do not add `CommandHeader`, page titles, heroes, or banners above the working surface. Status and utility actions belong in the panel or filter surface they act on, as in Mining.
 
 ## Filters, Search, and Selection
 
-Crafting defines the preferred filter language. Search remains immediately discoverable and high-frequency controls remain in the primary interface. Lower-frequency or numerous filters may move into an organized filter surface, especially on mobile. Inactive filters stay quiet; active filters become identifiable without filling the page with accent color. Show counts and clear/reset actions where useful.
+Mining defines the preferred filter language. Search remains immediately discoverable and high-frequency controls remain in the primary interface. Lower-frequency or numerous filters may move into an organized filter surface, especially on mobile. Inactive filters stay quiet; active filters become identifiable without filling the page with accent color. Show counts and clear/reset actions where useful.
 
 Search, filter chips, selects, toggles, and associated controls share heights, borders, typography, spacing, focus treatment, and surface colors across Breaker. Use existing Breaker primitives and tokens before introducing page-specific variants.
 
@@ -67,7 +118,7 @@ Breaker is an operational tool. Do not inflate components merely to create white
 
 ## Scrolling and Responsive Behavior
 
-The shell should generally remain stable while browsers, tables, result lists, inspectors, and other large working regions own their scrolling. The preferred structure is an available-height root, a header outside the scroll region, a `flex: 1` or `minmax(0, 1fr)` working region with `min-height: 0`, and inner content that uses `overflow-y: auto` as needed. Avoid accidental double scroll. Preserve useful horizontal comparison tables at compact widths when that is the honest information model.
+The shell should generally remain stable while browsers, tables, result lists, inspectors, and other large working regions own their scrolling. The preferred structure is an available-height root with no page header, a `flex: 1` or `minmax(0, 1fr)` working region with `min-height: 0`, and inner content that uses `overflow-y: auto` as needed. Avoid accidental double scroll. Preserve useful horizontal comparison tables at compact widths when that is the honest information model.
 
 Responsive work is a deliberate alternate composition, not an emergency pile of overrides. Desktop remains coherent through intermediate widths; mobile prioritizes the current task rather than attempting to display every desktop control at once. Crafting’s mobile filter sheet is the reference for large filter sets: its compact trigger communicates active-filter state and its sheet contains the real existing controls, not a disconnected duplicate.
 
@@ -83,7 +134,7 @@ A redesign may substantially change layout and presentation while preserving dom
 
 ## Environmental Artwork
 
-Environmental artwork may be a first-class part of Breaker’s visual system. Crafting is the reference implementation. Artwork establishes place, atmosphere, and product identity without competing with the operational interface; it is integrated composition, not a decorative banner or wallpaper.
+Environmental artwork may be a first-class part of Breaker’s visual system. Crafting’s atmospheric treatment is a useful precedent, but its component header artwork clips into the top of the view and must not be copied. Pages have no header band for artwork to sit in. Artwork establishes place, atmosphere, and product identity without competing with the operational interface; it is integrated composition, not a decorative banner or wallpaper.
 
 Artwork may establish a major workspace, differentiate domains, reinforce the Star Citizen industrial/logistical setting, add depth behind neutral surfaces, and transition between navigation, page identity, and working content. It must never carry required information: controls, labels, state, values, warnings, and targets remain legible and understandable without it.
 
@@ -95,7 +146,7 @@ Major domains may use coherent environmental identities: Crafting uses fabricati
 
 All artwork belongs to one visual universe: consistent lighting, contrast, camera language, realism, color treatment, environmental density, and cinematic restraint. Generate against the intended UI composition—determine aspect ratio, dense surface placement, visible artwork, required dark negative space, and a subject that survives desktop and intermediate widths. Generate alternate compositions or mobile crops when necessary instead of forcing one generic crop.
 
-The artwork serves the interface. If it creates readability, cropping, responsive, or hierarchy problems, change the artwork rather than distorting the UI. The Crafting treatment is the standard: atmospheric enough to establish identity, quiet enough that operational work remains dominant.
+The artwork serves the interface. If it creates readability, cropping, responsive, or hierarchy problems, change the artwork rather than distorting the UI. The standard is atmospheric enough to establish identity, quiet enough that operational work remains dominant.
 
 ## Implementation Authority
 
@@ -212,8 +263,8 @@ Header bands may use `--ops-header-band` with a quiet lower separator. Internal 
 
 ### Families
 
-- Primary and display: `Rajdhani`
-- Monospace: `Roboto Mono`, then `Courier New`
+- UI, display and numeric: `Segoe UI`, then `system-ui` (owner decision 2026-11-05; matches V31 as rendered)
+- Monospace: `Share Tech Mono`, then `Courier New` (IDs and codes only)
 - Use tabular numerals for quantities, quality, percentages, statistics, and aligned comparisons.
 
 The current typography is compact and technical, but it must remain readable. Uppercase labels and generous tracking are appropriate for kickers, section labels, and compact metadata—not for long body copy.
@@ -367,7 +418,9 @@ Decorative gradients must not sit behind dense tables or reduce data contrast.
 
 ## Dashboard Canon
 
-The Dashboard is an operational overview, not a collection of equal feature cards.
+**Status note (2026-10-29):** The old operational Dashboard described below is implementation history and may remain live during transition. It is **not** the owner-approved future homepage design. The new **target** is the five-slice cinematic module gateway specified in `docs/CINEMATIC_VISUAL_DIRECTION.md`. Preserve functioning dashboard behavior until a separately authorized implementation replaces it; do not use these historical telemetry/hero cards as the new landing-page visual template.
+
+The legacy Dashboard is an operational overview, not a collection of equal feature cards.
 
 Current composition:
 
@@ -627,11 +680,23 @@ Raw GUIDs belong in technical disclosure or explicit unresolved fallback, not no
 
 ## Mining Canon
 
+**New visual lock:** Restyle Mining to the approved cinematic shell without replacing its genuine operational comparisons. **Direct Spawn Competition segmented bars remain mandatory**, with selected material color emphasis, quiet competitor segments, the published distribution and unrepresented share when known, and existing hover/focus linkage. These bars represent individual source pools, not generic progress; never merge pools, renormalize, or fabricate missing shares. Keep the bar region after Selected Materials and before Other Materials. **Ranked Locations must keep the `T-{value}` tie labels** from `getDisplayedLocationRank`, with ordinary non-tied ranks and `R{value}` planned-route positions, accessible descriptions and stable ordering. See `docs/CINEMATIC_VISUAL_DIRECTION.md` and `docs/mining-ui-design-spec.md`.
+
 Mining retains semantic method, quality-band, encounter, and recommendation colors on the shared graphite foundation.
 
 Selected filters must be distinguishable from hover and inactive states. Tables and recommendation lists should favor comparison, stable columns, and tabular numerics.
 
 Do not remove meaningful category colors solely to make Mining visually quieter.
+
+### Implemented UI Recovery Pilot (2026-10-10)
+
+The Mining pilot is page-scoped to `src/components/industry/mining/mining.css`; it does not replace shared dashboard, navigation, or global `ops-*` tokens. Its confirmed surface contract is canvas `#0c1218`, workspace `#111a21`, card `#151e24`, raised `#1b2831`, default border `#293943`, hover border `#384e5b`, and cyan selected/focus `#55ccef`. It uses a 2px routine radius and the approved restrained panel/card/inset shadows only for task surfaces and location records.
+
+Mining text uses the shared Segoe UI stack (`--mb-font-ui`). Filter chips are 28px system-ui controls, selected chips retain the approved Crafting-style inset treatment, and focused controls use an independent two-pixel cyan ring.
+
+The route workflow remains filter → ranked locations → evidence/detail. At desktop widths that can preserve all three usable panels, Ranked Locations uses a narrow, non-draggable divider with a persisted chevron toggle. Expanded rows show rank, oversized clipped location imagery, name, selected-material coverage, conditional system badge, textual color-coded method shares, and bookmark; collapsed rows preserve everything except method availability and release width to the profile. The filter panel owns selected count and Clear; Mining does not render a second ACTIVE materials banner or duplicate selected-material strip in the profile. Location records remain a roughly 54px desktop target and disclose laterally without environment or method-image columns.
+
+Direct-spawn competition is source-pool-specific. A pool is visible only if the inspected location has a selected material in that delivered pool; multiple selected materials in that one pool share one truthful bar while retaining their own colors. It never calculates or suggests a combined target percentage, renormalizes a muted competitor, or merges distinct pools. Missing-at-location, loading, unavailable-reference, and absent-direct-spawn evidence remain distinct presentation states sourced from the existing reference data.
 
 ## Carrier Logistics Canon
 

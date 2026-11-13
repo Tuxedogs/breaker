@@ -137,6 +137,16 @@ export function resolveComponentImageUrl(identity: ComponentImageIdentity): stri
 
 /** Returns only transparent, presentation-safe art suitable for a large hero stage. */
 export function resolveComponentHeroArtUrl(identity: ComponentImageIdentity): string | null {
+  // Exact user-rendered component artwork is preferred to the legacy RGB thumbnail.
+  // Keep this map explicit so unrelated components never borrow another item render.
+  const exactHeroArt: Record<string, string> = {
+    "9585b0dc-b660-4e2a-9136-0092af1e72c1": "/images/crafting/hero-artwork/components/js300.webp",
+    "b1c89d89-d408-4998-9b17-76986d78a9dd": "/images/crafting/hero-artwork/components/js300.webp",
+  };
+  for (const key of [identity.blueprintId, identity.componentId, identity.entityClass]) {
+    const hero = key ? exactHeroArt[key.trim().toLowerCase()] : undefined;
+    if (hero) return hero;
+  }
   const imageUrl = resolveComponentImageUrl(identity);
   if (!imageUrl) return null;
 

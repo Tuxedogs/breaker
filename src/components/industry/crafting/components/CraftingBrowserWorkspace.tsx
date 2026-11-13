@@ -1,3 +1,4 @@
+import WorkspacePanel from "../../../shared/WorkspacePanel";
 import {
   useCallback,
   useLayoutEffect,
@@ -6,8 +7,10 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import "../craft-v31-layout.css";
 import {
   CRAFTING_WIDE_SPLIT_MIN_WIDTH,
+  useCraftingPhoneLayout,
   type CraftingBrowserLayoutMode,
 } from "../utils/craftingBrowserLayout";
 
@@ -40,6 +43,7 @@ export default function CraftingBrowserWorkspace({
   results,
   detail,
   detailReady = false,
+  detailLoading = false,
   layoutMode,
 }: {
   selectedId: string | null;
@@ -47,9 +51,15 @@ export default function CraftingBrowserWorkspace({
   results: ReactNode;
   detail: ReactNode;
   detailReady?: boolean;
+  detailLoading?: boolean;
   layoutMode: CraftingBrowserLayoutMode;
 }) {
   const [connectorY, setConnectorY] = useState<number | null>(null);
+  // Phones show one screen at a time: the blueprint list, or the selected
+  // blueprint's detail. The hidden screen stays mounted (keeping its scroll
+  // position) but is inert so focus and assistive technology skip it.
+  const isPhone = useCraftingPhoneLayout();
+  const phoneScreen = selectedId ? "detail" : "list";
   const workspaceRef = useRef<HTMLDivElement>(null);
   const browserRef = useRef<HTMLElement>(null);
 
@@ -125,17 +135,17 @@ export default function CraftingBrowserWorkspace({
   return (
     <div
       ref={workspaceRef}
-      className={`craft-browser-workspace craft-browser-production-workspace craft-browser-production-workspace--${layoutMode}${selectedId ? " is-selected" : " is-empty"}`}
+      className={`craft-browser-workspace craft-browser-production-workspace craft-browser-v31-workspace craft-browser-production-workspace--${layoutMode}${selectedId ? " is-selected" : " is-empty"}`}
       data-testid="crafting-production-workspace"
+      data-phone-screen={isPhone ? phoneScreen : undefined}
       style={connectorStyle}
     >
-      <section ref={browserRef} className="craft-browser-production-pane" aria-label="Component browser">
-        <BrowserBlueprintArtwork />
-        <div className="craft-browser-control-deck-label" aria-hidden="true">
-          <span>Control deck</span>
-          <span>Index / fabrication records</span>
-        </div>
+      <WorkspacePanel as="aside" tone="filter" className="craft-v31-filter-pane" aria-label="Recipe filters" inert={isPhone && phoneScreen === "detail"}>
         {toolbar}
+      </WorkspacePanel>
+
+      <section ref={browserRef} className="craft-browser-production-pane" aria-label="Blueprint index" inert={isPhone && phoneScreen === "detail"}>
+        <BrowserBlueprintArtwork />
         <div className="component-browser-body craft-browser-production-body">
           {results}
         </div>
@@ -153,12 +163,16 @@ export default function CraftingBrowserWorkspace({
         <span className="craft-browser-spine-cap craft-browser-spine-cap--bottom" />
       </aside>
 
-      <aside
+      <WorkspacePanel
+        as="aside"
+        tone="inspector"
         className={`craft-browser-detail-pane craft-detail-drawer-region${detailReady ? " craft-detail-drawer-region--ready" : ""}`}
         aria-label="Fabrication inspection detail"
+        aria-busy={detailLoading}
+        inert={isPhone && phoneScreen === "list"}
       >
         {detail}
-      </aside>
+      </WorkspacePanel>
     </div>
   );
 }

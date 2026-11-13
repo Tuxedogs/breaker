@@ -1,9 +1,12 @@
-import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState, lazy, Suspense, useCallback, useMemo, useRef } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItemsByBlueprintGuids } from "../../../lib/craftingData";
+import { loadBlueprintSourceGuidSet } from "../../../lib/craftingBlueprintSourcesApi";
+import { isEligibleCraftingBlueprint, normalizeBlueprintGuid } from "../../../lib/crafting/blueprintEligibility";
+import { loadMissionDetailMap } from "./utils/blueprintTrackerStore";
 import { useCraftingContext } from "./CraftingContext";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
@@ -18,7 +21,7 @@ import { clampQuality } from "./utils/qualityBands";
 import { getActiveInventoryEntries, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
 import { useMaterialIdentityIndex } from "../../../lib/logistics/materialIdentityIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
-import { useCraftingBrowserLayoutMode } from "./utils/craftingBrowserLayout";
+import { isCraftingPhoneViewport, useCraftingBrowserLayoutMode } from "./utils/craftingBrowserLayout";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
@@ -57,12 +60,45 @@ function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
 export default function CraftingModule() {
   const { blueprintId } = useParams<{ blueprintId?: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const previewId = blueprintId ? null : searchParams.get("preview");
+  // True while the open phone detail was pushed by a row tap, so its back
+  // control can pop that history entry instead of stacking another list entry.
+  const userPushedPreviewRef = useRef(false);
   const targetBlueprintId = blueprintId ?? previewId;
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
+  const didInitializePreviewRef = useRef(Boolean(targetBlueprintId));
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
+  const [verifiedBlueprintSources, setVerifiedBlueprintSources] = useState<ReadonlySet<string> | null>(null);
+  useEffect(() => {
+    let active = true;
+    loadBlueprintSourceGuidSet().then((guids) => {
+      if (active) setVerifiedBlueprintSources(guids);
+    }).catch(() => {
+      // Local fixtures intentionally block source APIs. Unknown is not evidence of unavailability.
+      if (active) setVerifiedBlueprintSources(null);
+    });
+    return () => { active = false; };
+  }, []);
+  // Blueprints whose every mission source is disabled (release state or
+  // not-for-release), the same rule the detail's "Unavailable" source label uses.
+  const [disabledSourceBlueprints, setDisabledSourceBlueprints] = useState<ReadonlySet<string>>(() => new Set());
+  useEffect(() => {
+    let active = true;
+    loadMissionDetailMap().then((missionMap) => {
+      const disabled = new Set<string>();
+      for (const [guid, missions] of missionMap) {
+        if (missions.length > 0 && missions.every((mission) => mission.isDisabled)) disabled.add(guid);
+      }
+      if (active) setDisabledSourceBlueprints(disabled);
+    });
+    return () => { active = false; };
+  }, []);
+  const sourceVerification = useCallback((recipe: ComponentRecipe): boolean | null =>
+    verifiedBlueprintSources === null ? null : isEligibleCraftingBlueprint(recipe.blueprint_id, verifiedBlueprintSources),
+  [verifiedBlueprintSources]);
   const layoutMode = useCraftingBrowserLayoutMode();
 
   // Component card index comes from CraftingLayout via context
@@ -133,7 +169,11 @@ export default function CraftingModule() {
     recipe: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber?: number; bands?: { start: string | number; end: string | number; mappedValue: string | number }[] }>,
     finalProductQuality: FinalProductQuality,
+    quantity = 1,
   ) => {
+    // Do not queue extracted recipes with no source-backed in-game blueprint path.
+    // Unknown availability remains explorable while the source API is unavailable.
+    if (verifiedBlueprintSources && !isEligibleCraftingBlueprint(recipe.blueprint_id, verifiedBlueprintSources)) return;
     const recipeId = `craft-${recipe.blueprint_id}`;
     const category = recipe.component_type ?? recipe.item_kind ?? "component";
     const resolveMaterial = createMaterialResolver(materialTemplates, materialIdentities);
@@ -180,7 +220,7 @@ export default function CraftingModule() {
     });
 
     registerCraftingRecipe({ recipeId, name: recipe.component_name, category, inputs });
-    addBuildQueueItem(recipeId, 1, {
+    addBuildQueueItem(recipeId, Math.max(1, Math.min(99, Math.trunc(quantity))), {
       blueprint_id: recipe.blueprint_id,
       itemId: getRecipeItemId(recipe),
       itemName: recipe.component_name,
@@ -190,7 +230,7 @@ export default function CraftingModule() {
       blueprintSources: getBlueprintSourcesForQueue(recipe),
       materialRequirements: inputs,
     });
-  }, [materialIdentities, materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
+  }, [materialIdentities, materialTemplates, registerCraftingRecipe, addBuildQueueItem, verifiedBlueprintSources]);
 
   const activeQueue = buildQueue.filter((item) => item.status !== "complete");
   const queuedRecipeIds = useMemo(
@@ -198,17 +238,45 @@ export default function CraftingModule() {
     [activeQueue],
   );
 
+  useEffect(() => {
+    if (!previewId) userPushedPreviewRef.current = false;
+  }, [previewId]);
+
   const closePreview = useCallback(() => {
+    if (userPushedPreviewRef.current && isCraftingPhoneViewport()) {
+      userPushedPreviewRef.current = false;
+      navigate(-1);
+      return;
+    }
     const next = new URLSearchParams(window.location.search);
     next.delete("preview");
     setSearchParams(next, { replace: true });
-  }, [setSearchParams]);
+  }, [navigate, setSearchParams]);
 
   const previewRecord = useCallback((record: { id: string }) => {
     const next = new URLSearchParams(window.location.search);
     next.set("preview", record.id);
     setSearchParams(next, { replace: false });
   }, [setSearchParams]);
+
+  const openPreviewFromList = useCallback((record: { id: string }) => {
+    userPushedPreviewRef.current = true;
+    previewRecord(record);
+  }, [previewRecord]);
+
+  // V31 opens with an inspected recipe. Initialize once from real catalog data,
+  // retaining URL deep links and respecting an explicit user-close thereafter.
+  useEffect(() => {
+    if (didInitializePreviewRef.current || blueprintId || previewId || cardsLoading || !browserComponentCards.length) return;
+    didInitializePreviewRef.current = true;
+    // Phones open on the blueprint list; a detail opens only when the user picks one.
+    if (isCraftingPhoneViewport()) return;
+    // Prefer a real, source-indexed power plant for the default lab scenario.
+    // A deep link or a user-selected item always takes precedence.
+    const initialRecord = browserComponentCards.find((record) => record.name.trim().toUpperCase() === "JS-300")
+      ?? browserComponentCards[0];
+    previewRecord(initialRecord);
+  }, [blueprintId, previewId, cardsLoading, browserComponentCards, previewRecord]);
 
   const loadError = blueprintId ? detailError : cardsError;
   const previewRecipeReady = previewId
@@ -240,6 +308,7 @@ export default function CraftingModule() {
       presentation="drawer"
       onClose={closePreview}
       onAddToQueue={handleAddToQueue}
+      isBlueprintSourceVerified={sourceVerification}
       isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
     />
   ) : null;
@@ -256,16 +325,20 @@ export default function CraftingModule() {
         <CraftingBrowserWorkspace
           selectedId={previewId}
           detailReady={previewRecipeReady}
+          detailLoading={previewLoading}
           layoutMode={layoutMode}
-          toolbar={<CraftingFilterBar records={browserComponentCards} resultCount={resultCount} />}
+          toolbar={<CraftingFilterBar records={browserComponentCards} resultCount={resultCount} sidebarMode />}
           results={(
             <ComponentResultsBrowser
+              presentation="index"
               records={browserComponentCards}
               loading={cardsLoading}
               error={cardsError}
               isRecipeQueued={(record) => queuedRecipeIds.has(`craft-${record.id}`)}
+              isBlueprintSourceVerified={(record) => verifiedBlueprintSources === null ? null : isEligibleCraftingBlueprint(record.id, verifiedBlueprintSources)}
+              isBlueprintUnavailable={(record) => disabledSourceBlueprints.has(normalizeBlueprintGuid(record.id))}
               previewId={previewId}
-              onPreviewRecord={previewRecord}
+              onPreviewRecord={openPreviewFromList}
               autoSelectFirstRecord={false}
               layoutMode={layoutMode}
               serverPage={browserPage}

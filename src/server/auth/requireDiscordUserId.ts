@@ -3,6 +3,7 @@ import { sql } from "drizzle-orm";
 
 import { getDb } from "../../db/client.js";
 import { profiles } from "../../db/schema.js";
+import { verifyStagingIsolation } from "../staging/isolation.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;
@@ -115,6 +116,7 @@ async function upsertProfile(context: AuthenticatedUserContext) {
 export async function requireAuthenticatedUser(headers: HeaderBag): Promise<AuthenticatedUserContext> {
   const token = getBearerToken(headers);
   if (!token) throw new AuthError();
+  await verifyStagingIsolation();
 
   const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.VITE_SUPABASE_ANON_KEY;

@@ -13,37 +13,34 @@ export interface SignatureDockPersistedState {
   isPresetModified?: boolean;
 }
 
+// Visibility is opt-in: `enabled` is the only visibility switch and `open` mirrors it.
+// A disabled dock is never minimized. Legacy saves with enabled && !open showed the
+// header-only strip, which is now the minimized state.
+export function normalizeSignatureDockState(parsed: Partial<SignatureDockPersistedState>): SignatureDockPersistedState {
+  const enabled = parsed.enabled === true;
+  return {
+    enabled,
+    open: enabled,
+    minimized: enabled && (parsed.minimized === true || parsed.open !== true),
+    fontWeight: parsed.fontWeight ?? 800,
+    fontSize: parsed.fontSize ?? 12,
+    pos: parsed.pos ?? null,
+    activeIds: Array.isArray(parsed.activeIds) ? parsed.activeIds : [],
+    activePresetId: parsed.activePresetId ?? null,
+    activeMaterialKeys: Array.isArray(parsed.activeMaterialKeys) ? parsed.activeMaterialKeys : undefined,
+    isPresetModified: parsed.isPresetModified ?? false,
+  };
+}
+
 export function loadSignatureDockState(): SignatureDockPersistedState {
   try {
     const raw = localStorage.getItem(SIGNATURE_DOCK_LS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as Partial<SignatureDockPersistedState>;
-      return {
-        enabled: parsed.enabled === true,
-        open: parsed.open ?? false,
-        minimized: parsed.minimized ?? false,
-        fontWeight: parsed.fontWeight ?? 800,
-        fontSize: parsed.fontSize ?? 12,
-        pos: parsed.pos ?? null,
-        activeIds: Array.isArray(parsed.activeIds) ? parsed.activeIds : [],
-        activePresetId: parsed.activePresetId ?? null,
-        activeMaterialKeys: Array.isArray(parsed.activeMaterialKeys) ? parsed.activeMaterialKeys : undefined,
-        isPresetModified: parsed.isPresetModified ?? false,
-      };
-    }
+    if (raw) return normalizeSignatureDockState(JSON.parse(raw) as Partial<SignatureDockPersistedState>);
   } catch {
     /* ignore */
   }
 
-  return {
-    enabled: false,
-    open: false,
-    minimized: false,
-    fontWeight: 800,
-    fontSize: 12,
-    pos: null,
-    activeIds: [],
-  };
+  return normalizeSignatureDockState({});
 }
 
 export function saveSignatureDockState(state: SignatureDockPersistedState) {

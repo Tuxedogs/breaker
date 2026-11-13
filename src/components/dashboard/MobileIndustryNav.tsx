@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 
@@ -16,7 +16,6 @@ const items = [
   { to: "/fitting", label: "Fitting", icon: "M12 3v18M3 12h18M6 6l12 12M18 6 6 18", exact: false, badge: null },
   { to: "/logistics/build-queue", label: "Build Queue", icon: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01", exact: false, badge: "queue" },
   { to: "/logistics/inventory", label: "Inventory", icon: "M21 16V8l-9-5-9 5v8l9 5 9-5zM3.5 8.5 12 13l8.5-4.5M12 13v8", exact: false, badge: null },
-  { to: "/industry/blueprint-tracker", label: "Bookmarks", icon: "M6 3h12v18l-6-4-6 4V3", exact: false, badge: null },
 ] as const;
 
 const HIGH_CONTRAST_STORAGE_KEY = "scintel-high-contrast";
@@ -33,6 +32,11 @@ function MobileNavIcon({ d }: { d: string | readonly string[] }) {
 export default function MobileIndustryNav() {
   const [open, setOpen] = useState(false);
   const [highContrast, setHighContrast] = useState(() => document.documentElement.classList.contains("sc-high-contrast"));
+  const { pathname } = useLocation();
+  // Shown beside the brand so the current route is visible while the drawer is closed.
+  const activeItem = items.find((item) => (item.exact
+    ? pathname === item.to
+    : pathname === item.to || pathname.startsWith(`${item.to}/`)));
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const openQueueItems = useLogisticsStore((store) =>
@@ -102,7 +106,10 @@ export default function MobileIndustryNav() {
           <span aria-hidden />
           <span aria-hidden />
         </button>
-        <span className="dash-mobile-shell-brand">SCINTEL</span>
+        <div className="dash-mobile-shell-identity">
+          <span className="dash-mobile-shell-brand">BREAKER</span>
+          {activeItem ? <span className="dash-mobile-shell-route">{activeItem.label}</span> : null}
+        </div>
         <span className="dash-mobile-shell-header-end" aria-hidden />
       </header>
 
@@ -119,6 +126,7 @@ export default function MobileIndustryNav() {
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  viewTransition={item.to === "/dashboard"}
                   end={item.exact}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) => ["dash-mobile-menu-item", isActive ? "dash-mobile-menu-item--active" : ""].filter(Boolean).join(" ")}

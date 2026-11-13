@@ -50,3 +50,24 @@ export function resolveLegacyMissionConcept(
   if (offerKeys.length > 1) return { kind: "series", conceptKey, offerKeys };
   return { kind: "unavailable", conceptKey };
 }
+
+export const MISSION_RETURN_PARAM = "return";
+
+/**
+ * Accept only same-app, in-app paths as a return target (no scheme, host,
+ * protocol-relative or backslash forms), so a link cannot redirect elsewhere.
+ */
+export function safeInternalReturnPath(value: string | null | undefined): string | null {
+  if (!value) return null;
+  if (!value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return null;
+  if (/^\/[a-z][a-z0-9+.-]*:/i.test(value)) return null;
+  return value.length <= 2000 ? value : null;
+}
+
+/** Deep link to one exact mission variant by its stable contract ID. */
+export function missionVariantUrl(contractId: string, returnTo?: string): string {
+  const params = new URLSearchParams({ variant: contractId });
+  const safeReturn = safeInternalReturnPath(returnTo);
+  if (safeReturn) params.set(MISSION_RETURN_PARAM, safeReturn);
+  return `${MISSION_BROWSER_PATH}?${params.toString()}`;
+}

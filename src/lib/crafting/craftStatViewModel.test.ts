@@ -12,7 +12,7 @@ import type { ComponentCardIndexRecord } from "../componentCardIndex.ts";
 import type { ComponentRecipe } from "../../components/industry/crafting/utils/craftingTypes.ts";
 import type { FittingComponentDetail } from "../fitting/fittingApi.ts";
 import type { TotalModifierRow } from "../../components/industry/crafting/utils/recipeQuality.ts";
-import { formatMaterialModifierDisplay } from "./craftingDetailStats.ts";
+import { formatCraftingContributionValue, formatCraftingModifierPercent, formatMaterialModifierDisplay } from "./craftingDetailStats.ts";
 
 function loadCard(blueprintId: string): ComponentCardIndexRecord {
   const filePath = path.join(
@@ -381,4 +381,28 @@ test("listAmbiguousBenefitDirectionProperties reports unknown GPP directions", (
   };
 
   assert.deepEqual(listAmbiguousBenefitDirectionProperties(recipe), ["GPP_Weapon_Tractor_Force"]);
+});
+
+test("small statistic values keep enough precision that a real change stays visible", () => {
+  // Quantum fuel requirement 0.01 reduced by 3.8%: previously "0.01 → 0.01", change "0".
+  const fuel = formatMaterialModifierDisplay("GPP_Quantum_FuelRequirement", 0.01, -3.8);
+  assert.equal(fuel.base, "0.01");
+  assert.equal(fuel.total, "0.0096");
+  assert.equal(fuel.modifier, "-0.00038");
+  assert.equal(fuel.modifierPercent, "-3.8%");
+  assert.notEqual(fuel.base, fuel.total);
+
+  // Ordinary magnitudes keep the existing two-decimal presentation.
+  const health = formatMaterialModifierDisplay("GPP_Health_MaxHealth", 200, 1.08);
+  assert.equal(health.total, "202.16");
+  assert.equal(health.modifier, "+2.16");
+  assert.equal(formatMaterialModifierDisplay("GPP_Health_MaxHealth", 0.72, 0).base, "0.72");
+
+  // A non-zero percentage never collapses to 0%; a true zero stays 0%.
+  assert.equal(formatCraftingModifierPercent(0.04), "+0.04%");
+  assert.equal(formatCraftingModifierPercent(0), "0%");
+  assert.equal(formatCraftingModifierPercent(1.2), "+1.2%");
+  assert.equal(formatCraftingContributionValue(0.03), "+0.03%");
+  assert.equal(formatCraftingContributionValue(-20), "-20.0%");
+  assert.equal(formatCraftingContributionValue(0), "+0.0%");
 });

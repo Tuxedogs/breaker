@@ -1,0 +1,57 @@
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const craft = await browser.newPage({viewport:{width:1600,height:980}});
+    await craft.goto('http://127.0.0.1:5173/industry/crafting');
+    await craft.locator('.craft-v31-workbench-hero').waitFor({timeout:20000});
+    const art = await craft.locator('.craft-v31-lab-art').boundingBox();
+    const identity = await craft.locator('.craft-v31-lab-identity').boundingBox();
+    assert.ok(art && identity && art.x+art.width<=identity.x+2,'Artwork must not overlap component title');
+    assert.equal(await craft.locator('.craft-v31-lab-snapshot > div').count(),4);
+    assert.equal(await craft.locator('.craft-v31-acquisition-columns > section').count(),2);
+    assert.equal(await craft.locator('.craft-v31-hero-controls .craft-v31-hero-queue').count(),1);
+    assert.equal(await craft.locator('.craft-v31-queue-quantity input').count(),1);
+    const materials = await craft.locator('.craft-detail-drawer-materials').boundingBox();
+    const stats = await craft.locator('.craft-detail-drawer-overview').boundingBox();
+    assert.ok(materials && stats && materials.y < stats.y,'Quality controls should precede detailed statistics');
+    console.log('PASS Crafting hero geometry and lab order');
+    await craft.locator('.craft-v31-filter-segments button').filter({hasText:'Component'}).click();
+    await craft.waitForTimeout(300);
+    assert.ok(await craft.locator('.craft-v31-recipe-row').filter({hasText:'JS-300'}).count(), 'Ship scope should preserve actual vehicle components');
+    assert.ok(!(await craft.locator('.craft-v31-recipe-row').allInnerTexts()).some(text => text.includes('ADP-mk4 Arms')), 'Ship scope excludes FPS armor');
+    await craft.locator('.craft-v31-filter-segments button').filter({hasText:'Equipment'}).click();
+    await craft.waitForTimeout(300);
+    assert.ok(await craft.locator('.craft-v31-recipe-row').filter({hasText:'ADP-mk4 Arms'}).count(), 'FPS scope should show armor');
+    await craft.getByRole('button',{name:'All',exact:true}).click();
+    await craft.waitForTimeout(250);
+    assert.ok(await craft.locator('.craft-v31-recipe-row').filter({hasText:'JS-300'}).count(), 'All scope restores vehicle records');
+    console.log('PASS Crafting scope filters use actual vehicle/FPS categories');
+    await craft.close();
+    const build = await browser.newPage({viewport:{width:1600,height:980}});
+    await build.goto('http://127.0.0.1:5173/logistics/build-queue');
+    const current = build.locator('.bq-v31-sourcing-context > strong');
+    await current.waitFor({timeout:20000});
+    const before = (await current.innerText()).trim();
+    const cards = build.locator('.bq-craft-card');
+    assert.ok(await cards.count()>1);
+    await cards.nth(1).click();
+    await build.waitForTimeout(250);
+    const after = (await current.innerText()).trim();
+    assert.notEqual(before,after,'Sourcing panel must follow the selected build');
+    assert.equal(after,(await build.locator('.bq-v31-build-hero h2').innerText()).trim());
+    console.log('PASS Build Queue selection-scoped sourcing: '+before+' -> '+after);
+    await build.close();
+    const inventory = await browser.newPage({viewport:{width:1600,height:980}});
+    await inventory.goto('http://127.0.0.1:5173/logistics/inventory');
+    const overview = inventory.locator('[data-testid="inventory-warehouse-overview"]');
+    await overview.waitFor({timeout:20000});
+    const labels = await overview.locator('.logi-inv-v31-overview-stats dt').allInnerTexts();
+    assert.deepEqual(labels.map(s => s.trim().toLowerCase()),
+      ['physical lots','available lots','reserved lots','selected']);
+    assert.equal(await overview.locator('.logi-inv-v31-overview-stats dd').count(),4);
+    console.log('PASS Inventory physical-lot statistics are explicitly separated');
+    await inventory.close();
+  } finally { await browser.close(); }
+})().catch(e=>{console.error(e);process.exitCode=1});

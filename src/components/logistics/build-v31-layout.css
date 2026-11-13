@@ -1,0 +1,572 @@
+/* V31 owns the three-column workspace frame. Legacy Build Queue CSS owns
+   reusable controls beneath it, not this page layout. */
+.bq-page .bq-v31-workspace {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: clamp(280px, 18vw, 340px) minmax(400px, 1fr) clamp(280px, 16vw, 340px);
+  gap: 1px;
+  padding: 0;
+  background: var(--mb-ws-gutter, var(--mb-border));
+}
+.bq-page .bq-v31-workspace.bq-v31-workspace--summary-collapsed {
+  grid-template-columns: clamp(280px, 18vw, 340px) minmax(400px, 1fr) 48px;
+}
+
+/* V31b production queue composition. Existing queue controls, reservations,
+   drag/drop and ledger calculations remain the live implementation. */
+.bq-page .bq-v31-panel-heading .bq-queue-col-title { margin: 0; padding: 0; font: inherit; }
+.bq-page .bq-queue-col { background: var(--mb-ws-panel); border: 0; border-radius: 0; box-shadow: none; padding: 0; gap: 0; }
+.bq-page .bq-queue-selector,
+.bq-page .bq-queue-col-body,
+.bq-page .bq-queue-col-foot { padding-inline: 10px; }
+.bq-page .bq-center-col { background: var(--mb-ops-surface-quiet); }
+.bq-page .bq-v31-detail-heading { margin: 0 0 2px; }
+.bq-page .bq-center-shell { padding-top: 8px; }
+.bq-page .bq-queue-list { padding: 7px 9px 8px; }
+.bq-page .bq-add-another-btn { min-height: 36px; }
+@media (min-width: 1250px) {
+  .bq-page .bq-v31-workspace {
+    grid-template-columns: 280px minmax(400px,1fr) minmax(320px,34.4%);
+    gap: 1px;
+    background: var(--mb-border);
+  }
+  .bq-page .bq-queue-col,
+  .bq-page .bq-center-col,
+  .bq-page .bq-summary-col { min-width: 0; }
+}
+@media (max-width: 1249px) {
+  .bq-page .bq-v31-detail-heading { min-height: 40px; }
+  .bq-page .bq-v31-panel-heading small { max-width: 45%; }
+}
+
+@media(max-width:768px){
+  /* Queue selection first, selected build second, sourcing below.
+     Preserve ledger's existing collapse and reservation handlers. */
+  .bq-page .bq-v31-workspace { display:flex; flex-direction:column; }
+  .bq-page .bq-queue-col { order:1; }
+  .bq-page .bq-center-col { order:2; }
+  .bq-page .bq-summary-col,
+  .bq-page .bq-summary-col--mobile { order:3; }
+}
+
+/* Reference V31 queue: status segments, compact build cards and allocation bars. */
+.bq-page .bq-v31-status-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  margin: 9px 10px 12px;
+  padding: 3px;
+  background: #0b1b28;
+  border: 1px solid #315166;
+}
+.bq-page .bq-v31-status-tabs .bq-queue-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 5px 2px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--mb-ops-text-secondary);
+  font: 500 10px/1.2 "Segoe UI", sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.bq-page .bq-v31-status-tabs .bq-queue-tab.is-active {
+  background: #153748;
+  border-color: var(--mb-ops-border-active);
+  color: #ecf6fb;
+}
+.bq-page .bq-v31-status-tabs .bq-queue-tab-count {
+  color: #6895a9;
+  font-size: 9px;
+}
+.bq-page .bq-craft-card-shell {
+  min-height: 76px;
+  background: #10212e;
+  border: 1px solid #315166;
+}
+.bq-page .bq-craft-card {
+  display: block;
+  width: 100%;
+  min-height: 76px;
+  padding: 9px 12px 9px 10px;
+  border: 0;
+  background: transparent;
+  color: #e9f4fa;
+  text-align: left;
+  box-shadow: none;
+}
+.bq-page .bq-craft-card.is-selected {
+  background: #163747;
+  box-shadow: inset 3px 0 0 #4dcce5;
+}
+.bq-page .bq-craft-card .bq-craft-card-index,
+.bq-page .bq-craft-card .bq-craft-card-progress-col,
+.bq-page .bq-craft-card .bq-craft-card-status,
+.bq-page .bq-craft-card .bq-craft-card-frame {
+  display: none;
+}
+.bq-page .bq-craft-card-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "cat status" "name status" "summary summary" "track track";
+  gap: 3px 5px;
+  width: 100%;
+  min-width: 0;
+}
+.bq-page .bq-craft-card-main .bq-craft-card-cat {
+  grid-area: cat;
+  padding: 0;
+  color: #7fa2b6;
+  font: 500 9px/1.2 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+}
+.bq-page .bq-craft-card-main .bq-craft-card-name {
+  grid-area: name;
+  display: block;
+  max-width: 100%;
+  color: #ecf6fb;
+  font: 700 12px/1.25 "Segoe UI", sans-serif;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.bq-page .bq-v31-card-status {
+  grid-area: status;
+  align-self: start;
+  font: 600 9px/1.3 "Segoe UI", sans-serif;
+  color: #ffb875;
+}
+.bq-page .bq-v31-card-status[data-status="complete"] {color:#5ccdb8}
+.bq-page .bq-v31-card-status[data-status="active"] {color:#5bd6eb}
+.bq-page .bq-v31-card-status[data-status="paused"] {color:#c7a5e6}
+.bq-page .bq-v31-card-summary {
+  grid-area: summary;
+  color: #9cb4c3;
+  font: 500 10px/1.4 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-card-track {
+  grid-area: track;
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin-top: 3px;
+  background: #284352;
+  overflow: hidden;
+}
+.bq-page .bq-v31-card-track > span {
+  display: block;
+  height: 100%;
+  background: #54c9e0;
+}
+
+/* Live build detail overview follows V31's summary-first composition.
+   The original interactive allocator remains in the accessible disclosure. */
+.bq-page .bq-v31-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0 0 12px;
+  padding: 0 12px;
+}
+.bq-page .bq-v31-build-hero {
+  position: relative;
+  min-height: 112px;
+  padding: 17px 18px;
+  border: 1px solid var(--mb-ops-border-strong);
+  background: #102638;
+}
+.bq-page .bq-v31-hero-category {
+  margin-bottom: 7px;
+  color: #55d0e3;
+  font: 600 10px/1.2 "Segoe UI", sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-build-hero h2 {
+  margin: 0 100px 5px 0;
+  color: #f0f7fc;
+  font: 700 21px/1.25 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-build-hero p {
+  margin: 0;
+  color: #a9bed0;
+  font: 500 11px/1.5 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-build-state {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  padding: 3px 9px;
+  color: #ffd09e;
+  border: 1px solid #6f6e58;
+  font: 600 10px/1.3 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--mb-ops-border-strong);
+  background: #0d2333;
+}
+.bq-page .bq-v31-metrics > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px;
+}
+.bq-page .bq-v31-metrics > div + div { border-left: 1px solid var(--mb-ops-border-strong); }
+.bq-page .bq-v31-metrics span { color: #abc4d4; font: 500 10px/1.2 "Segoe UI", sans-serif; }
+.bq-page .bq-v31-metrics strong { color: #e9f7ff; font: 700 21px/1.2 "Segoe UI", sans-serif; }
+.bq-page .bq-v31-metrics strong.is-short,
+.bq-page .bq-v31-material-table td.is-short { color: #ffae76; }
+.bq-page .bq-v31-coverage {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  color: #9fb9ca;
+  font: 600 10px/1.3 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-coverage > div {
+  height: 6px;
+  overflow: hidden;
+  background: #264859;
+}
+.bq-page .bq-v31-coverage > div > span {
+  display: block;
+  height: 100%;
+  background: #55c9e0;
+}
+.bq-page .bq-v31-material-plan-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--mb-ops-border-strong);
+}
+.bq-page .bq-v31-material-plan-head h3 {
+  margin: 0;
+  color: #e7f2f7;
+  font: 700 12px/1.3 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-material-plan-head a {
+  padding: 6px 10px;
+  color: #bcf4fa;
+  background: #124052;
+  border: 1px solid #39748a;
+  font: 500 10px/1.3 "Segoe UI", sans-serif;
+  text-decoration: none;
+}
+.bq-page .bq-v31-material-table-scroll { min-width:0; overflow-x:auto; }
+.bq-page .bq-v31-material-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--mb-ops-border-strong);
+  font: 500 11px/1.5 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-material-table thead { background: #142f40; }
+.bq-page .bq-v31-material-table th,
+.bq-page .bq-v31-material-table td {
+  padding: 10px 9px;
+  text-align: right;
+  border-bottom: 1px solid #294858;
+}
+.bq-page .bq-v31-material-table th:first-child,
+.bq-page .bq-v31-material-table td:first-child {text-align:left;}
+.bq-page .bq-v31-material-table th { color:#b1d5e3; font-weight:600; }
+.bq-page .bq-v31-material-table tbody th { color:#f1f7fa; font-weight:600; }
+.bq-page .bq-v31-material-table td { color:#d2e1e9; }
+.bq-page .bq-v31-material-table td.is-covered {color:#57c7a9}
+.bq-page .bq-v31-material-table small {color:#789bad; font-size:9px}
+.bq-page .bq-v31-stock-note {
+  margin: -3px 0 2px;
+  color:#7b9cae;
+  font: 400 10px/1.45 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-advanced-controls {
+  margin: 12px;
+  border: 1px solid var(--mb-ops-border-strong);
+  background: var(--mb-ops-surface-raised);
+}
+.bq-page .bq-v31-advanced-controls > summary {
+  padding: 11px 14px;
+  color: #b6e4f2;
+  cursor: pointer;
+  font: 600 11px/1.3 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-advanced-controls[open] > summary {
+  border-bottom: 1px solid var(--mb-ops-border-strong);
+}
+.bq-page .bq-v31-material-empty {
+  padding:16px;
+  border:1px solid var(--mb-ops-border-strong);
+  color:#9cb4c3;
+}
+@media(max-width:700px) {
+  .bq-page .bq-v31-overview {padding:0 8px;}
+  .bq-page .bq-v31-metrics {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .bq-page .bq-v31-metrics > div:nth-child(3) {border-left:0;border-top:1px solid var(--mb-ops-border-strong);}
+  .bq-page .bq-v31-metrics > div:nth-child(4) {border-top:1px solid var(--mb-ops-border-strong);}
+}
+
+/* V31 selected-build sourcing. This block reflects the currently inspected
+   craft, while the queue-wide ledger model remains intact upstream. */
+.bq-page .bq-v31-sourcing-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 12px;
+  margin: 0 0 22px;
+  padding: 12px 12px 13px;
+  border: 1px solid #31566b;
+  background: #10283a;
+}
+.bq-page .bq-v31-sourcing-context > span {
+  grid-column: 1 / -1;
+  color: #61d2eb;
+  font: 700 10px/1.3 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+.bq-page .bq-v31-sourcing-context > strong {
+  align-self: center;
+  color: #eaf5fa;
+  font: 700 15px/1.35 "Segoe UI", sans-serif;
+  overflow-wrap: anywhere;
+}
+.bq-page .bq-v31-sourcing-context > a {
+  align-self: center;
+  justify-self: end;
+  padding: 8px 11px;
+  border: 1px solid #41677b;
+  color: #bfeaf5;
+  font: 600 10px/1.2 "Segoe UI", sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.bq-page .bq-v31-sourcing-context > a:hover,
+.bq-page .bq-v31-sourcing-context > a:focus-visible {
+  background: #173d50;
+  border-color: #5acbe3;
+}
+
+/* Mobile queue tracks shrink to the shared Breaker viewport width. */
+@media (max-width: 699px) {
+  .bq-page .bq-queue-col { grid-template-columns: minmax(0, 1fr); }
+  .bq-page .bq-queue-col-body,
+  .bq-page .bq-queue-col-head,
+  .bq-page .bq-queue-list { min-width: 0; max-width: 100%; }
+  .bq-page .bq-queue-list { overflow-x: auto; }
+}
+
+/* V31b: production completion and primary selected-build actions belong above Material Planning.
+   Allocation coverage remains a separate truthful statistic. */
+.bq-page .bq-v31-production {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 1px 0;
+  color: var(--mb-ops-text-secondary);
+  font: 700 10px/1.25 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-production > div {
+  flex: 1;
+  height: 5px;
+  background: var(--mb-ops-surface-row);
+  border: 1px solid var(--mb-ops-border-strong);
+}
+.bq-page .bq-v31-production > div > span {
+  display: block;
+  height: 100%;
+  background: var(--mb-ops-border-active);
+}
+.bq-page .bq-v31-actions {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 11px;
+}
+.bq-page .bq-v31-actions > button {
+  padding: 8px 11px;
+  min-height: 34px;
+  border: 1px solid var(--mb-ops-border-strong);
+  background: var(--mb-ops-surface-row);
+  color: var(--mb-ops-text-primary);
+  font: 600 10px/1.25 "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+.bq-page .bq-v31-actions > button:first-child { border-color: var(--mb-ops-border-active); background: #123a47; }
+.bq-page .bq-v31-actions > button.bq-v31-actions--danger { border-color: #7c454f; background: #33242b; color: #efa9af; }
+.bq-page .bq-v31-actions > button:disabled { opacity: .5; cursor: not-allowed; }
+.bq-page .bq-v31-actions > button:focus-visible { outline: 2px solid var(--mb-ops-border-active); }
+.bq-page .bq-center-shell .bq-v31-advanced-controls .bq-selected-craft-actions { display: none; }
+
+
+/* V31b mobile Queue view: full-width stacked cards, not 64px swipe pills.
+   Keep BuildQueueCraftCard semantics and item selection identical to desktop. */
+@media (max-width: 719px) {
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-queue-col {
+    padding: 0 14px 18px;
+    gap: 0;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-queue-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+    gap: 7px;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card-drop-slot,
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card-shell,
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card {
+    display: block;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card-shell {
+    position: relative;
+    min-height: 72px;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card {
+    min-height: 72px;
+    padding: 10px 12px;
+    touch-action: manipulation;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-queue-col-foot {
+    display: block;
+    margin-top: 14px;
+    padding: 0;
+  }
+  .app-page-shell--mobile-views[data-workspace-module="build"] .bq-craft-card-drag-handle {
+    display: none;
+  }
+}
+
+
+/* Real inventory-backed V31b Potential Sources cards. */
+.bq-page .bq-v31-potential-sources {
+  margin: 13px 0 0;
+  padding: 0 0 12px;
+  border-top: 1px solid var(--mb-ops-border-strong);
+}
+.bq-page .bq-v31-potential-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 9px;
+  margin: 0;
+  padding: 13px 0 8px;
+}
+.bq-page .bq-v31-potential-head > h3 {
+  margin: 0;
+  color: var(--mb-ops-text-primary);
+  font: 700 11px/1.25 "Segoe UI", sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-potential-head > span {
+  color: var(--mb-ops-border-active);
+  font: 600 9px/1.3 "Segoe UI", sans-serif;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.bq-page .bq-v31-potential-sources > .bq-ledger-description {
+  margin: 0 0 10px;
+  font: 500 10px/1.45 "Segoe UI", sans-serif;
+  color: var(--mb-ops-text-secondary);
+}
+.bq-page .bq-v31-location-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.bq-page .bq-v31-location-source {
+  border: 1px solid var(--mb-ops-border-strong);
+  background: var(--mb-ops-surface-panel);
+}
+.bq-page .bq-v31-location-source-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  gap: 8px;
+  padding: 10px 11px;
+  border-bottom: 1px solid var(--mb-ops-surface-separator);
+  background: var(--mb-ops-surface-row);
+}
+.bq-page .bq-v31-location-source-head > strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #e1eef5;
+  font: 700 12px/1.25 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-location-source-head > span {
+  flex: 0 0 auto;
+  color: var(--mb-ops-text-secondary);
+  font: 600 10px/1.3 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-location-source-materials {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.bq-page .bq-v31-location-source-materials > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  padding: 8px 11px;
+  border-top: 1px solid rgba(87, 138, 157, .14);
+}
+.bq-page .bq-v31-location-source-materials > div:first-child { border-top: 0; }
+.bq-page .bq-v31-location-source-materials > div > span {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  min-width: 0;
+  color: var(--mb-ops-text-secondary);
+  font: 500 11px/1.2 "Segoe UI", sans-serif;
+}
+.bq-page .bq-v31-location-source-materials > div > strong {
+  color: #6bd4e7;
+  font: 700 11px/1.2 "Segoe UI", sans-serif;
+  white-space: nowrap;
+}
+.bq-page .bq-v31-potential-inventory-link {
+  display: inline-flex;
+  margin: 11px 0 0;
+  padding: 9px 12px;
+  background: var(--mb-ops-surface-row);
+  border: 1px solid var(--mb-ops-border-active);
+  color: var(--mb-ops-text-primary);
+  font: 600 11px/1.2 "Segoe UI", sans-serif;
+  text-decoration: none;
+}
+.bq-page .bq-v31-potential-inventory-link:hover { background: var(--mb-ops-surface-hover); }
+.bq-page .bq-v31-potential-inventory-link:focus-visible { outline: 2px solid var(--mb-ops-border-active); }

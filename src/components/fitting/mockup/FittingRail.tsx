@@ -6,8 +6,6 @@ const RAIL_ITEMS = [
   { key: "cargo", label: "Inventory", to: "/logistics/inventory" },
   { key: "tools", label: "Tools", to: "/modules" },
   { key: "wrench", label: "Industry", to: "/industry/crafting" },
-  { key: "crosshair", label: "Combat", to: "/combat/component-mapping" },
-  { key: "shield", label: "Defense", to: "/dashboard/doctrine/armor-threshold" },
   { key: "hex", label: "Systems", to: "/dashboard/doctrine" },
 ] as const;
 
@@ -23,10 +21,6 @@ function RailIcon({ kind }: { kind: (typeof RAIL_ITEMS)[number]["key"] }) {
       return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M14.7 6.3a4 4 0 105.7 5.7L8 19l-3 1 1-3 8.7-10.7z" /></svg>;
     case "wrench":
       return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M14.7 6.3a4 4 0 015.7 5.7l-2.2 2.2-3.5-3.5 2.2-2.2z" /><path d="M3 21l6-6" /></svg>;
-    case "crosshair":
-      return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="12" cy="12" r="7" /><path d="M12 5v14M5 12h14" /></svg>;
-    case "shield":
-      return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 3l8 3v6c0 4.4-3.2 7.8-8 9-4.8-1.2-8-4.6-8-9V6z" /></svg>;
     default:
       return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6z" /></svg>;
   }

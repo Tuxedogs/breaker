@@ -3,10 +3,12 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import * as schema from "./schema.js";
+import { assertStagingConfiguration } from "../server/staging/config.js";
 
 let dbInstance: PostgresJsDatabase<typeof schema> | null = null;
 
 export function getDb() {
+  assertStagingConfiguration();
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {

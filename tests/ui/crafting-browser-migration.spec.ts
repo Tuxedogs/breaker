@@ -32,7 +32,7 @@ async function selectAd5b(page: Page) {
   await expect(row).toBeVisible();
   await row.click();
   await expect(page).toHaveURL(new RegExp(`preview=${AD5B_ID}`));
-  await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
+  await expect(page.locator(".craft-v31-lab-title")).toHaveAttribute(
     "aria-label",
     /AD5B Ballistic Gatling/,
   );
@@ -188,7 +188,7 @@ test.describe("Crafting production browser migration", () => {
     })).toBeLessThanOrEqual(2);
 
     await page.getByRole("button", { name: "Shield", exact: true }).first().click();
-    await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute("aria-label", /AD5B/);
+    await expect(page.locator(".craft-v31-lab-title")).toHaveAttribute("aria-label", /AD5B/);
     await expect(page.getByTestId("crafting-center-spine")).toHaveAttribute("data-trace-active", "false");
 
     await page.getByRole("button", { name: /Close AD5B Ballistic Gatling.*detail/ }).click();
@@ -205,7 +205,7 @@ test.describe("Crafting production browser migration", () => {
 
     const drawer = page.locator(".craft-detail-drawer-shell");
     await expect(drawer).toBeVisible();
-    await expect(drawer.locator(".craft-detail-hero-artwork")).toHaveAttribute(
+    await expect(drawer.locator(".craft-v31-lab-art img")).toHaveAttribute(
       "src",
       /behr-ballistic-gatling-s5\.webp$/,
     );
@@ -309,7 +309,7 @@ test.describe("Crafting production browser migration", () => {
 
     const detail = page.locator(".craft-detail-drawer-shell");
     await expect(detail).toBeVisible();
-    await expect(page.locator(".craft-detail-drawer-mobile-back")).toBeVisible();
+    await expect(page.locator(".craft-v31-lab-back")).toBeVisible();
     await expect(detail.getByRole("tab")).toHaveCount(4);
 
     await detail.getByRole("tab", { name: "Materials", exact: true }).click();
@@ -320,7 +320,7 @@ test.describe("Crafting production browser migration", () => {
     await detail.getByRole("tab", { name: "Sources", exact: true }).click();
     await expect(detail.locator(".craft-detail-sources-section")).toBeVisible();
 
-    await page.locator(".craft-detail-drawer-mobile-back").click();
+    await page.locator(".craft-v31-lab-back").click();
     await expect(page.locator(".craft-browser-production-pane")).toBeVisible();
     await expect(page.locator(".craft-browser-detail-pane")).toBeHidden();
     await expect(page).toHaveURL(/(?:\?|&)search=AD5B(?:&|$)/);

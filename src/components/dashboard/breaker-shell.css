@@ -1,0 +1,321 @@
+/* V31 application shell (Breaker_V31_Responsive_Motion.html).
+   Geometry and colours are measured from the reference; every value is a token.
+   Desktop/tablet: 48px top bar above a 66px module rail and the working viewport.
+   Phones (<=699px): compact top bar, page content, fixed six-item module dock. */
+
+.dash-page.breaker-shell {
+  display: grid;
+  grid-template-rows: var(--mb-shell-topbar-height) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--mb-shell-canvas);
+}
+
+.breaker-shell__layout {
+  display: grid;
+  grid-template-columns: var(--mb-shell-rail-width) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+}
+
+.breaker-shell .dash-body,
+.breaker-shell .dash-content { min-height: 0; height: 100%; }
+
+/* ── Top bar ─────────────────────────────────
+   One V31 .topbar for the homepage and every operational page: the reference applies
+   identical rules in both states. Values are taken from its stylesheet. */
+.breaker-topbar {
+  position: relative;
+  z-index: 4;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: var(--mb-shell-topbar-height);
+  min-width: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--mb-shell-topbar-line);
+  background: var(--mb-shell-topbar-bg);
+  box-shadow: 0 2px 24px var(--mb-shell-topbar-shadow);
+  color: var(--mb-shell-text);
+  font-family: var(--mb-font-ui);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* V31 shared bar hairline: full module accent fading out by 68%. */
+.breaker-topbar::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, currentColor 0%, transparent 68%);
+  color: var(--mb-accent);
+  opacity: .8;
+  pointer-events: none;
+}
+.breaker-topbar[data-module="craft"]::after { color: var(--mb-shell-topbar-craft-accent); }
+.breaker-topbar[data-module="build"]::after { color: var(--mb-shell-topbar-build-accent); opacity: .3; }
+.breaker-topbar[data-module="inventory"]::after { color: var(--mb-shell-topbar-inventory-accent); }
+.breaker-topbar[data-module="fitting"]::after { color: var(--mb-shell-topbar-fitting-accent); }
+
+.breaker-topbar__brand {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 17px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--mb-shell-brand);
+  font-size: 12px;
+  font-weight: 680;
+  letter-spacing: .4em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.breaker-topbar__brand:focus-visible { outline: 2px solid var(--mb-shell-focus); outline-offset: 3px; }
+.breaker-topbar__symbol { color: var(--mb-shell-brand-symbol); font-size: 18px; letter-spacing: 0; line-height: 1; }
+
+.breaker-topbar__divider { flex: none; width: 1px; height: 14px; background: var(--mb-shell-divider); }
+
+/* Operational pages show a page / detail breadcrumb; the homepage shows a plain label. */
+.breaker-topbar__crumb,
+.breaker-topbar__label {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  color: var(--mb-shell-crumb);
+  font-size: 11px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.breaker-topbar__crumb-page { color: var(--mb-shell-crumb-page); font-size: 10px; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; }
+.breaker-topbar__crumb-sep { color: var(--mb-shell-crumb-sep); font-size: 12px; }
+.breaker-topbar__crumb-detail { min-width: 0; color: var(--mb-shell-crumb-detail); font-size: 11px; letter-spacing: .02em; }
+
+.breaker-topbar__spacer { flex: 1; }
+
+.breaker-topbar__status {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 9px;
+  color: var(--mb-shell-status);
+  font-size: 9px;
+  letter-spacing: .16em;
+  white-space: nowrap;
+}
+.breaker-topbar__status::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mb-shell-status-dot);
+  box-shadow: 0 0 11px var(--mb-shell-status-dot);
+}
+
+.breaker-topbar .breaker-topbar__round,
+.breaker-topbar .breaker-topbar__account {
+  flex: none;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  min-height: 26px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--mb-shell-round-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--mb-shell-round-text);
+  font-size: 15px;
+}
+.breaker-topbar__round { display: grid; place-items: center; cursor: pointer; }
+.breaker-topbar__round:focus-visible { outline: 2px solid var(--mb-shell-focus); outline-offset: 2px; }
+
+/* V31 pins the bar while tablet and phone pages scroll (the homepage stacks its slices). */
+@media (max-width: 1100px) {
+  .breaker-topbar { position: sticky; top: 0; z-index: 50; }
+}
+
+/* V31 keeps 20px padding until phones: its later base rule outranks the 720px padding. */
+@media (max-width: 720px) {
+  .breaker-topbar { gap: 11px; }
+  .breaker-topbar__status { display: none; }
+}
+
+@media (max-width: 600px) {
+  .breaker-topbar__crumb { overflow: hidden; }
+  .breaker-topbar__crumb-detail { overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* ── Module rail ─────────────────────────────── */
+.breaker-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  min-height: 0;
+  padding: 18px 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid var(--mb-shell-rail-line);
+  background: var(--mb-shell-rail-bg);
+  scrollbar-width: none;
+  font-family: var(--mb-font-ui);
+}
+
+.breaker-rail__item {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--mb-shell-nav-radius);
+  background: transparent;
+  color: var(--mb-shell-nav);
+  font-family: var(--mb-font-ui);
+  font-size: 17px;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+.breaker-rail__item:hover { border-color: var(--mb-shell-nav-hover-border); background: var(--mb-shell-nav-hover-bg); color: var(--mb-shell-nav-hover); }
+.breaker-rail__item.is-current {
+  border-color: var(--mb-shell-nav-current-border);
+  background: var(--mb-shell-nav-current-bg);
+  box-shadow: inset 2px 0 var(--mb-shell-nav-current-mark);
+  color: var(--mb-shell-nav-current);
+}
+.breaker-rail__item:focus-visible { outline: 2px solid var(--mb-shell-focus); outline-offset: 1px; }
+.breaker-rail__item--secondary,
+.breaker-rail__tool { font-size: 15px; }
+.breaker-rail__tool.is-on { color: var(--mb-shell-nav-current); }
+
+.breaker-rail__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.breaker-rail__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 13px;
+  padding: 0 3px;
+  border-radius: var(--mb-radius-pill);
+  background: var(--mb-shell-nav-current-border);
+  color: var(--mb-shell-crumb-detail);
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+}
+
+.breaker-rail__divider { flex: none; width: 26px; height: 1px; margin: 3px 0; background: var(--mb-shell-rail-line); }
+.breaker-rail__footer { display: flex; flex-direction: column; align-items: center; gap: 9px; margin-top: auto; }
+
+/* ── Phones: compact header and bottom module dock ─ */
+@media (max-width: 699px) {
+  .dash-page.breaker-shell { background: var(--mb-shell-mobile-canvas); }
+  .breaker-shell__layout { grid-template-columns: minmax(0, 1fr); }
+  .breaker-shell .dash-body { box-sizing: border-box; padding-bottom: calc(var(--mb-shell-dock-height) + env(safe-area-inset-bottom, 0px)); }
+
+  .breaker-topbar { z-index: 60; gap: 9px; padding: 0 12px; background: var(--mb-shell-topbar-bg-mobile); backdrop-filter: blur(14px); font-size: 12px; }
+  .breaker-topbar__brand { max-width: 170px; gap: 8px; font-size: 11px; letter-spacing: .17em; }
+  .breaker-topbar__divider { height: 17px; opacity: .7; }
+  .breaker-topbar__crumb,
+  .breaker-topbar__label { display: block; flex: 1; overflow: hidden; font-size: 9px; letter-spacing: .04em; text-overflow: ellipsis; }
+  .breaker-topbar__crumb-detail { display: inline-block; max-width: 93px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+  .breaker-topbar__spacer,
+  .breaker-topbar__round { display: none; }
+
+  .breaker-rail {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 80;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: stretch;
+    justify-items: stretch;
+    gap: 1px;
+    height: calc(var(--mb-shell-dock-height) + env(safe-area-inset-bottom, 0px));
+    padding: 5px 4px calc(5px + env(safe-area-inset-bottom, 0px));
+    overflow: visible;
+    border-top: 1px solid var(--mb-shell-dock-line);
+    border-right: 0;
+    background: var(--mb-shell-dock-bg);
+    box-shadow: 0 -8px 32px var(--mb-shell-dock-shadow);
+  }
+  .breaker-rail__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    height: 56px;
+    min-width: 0;
+    min-height: 52px;
+    border-radius: var(--mb-radius-md);
+    color: var(--mb-shell-dock-nav);
+    font-size: 19px;
+    line-height: 1.05;
+  }
+  .breaker-rail__item:hover { border-color: transparent; background: transparent; color: var(--mb-shell-dock-current); }
+  .breaker-rail__item.is-current {
+    border-color: var(--mb-shell-dock-current-border);
+    background: var(--mb-shell-dock-current-bg);
+    box-shadow: inset 0 2px var(--mb-shell-dock-current-mark);
+    color: var(--mb-shell-dock-current);
+  }
+  .breaker-rail__label {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    color: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .01em;
+  }
+  .breaker-rail__badge { top: 3px; right: 8px; }
+  .breaker-rail__item--secondary,
+  .breaker-rail__divider,
+  .breaker-rail__footer { display: none; }
+}
+
+@media (max-width: 360px) {
+  .breaker-topbar__brand { font-size: 10px; letter-spacing: .1em; }
+  .breaker-topbar__crumb,
+  .breaker-topbar__label { font-size: 8px; }
+  .breaker-rail { padding-right: 1px; padding-left: 1px; }
+  .breaker-rail__label { font-size: 9px; }
+}
+
+@media (orientation: landscape) and (max-width: 699px) {
+  .breaker-shell .dash-body { padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px)); }
+  .breaker-rail { height: calc(58px + env(safe-area-inset-bottom, 0px)); }
+  .breaker-rail__item { height: 46px; min-height: 42px; }
+  .breaker-rail__label { font-size: 9px; }
+}

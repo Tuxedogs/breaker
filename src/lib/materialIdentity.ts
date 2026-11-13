@@ -176,3 +176,18 @@ export function createMaterialIdentityResolver(identities: readonly MaterialIden
 }
 
 export const DEFAULT_MATERIAL_IDENTITY_RESOLVER = createMaterialIdentityResolver([]);
+
+// Product display codes, curated for V31b. The upstream identity publication does not yet supply abbreviations.
+const MATERIAL_SHORT_CODES: Readonly<Record<string, string>> = {
+  beradom: "Bdm", beryl: "Byl", bexalite: "Bex", carinite: "Car",
+  carinitepure: "Pur", copper: "Cop", corundum: "Cor", jaclium: "Jac",
+  janalite: "Jan", quantanium: "Qtm", quartz: "Qtz", sadaryx: "Sdx",
+  saldynium: "Sal", savrilium: "Sav", titanium: "Ti", tin: "Tin",
+};
+
+export function materialShortCode(identity: string): string {
+  const resolved = DEFAULT_MATERIAL_IDENTITY_RESOLVER.resolve(identity);
+  const key = normalizeMaterialIdentityToken(resolved?.materialKey ?? identity);
+  const fallback = (resolved?.displayName ?? identity).trim().slice(0, 3).toLowerCase();
+  return MATERIAL_SHORT_CODES[key] ?? fallback.charAt(0).toUpperCase() + fallback.slice(1);
+}

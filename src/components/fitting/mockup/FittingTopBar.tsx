@@ -38,7 +38,7 @@ export default function FittingTopBar({ view, onSelectShip, onSaveLoadout }: Fit
         </span>
         <div className="fm-topbar-copy">
           {view.manufacturer ? <span className="fm-topbar-mfg">{view.manufacturer}</span> : null}
-          <h1>{view.shipName}</h1>
+          <h2>{view.shipName}</h2>
           <span className="fm-topbar-role">{view.roleLine}</span>
         </div>
       </div>

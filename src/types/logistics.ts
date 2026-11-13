@@ -62,9 +62,11 @@ export interface RecipeTemplate {
 export interface InventoryLocation {
   id: string;
   name: string;
+  /** Canonical locations come from Scintel; custom locations are private user records. */
+  source?: "canonical" | "custom";
   category?: string;
   system?: string;
-  type?: "station" | "city" | "outpost" | "ship";
+  type?: "station" | "city" | "outpost" | "ship" | "custom";
 }
 
 export interface InventoryEntry {

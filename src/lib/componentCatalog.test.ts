@@ -15,6 +15,13 @@ import { buildComponentCatalogStatMetrics } from "../components/industry/craftin
 import type { ComponentCardIndexRecord } from "./componentCardIndex.ts";
 import { validateComponentCatalogGeneration } from "./componentCatalogGeneration.ts";
 import {
+  clearComponentCardIndexCache,
+  fetchComponentCardById,
+  getComponentCardIndexFromApi,
+  prepareComponentCards,
+  readComponentCardById,
+} from "./componentCardIndexApi.ts";
+import {
   classifyRecipeInput,
   getRecipeInputDisplayName,
 } from "./crafting/recipeInputClassification.ts";
@@ -29,6 +36,36 @@ function loadCard(id: string): ComponentCardIndexRecord {
     `${id}.json`,
   ), "utf8")) as ComponentCardIndexRecord;
 }
+
+test("browse summaries cannot mask full card detail during Build Queue preparation", async (t) => {
+  clearComponentCardIndexCache();
+  const full = loadCard("1a85280e-7b8f-4486-a563-17cd2549d268");
+  const summary = { ...full, stats: { ...full.stats, fpsWeapon: { alphaDamageTotal: 10 } } };
+  const requests: string[] = [];
+  t.mock.method(globalThis, "fetch", async (input: string | URL | Request) => {
+    const url = String(input);
+    requests.push(url);
+    const payload = url.endsWith('/index')
+      ? { generatedAt: 'test-generation', shapedRecordCount: 1 }
+      : url.endsWith('/facets')
+        ? { generatedAt: 'test-generation', facets: {} }
+        : url.endsWith('/browse')
+          ? { generatedAt: 'test-generation', records: [summary] }
+          : full;
+    return new Response(JSON.stringify(payload), { headers: { 'Content-Type': 'application/json' } });
+  });
+  try {
+    await getComponentCardIndexFromApi();
+    assert.equal(readComponentCardById(full.id), null);
+    await prepareComponentCards([full.id, full.id]);
+    assert.deepEqual(await fetchComponentCardById(full.id), full);
+    assert.equal(requests.filter((url) => url.endsWith(`/${full.id}`)).length, 1);
+    assert.equal(readComponentCardById(full.id)?.stats.fpsWeapon?.burstShotCount, 4);
+    assert.equal(readComponentCardById(full.id)?.stats.fpsWeapon?.projectileSpeed, 550);
+  } finally {
+    clearComponentCardIndexCache();
+  }
+});
 
 function loadJson(...segments: string[]): unknown {
   return JSON.parse(readFileSync(path.join(process.cwd(), ...segments), "utf8")) as unknown;
@@ -295,6 +332,16 @@ test("browser projection pages source-backed summaries without transferring deta
   assert.ok((payload.records ?? []).length <= 40);
   assert.ok(payload.records?.every((record) => record.type === "shield"));
   assert.ok(payload.records?.every((record) => record.searchText === undefined && record.description === undefined && record.source === undefined));
+});
+
+test("browser projection returns the whole filtered list for limit=all", async () => {
+  const result = await handleComponentCardsRoute("GET", "/api/crafting/component-cards/browser?limit=all");
+  assert.ok(result);
+  assert.equal(result.status, 200);
+  const payload = result.body as { totalRecords?: number; page?: number; records?: unknown[] };
+  assert.equal(payload.page, 1);
+  assert.ok((payload.totalRecords ?? 0) > 40);
+  assert.equal(payload.records?.length, payload.totalRecords);
 });
 
 test("browser projection ignores unknown URL filter values", async () => {

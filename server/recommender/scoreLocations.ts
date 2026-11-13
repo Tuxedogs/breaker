@@ -16,21 +16,8 @@ import {
   isMaterialActiveAtPyroLocation,
   miningLocationMergeKey,
 } from "./locationNormalization.js";
-
-function qualityFit(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number {
-  if (requirement.selectedQuality === undefined) return 1;
-  const chances = sourceQuality?.thresholdChances as Record<string, number> | undefined;
-  const chance = chances?.[String(requirement.selectedQuality)];
-  if (typeof chance === "number") return chance;
-  return 0.5;
-}
-
-function thresholdChanceFor(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number | undefined {
-  if (requirement.selectedQuality === undefined) return undefined;
-  const chances = sourceQuality?.thresholdChances as Record<string, number> | undefined;
-  const chance = chances?.[String(requirement.selectedQuality)];
-  return typeof chance === "number" ? chance : undefined;
-}
+import type { MiningRankingMode } from "./recommender.types.js";
+import { commonQualityThreshold, rankEvidence } from "../../src/features/mining/rankingContract.js";
 
 function fallbackSourceScore(source: Record<string, unknown>): number {
   const probability = typeof source.probability === "number" ? source.probability : 0;
@@ -50,8 +37,40 @@ function miningTypeFromSpawn(spawnType: string): string {
   return "Other/Unknown";
 }
 
+function normalizedMiningMethod(spawnType: string): string {
+  const type = miningTypeFromSpawn(spawnType).toLowerCase();
+  if (type === "ship") return "ship";
+  if (type === "ground vehicle") return "ground";
+  if (type === "hand") return "hand";
+  if (type === "harvestable") return "harvestable";
+  return type;
+}
+
+function allowedMiningMethodSet(allowedMiningMethods: string[] | undefined): Set<string> | null {
+  if (!allowedMiningMethods?.length) return null;
+  return new Set(allowedMiningMethods.map((method) => method.trim().toLowerCase()).filter(Boolean));
+}
+
+function sourceYieldFit(source: Record<string, unknown>, compositionAverage: number | undefined): number {
+  const rawStrength = typeof source.overallScore === "number"
+    ? source.overallScore
+    : fallbackSourceScore(source);
+  const strength = Math.max(0, Math.min(1, rawStrength > 1 ? rawStrength / 100 : rawStrength));
+  const composition = Math.max(0, Math.min(1, (compositionAverage ?? 0) / 100));
+  return strength * 0.7 + composition * 0.3;
+}
+
+function weightedEvidenceScore(
+  rankingMode: MiningRankingMode,
+  qualityFitResult: number,
+  yieldFit: number,
+  requirementWeight: number,
+): number {
+  return rankEvidence(rankingMode, qualityFitResult, yieldFit) * requirementWeight;
+}
+
 function materialNeedKey(requirement: AggregatedRequirement): string {
-  return `${requirement.materialKey}|${requirement.selectedQuality ?? "any"}|${requirement.unitType ?? ""}`;
+  return `${requirement.materialKey}|${requirement.unitType ?? ""}`;
 }
 
 function sourceResourceKeys(source: Record<string, unknown>, group: { materialId?: string; materialName?: string }): string[] {
@@ -206,12 +225,15 @@ export function scoreLocations(
   requirements: AggregatedRequirement[],
   apiData: RecommenderApiData,
   warnings: RecommenderWarning[],
+  options: { allowedMiningMethods?: string[]; rankingMode?: MiningRankingMode } = {},
 ): { locations: ScoredLocation[]; diagnostics: MaterialCoverageDiagnostic[]; scoreContributions: ScoreContributionDiagnostic[] } {
   const locations = new Map<string, ScoredLocation>();
   const diagnostics: MaterialCoverageDiagnostic[] = [];
   const scoreContributions: ScoreContributionDiagnostic[] = [];
   const indexedResourcesByLocation = buildIndexedResources(apiData, warnings);
   const identityResolver = apiData.materialIdentityResolver;
+  const allowedMethods = allowedMiningMethodSet(options.allowedMiningMethods);
+  const rankingMode = options.rankingMode;
 
   for (const requirement of requirements) {
     const group = findMaterialGroup(requirement, apiData.materialGroups, warnings, identityResolver);
@@ -229,6 +251,14 @@ export function scoreLocations(
     }
 
     const sources = resolveSources(group, warnings);
+    const eligibleSources = sources.filter((source) => {
+      const location = resolveLocation(source, apiData, warnings);
+      return isActivePyroMiningLocation(location.systemName, location.locationName) &&
+        isActiveStantonLagrangeMiningLocation(location.systemName, location.locationName) &&
+        isMaterialActiveAtPyroLocation(location.systemName, location.locationName, source.materialName ?? group.materialName) &&
+        (!allowedMethods || allowedMethods.has(normalizedMiningMethod(location.spawnType)));
+    });
+    const qualityThreshold = commonQualityThreshold(eligibleSources.map((source) => source.quality?.thresholdChances));
     const materialDiagnostics: MaterialCoverageDiagnostic = {
       materialKey: requirement.materialKey,
       materialId: requirement.materialId,
@@ -249,6 +279,16 @@ export function scoreLocations(
       ) {
         continue;
       }
+      const miningMethod = normalizedMiningMethod(location.spawnType);
+      if (allowedMethods && !allowedMethods.has(miningMethod)) {
+        addWarning(warnings, {
+          code: "source_mining_method_excluded",
+          message: `${requirement.materialName} at ${location.locationName} was excluded because its ${miningMethod} mining method is not allowed by this request.`,
+          materialId: requirement.materialId,
+          materialName: requirement.materialName,
+        });
+        continue;
+      }
       const key = physicalLocationKey(location);
       materialDiagnostics.candidateLocations.push({
         locationKey: key,
@@ -261,8 +301,10 @@ export function scoreLocations(
       const compositionAverageUsed = source.composition?.averagePercentage ?? source.composition?.maxPercentage;
       const compositionMaxUsed = source.composition?.maxPercentage;
       const compositionMissing = compositionAverageUsed === undefined;
-      const thresholdChanceUsed = thresholdChanceFor(requirement, source.quality);
-      const thresholdDataMissing = requirement.selectedQuality !== undefined && !source.quality?.thresholdChances;
+      const chance = qualityThreshold === undefined ? undefined : source.quality?.thresholdChances?.[String(qualityThreshold)];
+      const thresholdChanceUsed = typeof chance === "number" && Number.isFinite(chance) ? chance : undefined;
+      const thresholdDataMissing = thresholdChanceUsed === undefined;
+      const qualityFitResult = thresholdChanceUsed ?? sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed);
       if (compositionMissing) {
         addWarning(warnings, {
           code: "source_composition_missing",
@@ -271,19 +313,25 @@ export function scoreLocations(
           materialName: requirement.materialName,
         });
       }
-      if (thresholdDataMissing) {
-        addWarning(warnings, {
-          code: "source_quality_thresholds_missing",
-          message: `Quality threshold chances are missing for ${requirement.materialName}; selected quality was preserved but partially scored.`,
-          materialId: requirement.materialId,
-          materialName: requirement.materialName,
-        });
-      }
-
       const baseScore = source.overallScore ?? fallbackSourceScore(source as Record<string, unknown>);
       const requirementWeight = Math.log10(requirement.requiredQuantity + 10);
-      const qualityFitResult = qualityFit(requirement, source.quality);
-      const score = (baseScore + (compositionAverageUsed ?? 0) / 100) * qualityFitResult * requirementWeight;
+      // Omitted rankingMode retains the prior multiplicative score contract for
+      // old API clients. Explicit modes use the shared two-domain contract.
+      const score = rankingMode === undefined
+        ? (baseScore + (compositionAverageUsed ?? 0) / 100) * qualityFitResult * requirementWeight
+        : weightedEvidenceScore(
+          rankingMode,
+          qualityFitResult,
+          sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
+          requirementWeight,
+        );
+      const routeTargetabilityScore = rankingMode === undefined
+        ? undefined
+        : rankEvidence(
+          rankingMode,
+          qualityFitResult,
+          sourceYieldFit(source as Record<string, unknown>, compositionAverageUsed),
+        ) * 100;
       const scoreDiagnostic: ScoreContributionDiagnostic = {
         materialKey: requirement.materialKey,
         materialId: requirement.materialId,
@@ -298,9 +346,11 @@ export function scoreLocations(
         compositionMaxUsed,
         selectedQuality: requirement.selectedQuality,
         thresholdChanceUsed,
+        qualityThresholdUsed: thresholdChanceUsed === undefined ? undefined : qualityThreshold,
         qualityFit: qualityFitResult,
         requirementWeight,
         finalContribution: score,
+        routeTargetabilityScore,
         compositionMissing,
         thresholdDataMissing,
         sourceResolverPath: source.sourceResolverPath,

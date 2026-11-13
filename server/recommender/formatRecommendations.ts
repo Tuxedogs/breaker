@@ -139,7 +139,7 @@ type EncounterSignal = SignalScore & {
   proxy: boolean;
 };
 
-function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): QualitySignal {
+function qualitySignal(source: ApiSource, requirement: AggregatedRequirement, threshold: number | undefined): QualitySignal {
   if (!qualityMatters(requirement, source)) {
     return {
       score: null,
@@ -150,14 +150,14 @@ function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): Q
     };
   }
 
-  const thresholdChance = selectedQualityChance(source, requirement.selectedQuality);
+  const thresholdChance = selectedQualityChance(source, threshold);
   if (thresholdChance === undefined) {
     return {
       score: null,
       ignored: false,
       thresholdChance: null,
       fieldsUsed: [],
-      missingComponents: ["quality.thresholdChances[selectedQuality]"],
+      missingComponents: ["quality.thresholdChances[qualityThreshold]"],
     };
   }
 
@@ -165,7 +165,7 @@ function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): Q
     score: percentSignal(thresholdChance) ?? null,
     ignored: false,
     thresholdChance,
-    fieldsUsed: ["quality.thresholdChances[selectedQuality]"],
+    fieldsUsed: ["quality.thresholdChances[qualityThreshold]"],
     missingComponents: [],
   };
 }
@@ -254,6 +254,7 @@ function buildRouteSignals(
   source: ApiSource,
   requirement: AggregatedRequirement,
   sourceRowCount: number,
+  threshold: number | undefined,
 ): {
   quality: QualitySignal;
   composition: ReturnType<typeof compositionSignal>;
@@ -264,7 +265,7 @@ function buildRouteSignals(
   sourceFieldsUsed: string[];
   sourceStrength: number;
 } {
-  const quality = qualitySignal(source, requirement);
+  const quality = qualitySignal(source, requirement, threshold);
   const composition = compositionSignal(source);
   const encounter = encounterSignal(source, sourceRowCount);
   const sourceStrength = sourceStrengthScore(source);
@@ -311,6 +312,7 @@ function routeSignalsPayload(args: {
   competingSources: number;
   sourceRowCount: number;
   built: ReturnType<typeof buildRouteSignals>;
+  threshold?: number;
 }): MaterialRouteScore["signals"] {
   const { source, requirement, locationName, qualityRouteScore, yieldRouteScore, overallTargetabilityScore, competingSources, built } = args;
   return {
@@ -330,6 +332,7 @@ function routeSignalsPayload(args: {
     recommendationScore: overallTargetabilityScore,
     selectedQuality: requirement.selectedQuality,
     thresholdChance: built.quality.thresholdChance,
+    qualityThreshold: built.quality.thresholdChance == null ? undefined : args.threshold,
     qualitySourceScope: source.quality?.qualitySourceScope ?? null,
     qualitySourceFamily: source.quality?.qualitySourceFamily ?? null,
     qualityDistributionName: source.quality?.distributionName ?? null,
@@ -408,6 +411,7 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
     rawDemand: number;
     competingSources: number;
     sourceRowCount: number;
+    threshold?: number;
   };
 
   const rawRoutes: RawRoute[] = [];
@@ -423,7 +427,8 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
       const source = location.bestSources.find((entry) => sourceBelongsToRequirement(entry, requirement)) ?? location.bestSources[0];
       if (!source) continue;
       const sourceRowCount = routeSourceRowCount(location, requirement);
-      const signals = buildRouteSignals(source, requirement, sourceRowCount);
+      const diagnostic = location.scoreDiagnostics?.find((entry) => entry.materialKey === requirement.materialKey && entry.sourceLocationRawName === (source.sourceLocationRawName ?? source.location ?? source.providerName));
+      const signals = buildRouteSignals(source, requirement, sourceRowCount, diagnostic?.qualityThresholdUsed);
       rawRoutes.push({
         locationKey: location.locationKey,
         locationName: location.locationName,
@@ -433,6 +438,7 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
         rawDemand: Math.log10(requirement.requiredQuantity + 10) * 25,
         competingSources: sourceCounts.get(requirement.materialKey) ?? 1,
         sourceRowCount,
+        threshold: diagnostic?.qualityThresholdUsed,
       });
     }
   }
@@ -449,7 +455,31 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
     const qualityRouteScore = route.signals.quality.score === null ? null : roundScore(route.signals.quality.score);
     const yieldRouteScore = roundScore(route.signals.composition.score ?? 0);
     const demandMatchScore = roundScore(maxDemand > 0 ? (route.rawDemand / maxDemand) * 100 : 0);
-    const overallTargetabilityScore = roundScore(route.signals.recommendation);
+    const sourceLocation = route.source.sourceLocationRawName ?? route.source.location ?? route.source.providerName;
+    const diagnostics = locations.find((location) => location.locationKey === route.locationKey)
+      ?.scoreDiagnostics?.filter((diagnostic) =>
+        diagnostic.materialKey === route.requirement.materialKey &&
+        diagnostic.sourceLocationRawName === sourceLocation
+      ) ?? [];
+    const matchingDiagnostics = diagnostics.length > 0
+      ? diagnostics
+      : locations.find((location) => location.locationKey === route.locationKey)
+        ?.scoreDiagnostics?.filter((diagnostic) => diagnostic.materialKey === route.requirement.materialKey) ?? [];
+    // The scorer accumulates each eligible source contribution at a physical
+    // location. Carry that same explicit-mode aggregation into the one route
+    // score the UI consumes; selecting the first source here would let the
+    // displayed order disagree with the server when a material has multiple
+    // eligible source rows at that location. These are modeled rank scores,
+    // not probabilities, so their sum is intentionally not clamped to 100.
+    // Omitted rankingMode retains the legacy formatter score path.
+    const explicitRouteScore = matchingDiagnostics.length > 0 && matchingDiagnostics.every(
+      (diagnostic) => diagnostic.routeTargetabilityScore !== undefined,
+    )
+      ? matchingDiagnostics.reduce((sum, diagnostic) => sum + (diagnostic.routeTargetabilityScore ?? 0), 0)
+      : undefined;
+    const overallTargetabilityScore = explicitRouteScore === undefined
+      ? route.signals.recommendation
+      : Math.round(explicitRouteScore);
     const score: MaterialRouteScore = {
       materialKey: route.requirement.materialKey,
       materialId: route.requirement.materialId,
@@ -473,6 +503,7 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
         competingSources: route.competingSources,
         sourceRowCount: route.sourceRowCount,
         built: route.signals,
+        threshold: route.threshold,
       }),
     };
     const list = byLocation.get(route.locationKey) ?? [];

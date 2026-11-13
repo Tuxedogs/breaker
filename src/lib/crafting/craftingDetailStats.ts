@@ -67,11 +67,17 @@ export function formatCraftingCompactNumber(value: number, options: { sign?: boo
 
 export function formatCraftingModifierPercent(value: number): string {
   if (!Number.isFinite(value)) return "-";
-  const rounded = Math.round(value * 10) / 10;
+  // One decimal normally; a real change smaller than 0.05% keeps one
+  // significant digit instead of collapsing to "0%".
+  const digits = value !== 0 && Math.abs(value) < 0.05
+    ? Math.min(6, 1 - Math.floor(Math.log10(Math.abs(value))))
+    : 1;
+  const scale = 10 ** digits;
+  const rounded = Math.round(value * scale) / scale;
   const normalized = Object.is(rounded, -0) ? 0 : rounded;
   const formatted = normalized.toLocaleString("en-US", {
     minimumFractionDigits: Number.isInteger(normalized) ? 0 : 1,
-    maximumFractionDigits: Number.isInteger(normalized) ? 0 : 1,
+    maximumFractionDigits: Number.isInteger(normalized) ? 0 : digits,
   });
   return `${normalized > 0 ? "+" : ""}${formatted}%`;
 }
@@ -80,6 +86,11 @@ export function formatCraftingContributionValue(value: number, modifierMode?: st
   if (modifierMode === "integerAdditive") {
     const v = Math.round(value);
     return `${v >= 0 ? "+" : ""}${v}`;
+  }
+  // A real contribution below 0.05% keeps one significant digit, never "+0.0%".
+  if (value !== 0 && Math.abs(value) < 0.05) {
+    const digits = Math.min(6, -Math.floor(Math.log10(Math.abs(value))));
+    return `${value > 0 ? "+" : ""}${value.toFixed(digits)}%`;
   }
   return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
@@ -130,13 +141,20 @@ export function formatModifiedNumber(value: number, property: string): string {
     property === "GPP_Quantum_Speed"
       ? quantumMetersToKilometers(value)
       : value;
-  const rounded =
+  // Two decimals for ordinary magnitudes; below 1, keep two significant digits
+  // so small source values (e.g. 0.00962 fuel) and their deltas never round to
+  // a value indistinguishable from the base.
+  const fractionDigits =
     property === "GPP_ItemResource_PowerGeneration"
-      ? Math.round(displayValue)
-      : Math.round(displayValue * 100) / 100;
+      ? 0
+      : displayValue !== 0 && Math.abs(displayValue) < 1
+        ? Math.min(10, Math.max(2, 1 - Math.floor(Math.log10(Math.abs(displayValue)))))
+        : 2;
+  const scale = 10 ** fractionDigits;
+  const rounded = Math.round(displayValue * scale) / scale;
   const normalized = Object.is(rounded, -0) ? 0 : rounded;
   const formatted = normalized.toLocaleString("en-US", {
-    maximumFractionDigits: Number.isInteger(normalized) ? 0 : 2,
+    maximumFractionDigits: Number.isInteger(normalized) ? 0 : fractionDigits,
   });
 
   if (property === "GPP_ItemResource_PowerGeneration") {

@@ -1,0 +1,47 @@
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+const root=process.env.BREAKER_URL||'http://127.0.0.1:5173';
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ try{
+   const craft=await browser.newPage({viewport:{width:1600,height:980}});
+   await craft.goto(root+'/industry/crafting',{waitUntil:'domcontentloaded'});
+   await craft.locator('.craft-v31-workbench-hero').waitFor({timeout:15000});
+   assert.ok(await craft.locator('.craft-detail-drawer-sources').count(),'Blueprint acquisition visible in DOM');
+   assert.ok(await craft.locator('.craft-detail-drawer-materials').count(),'Material quality section visible');
+   assert.ok(await craft.locator('.craft-detail-drawer-stats').count(),'Projected performance section visible');
+   console.log('PASS crafting seeded from actual catalog and sections coexist');
+   await craft.close();
+   const build=await browser.newPage({viewport:{width:1600,height:980}});
+   await build.goto(root+'/logistics/build-queue',{waitUntil:'domcontentloaded'});
+   await build.locator('.bq-v31-metrics').waitFor({timeout:15000});
+   assert.ok(await build.locator('.bq-v31-material-table tbody tr').count()>0,'Real material rows present');
+   await build.getByRole('tab',{name:/Planned/}).click();
+   assert.ok((await build.locator('.bq-v31-card-status').allTextContents()).every(s=>s.trim()==='PLANNED'),'Planned filter excludes active rows');
+   await build.getByRole('tab',{name:/All/}).click();
+   assert.ok(await build.locator('.bq-v31-card-status').count()>0,'All queue entries restored');
+   console.log('PASS real Build Queue material plan and status controls');
+   await build.close();
+   const inventory=await browser.newPage({viewport:{width:1600,height:980}});
+   await inventory.goto(root+'/logistics/inventory',{waitUntil:'domcontentloaded'});
+   await inventory.locator('[data-testid="inventory-empty-location"]').waitFor({timeout:15000});
+   assert.equal(await inventory.locator('.logi-inv-v31-vacant-slots span').count(),15,'Empty warehouse grid is visible');
+   assert.ok((await inventory.locator('[data-testid="inventory-warehouse-overview"]').innerText()).includes('0'),'No invented inventory records');
+   console.log('PASS inventory visual slots and empty-stock truth');
+   await inventory.close();
+   const fitting=await browser.newPage({viewport:{width:1600,height:980}});
+   await fitting.goto(root+'/fitting',{waitUntil:'domcontentloaded'});
+   await fitting.locator('.fit-v31-offline-stage').waitFor({timeout:15000});
+   assert.equal(await fitting.locator('.fit-v31-offline-hit').count(),8,'Exact V31b sample regions');
+   await fitting.getByRole('button',{name:'Inspect Left weapon'}).click();
+   assert.ok((await fitting.locator('.fit-v31-offline-inspector').innerText()).includes('Left weapon'));
+   await fitting.getByRole('button',{name:'Zoom in'}).click();
+   assert.equal((await fitting.locator('.fit-v31-offline-zoom output').innerText()).trim(),'110%');
+   await fitting.getByRole('button',{name:'Defense',exact:true}).click();
+   assert.equal(await fitting.locator('.fit-v31-offline-hit').count(),1,'Defense filter narrows illustrative regions');
+   assert.ok((await fitting.locator('main').innerText()).includes('OFFLINE VISUAL FIXTURE'),'Fixture clearly labeled offline');
+   console.log('PASS fitting V31b reference hotspots, filters, zoom and demo labeling');
+   await fitting.close();
+ } finally {await browser.close();}
+ console.log('ALL_PARITY_INTERACTIONS_PASSED');
+})().catch(e=>{console.error(e);process.exitCode=1});

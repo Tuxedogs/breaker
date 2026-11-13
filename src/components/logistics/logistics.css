@@ -9,63 +9,11 @@
 /* ── Page shell ───────────────────────────────── */
 
 .logi-page {
-  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   min-height: 100%;
   box-sizing: border-box;
-}
-
-.logi-page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.logi-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-primary);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.35);
-  margin-bottom: 0.3rem;
-}
-
-.logi-breadcrumb-link {
-  color: rgba(160, 180, 220, 0.4);
-  text-decoration: none;
-  transition: color 0.12s;
-}
-
-.logi-breadcrumb-link:hover {
-  color: rgba(160, 180, 220, 0.7);
-}
-
-.logi-breadcrumb-sep { opacity: 0.35; }
-
-.logi-breadcrumb-active { color: rgba(167, 139, 250, 0.65); }
-
-.logi-page-title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #e7edff;
-  margin: 0;
-}
-
-.logi-page-subtitle {
-  font-family: var(--font-primary);
-  font-size: 0.78rem;
-  color: rgba(160, 180, 220, 0.45);
-  margin-top: 0.18rem;
 }
 
 /* ── Buttons ──────────────────────────────────── */
@@ -76,21 +24,21 @@
   gap: 0.4rem;
   min-height: var(--app-control-height, 34px);
   padding: 0.42rem 0.9rem;
-  background: rgba(167, 139, 250, 0.22);
-  border: 1px solid rgba(167, 139, 250, 0.45);
-  border-radius: 6px;
-  font-family: var(--font-primary);
+  background: var(--mb-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 45%, transparent);
+  border-radius: var(--mb-radius-lg);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-body, 14px);
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #e9deff;
+  color: var(--mb-text-1);
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
   transition: background 0.12s, border-color 0.12s;
 }
 
-.logi-btn-primary:hover { background: rgba(167, 139, 250, 0.3); border-color: rgba(167, 139, 250, 0.6); }
+.logi-btn-primary:hover { background: color-mix(in srgb, var(--mb-accent) 30%, transparent); border-color: color-mix(in srgb, var(--mb-accent) 60%, transparent); }
 
 .logi-btn-primary[aria-disabled="true"] {
   opacity: 0.68;
@@ -102,14 +50,14 @@
   gap: 0.4rem;
   min-height: var(--app-control-height, 34px);
   padding: 0.42rem 0.9rem;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(96, 165, 250, 0.28);
-  border-radius: 6px;
-  font-family: var(--font-primary);
+  background: var(--mb-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 28%, transparent);
+  border-radius: var(--mb-radius-lg);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-body, 14px);
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: rgba(199, 210, 230, 0.82);
+  color: var(--mb-text-2);
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
@@ -118,9 +66,9 @@
 }
 
 .logi-btn-secondary:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(96, 165, 250, 0.42);
-  color: #e7edff;
+  background: color-mix(in srgb, var(--mb-accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--mb-accent) 42%, transparent);
+  color: var(--mb-text-1);
 }
 
 .logi-btn-ghost {
@@ -129,20 +77,20 @@
   gap: 0.4rem;
   min-height: var(--app-control-height, 34px);
   padding: 0.42rem 0.8rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  font-family: var(--font-primary);
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-meta, 13px);
   font-weight: 600;
-  color: rgba(199, 210, 230, 0.65);
+  color: var(--mb-text-3);
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
 
 .logi-btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(199, 210, 230, 0.9);
+  background: var(--mb-surface-hover);
+  color: var(--mb-text-2);
 }
 
 /* ── Stats row ────────────────────────────────── */
@@ -154,40 +102,40 @@
 }
 
 .logi-stat-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 6px;
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-lg);
   padding: 0.85rem 1rem;
 }
 
 .logi-stat-card--alert {
-  border-color: rgba(248, 113, 113, 0.15);
+  border-color: color-mix(in srgb, var(--mb-bad) 15%, transparent);
 }
 
 .logi-stat-label {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.56rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.4);
+  color: var(--mb-text-3);
   margin-bottom: 0.3rem;
 }
 
 .logi-stat-value {
-  font-family: var(--font-display);
+  font-family: var(--mb-font-display);
   font-size: 1.3rem;
   font-weight: 700;
-  color: #e7edff;
+  color: var(--mb-text-1);
   line-height: 1;
 }
 
-.logi-stat-value--shortage { color: #f87171; }
+.logi-stat-value--shortage { color: var(--mb-bad); }
 
 .logi-stat-unit {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.72rem;
   font-weight: 600;
-  color: rgba(160, 180, 220, 0.5);
+  color: var(--mb-text-3);
   margin-left: 0.18rem;
 }
 
@@ -200,9 +148,9 @@
 }
 
 .logi-nav-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 8px;
+  background: var(--mb-surface-1);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-lg);
   padding: 1.1rem 1.15rem;
   display: flex;
   flex-direction: column;
@@ -213,8 +161,8 @@
 }
 
 .logi-nav-card:hover {
-  background: rgba(167, 139, 250, 0.05);
-  border-color: rgba(167, 139, 250, 0.2);
+  background: var(--mb-surface-hover);
+  border-color: var(--mb-border-hover);
 }
 
 .logi-nav-card--wip {
@@ -226,37 +174,37 @@
 .logi-nav-card-icon {
   width: 38px;
   height: 38px;
-  border-radius: 8px;
-  background: rgba(167, 139, 250, 0.1);
-  border: 1px solid rgba(167, 139, 250, 0.15);
+  border-radius: var(--mb-radius-lg);
+  background: var(--mb-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 15%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #a78bfa;
+  color: var(--mb-accent);
   flex-shrink: 0;
 }
 
 .logi-nav-card-icon--wip {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.07);
-  color: rgba(160, 180, 220, 0.4);
+  background: var(--mb-surface-1);
+  border-color: var(--mb-border-soft);
+  color: var(--mb-text-3);
 }
 
 .logi-nav-card-label {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.96rem;
   font-weight: 700;
-  color: #e7edff;
+  color: var(--mb-text-1);
   letter-spacing: 0.02em;
 }
 
 .logi-nav-card-count {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.4);
+  color: var(--mb-text-3);
 }
 
-.logi-nav-card-count--wip { color: rgba(160, 180, 220, 0.3); }
+.logi-nav-card-count--wip { color: var(--mb-text-3); }
 
 /* ── Filter bar ───────────────────────────────── */
 
@@ -266,9 +214,9 @@
   gap: 0.6rem;
   flex-wrap: wrap;
   padding: 0.62rem 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-lg);
+  background: var(--mb-surface-1);
 }
 
 .logi-search-wrap {
@@ -277,9 +225,9 @@
   gap: 0.4rem;
   min-height: var(--app-input-height, 36px);
   padding: 0 0.7rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 5px;
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
   flex: 1;
   max-width: 280px;
   min-width: 160px;
@@ -288,7 +236,7 @@
 .logi-search-icon {
   width: 13px;
   height: 13px;
-  color: rgba(160, 180, 220, 0.35);
+  color: var(--mb-text-3);
   flex-shrink: 0;
 }
 
@@ -296,24 +244,24 @@
   background: none;
   border: none;
   outline: none;
-  color: rgba(160, 180, 220, 0.8);
-  font-family: var(--font-primary);
+  color: var(--mb-text-2);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-body, 14px);
   flex: 1;
   min-width: 0;
 }
 
-.logi-search-input::placeholder { color: rgba(160, 180, 220, 0.32); }
+.logi-search-input::placeholder { color: var(--mb-text-3); }
 
 .logi-select {
   min-height: var(--app-input-height, 36px);
   padding: 0 0.65rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 5px;
-  font-family: var(--font-primary);
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-body, 14px);
-  color: rgba(160, 180, 220, 0.8);
+  color: var(--mb-text-2);
   cursor: pointer;
   outline: none;
   min-width: 140px;
@@ -321,9 +269,9 @@
 
 .logi-filter-count {
   margin-left: auto;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.3);
+  color: var(--mb-text-3);
   white-space: nowrap;
 }
 
@@ -346,7 +294,7 @@
 .logi-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: color-mix(in srgb, var(--mb-canvas) 45%, transparent);
   z-index: 199;
 }
 
@@ -357,8 +305,8 @@
   bottom: 0;
   width: 390px;
   max-width: 92vw;
-  background: #0b0d12;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--mb-canvas);
+  border-left: 1px solid var(--mb-border-soft);
   z-index: 200;
   transform: translateX(100%);
   transition: transform 0.2s ease;
@@ -387,31 +335,31 @@
 }
 
 .logi-table th {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-table-header, 11px);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.38);
+  color: var(--mb-text-3);
   text-align: left;
   padding: 0 0.75rem 0.45rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--mb-border-soft);
   white-space: nowrap;
 }
 
 .logi-table td {
   padding: 0.52rem 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  font-family: var(--font-primary);
+  border-bottom: 1px solid var(--mb-border-soft);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-table-text, 13.5px);
   font-weight: 500;
-  color: rgba(199, 210, 230, 0.82);
+  color: var(--mb-text-2);
   vertical-align: middle;
   font-variant-numeric: tabular-nums;
 }
 
 .logi-table tr:last-child td { border-bottom: none; }
 
-.logi-table tr:hover td { background: rgba(255, 255, 255, 0.015); }
+.logi-table tr:hover td { background: var(--mb-surface-hover); }
 
 .logi-mat-cell {
   display: flex;
@@ -422,19 +370,19 @@
 .logi-mat-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background: rgba(167, 139, 250, 0.45);
+  border-radius: var(--mb-radius-pill);
+  background: color-mix(in srgb, var(--mb-accent) 45%, transparent);
   flex-shrink: 0;
 }
 
 .logi-qty-cell {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: var(--app-text-meta, 12.5px);
-  color: rgba(160, 180, 220, 0.65);
+  color: var(--mb-text-3);
 }
 
 .logi-muted-cell {
-  color: rgba(160, 180, 220, 0.42);
+  color: var(--mb-text-3);
   font-size: 0.8rem;
 }
 
@@ -451,23 +399,23 @@
   align-items: center;
   justify-content: center;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 4px;
-  color: rgba(160, 180, 220, 0.38);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  color: var(--mb-text-3);
   cursor: pointer;
   transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
 
 .logi-action-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(199, 210, 230, 0.8);
-  border-color: rgba(255, 255, 255, 0.13);
+  background: var(--mb-surface-hover);
+  color: var(--mb-text-2);
+  border-color: var(--mb-border);
 }
 
 .logi-action-btn--delete:hover {
-  background: rgba(248, 113, 113, 0.08);
-  color: #f87171;
-  border-color: rgba(248, 113, 113, 0.18);
+  background: color-mix(in srgb, var(--mb-bad) 8%, transparent);
+  color: var(--mb-bad);
+  border-color: color-mix(in srgb, var(--mb-bad) 18%, transparent);
 }
 
 @media (max-width: 760px) {
@@ -497,7 +445,7 @@
     max-width: none;
     max-height: min(88dvh, 720px);
     border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--mb-border);
     transform: translateY(100%);
   }
 
@@ -532,9 +480,9 @@
   }
 
   .logi-table tr {
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.018);
+    border: 1px solid var(--mb-border-soft);
+    border-radius: var(--mb-radius-lg);
+    background: var(--mb-surface-1);
     overflow: hidden;
   }
 
@@ -545,12 +493,12 @@
     align-items: center;
     min-height: 36px;
     padding: 0.4rem 0.6rem;
-    border-bottom-color: rgba(255, 255, 255, 0.045);
+    border-bottom-color: var(--mb-border-soft);
     font-size: 0.92rem;
   }
 
   .logi-table td::before {
-    color: rgba(160, 180, 220, 0.46);
+    color: var(--mb-text-3);
     content: attr(data-label);
     font-size: 0.62rem;
     font-weight: 700;
@@ -586,8 +534,8 @@
   justify-content: center;
   padding: 3rem 1rem;
   gap: 0.5rem;
-  color: rgba(160, 180, 220, 0.3);
-  font-family: var(--font-primary);
+  color: var(--mb-text-3);
+  font-family: var(--mb-font-ui);
   font-size: 0.82rem;
   text-align: center;
 }
@@ -608,7 +556,7 @@
   padding: 0.85rem 1rem 1rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(167, 139, 250, 0.12) transparent;
+  scrollbar-color: var(--mb-accent-soft) transparent;
 }
 
 .logi-entry-panel-header {
@@ -617,16 +565,16 @@
   justify-content: space-between;
   margin-bottom: 1rem;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--mb-border-soft);
   flex-shrink: 0;
 }
 
 .logi-entry-panel-title {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.6rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.55);
+  color: var(--mb-text-3);
 }
 
 .logi-panel-close-btn {
@@ -637,15 +585,15 @@
   justify-content: center;
   background: none;
   border: none;
-  color: rgba(160, 180, 220, 0.38);
+  color: var(--mb-text-3);
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: var(--mb-radius-sm);
   transition: color 0.12s, background 0.12s;
 }
 
 .logi-panel-close-btn:hover {
-  color: rgba(199, 210, 230, 0.8);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--mb-text-2);
+  background: var(--mb-surface-hover);
 }
 
 .logi-form-field {
@@ -656,39 +604,39 @@
 }
 
 .logi-form-label {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.57rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.42);
+  color: var(--mb-text-3);
 }
 
 .logi-form-input {
   padding: 0.38rem 0.65rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 4px;
-  font-family: var(--font-primary);
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  font-family: var(--mb-font-ui);
   font-size: 0.87rem;
-  color: rgba(199, 210, 230, 0.88);
+  color: var(--mb-text-2);
   outline: none;
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.12s;
 }
 
-.logi-form-input:focus { border-color: rgba(167, 139, 250, 0.35); }
+.logi-form-input:focus { border-color: color-mix(in srgb, var(--mb-accent) 35%, transparent); }
 
-.logi-form-input::placeholder { color: rgba(160, 180, 220, 0.28); }
+.logi-form-input::placeholder { color: var(--mb-text-3); }
 
 .logi-form-select {
   padding: 0.38rem 0.65rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 4px;
-  font-family: var(--font-primary);
+  background: var(--mb-surface-2);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  font-family: var(--mb-font-ui);
   font-size: 0.87rem;
-  color: rgba(199, 210, 230, 0.88);
+  color: var(--mb-text-2);
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -701,15 +649,15 @@
 }
 
 .logi-form-hint {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.56rem;
   letter-spacing: 0.06em;
-  color: rgba(160, 180, 220, 0.36);
+  color: var(--mb-text-3);
   margin-top: 0.12rem;
 }
 
 .logi-form-hint--value {
-  color: rgba(167, 139, 250, 0.55);
+  color: color-mix(in srgb, var(--mb-accent) 55%, transparent);
 }
 
 .logi-form-label-sub {
@@ -730,8 +678,8 @@
 .logi-inv-mode-toggle {
   display: flex;
   gap: 0;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 4px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
   overflow: hidden;
 }
 
@@ -740,33 +688,33 @@
   padding: 0.36rem 0.5rem;
   background: none;
   border: none;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(160, 180, 220, 0.5);
+  color: var(--mb-text-3);
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
 
 .logi-inv-mode-btn + .logi-inv-mode-btn {
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 1px solid var(--mb-border-soft);
 }
 
 .logi-inv-mode-btn--active {
-  background: rgba(167, 139, 250, 0.12);
-  color: #c4b5fd;
+  background: var(--mb-accent-soft);
+  color: var(--mb-accent);
 }
 
 .logi-inv-mode-btn:not(.logi-inv-mode-btn--active):hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(199, 210, 230, 0.75);
+  background: var(--mb-surface-hover);
+  color: var(--mb-text-2);
 }
 
 .logi-inv-segmented {
   display: flex;
   gap: 0;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 4px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
   overflow: hidden;
 }
 
@@ -775,26 +723,26 @@
   padding: 0.36rem 0.5rem;
   background: none;
   border: none;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.82rem;
   font-weight: 700;
-  color: rgba(160, 180, 220, 0.55);
+  color: var(--mb-text-3);
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
 }
 
 .logi-inv-segmented-btn + .logi-inv-segmented-btn {
-  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 1px solid var(--mb-border-soft);
 }
 
 .logi-inv-segmented-btn--active {
-  background: rgba(167, 139, 250, 0.12);
-  color: #c4b5fd;
+  background: var(--mb-accent-soft);
+  color: var(--mb-accent);
 }
 
 .logi-inv-segmented-btn:not(.logi-inv-segmented-btn--active):hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(199, 210, 230, 0.75);
+  background: var(--mb-surface-hover);
+  color: var(--mb-text-2);
 }
 
 /* Location typeahead */
@@ -803,7 +751,7 @@
 }
 
 .logi-form-input--selected {
-  border-color: rgba(167, 139, 250, 0.3);
+  border-color: color-mix(in srgb, var(--mb-accent) 30%, transparent);
 }
 
 .logi-location-suggestions {
@@ -811,9 +759,9 @@
   top: calc(100% + 3px);
   left: 0;
   right: 0;
-  background: #0e1018;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  background: var(--mb-canvas);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-md);
   z-index: 50;
   list-style: none;
   margin: 0;
@@ -821,15 +769,15 @@
   max-height: 180px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(167, 139, 250, 0.15) transparent;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  scrollbar-color: var(--mb-accent-soft) transparent;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--mb-canvas) 50%, transparent);
 }
 
 .logi-location-suggestions--empty {
   padding: 0.55rem 0.75rem;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.78rem;
-  color: rgba(160, 180, 220, 0.35);
+  color: var(--mb-text-3);
 }
 
 .logi-location-suggestion-system {
@@ -839,12 +787,12 @@
 .logi-location-suggestion-system > span {
   display: block;
   padding: 0.12rem 0.75rem;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(167, 139, 250, 0.8);
+  color: var(--mb-accent);
 }
 
 .logi-location-suggestion-category {
@@ -854,12 +802,12 @@
 .logi-location-suggestion-category-label {
   display: block;
   padding: 0.12rem 0.75rem 0.12rem 1rem;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.42);
+  color: var(--mb-text-3);
 }
 
 .logi-location-suggestion {
@@ -878,21 +826,21 @@
 
 .logi-location-suggestion:hover,
 .logi-location-suggestion--active {
-  background: rgba(167, 139, 250, 0.1);
+  background: var(--mb-accent-soft);
 }
 
 .logi-location-suggestion-name {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.86rem;
   font-weight: 500;
-  color: rgba(199, 210, 230, 0.88);
+  color: var(--mb-text-2);
 }
 
 .logi-location-suggestion-meta {
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   font-size: 0.56rem;
   letter-spacing: 0.08em;
-  color: rgba(160, 180, 220, 0.38);
+  color: var(--mb-text-3);
   text-transform: uppercase;
   flex-shrink: 0;
 }
@@ -903,18 +851,18 @@
   gap: 0.5rem;
   margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--mb-border-soft);
   flex-shrink: 0;
 }
 
 .logi-inventory-add-success {
   width: 100%;
   padding: 0.48rem 0.62rem;
-  border: 1px solid rgba(76, 187, 23, 0.24);
-  border-radius: 4px;
-  background: rgba(76, 187, 23, 0.08);
-  color: rgba(150, 220, 130, 0.88);
-  font-family: var(--font-primary);
+  border: 1px solid color-mix(in srgb, var(--mb-good) 24%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-good) 8%, transparent);
+  color: var(--mb-good);
+  font-family: var(--mb-font-ui);
   font-size: 0.67rem;
   letter-spacing: 0.04em;
 }
@@ -922,11 +870,11 @@
 .logi-inventory-add-error {
   width: 100%;
   padding: 0.48rem 0.62rem;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 4px;
-  background: rgba(239, 68, 68, 0.08);
-  color: rgba(255, 170, 170, 0.9);
-  font-family: var(--font-primary);
+  border: 1px solid color-mix(in srgb, var(--mb-bad) 30%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-bad) 8%, transparent);
+  color: var(--mb-bad);
+  font-family: var(--mb-font-ui);
   font-size: 0.67rem;
   letter-spacing: 0.04em;
 }
@@ -937,8 +885,8 @@
   display: inline-flex;
   align-items: center;
   padding: 0.1rem 0.38rem;
-  border-radius: 3px;
-  font-family: var(--font-primary);
+  border-radius: var(--mb-radius-sm);
+  font-family: var(--mb-font-ui);
   font-size: 0.67rem;
   font-weight: 200;
   letter-spacing: 0.04em;
@@ -947,16 +895,16 @@
   max-width: max-content;
 }
 
-.logi-badge--queued     { background: rgba(160,180,220,0.07); color: rgba(160,180,220,0.52); border: 1px solid rgba(160,180,220,0.11); }
-.logi-badge--in-progress { background: rgba(167,139,250,0.12); color: #a78bfa;               border: 1px solid rgba(167,139,250,0.22); }
-.logi-badge--paused     { background: rgba(245,158,11,0.1);  color: #f59e0b;               border: 1px solid rgba(245,158,11,0.18); }
-.logi-badge--complete   { background: rgba(74,222,128,0.1);  color: #4ade80;               border: 1px solid rgba(74,222,128,0.18); }
-.logi-badge--cancelled  { background: rgba(248,113,113,0.07); color: rgba(248,113,113,0.55); border: 1px solid rgba(248,113,113,0.12); }
-.logi-badge--station    { background: rgba(56,189,248,0.08); color: rgba(56,189,248,0.7);  border: 1px solid rgba(56,189,248,0.15); }
-.logi-badge--city       { background: rgba(167,139,250,0.08); color: rgba(167,139,250,0.7); border: 1px solid rgba(167,139,250,0.15); }
-.logi-badge--outpost    { background: rgba(245,158,11,0.08); color: rgba(245,158,11,0.7);  border: 1px solid rgba(245,158,11,0.15); }
-.logi-badge--ship       { background: rgba(74,222,128,0.08); color: rgba(74,222,128,0.7);  border: 1px solid rgba(74,222,128,0.15); }
-.logi-badge--shortage   { background: rgba(248,113,113,0.1); color: #f87171;               border: 1px solid rgba(248,113,113,0.2); }
+.logi-badge--queued     { background: color-mix(in srgb, var(--mb-text-3) 7%, transparent); color: var(--mb-text-3); border: 1px solid color-mix(in srgb, var(--mb-text-3) 11%, transparent); }
+.logi-badge--in-progress { background: var(--mb-accent-soft); color: var(--mb-accent); border: 1px solid color-mix(in srgb, var(--mb-accent) 22%, transparent); }
+.logi-badge--paused     { background: color-mix(in srgb, var(--mb-warn) 10%, transparent); color: var(--mb-warn); border: 1px solid color-mix(in srgb, var(--mb-warn) 18%, transparent); }
+.logi-badge--complete   { background: color-mix(in srgb, var(--mb-good) 10%, transparent); color: var(--mb-good); border: 1px solid color-mix(in srgb, var(--mb-good) 18%, transparent); }
+.logi-badge--cancelled  { background: color-mix(in srgb, var(--mb-bad) 7%, transparent); color: color-mix(in srgb, var(--mb-bad) 55%, transparent); border: 1px solid color-mix(in srgb, var(--mb-bad) 12%, transparent); }
+.logi-badge--station    { background: color-mix(in srgb, var(--mb-accent) 8%, transparent); color: color-mix(in srgb, var(--mb-accent) 70%, transparent); border: 1px solid color-mix(in srgb, var(--mb-accent) 15%, transparent); }
+.logi-badge--city       { background: color-mix(in srgb, var(--mb-accent) 8%, transparent); color: color-mix(in srgb, var(--mb-accent) 70%, transparent); border: 1px solid color-mix(in srgb, var(--mb-accent) 15%, transparent); }
+.logi-badge--outpost    { background: color-mix(in srgb, var(--mb-warn) 8%, transparent); color: color-mix(in srgb, var(--mb-warn) 70%, transparent); border: 1px solid color-mix(in srgb, var(--mb-warn) 15%, transparent); }
+.logi-badge--ship       { background: color-mix(in srgb, var(--mb-good) 8%, transparent); color: color-mix(in srgb, var(--mb-good) 70%, transparent); border: 1px solid color-mix(in srgb, var(--mb-good) 15%, transparent); }
+.logi-badge--shortage   { background: color-mix(in srgb, var(--mb-bad) 10%, transparent); color: var(--mb-bad); border: 1px solid color-mix(in srgb, var(--mb-bad) 20%, transparent); }
 
 .quantity {
   display: inline-flex;
@@ -986,17 +934,17 @@
   gap: 0.55rem;
   align-items: center;
   padding: 0.42rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
-  font-family: var(--font-primary);
+  border-bottom: 1px solid var(--mb-border-soft);
+  font-family: var(--mb-font-ui);
   font-size: 0.82rem;
-  color: rgba(199, 210, 230, 0.78);
+  color: var(--mb-text-2);
 }
 
 .logi-stack-row:last-child { border-bottom: none; }
 
 .logi-stack-row strong {
   font-size: 0.85rem;
-  color: var(--logi-material-accent, #a78bfa);
+  color: var(--logi-material-accent, var(--mb-accent));
 }
 
 .logi-stack-row span {
@@ -1017,7 +965,7 @@
 }
 
 .logi-premium-widget {
-  border-color: rgba(167, 139, 250, 0.16);
+  border-color: color-mix(in srgb, var(--mb-accent) 16%, transparent);
 }
 
 .logi-quality-pill {
@@ -1025,28 +973,24 @@
   align-items: center;
   min-height: 24px;
   padding: 0.05rem 0.34rem;
-  border-radius: 3px;
-  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.16));
-  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.035));
-  color: var(--craft-value-tier-color, rgba(216, 226, 245, 0.8));
-  font-family: var(--font-primary);
+  border-radius: var(--mb-radius-sm);
+  border: 1px solid var(--craft-value-tier-border, var(--mb-border));
+  background: var(--craft-value-tier-bg, var(--mb-surface-1));
+  color: var(--craft-value-tier-color, var(--mb-text-2));
+  font-family: var(--mb-font-ui);
   font-size: 0.85rem;
   font-weight: bolder;
   text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 /* Void Navy color pass: shared Logistics shells and cards only */
-.logi-page {
-  background: var(--bg-app);
-}
 
-.logi-page-header,
 .logi-entry-panel-header,
 .logi-entry-panel-actions,
 .logi-table th,
 .logi-table td,
 .logi-stack-row {
-  border-color: var(--border-divider-color);
+  border-color: var(--mb-border-soft);
 }
 
 .logi-stat-card,
@@ -1054,14 +998,14 @@
 .logi-filter-bar,
 .logi-drawer,
 .logi-location-suggestions {
-  background: var(--bg-panel);
-  border-color: var(--border-panel-color);
-  box-shadow: var(--shadow-panel);
+  background: var(--mb-surface-1);
+  border-color: var(--mb-border);
+  box-shadow: var(--mb-shadow-panel);
 }
 
 .logi-nav-card:hover {
-  background: var(--bg-card);
-  border-color: var(--border-hover-color);
+  background: var(--mb-surface-hover);
+  border-color: var(--mb-border-hover);
 }
 
 .logi-search-wrap,
@@ -1073,8 +1017,8 @@
 .logi-inv-mode-toggle,
 .logi-inv-segmented,
 .logi-nav-card-icon--wip {
-  background: var(--bg-card-dark);
-  border-color: var(--border-soft-color);
+  background: var(--mb-surface-2);
+  border-color: var(--mb-border-soft);
 }
 
 .logi-btn-ghost:hover,
@@ -1084,22 +1028,21 @@
 .logi-location-suggestion:hover,
 .logi-location-suggestion--active,
 .logi-table tr:hover td {
-  background: var(--bg-card);
-  border-color: var(--border-hover-color);
+  background: var(--mb-surface-hover);
+  border-color: var(--mb-border-hover);
 }
 
 .logi-inv-mode-btn--active {
-  background: var(--bg-card-active);
-  color: #c4b5fd;
+  background: var(--mb-accent-soft);
+  color: var(--mb-accent);
 }
 
 .logi-inv-segmented-btn--active {
-  background: var(--bg-card-active);
-  color: #c4b5fd;
+  background: var(--mb-accent-soft);
+  color: var(--mb-accent);
 }
 
 .logi-stat-card--alert,
 .logi-action-btn--delete:hover {
-  border-color: var(--border-danger-color);
+  border-color: color-mix(in srgb, var(--mb-bad) 30%, transparent);
 }
-

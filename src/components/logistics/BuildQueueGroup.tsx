@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
@@ -69,8 +68,7 @@ type BuildQueueActiveDrawer = {
   requirementKey: string;
 };
 
-type BlueprintMissionLink = {
-  href: string;
+type BlueprintMissionSource = {
   id: string;
   label: string;
 };
@@ -83,7 +81,7 @@ function readMissionString(record: Record<string, unknown>, ...keys: string[]): 
   return undefined;
 }
 
-function normalizeBlueprintMissionLink(value: unknown): BlueprintMissionLink | null {
+function normalizeBlueprintMissionSource(value: unknown): BlueprintMissionSource | null {
   if (typeof value !== 'object' || value === null) return null;
   const mission = value as Record<string, unknown>;
   const conceptKey = readMissionString(mission, 'conceptKey');
@@ -91,54 +89,52 @@ function normalizeBlueprintMissionLink(value: unknown): BlueprintMissionLink | n
   const label = readMissionString(mission, 'contractTitle', 'title', 'contractDebugName', 'debugName');
   const routeKey = conceptKey ?? missionId;
   if (!routeKey || !label) return null;
-  const params = new URLSearchParams(conceptKey ? { concept: conceptKey } : { search: routeKey });
   return {
-    href: `/industry/missions?${params.toString()}`,
     id: `${conceptKey ? 'concept' : 'mission'}:${routeKey}`,
     label: label.replace(/~mission\(([^)]+)\)/g, '$1'),
   };
 }
 
 function BlueprintSourceDisplay({ blueprintId, fallbackLabel }: { blueprintId?: string; fallbackLabel: string }) {
-  const [missionLinks, setMissionLinks] = useState<BlueprintMissionLink[] | null>(null);
+  const [missionSources, setMissionSources] = useState<BlueprintMissionSource[] | null>(null);
 
   useEffect(() => {
     const normalizedBlueprintId = blueprintId?.trim();
     if (!normalizedBlueprintId) {
-      queueMicrotask(() => setMissionLinks([]));
+      queueMicrotask(() => setMissionSources([]));
       return;
     }
     let cancelled = false;
     queueMicrotask(() => {
-      if (!cancelled) setMissionLinks(null);
+      if (!cancelled) setMissionSources(null);
     });
     loadBlueprintSourceMissions(normalizedBlueprintId)
       .then((missions) => {
         if (cancelled) return;
         const links = missions
-          .map(normalizeBlueprintMissionLink)
-          .filter((link): link is BlueprintMissionLink => Boolean(link))
-          .filter((link, index, all) => all.findIndex((candidate) => candidate.href === link.href) === index);
-        setMissionLinks(links);
+          .map(normalizeBlueprintMissionSource)
+          .filter((link): link is BlueprintMissionSource => Boolean(link))
+          .filter((link, index, all) => all.findIndex((candidate) => candidate.id === link.id) === index);
+        setMissionSources(links);
       })
       .catch(() => {
-        if (!cancelled) setMissionLinks([]);
+        if (!cancelled) setMissionSources([]);
       });
     return () => {
       cancelled = true;
     };
   }, [blueprintId]);
 
-  if (!missionLinks?.length) {
+  if (!missionSources?.length) {
     return <span className="bq-item-blueprint" title={fallbackLabel}>{fallbackLabel}</span>;
   }
 
   return (
-    <span className="bq-item-blueprint-links" title={missionLinks.map((mission) => mission.label).join(', ')}>
-      {missionLinks.map((mission, index) => (
+    <span className="bq-item-blueprint-links" title={missionSources.map((mission) => mission.label).join(', ')}>
+      {missionSources.map((mission, index) => (
         <span key={mission.id} className="bq-item-blueprint-link-wrap">
           {index > 0 ? ", " : null}
-          <Link className="bq-item-blueprint-link" to={mission.href}>{mission.label}</Link>
+          <span className="bq-item-blueprint-source">{mission.label}</span>
         </span>
       ))}
     </span>

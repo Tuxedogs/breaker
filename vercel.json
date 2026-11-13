@@ -1,8 +1,9 @@
 {
+  "buildCommand": "npm run build:staging",
   "functions": {
     "api/missions/[...path].ts": {
-      "includeFiles": "server-data/missions/{mission_browser_index.json,families/**,family-variants/**,variants/**}",
-      "excludeFiles": "server-data/missions/mission_{variants,locations,rewards,prerequisites,families,concepts,reputation,unresolved_refs,browse_groups}.json"
+      "includeFiles": "server-data/missions/{current.json,generations/a844b5c9fb262c00b07e065b/**}",
+      "excludeFiles": "server-data/missions/generations/a844b5c9fb262c00b07e065b/mission_{rewards,offers,families,prerequisites,concepts,reputation,unresolved_refs,browse_groups,category*_report,concept*_report,browser*_report,offer*_report}.json"
     },
     "api/crafting/[...path].ts": {
       "includeFiles": "server-data/crafting/**"

@@ -21,6 +21,7 @@ import secondWindArmorCard from "../../../../server-data/crafting/component-card
 import secondWindWeaponCard from "../../../../server-data/crafting/component-cards/by-id/b488199e-f0fc-4e8b-89bd-d3a435d6dce1.json";
 import m5aCard from "../../../../server-data/crafting/component-cards/by-id/9fe902be-8b39-4d71-9017-e2fed7b0604c.json";
 import cq7Card from "../../../../server-data/crafting/component-cards/by-id/1a85280e-7b8f-4486-a563-17cd2549d268.json";
+import c788Card from "../../../../server-data/crafting/component-cards/by-id/6713db41-8231-4e71-b7a2-74073ddd4b50.json";
 import atlasCard from "../../../../server-data/crafting/component-cards/by-id/17b29a33-88fe-484f-bb9b-fbf780273ff5.json";
 import snowBlindCard from "../../../../server-data/crafting/component-cards/by-id/9b4499d4-b54c-4eb9-b661-e65f3d0f501d.json";
 import js300Card from "../../../../server-data/crafting/component-cards/by-id/9585b0dc-b660-4e2a-9136-0092af1e72c1.json";
@@ -63,7 +64,11 @@ export const fixtureMetadata = {
   sourceEndpoints: ["/api/crafting/component-cards/:id", "/api/crafting/recipes/:id", "/api/v1/fitting/components/:entityClass"],
 };
 
+// Reuse the delivered source join for a briefing with real variant metadata.
+import cq7BlueprintSources from "../../../../server-data/crafting/blueprint-sources/by-blueprint/1a85280e-7b8f-4486-a563-17cd2549d268.json";
+
 export const blueprintSourceMissions = new Map<string, unknown[]>([
+  ["1a85280e-7b8f-4486-a563-17cd2549d268", cq7BlueprintSources.missions],
   ["db3f4c97-8d40-4b36-b397-452dea1594fc", [{
     conceptKey: "xenothreat-2-85-01",
     contractId: "f7e79f35-9b92-4b44-8f76-4fc9154f16cd",
@@ -92,6 +97,7 @@ export const componentCards = new Map([
   secondWindWeaponCard,
   m5aCard,
   cq7Card,
+  c788Card,
   atlasCard,
   snowBlindCard,
   js300Card,
@@ -109,6 +115,7 @@ export const componentCardRecords = [
   secondWindWeaponCard,
   m5aCard,
   cq7Card,
+  c788Card,
   atlasCard,
   snowBlindCard,
   js300Card,

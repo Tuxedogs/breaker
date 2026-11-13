@@ -1,0 +1,36 @@
+/* Canonical resource-selection chips shared by Mining and Crafting.
+   Edit here, not in page-specific override layers. */
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .source-index-chip-flow{display:flex;width:100%;min-width:0;flex-wrap:wrap;align-items:flex-start;align-content:flex-start;gap:5px}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip{
+  box-sizing:border-box;display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;
+  width:max-content;max-width:100%;min-width:0;height:auto;min-height:0;padding:5px 8px;
+  overflow:visible;overflow-wrap:break-word;text-overflow:clip;white-space:normal;
+  border:1px solid #284452;border-radius:0;background:#091a29;box-shadow:none;color:#94b4c4;
+  font-family:"Segoe UI",system-ui,sans-serif;font-size:10px;font-weight:400;letter-spacing:0;
+  line-height:1.25;text-align:center;text-transform:none;cursor:pointer;
+}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip:hover,
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip:focus-visible{
+  border-color:#58bcd3;background:#133146;color:#e3f5fb;
+}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip.is-active,
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip.is-active:hover{
+  border:1px solid #458ca4;background:#153548;box-shadow:none;color:#e9fafe;font-weight:650;
+}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip.is-muted:not(.is-active){
+  color:var(--mb-text-3);opacity:.7;
+}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip.is-muted:not(.is-active):hover{opacity:1}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip:disabled,
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip:disabled:hover{
+  border:1px solid #284452;background:#091a29;color:var(--mb-text-3);opacity:.32;cursor:not-allowed;
+}
+:is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip.is-unavailable{
+  border:1px solid #458ca4;background:#153548;color:var(--mb-text-2);
+  text-decoration:line-through;text-decoration-color:var(--mb-warn);
+}
+@media(max-width:699px){
+  :is(.mine-page.mine-page--v2, .craft-browser-v31-workspace) .mining-filter-chip--material.source-index-chip{
+    font-size:11px;padding:6px 8px;
+  }
+}

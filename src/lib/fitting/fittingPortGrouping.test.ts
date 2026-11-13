@@ -3,11 +3,33 @@ import test from "node:test";
 import type { PortBreakdownRow } from "./fittingPortGrouping.ts";
 import { buildMockupOffensiveDisplayGroups } from "./fittingMockupGroups.ts";
 import {
+  adaptShipDetail,
   buildOffensiveGroups,
   offensiveGroupKey,
   portCompatibilitySignature,
   summarizeGroupRows,
 } from "./fittingPortGrouping.ts";
+
+test("adaptShipDetail preserves the extracted boost regeneration delay", () => {
+  const adapted = adaptShipDetail({
+    id: "ship-1",
+    name: "Ship",
+    displayName: "Ship",
+    manufacturer: null,
+    vehicleType: "Spaceship",
+    isGroundVehicle: false,
+    career: null,
+    role: null,
+    crew: { min: 1, max: 1 },
+    cargoCapacityScu: null,
+    confidence: "high",
+    description: null,
+    className: null,
+    performance: { boostRegenDelayAfterUse: 0.2 },
+  });
+
+  assert.equal(adapted.ship?.boostRegenDelayAfterUse, 0.2);
+});
 
 function weaponRow(overrides: Partial<PortBreakdownRow> = {}): PortBreakdownRow {
   return {

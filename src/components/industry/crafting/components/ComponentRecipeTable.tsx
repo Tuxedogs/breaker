@@ -1,3 +1,4 @@
+import WorkspaceMetricStrip from "../../../shared/WorkspaceMetricStrip";
 import {
   useState,
   useMemo,
@@ -7,7 +8,10 @@ import {
   type ReactNode,
 } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { createPortal } from "react-dom";
 import MiningBookmarkIcon from "../../mining/MiningBookmarkIcon";
+import { useShellBreadcrumbDetail } from "../../../dashboard/shellNavigation";
+import { classToneClass, gradeToneClass } from "../utils/componentGradeClass";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -38,6 +42,7 @@ import {
   loadBlueprintSourceMissions,
 } from "@/lib/craftingBlueprintSourcesApi";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
+import { missionVariantUrl } from "@/lib/missionUrls";
 import {
   DEFAULT_BAND_INDEX,
   FALLBACK_QUALITY_BANDS,
@@ -80,6 +85,14 @@ import {
 } from "@/lib/crafting/craftingDetailStats";
 import { buildCraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
 import { CraftStatisticsCards } from "@/components/shared/CraftStatisticsCards";
+import {
+  CraftLabMaterialCard,
+  CraftLabModifierDetails,
+  CraftLabPerformance,
+  LabIcon,
+  type LabIconName,
+} from "./CraftQualityLab";
+import { getMaterialEffectsAtQuality } from "../utils/materialEffects";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
 import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
 import {
@@ -144,6 +157,8 @@ type MissionRewardEntry = {
   source: "mission" | "pool";
   reputationRequirement?: string;
   pickupSystem?: string;
+  pickupLocation?: string;
+  missionGiver?: string;
   reputationScope?: string;
   reputationReward?: string;
   payout?: string;
@@ -344,6 +359,16 @@ async function enrichMissionEntry(entry: MissionRewardEntry): Promise<MissionRew
     if (!variant) return entry;
     const pickupLocation = isRecord(variant.pickupLocation) ? variant.pickupLocation : null;
     const reputationScope = isRecord(variant.reputationScope) ? variant.reputationScope : null;
+    // The canonical pickupLocation resolver is based on mission availability / giver
+    // roles. Do not substitute an objective destination for where the contract appears.
+    const trustedPickupRole = pickupLocation?.sourceRole === "availability"
+      || pickupLocation?.sourceRole === "mission_giver"
+      || pickupLocation?.sourceRole === "origin"
+      || pickupLocation?.sourceRole === "system_scope";
+    const location = trustedPickupRole && pickupLocation?.status !== "unknown"
+      && pickupLocation?.status !== "unresolved"
+      ? asNonEmptyString(pickupLocation?.displayName)
+      : undefined;
     const rewards = isRecord(variant.rewards) ? variant.rewards : null;
     const rewardedPaths = Array.isArray(variant.rewardedReputationPaths) ? variant.rewardedReputationPaths : [];
     return {
@@ -354,6 +379,9 @@ async function enrichMissionEntry(entry: MissionRewardEntry): Promise<MissionRew
         ?? asNonEmptyString(variant.locationRoles && isRecord(variant.locationRoles) && isRecord(variant.locationRoles.pickup)
           ? variant.locationRoles.pickup.primarySystem
           : undefined),
+      pickupLocation: location,
+      missionGiver: asNonEmptyString(variant.provider)
+        ?? asNonEmptyString(variant.faction),
       reputationScope: asNonEmptyString(reputationScope?.displayName),
       reputationReward: asNonEmptyString(rewardedPaths[0] && isRecord(rewardedPaths[0]) ? rewardedPaths[0].displayText : undefined)
         ?? (Array.isArray(rewards?.reputationRewards) ? asNonEmptyString(rewards.reputationRewards[0]) : undefined),
@@ -408,6 +436,134 @@ function useMissionRewardEntries(
   }, [recipe.blueprint_id]);
 
   return apiEntries && apiEntries.length > 0 ? apiEntries : fallbackEntries;
+}
+
+/** Minimal blueprint-linked mission context. Does not browse the mission catalog. */
+function BlueprintSourceSummary({
+  recipe,
+  rewardPools,
+  isMissionBookmarked,
+  onToggleMissionBookmark,
+}: {
+  recipe: ComponentRecipe;
+  rewardPools: RecipeRewardPoolSummary[];
+  isMissionBookmarked: (missionId: string) => boolean;
+  onToggleMissionBookmark: (missionId: string) => void;
+}) {
+  const entries = useMissionRewardEntries(recipe, rewardPools)
+    .filter((entry) => entry.source === "mission");
+  const primary = entries.find((entry) => !entry.isDisabled) ?? entries[0];
+  const [showAll, setShowAll] = useState(false);
+  const openRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  const closeModal = () => {
+    setShowAll(false);
+    openRef.current?.focus();
+  };
+
+  useEffect(() => {
+    setShowAll(false);
+  }, [recipe.blueprint_id]);
+
+  useEffect(() => {
+    if (!showAll) return;
+    closeRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setShowAll(false);
+        openRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [showAll]);
+
+  const context = (entry: MissionRewardEntry) => ({
+    giver: entry.missionGiver ?? "Not recorded",
+    location: entry.pickupLocation ?? entry.pickupSystem ?? "Not recorded",
+    reputation: entry.reputationRequirement ?? "Not recorded",
+  });
+
+  return (
+    <>
+      <div className="craft-v31-blueprint-source" data-metric="source">
+        <div className="craft-v31-blueprint-source-top">
+          <span><LabIcon name="source" /> Blueprint Source</span>
+          {entries.length > 0 && (
+            <button type="button" className="craft-v31-blueprint-see-all" ref={openRef}
+              onClick={() => setShowAll(true)} aria-haspopup="dialog">
+              See all
+            </button>
+          )}
+        </div>
+        {primary ? (
+          <>
+            <strong title={primary.title}>{primary.title}</strong>
+            <small title={[
+              "Mission Giver: " + context(primary).giver,
+              "Location: " + context(primary).location,
+              "Rep Required: " + context(primary).reputation,
+            ].join(" | ")}>
+              {primary.isDisabled && <span className="craft-v31-blueprint-disabled">Unavailable · </span>}
+              {context(primary).giver} · {context(primary).location} · Rep: {context(primary).reputation}
+            </small>
+          </>
+        ) : (
+          <>
+            <strong>No mission source recorded</strong>
+            <small>Blueprint availability has not been linked to a mission</small>
+          </>
+        )}
+      </div>
+      {showAll && createPortal(
+        <div className="craft-v31-blueprint-modal-backdrop" onMouseDown={(event) => {
+          if (event.target === event.currentTarget) closeModal();
+        }}>
+          <section role="dialog" aria-modal="true" aria-labelledby="craft-blueprint-source-modal-title"
+            className="craft-v31-blueprint-modal">
+            <header className="craft-v31-blueprint-modal-header">
+              <div>
+                <span className="craft-v31-blueprint-modal-kicker">Crafting · Blueprint Source</span>
+                <h2 id="craft-blueprint-source-modal-title">Blueprint missions</h2>
+                <p>{entries.length} linked {entries.length === 1 ? "mission" : "missions"}</p>
+              </div>
+              <button type="button" ref={closeRef} className="craft-v31-blueprint-modal-close"
+                aria-label="Close blueprint missions" onClick={closeModal}>×</button>
+            </header>
+            <div className="craft-v31-blueprint-modal-list">
+              {entries.map((entry) => {
+                const info = context(entry);
+                const bookmarked = isMissionBookmarked(entry.id);
+                return (
+                  <article key={entry.id} className="craft-v31-blueprint-modal-mission">
+                    <div className="craft-v31-blueprint-modal-mission-heading">
+                      <strong>{entry.title}</strong>
+                      {entry.isDisabled && <span className="craft-v31-blueprint-disabled">Unavailable</span>}
+                      <button type="button"
+                        className={"craft-v31-blueprint-bookmark" + (bookmarked ? " is-active" : "")}
+                        aria-label={bookmarked ? "Remove saved mission " + entry.title : "Save mission " + entry.title}
+                        aria-pressed={bookmarked}
+                        onClick={() => onToggleMissionBookmark(entry.id)}>
+                        <MiningBookmarkIcon />
+                      </button>
+                    </div>
+                    <dl className="craft-v31-blueprint-modal-meta">
+                      <div><dt>Mission Giver</dt><dd>{info.giver}</dd></div>
+                      <div><dt>Location</dt><dd>{info.location}</dd></div>
+                      <div><dt>Rep Required</dt><dd>{info.reputation}</dd></div>
+                    </dl>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        </div>,
+        document.body,
+      )}
+    </>
+  );
 }
 
 const QUERY_ALIAS_MAP: Record<string, string> = {
@@ -2078,30 +2234,169 @@ function ItemSummaryPanel({
   );
 }
 
+/** Recorded source fields, with unrecorded ones collapsed into a single line
+    rather than repeated "Unknown" values. */
+function SourceMeta({ fields }: { fields: [label: string, value: string | undefined][] }) {
+  const recorded = fields.filter((field): field is [string, string] => Boolean(field[1]));
+  const missing = fields.filter(([, value]) => !value).map(([label]) => label.toLowerCase());
+  return (
+    <dl className="craft-v31-source-meta">
+      {recorded.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+      {missing.length > 0 ? <div className="is-missing"><dt>Not recorded</dt><dd>{missing.join(", ")}</dd></div> : null}
+    </dl>
+  );
+}
+
 function MissionSourcePanel({
   recipe,
   rewardPools,
   isMissionBookmarked,
   onToggleMissionBookmark,
+  variant = "detail",
+  blueprintPath,
 }: {
   recipe: ComponentRecipe;
   rewardPools: RecipeRewardPoolSummary[];
   isMissionBookmarked: (missionId: string) => boolean;
   onToggleMissionBookmark: (missionId: string) => void;
+  /** "lab" renders V31 laboratory classes owned by craft-v31-layout.css. */
+  variant?: "detail" | "lab";
+  /** Lab only: blueprint-path verification state shown beside the heading. */
+  blueprintPath?: { label: string; tone: string };
 }) {
   const missionEntries = useMissionRewardEntries(recipe, rewardPools);
+  const location = useLocation();
   const [expandedSourceRecipeId, setExpandedSourceRecipeId] = useState<string | null>(null);
   const [selectedMission, setSelectedMission] = useState<MissionRewardEntry | null>(null);
   const showAllSources = expandedSourceRecipeId === recipe.blueprint_id;
   const visibleMissionEntries = showAllSources ? missionEntries : missionEntries.slice(0, 3);
   const hasAdditionalSources = missionEntries.length > 3;
+  const toggleAllSources = () => setExpandedSourceRecipeId((current) =>
+    current === recipe.blueprint_id ? null : recipe.blueprint_id
+  );
+  const missionBriefing = selectedMission && (
+    <div className="craft-mission-briefing-modal" role="dialog" aria-modal="true" aria-label="Mission Briefing">
+      <div className="craft-mission-briefing-card">
+        <button type="button" className="craft-detail-drawer-close" aria-label="Close Mission Briefing" onClick={() => setSelectedMission(null)}>×</button>
+        <h3>Mission Briefing</h3>
+        <strong>{selectedMission.title}</strong>
+        <dl>
+          <dt>Reputation Reward</dt><dd>{selectedMission.reputationReward ?? "Unavailable"}</dd>
+          <dt>Blueprint Reward Pool</dt><dd>{selectedMission.poolName ?? "Unavailable"}</dd>
+          <dt>Payout</dt><dd>{selectedMission.payout ?? "Unavailable"}</dd>
+          <dt>Systems</dt><dd>{selectedMission.systems?.join(" / ") || selectedMission.pickupSystem || "Unavailable"}</dd>
+          <dt>Items to Collect or Deliver</dt><dd>{selectedMission.deliveryItems?.join(" / ") || "Nothing more."}</dd>
+        </dl>
+        {selectedMission.contractId ? (
+          <Link
+            className="craft-detail-source-toggle"
+            data-testid="craft-mission-open-in-missions"
+            to={missionVariantUrl(selectedMission.contractId, `${location.pathname}${location.search}`)}
+          >
+            Open in Missions: prerequisites and faction
+          </Link>
+        ) : (
+          <p className="craft-mission-source-meta">Reward pool only: no exact mission contract to open.</p>
+        )}
+      </div>
+    </div>
+  );
+
+  if (variant === "lab") {
+    const primarySource = missionEntries[0];
+    const sourceKind = (entry: MissionRewardEntry) => (entry.source === "mission" ? "Mission" : "Reward pool");
+    return (
+      <>
+        <div className="craft-v31-lab-row">
+          <LabIcon name="source" />
+          <div className="craft-v31-lab-row-copy">
+            <h3 className="craft-v31-lab-row-title">Blueprint acquisition</h3>
+            {primarySource ? (
+              <button type="button" className="craft-v31-source-title" onClick={() => setSelectedMission(primarySource)}>
+                {primarySource.isDisabled && <span className="craft-v31-source-disabled">Disabled</span>}
+                {primarySource.title}
+                {missionEntries.length > 1 ? <small> +{missionEntries.length - 1} more</small> : null}
+              </button>
+            ) : (
+              <small>No confirmed mission reward sources</small>
+            )}
+          </div>
+          <div className="craft-v31-lab-row-value craft-v31-source-state">
+            {primarySource ? <span>{sourceKind(primarySource)}</span> : null}
+            {blueprintPath ? <span className={`craft-v31-source-status ${blueprintPath.tone}`}>{blueprintPath.label}</span> : null}
+          </div>
+        </div>
+        <div className="craft-v31-lab-tools">
+        <details className="craft-v31-disclosure craft-v31-source-details">
+          <summary>
+            <LabIcon name="details" />
+            <span>Source details</span>
+            <small>{missionEntries.length} {missionEntries.length === 1 ? "source" : "sources"} · store locations</small>
+          </summary>
+          <div className="craft-v31-acquisition-columns">
+            <section aria-label="Blueprint reward pools">
+              <h4 className="craft-v31-source-label">Mission sources</h4>
+              {missionEntries.length === 0 ? (
+                <p>No confirmed mission reward sources for this blueprint.</p>
+              ) : (
+                <ul className="craft-v31-source-list">
+                  {visibleMissionEntries.map((entry, entryIndex) => {
+                    const bookmarked = isMissionBookmarked(entry.id);
+                    return (
+                      <li key={`${entry.id}:${entryIndex}`} className={`craft-v31-source${entry.isDisabled ? " is-disabled" : ""}`}>
+                        <button
+                          type="button"
+                          className={`craft-v31-source-save${bookmarked ? " is-active" : ""}`}
+                          aria-pressed={bookmarked}
+                          aria-label={bookmarked ? `Remove ${entry.title} mission save` : `Save ${entry.title} mission`}
+                          onClick={() => onToggleMissionBookmark(entry.id)}
+                        >
+                          <MiningBookmarkIcon />
+                        </button>
+                        <div className="craft-v31-source-copy">
+                          <button type="button" className="craft-v31-source-title" onClick={() => setSelectedMission(entry)}>
+                            {entry.isDisabled && <span className="craft-v31-source-disabled">Disabled</span>}
+                            {entry.title}
+                          </button>
+                          <SourceMeta
+                            fields={[
+                              ["Type", sourceKind(entry)],
+                              ["Reputation", entry.reputationRequirement],
+                              ["System", entry.pickupSystem],
+                              ["Faction", entry.reputationScope ?? entry.factionName],
+                            ]}
+                          />
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {hasAdditionalSources && (
+                <button type="button" className="craft-v31-source-toggle" aria-expanded={showAllSources} onClick={toggleAllSources}>
+                  {showAllSources ? "Show fewer sources" : `See all ${missionEntries.length} sources`}
+                </button>
+              )}
+            </section>
+            <section aria-label="Blueprint store locations">
+              <h4 className="craft-v31-source-label">Store locations</h4>
+              <p>Store locations are not verified in this blueprint source dataset.</p>
+            </section>
+          </div>
+        </details>
+        </div>
+        {missionBriefing}
+      </>
+    );
+  }
 
   return (
     <section className="craft-detail-sources-section">
       <div className="craft-summary-section craft-summary-mission-section">
+        <header className="craft-source-heading"><div><span className="craft-source-eyebrow">BLUEPRINT ACQUISITION</span><h3>Mission sources</h3></div><span className="craft-source-count">{missionEntries.length} {missionEntries.length === 1 ? "source" : "sources"}</span></header>
           {missionEntries.length === 0 ? (
             <div className="craft-summary-empty craft-summary-empty--compact">
-              No mission data for this blueprint
+              No confirmed mission reward sources for this blueprint.
             </div>
           ) : (
             <div className="craft-mission-source-list">
@@ -2124,9 +2419,9 @@ function MissionSourcePanel({
                         <button type="button" className="craft-mission-source-link" onClick={() => setSelectedMission(entry)}>{entry.title}</button>
                       </div>
                       <div className="craft-mission-source-meta">
-                        <span>Rep required: {entry.reputationRequirement ?? "Unavailable"}</span>
-                        <span>Pickup system: {entry.pickupSystem ?? "Unavailable"}</span>
-                        <span>Rep scope: {entry.reputationScope ?? entry.factionName ?? "Unavailable"}</span>
+                        <span><b>REPUTATION</b>{entry.reputationRequirement ?? "Unknown"}</span>
+                        <span><b>SYSTEM</b>{entry.pickupSystem ?? "Unknown"}</span>
+                        <span><b>FACTION</b>{entry.reputationScope ?? entry.factionName ?? "Unknown"}</span>
                       </div>
                     </div>
                   </div>
@@ -2139,30 +2434,13 @@ function MissionSourcePanel({
               type="button"
               className="craft-detail-source-toggle"
               aria-expanded={showAllSources}
-              onClick={() => setExpandedSourceRecipeId((current) =>
-                current === recipe.blueprint_id ? null : recipe.blueprint_id
-              )}
+              onClick={toggleAllSources}
             >
               {showAllSources ? "Show fewer sources" : "See all sources"}
             </button>
           )}
       </div>
-      {selectedMission && (
-        <div className="craft-mission-briefing-modal" role="dialog" aria-modal="true" aria-label="Mission Briefing">
-          <div className="craft-mission-briefing-card">
-            <button type="button" className="craft-detail-drawer-close" aria-label="Close Mission Briefing" onClick={() => setSelectedMission(null)}>×</button>
-            <h3>Mission Briefing</h3>
-            <strong>{selectedMission.title}</strong>
-            <dl>
-              <dt>Reputation Reward</dt><dd>{selectedMission.reputationReward ?? "Unavailable"}</dd>
-              <dt>Blueprint Reward Pool</dt><dd>{selectedMission.poolName ?? "Unavailable"}</dd>
-              <dt>Payout</dt><dd>{selectedMission.payout ?? "Unavailable"}</dd>
-              <dt>Systems</dt><dd>{selectedMission.systems?.join(" / ") || selectedMission.pickupSystem || "Unavailable"}</dd>
-              <dt>Items to Collect or Deliver</dt><dd>{selectedMission.deliveryItems?.join(" / ") || "Nothing more."}</dd>
-            </dl>
-          </div>
-        </div>
-      )}
+      {missionBriefing}
     </section>
   );
 }
@@ -2340,6 +2618,7 @@ function RecipeDrawer({
   componentCards = [],
   onAddToQueue,
   isRecipeQueued,
+  isBlueprintSourceVerified,
   isRecipeBookmarked,
   onToggleBookmark,
   isMissionBookmarked,
@@ -2357,8 +2636,10 @@ function RecipeDrawer({
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
     finalProductQuality: FinalProductQuality,
+    quantity?: number,
   ) => void;
   isRecipeQueued: (recipe: ComponentRecipe) => boolean;
+  isBlueprintSourceVerified?: (recipe: ComponentRecipe) => boolean | null;
   isRecipeBookmarked: (recipe: ComponentRecipe) => boolean;
   onToggleBookmark: (recipe: ComponentRecipe) => void;
   isMissionBookmarked: (missionId: string) => boolean;
@@ -2386,6 +2667,7 @@ function RecipeDrawer({
     ? initialRecipeId
     : recipe.blueprint_id;
   const [selectedRecipeId, setSelectedRecipeId] = useState(initialSelectedRecipeId);
+  const [queueQuantity, setQueueQuantity] = useState(1);
   const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
   const detailMaterialRows = useMemo(
     () => projectCraftingDetailMaterialRows(selectedRecipe),
@@ -2403,6 +2685,7 @@ function RecipeDrawer({
   useEffect(() => {
     setDrawerTab("materials");
     setMobileDetailTab("overview");
+    setQueueQuantity(1);
   }, [selectedRecipe.blueprint_id]);
 
   const buildDefaultMaterialQualities = useCallback(
@@ -2426,6 +2709,9 @@ function RecipeDrawer({
     setMaterialQualities(buildDefaultMaterialQualities(selectedRecipe));
   }, [buildDefaultMaterialQualities, selectedRecipe]);
 
+  // Session-only comparison point for the laboratory: the mean input quality
+  // when the user captured it. Not persisted; cleared when the recipe changes.
+
   const selectedMaterialQualities = useMemo(
     () => ({
       ...buildDefaultMaterialQualities(selectedRecipe),
@@ -2443,6 +2729,25 @@ function RecipeDrawer({
       ),
     [detailMaterialRows, getBandsForMaterial, selectedRecipe],
   );
+
+  const applyScenarioPreset = (minimum: number | null) => {
+    if (minimum === null) {
+      setMaterialQualities(buildDefaultMaterialQualities(selectedRecipe));
+      return;
+    }
+    setMaterialQualities((current) => {
+      const next = { ...current };
+      for (const { requirement: material, inputIndex } of detailMaterialRows) {
+        const key = getMaterialQualityKey(selectedRecipe, material, inputIndex);
+        const bands = materialBandsByKey.get(key);
+        if (!bands?.length) continue;
+        // Presets set exact quality values. Slider quantization markers and
+        // continuous drag behavior remain unchanged.
+        next[key] = clampQuality(Math.max(Number(bands[0].start), minimum));
+      }
+      return next;
+    });
+  };
 
   function getBandIndex(key: string): number {
     const bands = materialBandsByKey.get(key) ?? [];
@@ -2584,6 +2889,9 @@ function RecipeDrawer({
 
   const showVariantSelector = groupRecipes.length > 1;
   const selectedIsQueued = isRecipeQueued(selectedRecipe);
+  const selectedBlueprintSourceState = isBlueprintSourceVerified?.(selectedRecipe) ?? null;
+  const queueBlocked = selectedBlueprintSourceState === false;
+  const unavailableBlueprintReason = "Recipe exists in the game data, but no verified obtainable blueprint source is recorded. Preview only; Build Queue is disabled.";
   const selectedIsBookmarked = isRecipeBookmarked(selectedRecipe);
   const categoryLine = [
     selectedComponentCard?.category ?? selectedRecipe.category,
@@ -2595,10 +2903,10 @@ function RecipeDrawer({
     .filter((value, index, values) => values.findIndex((item) => item.trim().toLowerCase() === value.trim().toLowerCase()) === index)
     .join(" / ");
   const heroMeta = [
-    formatSize(selectedRecipe.size),
-    selectedRecipe.grade ? `Grade ${selectedRecipe.grade}` : null,
-    selectedRecipe.class,
-  ].filter((value): value is string => Boolean(value));
+    { value: formatSize(selectedRecipe.size), tone: "" },
+    { value: selectedRecipe.grade ? `Grade ${selectedRecipe.grade}` : null, tone: gradeToneClass(selectedRecipe.grade) },
+    { value: selectedRecipe.class, tone: classToneClass(selectedRecipe.class) },
+  ].filter((item): item is { value: string; tone: string } => Boolean(item.value));
   const heroCraftTime = formatCraftTime(
     selectedComponentCard?.craftTimeSeconds ?? selectedRecipe.craft_time_seconds ?? 0,
   );
@@ -2637,127 +2945,171 @@ function RecipeDrawer({
     : "";
   const descriptionCanExpand = itemDescription.length > 150 || itemDescription.split("\n").length > 2;
 
+  // Real extracted modifiers; missing baselines are never filled with demo data.
+  // The summary shows the first projected statistic (e.g. Health); the rest
+  // stay in Performance changes.
+  const primaryProjectionRow = totalModifiers.find((row) => hasEffectiveModifierValue(row.totalValue, row.modifierMode));
+  const primaryProjection = primaryProjectionRow ? (() => {
+    const base = getCraftingModifierBaseValue(fittingDetail, primaryProjectionRow.property);
+    const calculated = formatMaterialModifierDisplay(primaryProjectionRow.property, base, primaryProjectionRow.totalValue, primaryProjectionRow.modifierMode);
+    return {
+      label: getModifierStatBindingLabel(primaryProjectionRow.property),
+      value: calculated.total || "Not extracted",
+      note: calculated.total ? formatModifierDifference(calculated) : "Modifier not calculated",
+      noteClass: calculated.total ? getImpactClass(getModifierImpact(primaryProjectionRow.property, primaryProjectionRow.totalValue)) : undefined,
+    };
+  })() : null;
+  const labMaterialRows = detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
+    const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
+    const quality = clampQuality(selectedMaterialQualities[key] ?? 0);
+    return {
+      key,
+      mat,
+      quality,
+      bands: materialBandsByKey.get(key) ?? [],
+      effects: getMaterialEffectsAtQuality(mat, quality, fittingDetail),
+    };
+  });
+  const scenarioMetrics: { key: string; icon: LabIconName; label: string; value: string; note?: string; noteClass?: string; title?: string }[] = [
+    { key: "quality", icon: "quality", label: "Quality", value: String(formatCompactNumber(finalProductQuality.averageBand)) + " / 8", note: String(finalProductQuality.rarity), title: "Scenario quality: mean selected material band" },
+    primaryProjection
+      ? { key: "projection", icon: "stat", ...primaryProjection }
+      : { key: "projection", icon: "stat", label: "Statistics", value: "No change", note: "At these qualities" },
+    { key: "time", icon: "time", label: "Craft time", value: heroCraftTime || "Unknown", title: "Recipe duration" },
+  ];
   if (presentation === "drawer") {
+    const heroKicker = [
+      ...(categoryLine ? [{ value: categoryLine, tone: "" }] : []),
+      ...heroMeta,
+    ];
     return (
       <section
         className="craft-detail-stage craft-detail-shell craft-detail-drawer-shell"
         aria-label={`${displayName} component detail`}
         aria-busy={quantizationLoading || fittingStatsLoading}
       >
-        <header
-          className="craft-detail-drawer-header"
-        >
-          <button
-            type="button"
-            className="craft-detail-drawer-mobile-back"
-            onClick={onClose}
-          >
-            <span aria-hidden="true">‹</span>
-            <span>Crafting</span>
+        {/* Phone-only sticky back bar: stays visible while the laboratory scrolls. */}
+        <nav className="craft-v31-phone-detail-bar" aria-label="Blueprint detail navigation">
+          <button type="button" className="craft-v31-phone-detail-back" onClick={onClose}>
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span>Blueprints</span>
           </button>
-          <div className="craft-detail-hero-art-stage" data-hero-layout={heroLayout}>
-            {heroArtworkUrl ? (
-              <img
-                src={heroArtworkUrl}
-                alt=""
-                aria-hidden="true"
-                className="craft-detail-hero-art craft-detail-hero-artwork"
-              />
-            ) : heroIconUrl ? (
-              <img
-                src={heroIconUrl}
-                alt=""
-                aria-hidden="true"
-                className="craft-detail-hero-icon"
-              />
-            ) : (
-              <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
-            )}
-          </div>
-          <div className="craft-detail-drawer-identity" data-mobile-family={heroFamily ?? ""}>
-            {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-            <h2 className="craft-detail-drawer-title" aria-label={displayName} title={displayName}>
-              <span className="craft-detail-drawer-desktop-title">{mobileDisplayName}</span>
-              <span className="craft-detail-drawer-mobile-title">{mobileDisplayName}</span>
-            </h2>
-            <div className="craft-summary-chips craft-detail-hero-chips">
-              <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-                Quality {formatCompactNumber(finalProductQuality.averageBand)}
-              </span>
-              {heroMeta.map((value) => (
-                <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
-              ))}
-            </div>
-          </div>
-          <div className="craft-detail-drawer-facts" aria-label="Crafting summary">
-            {heroCraftTime && (
-              <span><span>Craft Time</span><strong>{heroCraftTime}</strong></span>
-            )}
-            <span>
-              <span>Materials</span>
-              <strong>{selectedRecipe.materials.length}</strong>
-            </span>
-          </div>
-          <div className="craft-detail-drawer-header-actions">
-            <button
-              type="button"
-              className="craft-detail-drawer-close"
-              aria-label={`Close ${displayName} detail`}
-              onClick={onClose}
-            >
-              ×
-            </button>
-          </div>
-        </header>
-
-        <nav className="craft-detail-drawer-tabs" aria-label="Component detail sections" role="tablist">
-          {(["overview", "materials", "stats", "sources"] as const).map((tabName) => (
-            <button
-              key={tabName}
-              type="button"
-              id={`craft-detail-drawer-tab-${tabName}`}
-              role="tab"
-              className={drawerTab === tabName ? "is-active" : undefined}
-              aria-selected={drawerTab === tabName}
-              aria-controls={`craft-detail-drawer-panel-${tabName}`}
-              onClick={() => setDrawerTab(tabName)}
-            >
-              {{
-                overview: "Overview",
-                materials: "Materials",
-                stats: "Statistics",
-                sources: "Sources",
-              }[tabName]}
-            </button>
-          ))}
+          <span className="craft-v31-phone-detail-name" aria-hidden="true">{mobileDisplayName}</span>
         </nav>
-
-        <div className="craft-detail-drawer-body">
-          {drawerTab === "overview" && (
-            <div
-              className="craft-detail-drawer-overview"
-              id="craft-detail-drawer-panel-overview"
-              role="tabpanel"
-              aria-labelledby="craft-detail-drawer-tab-overview"
-            >
-              {itemDescription && <p className="craft-item-description">{itemDescription}</p>}
-              <EstimatedEffectsPanel
-                fittingDetail={fittingDetail}
-                totalModifiers={totalModifiers}
-                overallModifiers={overallModifiers}
-                overallQualitySource={overallQualitySource}
-                finalProductQuality={finalProductQuality}
-              />
+        <article className="craft-v31-lab">
+          {/* Selected component artwork fills the hero background; identity stays on the left. */}
+          <header className={"craft-v31-lab-hero" + (heroArtworkUrl ? " has-artwork" : "")}>
+            {heroArtworkUrl ? (
+              <div className="craft-v31-lab-art" data-hero-layout={heroLayout} aria-hidden="true">
+                <img className="craft-v31-lab-art-feature" src={heroArtworkUrl} alt="" />
+              </div>
+            ) : null}
+            <button type="button" className="craft-v31-lab-back" onClick={onClose}>
+              <span aria-hidden="true">‹</span>
+              <span>Blueprints</span>
+            </button>
+            <div className="craft-v31-lab-identity">
+              {heroKicker.length > 0 && (
+                <p className="craft-v31-lab-kicker">
+                  {heroKicker.map(({ value, tone }, index) => (
+                    <span key={value} className={tone || undefined}>{index > 0 ? " / " : ""}{value}</span>
+                  ))}
+                </p>
+              )}
+              <h2 className="craft-v31-lab-title" aria-label={displayName} title={displayName}>{mobileDisplayName}</h2>
+              <p className="craft-v31-lab-subtitle">Configure material quality and preview its effect.</p>
             </div>
-          )}
+            <div className="craft-v31-lab-actions" aria-label="Blueprint build controls">
+              <button type="button" className={"craft-v31-lab-save" + (selectedIsBookmarked ? " is-active" : "")}
+                aria-pressed={selectedIsBookmarked}
+                aria-label={selectedIsBookmarked ? "Remove " + displayName + " save" : "Save " + displayName}
+                onClick={() => onToggleBookmark(selectedRecipe)}>
+                <MiningBookmarkIcon /> <span>{selectedIsBookmarked ? "Saved" : "Save"}</span>
+              </button>
+              <label className="craft-v31-lab-quantity">
+                <span>Qty</span>
+                <input type="number" min={1} max={99} value={queueQuantity}
+                  aria-label="Queue quantity"
+                  onChange={(event) => {
+                    const value = Number(event.target.value);
+                    setQueueQuantity(Number.isFinite(value) ? Math.min(99, Math.max(1, Math.trunc(value))) : 1);
+                  }}
+                />
+              </label>
+              <button type="button" className="craft-v31-lab-queue"
+                disabled={queueBlocked}
+                title={queueBlocked ? unavailableBlueprintReason : undefined}
+                aria-label={selectedIsQueued ? displayName + " is already queued; add another batch" : "Add " + displayName + " to build queue"}
+                onClick={() => onAddToQueue(selectedRecipe, selectedQualitySnapshot, finalProductQuality, queueQuantity)}>
+                {queueBlocked ? "Preview only" : selectedIsQueued ? "Add another batch" : "Add to build queue"}
+              </button>
+            </div>
+            <button type="button" className="craft-v31-lab-close" aria-label={`Close ${displayName} detail`} onClick={onClose}>×</button>
+          </header>
 
-          {drawerTab === "materials" && (
+          <nav className="craft-detail-drawer-tabs" aria-label="Component detail sections" role="tablist">
+            {(["overview", "materials", "stats", "sources"] as const).map((tabName) => (
+              <button
+                key={tabName}
+                type="button"
+                id={`craft-detail-drawer-tab-${tabName}`}
+                role="tab"
+                className={drawerTab === tabName ? "is-active" : undefined}
+                aria-selected={drawerTab === tabName}
+                aria-controls={`craft-detail-drawer-panel-${tabName}`}
+                onClick={() => setDrawerTab(tabName)}
+              >
+                {{
+                  overview: "Details",
+                  materials: "Materials",
+                  stats: "Statistics",
+                  sources: "Sources",
+                }[tabName]}
+              </button>
+            ))}
+          </nav>
+
+          <div className="craft-v31-workbench-content" data-active-tab={drawerTab}>
+            <WorkspaceMetricStrip className="craft-v31-lab-snapshot" aria-label="Actual crafting scenario summary">
+              {scenarioMetrics.slice(0, 2).map((metric) => (
+                <div key={metric.key} data-metric={metric.key} title={metric.title}>
+                  <span><LabIcon name={metric.icon} />{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                  {metric.note ? <small className={metric.noteClass}>{metric.note}</small> : null}
+                </div>
+              ))}
+              <BlueprintSourceSummary
+                recipe={selectedRecipe}
+                rewardPools={rewardPools}
+                isMissionBookmarked={isMissionBookmarked}
+                onToggleMissionBookmark={onToggleMissionBookmark}
+              />
+              {scenarioMetrics.slice(2).map((metric) => (
+                <div key={metric.key} data-metric={metric.key} title={metric.title}>
+                  <span><LabIcon name={metric.icon} />{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                  {metric.note ? <small className={metric.noteClass}>{metric.note}</small> : null}
+                </div>
+              ))}
+            </WorkspaceMetricStrip>
+
             <div
               className="craft-detail-drawer-materials"
               id="craft-detail-drawer-panel-materials"
               role="tabpanel"
               aria-labelledby="craft-detail-drawer-tab-materials"
             >
+              <div className="craft-v31-lab-heading-row">
+                <h3 className="craft-v31-lab-section-heading">Material quality</h3>
+                <div className="craft-v31-scenario-presets" role="group" aria-label="Material quality presets">
+                  <button type="button" onClick={() => applyScenarioPreset(null)}>Reset</button>
+                  <button type="button" onClick={() => applyScenarioPreset(800)}>800</button>
+                  <button type="button" onClick={() => applyScenarioPreset(1000)}>Max</button>
+                </div>
+
+              </div>
               {showVariantSelector && (
                 <div className="craft-variant-selector" aria-label="Select variant">
                   <div className="craft-variant-selector-label">Select variant</div>
@@ -2782,40 +3134,29 @@ function RecipeDrawer({
                   </div>
                 </div>
               )}
-              <RightCraftingPanel
-                fittingDetail={fittingDetail}
-                totalModifiers={totalModifiers}
-                overallModifiers={overallModifiers}
-                overallQualitySource={overallQualitySource}
-                finalProductQuality={finalProductQuality}
-              >
-                {detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
-                  const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
-                  return (
-                    <DetailMaterialQualityRow
-                      key={`${mat.slot}:${key}`}
-                      mat={mat}
-                      quality={selectedMaterialQualities[key]}
-                      fittingDetail={fittingDetail}
-                      onQualityChange={(quality) =>
-                        setMaterialQualities((prev) => ({ ...prev, [key]: clampQuality(quality) }))
-                      }
-                      getBandsForMaterial={getBandsForMaterial}
-                    />
-                  );
-                })}
-              </RightCraftingPanel>
+              <div className="craft-v31-material-list">
+                {labMaterialRows.map((row) => (
+                  <CraftLabMaterialCard
+                    key={row.key}
+                    mat={row.mat}
+                    quality={row.quality}
+                    bands={row.bands}
+                    effects={row.effects}
+                    onQualityChange={(quality) =>
+                      setMaterialQualities((prev) => ({ ...prev, [row.key]: clampQuality(quality) }))
+                    }
+                  />
+                ))}
+              </div>
             </div>
-          )}
 
-          {drawerTab === "stats" && (
             <div
               className="craft-detail-drawer-stats"
               id="craft-detail-drawer-panel-stats"
               role="tabpanel"
               aria-labelledby="craft-detail-drawer-tab-stats"
             >
-              <ItemSummaryPanel
+              <CraftLabPerformance
                 recipe={selectedRecipe}
                 fittingDetail={fittingDetail}
                 fittingStatsLoading={fittingStatsLoading}
@@ -2824,44 +3165,43 @@ function RecipeDrawer({
                 totalModifiers={totalModifiers}
               />
             </div>
-          )}
 
-          {drawerTab === "sources" && (
+            {/* Technical details and description, collapsed by default. */}
             <div
-              className="craft-detail-drawer-sources"
-              id="craft-detail-drawer-panel-sources"
+              className="craft-detail-drawer-overview"
+              id="craft-detail-drawer-panel-overview"
               role="tabpanel"
-              aria-labelledby="craft-detail-drawer-tab-sources"
+              aria-labelledby="craft-detail-drawer-tab-overview"
             >
-              <MissionSourcePanel
-                recipe={selectedRecipe}
-                rewardPools={rewardPools}
-                isMissionBookmarked={isMissionBookmarked}
-                onToggleMissionBookmark={onToggleMissionBookmark}
+              <CraftLabModifierDetails
+                rows={labMaterialRows.map((row) => ({
+                  key: row.key,
+                  material: row.mat.material_name,
+                  slot: row.mat.slot,
+                  quality: row.quality,
+                  effects: row.effects,
+                }))}
               />
+              <details className="craft-v31-disclosure craft-v31-description-details">
+                <summary>
+                  <LabIcon name="details" />
+                  <span>Component description</span>
+                  <small>Description and quality response</small>
+                </summary>
+                {itemDescription && <p className="craft-item-description">{itemDescription}</p>}
+                <EstimatedEffectsPanel
+                  fittingDetail={fittingDetail}
+                  totalModifiers={totalModifiers}
+                  overallModifiers={overallModifiers}
+                  overallQualitySource={overallQualitySource}
+                  finalProductQuality={finalProductQuality}
+                />
+              </details>
             </div>
-          )}
-        </div>
+          </div>
+        </article>
 
-        <footer className="craft-detail-drawer-footer">
-          <button
-            type="button"
-            className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
-            aria-pressed={selectedIsBookmarked}
-            aria-label={selectedIsBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
-            onClick={() => onToggleBookmark(selectedRecipe)}
-          >
-            <MiningBookmarkIcon />
-          </button>
-          <button
-            type="button"
-            className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
-            aria-pressed={selectedIsQueued}
-            onClick={() => onAddToQueue(selectedRecipe, selectedQualitySnapshot, finalProductQuality)}
-          >
-            {selectedIsQueued ? "Queued" : "Add to Queue"}
-          </button>
-        </footer>
+        {queueBlocked ? <p className="craft-blueprint-availability" role="status">{unavailableBlueprintReason}</p> : null}
       </section>
     );
   }
@@ -2896,8 +3236,8 @@ function RecipeDrawer({
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
               Quality {formatCompactNumber(finalProductQuality.averageBand)}
             </span>
-            {heroMeta.map((value) => (
-              <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
+            {heroMeta.map(({ value, tone }) => (
+              <span key={value} className={`craft-badge craft-badge--neutral ${tone}`.trim()}>{value}</span>
             ))}
           </div>
           {itemDescription && (
@@ -2937,6 +3277,7 @@ function RecipeDrawer({
               <strong>{detailMaterialRows.length} <small>ingredients</small></strong>
             </span>
           </div>
+          {queueBlocked ? <p className="craft-blueprint-availability" role="status">{unavailableBlueprintReason}</p> : null}
           <div className="craft-summary-action-row craft-detail-actions">
             <button
               type="button"
@@ -2950,6 +3291,8 @@ function RecipeDrawer({
             <button
               type="button"
               className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+            disabled={queueBlocked}
+            title={queueBlocked ? unavailableBlueprintReason : undefined}
               aria-pressed={selectedIsQueued}
               aria-label={selectedIsQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
               onClick={() => onAddToQueue(
@@ -2958,7 +3301,7 @@ function RecipeDrawer({
                 finalProductQuality,
               )}
             >
-              {selectedIsQueued ? "Queued" : "Add to Queue"}
+              {queueBlocked ? "Preview Only" : selectedIsQueued ? "Queued" : "Add to Queue"}
             </button>
           </div>
         </div>
@@ -3001,10 +3344,10 @@ function RecipeDrawer({
               <span><span>Size</span><strong>{formatSize(selectedRecipe.size)}</strong></span>
             )}
             {selectedRecipe.grade && (
-              <span><span>Grade</span><strong>{selectedRecipe.grade}</strong></span>
+              <span><span>Grade</span><strong className={gradeToneClass(selectedRecipe.grade) || undefined}>{selectedRecipe.grade}</strong></span>
             )}
             {selectedRecipe.class && (
-              <span><span>Class</span><strong>{selectedRecipe.class}</strong></span>
+              <span><span>Class</span><strong className={classToneClass(selectedRecipe.class) || undefined}>{selectedRecipe.class}</strong></span>
             )}
           </div>
         </div>
@@ -3031,11 +3374,13 @@ function RecipeDrawer({
           <button
             type="button"
             className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+            disabled={queueBlocked}
+            title={queueBlocked ? unavailableBlueprintReason : undefined}
             aria-pressed={selectedIsQueued}
             aria-label={selectedIsQueued ? `${mobileDisplayName} is in build queue` : `Add ${mobileDisplayName} to build queue`}
             onClick={() => onAddToQueue(selectedRecipe, selectedQualitySnapshot, finalProductQuality)}
           >
-            {selectedIsQueued ? "Queued" : "Add to Queue"}
+            {queueBlocked ? "Preview Only" : selectedIsQueued ? "Queued" : "Add to Queue"}
           </button>
         </div>
       </section>
@@ -3143,8 +3488,10 @@ interface Props {
     recipe: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
     finalProductQuality: FinalProductQuality,
+    quantity?: number,
   ) => void;
   isRecipeQueued?: (recipe: ComponentRecipe) => boolean;
+  isBlueprintSourceVerified?: (recipe: ComponentRecipe) => boolean | null;
   presentation?: "drawer";
   onClose?: () => void;
 }
@@ -3155,6 +3502,7 @@ export default function ComponentRecipeTable({
   initialBlueprintId,
   onAddToQueue,
   isRecipeQueued = () => false,
+  isBlueprintSourceVerified,
   presentation = "drawer",
   onClose,
 }: Props) {
@@ -3487,6 +3835,7 @@ export default function ComponentRecipeTable({
   const selectedGroup = initialBlueprintId
     ? groupedRecipes.find((group) => group.recipes.some((recipe) => recipe.blueprint_id === initialBlueprintId)) ?? null
     : groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
+  useShellBreadcrumbDetail(selectedGroup?.displayName);
   const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
   const hiddenRecipeCount = Math.max(0, groupedRecipes.length - visibleRecipeGroups.length);
 
@@ -3507,6 +3856,7 @@ export default function ComponentRecipeTable({
             componentCards={componentCards}
             onAddToQueue={onAddToQueue}
             isRecipeQueued={isRecipeQueued}
+            isBlueprintSourceVerified={isBlueprintSourceVerified}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
             onToggleBookmark={toggleBookmark}
             isMissionBookmarked={(missionId) => bookmarkedMissionIds.has(missionId)}
@@ -3907,6 +4257,7 @@ export default function ComponentRecipeTable({
               componentCards={componentCards}
             onAddToQueue={onAddToQueue}
             isRecipeQueued={isRecipeQueued}
+            isBlueprintSourceVerified={isBlueprintSourceVerified}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
             onToggleBookmark={toggleBookmark}
             isMissionBookmarked={(missionId) => bookmarkedMissionIds.has(missionId)}

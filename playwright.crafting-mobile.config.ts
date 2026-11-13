@@ -12,7 +12,7 @@ export default defineConfig({
   expect: { timeout: 30_000 },
   use: { baseURL, trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: {
-    command: `vite --mode fixtures --host 127.0.0.1 --port ${port}`,
+    command: `vite --config vite.local-fixtures.config.ts --mode fixtures --host 127.0.0.1 --port ${port} --strictPort`,
     url: `${baseURL}/industry/crafting`,
     reuseExistingServer: false,
     timeout: 180_000,

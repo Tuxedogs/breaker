@@ -5,10 +5,243 @@
    ────────────────────────────────────────────── */
 
 :root {
+  /* V31 cinematic homepage fidelity palette.
+     Scoped use: breaker-home.css only. These exact values preserve the approved prototype;
+     operational pages continue using standard --mb-* semantic tokens. */
+  --mb-home-body-text: #ecf5fa;
+  --mb-home-canvas: #03070c;
+  --mb-home-slice-unavailable-accent: #788e9d;
+  --mb-home-chrome: #060d15;
+  --mb-home-panel-border: #273e4c;
+  --mb-home-panel-fallback: #0c1420;
+  --mb-home-panel-overlay-start: #07101a19;
+  --mb-home-panel-overlay-middle: #07111a10;
+  --mb-home-panel-overlay-end: #061019cc;
+  --mb-home-panel-kicker: #a2bdca;
+  --mb-home-panel-number: #cfe6f0a9;
+  --mb-home-panel-description: #b7c7d0;
+  --mb-home-panel-action: #e6f4fb;
+  --mb-home-panel-action-border: #8bb0bc;
+  --mb-home-panel-wip-border: #74889969;
+  --mb-home-panel-wip-text: #8da2b1;
+  --mb-home-panel-action-border-hover: #e0f1f4;
+  --mb-home-panel-action-hover-fill: #e5f7ff23;
+  --mb-home-white: #fff;
+  --mb-home-section-header-surface: #06111b;
+  --mb-home-section-header-border: #244052;
+  --mb-home-section-header-text: #d8e8f1;
+  --mb-home-section-header-muted: #81a4b5;
+  --mb-home-tablet-gutter: #253e4d;
+  --mb-home-mobile-heading-start: #0c2638;
+  --mb-home-mobile-heading-end: #07131e;
+  --mb-home-mobile-heading-border: #285064;
+  --mb-home-mobile-heading-text: #eef8fb;
+  --mb-home-mobile-heading-muted: #8bb0c2;
+  --mb-home-mobile-canvas: #06111c;
+  --mb-home-mobile-gutter: #233b49;
+  --mb-home-mobile-overlay-start: #06101955;
+  --mb-home-mobile-overlay-end: #020c18e8;
+  --mb-home-focus-ring: #63dcef;
+  --mb-home-popover-surface: #0b1e2e;
+  --mb-home-popover-shadow: #0009;
+
+  /* V31 operational workspace palette (Mining visual pilot, 2026-11-04).
+     Shared structural surfaces for the operational modules, with Mining unchanged.
+     Surfaces, hairlines and label tiers only; interaction still uses --mb-accent. */
+  --mb-ws-gutter: #1e3140;
+  --mb-ws-panel: #0a1420;
+  --mb-ws-panel-alt: #0a1521;
+  --mb-ws-profile-glow: #0d1d2a;
+  --mb-ws-raised: #0e1b28;
+  --mb-ws-raised-2: #10202d;
+  --mb-ws-control: #101d2a;
+  --mb-ws-control-hover: #142b3a;
+  --mb-ws-control-border: #294152;
+  --mb-ws-selected: #153244;
+  --mb-ws-selected-border: #397990;
+  --mb-ws-input: #0e1d2a;
+  --mb-ws-input-border: #2c4757;
+  --mb-ws-rule: #253745;
+  --mb-ws-line: #294556;
+  --mb-ws-row: #0d1a26;
+  --mb-ws-row-hover: #112333;
+  --mb-ws-row-selected: #12293a;
+  --mb-ws-rank-bg: #0b1d2b;
+  --mb-ws-rank-border: #324e60;
+  --mb-ws-rank-tie-bg: #133340;
+  --mb-ws-rank-tie-border: #2a7088;
+  --mb-ws-track: #344b59;
+  --mb-ws-text-label: #d6e6ee;
+  --mb-ws-text-head: #8ea9b8;
+  --mb-ws-text-body: #b3cedc;
+  --mb-ws-text-muted: #7b9faf;
+  --mb-ws-text-hint: #708b9b;
+  /* V31 Mining profile table text, matched to the approved mockup. */
+  --mb-ws-table-primary: #d7ecf5;
+  --mb-ws-table-cell: #d5eaf2;
+  --mb-ws-location-name: #d9e8ef;
+  --mb-ws-table-numeric: #c8dbe5;
+  --mb-ws-table-trace: #a8c1cd;
+  --mb-ws-table-trace-value: #8caaba;
+  --mb-ws-table-branch: #578399;
+  --mb-ws-material-index-text: #90a5b3;
+  --mb-ws-table-heading: #bfd6df;
+  --mb-ws-table-method: #adc0ca;
+  --mb-ws-metric-label: #b0c7d1;
+  --mb-ws-star: #658395;
+  --mb-ws-star-active: #f3cb94;
+  /* Shared operational palette. Crafting, Inventory, Build Queue, Fitting, and
+     Refinery consume these values; Mining and Home remain visually untouched. */
+  --mb-ops-surface-quiet: #091723;
+  --mb-ops-surface-panel: #0a1b29;
+  --mb-ops-surface-raised: #0b1c29;
+  --mb-ops-surface-row: #102637;
+  --mb-ops-surface-hover: #183346;
+  --mb-ops-surface-selected: #1a3a49;
+  --mb-ops-surface-separator: #294758;
+  --mb-ops-border-strong: #315267;
+  --mb-ops-border-active: #52c6df;
+  --mb-ops-text-primary: #e8edf2;
+  --mb-ops-text-secondary: #9db7c9;
+
+
+  /* V31 application shell (top bar, module rail, mobile dock, section tabs).
+     Values measured from Breaker_V31_Responsive_Motion.html; scoped to breaker-shell.css
+     and the Mining section tabs. */
+  --mb-shell-topbar-height: 48px;
+  /* Module identity is limited to the shared top-bar hairline; interactions stay cyan. */
+  --mb-shell-topbar-craft-accent: #ffab6b;
+  --mb-shell-topbar-build-accent: #adbadf;
+  --mb-shell-topbar-inventory-accent: #9ddca4;
+  --mb-shell-topbar-fitting-accent: #43d4f4;
+  --mb-shell-rail-width: 66px;
+  --mb-shell-dock-height: 70px;
+  --mb-shell-tab-height: 55px;
+  --mb-shell-shortcut-height: 43px;
+  --mb-shell-nav-radius: 3px;
+  --mb-shell-canvas: #070e16;
+  --mb-shell-topbar-bg: #060d15;
+  --mb-shell-topbar-bg-mobile: #06111de8;
+  --mb-shell-topbar-line: #233240;
+  --mb-shell-topbar-shadow: #0005;
+  --mb-shell-brand: #f2f8fb;
+  --mb-shell-brand-symbol: #84e0f2;
+  --mb-shell-divider: #293b4d;
+  --mb-shell-crumb: #dbeaf1;
+  --mb-shell-crumb-page: #8db7c8;
+  --mb-shell-crumb-detail: #eef7fb;
+  --mb-shell-crumb-sep: #597586;
+  --mb-shell-text: #ecf5fa;
+  --mb-shell-status: #8fa5b4;
+  --mb-shell-status-dot: #49dfff;
+  --mb-shell-round-border: #3a5060;
+  --mb-shell-round-text: #c5d9e3;
+  --mb-shell-rail-bg: #07111b;
+  --mb-shell-rail-line: #90b9cf24;
+  --mb-shell-nav: #839caa;
+  --mb-shell-nav-hover: #e6f8fb;
+  --mb-shell-nav-hover-bg: #102535;
+  --mb-shell-nav-hover-border: #294a5c;
+  --mb-shell-nav-current: #61dcf4;
+  --mb-shell-nav-current-bg: #0c2939;
+  --mb-shell-nav-current-border: #23627a;
+  --mb-shell-nav-current-mark: #54d6f6;
+  --mb-shell-nav-disabled: #455d6e;
+  --mb-shell-dock-bg: #071824;
+  --mb-shell-dock-line: #355368;
+  --mb-shell-dock-shadow: #0109128c;
+  --mb-shell-dock-nav: #7795a7;
+  --mb-shell-dock-current: #79e5f8;
+  --mb-shell-dock-current-bg: #102e3e;
+  --mb-shell-dock-current-border: #2c7189;
+  --mb-shell-dock-current-mark: #53d5f2;
+  --mb-shell-mobile-canvas: #07121e;
+  --mb-shell-tabs-bg: #0a1824;
+  --mb-shell-tabs-line: #29485b;
+  --mb-shell-tabs-shadow: #0209128a;
+  --mb-shell-tab-divider: #243848;
+  --mb-shell-tab-text: #829cab;
+  --mb-shell-tab-sub: #5d7c8e;
+  --mb-shell-tab-active: #83e2f4;
+  --mb-shell-tab-active-sub: #79b0c4;
+  --mb-shell-tab-active-mark: #57d2ea;
+  --mb-shell-tab-active-glow: #133b4d8b;
+  --mb-shell-shortcut-bg: #0a1a27;
+  --mb-shell-shortcut-line: #294354;
+  --mb-shell-shortcut-shadow: #0208104d;
+  --mb-shell-shortcut-prefix: #648a9d;
+  --mb-shell-shortcut-btn: #0c2231;
+  --mb-shell-shortcut-btn-border: #2b4b5e;
+  --mb-shell-shortcut-btn-text: #a9c8d7;
+  --mb-shell-shortcut-active: #7ce0f3;
+  --mb-shell-shortcut-active-bg: #113347;
+  --mb-shell-shortcut-active-border: #4db5d0;
+  --mb-shell-focus: #57d8f0;
+  --mb-shell-mobile-panel: #091722;
+  --mb-shell-mobile-panel-alt: #0a1926;
+  --mb-shell-mobile-panel-profile: #0b1925;
+
   color-scheme: dark;
-  --font-primary: Rajdhani, sans-serif;
-  --font-display: Rajdhani, sans-serif;
-  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Breaker semantic layer (--mb-*): the only vocabulary for new and migrated CSS.
+     Values are what Mining renders today (its --mine-intel-* tokens resolve to the
+     --ops-* values below); --ops-* fills roles Mining does not define.
+     One interactive accent: cyan, for selection, focus and active state.
+     Good/bad/warn/info, quality and rarity colors carry meaning only. */
+  /* Surfaces (quieter as they nest) */
+  --mb-canvas: var(--ops-canvas);                  /* Mining --mine-intel-bg */
+  --mb-surface-1: var(--ops-surface-primary);      /* Mining --mine-intel-workspace / -panel */
+  --mb-surface-2: var(--ops-surface-deep);         /* Mining --mine-intel-row-alt */
+  --mb-surface-row: var(--ops-surface-row);        /* Mining --mine-intel-row */
+  --mb-surface-hover: var(--ops-surface-hover);    /* Mining --mine-intel-raised */
+  --mb-surface-selected: var(--ops-surface-selected);
+  /* Lines */
+  --mb-border: var(--ops-border-default);          /* Mining --mine-intel-border */
+  --mb-border-soft: var(--ops-border-soft);        /* Mining --mine-intel-border-soft */
+  --mb-border-hover: #384e5b;                      /* Mining --mine-intel-border-hover */
+  /* Text */
+  --mb-text-1: #edf7ff;
+  --mb-text-2: #a9bad0;
+  --mb-text-3: #7a8fa3;
+  /* Interaction: one accent */
+  --mb-accent: #5bd6ed;                          /* V31 opaque cyan */
+  --mb-accent-soft: rgba(91, 214, 237, 0.12);
+  --mb-focus-ring: var(--mb-accent);               /* Mining focus outline */
+  /* Semantics (meaning only, never decoration) */
+  --mb-good: var(--stat-beneficial);
+  --mb-bad: var(--stat-detrimental);
+  --mb-warn: var(--accent-gold);
+  --mb-info: #4db8b0;
+  /* Component grade (rank, A best) and class (named category). Always shown with their text label. */
+  --mb-grade-a: #f7d774;                           /* gold */
+  --mb-grade-b: #dfe7ee;                           /* silver */
+  --mb-grade-c: #c99a6b;                           /* bronze */
+  --mb-grade-d: var(--mb-text-3);
+  --mb-class-military: #9cb974;
+  --mb-class-civilian: #8fb4d9;
+  --mb-class-stealth: #a99bd6;
+  --mb-class-industrial: #d6a86a;
+  --mb-class-competition: #d98d8d;
+  /* Shape */
+  --mb-radius-sm: 2px;                             /* controls; Mining routine radius */
+  --mb-radius-md: 4px;                             /* panels */
+  --mb-radius-lg: 6px;                             /* floating layers */
+  --mb-radius-pill: 999px;
+  --mb-shadow-panel: var(--ops-shadow-primary);    /* Mining --mine-shadow-panel; primary panels only */
+  /* Page shell rhythm (canon: Page Shell) */
+  --mb-shell-padding: 8px;
+  --mb-shell-gap: 8px;
+  /* Type roles */
+  /* Owner decision 2026-11-05: Segoe UI is Breaker's single typeface, matching V31
+     as rendered. Hierarchy comes from V31 sizes, weights and spacing, not extra faces. */
+  --mb-font-ui: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mb-font-display: var(--mb-font-ui);
+  --mb-font-numeric: var(--mb-font-ui); /* data values; pair with tabular-nums */
+  --mb-font-mono: "Share Tech Mono", "Courier New", monospace;       /* IDs and codes only */
+
+  --font-primary: var(--mb-font-ui);
+  --font-display: var(--mb-font-display);
+  --font-ui: var(--mb-font-ui);
   --font-size-9: 9px;
   --font-size-12: 12px;
   --font-size-14: 14px;
@@ -23,7 +256,7 @@
   --tracking-wide: 0.08em;
   --tracking-label: 0.25em;
   --tracking-display: 0.38em;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   --text-main: #edf7ff;
   --glass-bg: rgba(10, 14, 20, 0.55);
 
@@ -56,11 +289,11 @@
 --void-panel-top: rgba(14, 20, 26, 0.98);
 --void-panel-bottom: rgba(6, 10, 14, 0.99);
 
-/* Amber action/focus language */
+/* Legacy amber active wash. Not the interactive accent; use --mb-accent. */
 --void-active-wash: rgba(255, 153, 0, 0.12);
 --void-active-fade: rgba(255, 153, 0, 0.035);
 
-/* Borders: quieter graphite; amber only for active/hover */
+/* Borders: quieter graphite; legacy amber active/hover (use --mb-accent for new work) */
 --void-border-soft: rgba(130, 150, 160, 0.08);
 --void-border-panel: rgba(130, 150, 160, 0.11);
 --void-border-hover: rgba(255, 178, 26, 0.24);
@@ -77,9 +310,9 @@
 --void-accent-teal-soft: rgba(77, 184, 168, 0.11);
 --void-accent-teal-glow: rgba(77, 184, 168, 0.14);
 
---void-text-main: #edf7ff;
---void-text-muted: #a9bad0;
---void-text-dim: #7a8fa3;
+--void-text-main: var(--mb-text-1);
+--void-text-muted: var(--mb-text-2);
+--void-text-dim: var(--mb-text-3);
 
 /* Void Box Shadows semantic color tokens */
 
@@ -163,9 +396,9 @@
   --ui-panel-border: rgba(65, 132, 160, 0.16);
   --ui-panel-border-soft: rgba(65, 132, 160, 0.14);
   --ui-accent-cyan: #4db8b0;
-  --ui-text-primary: #edf7ff;
-  --ui-text-secondary: #a9bad0;
-  --ui-text-muted: #7a8fa3;
+  --ui-text-primary: var(--mb-text-1);
+  --ui-text-secondary: var(--mb-text-2);
+  --ui-text-muted: var(--mb-text-3);
   --ui-line-body: 1.35;
   --ui-line-dense: 1.25;
 
@@ -179,7 +412,6 @@
   --ops-header-band: rgba(15, 22, 34, 0.64);
   --ops-border-default: rgba(115, 143, 171, 0.2);
   --ops-border-soft: rgba(115, 143, 171, 0.14);
-  --ops-radius-primary: 7px;
   --ops-radius-nested: 4px;
   --ops-shadow-primary:
     0 10px 24px rgba(0, 0, 0, 0.28),
@@ -255,7 +487,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   color: var(--text-main);
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
   overflow-x: clip;
 }
 
@@ -266,7 +498,7 @@ body {
 #root {
   min-height: 100vh;
   min-height: 100dvh;
-  font-family: var(--font-primary);
+  font-family: var(--mb-font-ui);
 }
 
 .title-font {
@@ -286,6 +518,11 @@ select,
 textarea,
 a {
   -webkit-tap-highlight-color: rgba(245, 158, 11, 0.16);
+}
+
+/* Form controls take the surrounding font instead of the UA default (zero specificity). */
+:where(button, input, select, textarea) {
+  font: inherit;
 }
 
 :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {

@@ -27,6 +27,8 @@ type FittingHeroProps = {
   onExitInspect: () => void;
   onViewDetails: () => void;
   selectorDrawer?: ReactNode;
+  /** Ship identity, section tabs and ship/loadout tools, shown above the stage. */
+  header?: ReactNode;
 };
 
 export default function FittingHero({
@@ -35,6 +37,7 @@ export default function FittingHero({
   onExitInspect,
   onViewDetails,
   selectorDrawer,
+  header,
 }: FittingHeroProps) {
   const candidateKey = asset.candidates.map((candidate) => candidate.src).join("\0");
   const [candidateState, setCandidateState] = useState({ key: candidateKey, index: 0 });
@@ -44,6 +47,7 @@ export default function FittingHero({
 
   return (
     <section className="fm-hero" aria-label="Ship viewer">
+      {header}
       <div className="fm-hero-stage">
         <div className="fm-hero-lighting" aria-hidden />
         <div className="fm-hero-floor" aria-hidden />

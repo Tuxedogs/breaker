@@ -1,46 +1,35 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, type ReactNode } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
+import AppPageShell from "./components/shared/AppPageShell";
 import SignatureDock from "./components/SignatureDock";
 import { SignatureDockProvider } from "./lib/SignatureDockProvider";
 import OnlinePersistenceCoordinator from "./components/logistics/OnlinePersistenceCoordinator";
 import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
-import DashboardPage from "./pages/DashboardPage";
+import BreakerHomePage from "./pages/BreakerHomePage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import { loadBuildQueuePage } from "./pages/logistics/buildQueueRoute";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
-const DoctrineLibraryPage = lazy(() => import("./pages/DoctrineLibraryPage"));
-const DoctrineModulePage = lazy(() => import("./pages/DoctrineModulePage"));
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const InventoryFixturePage = lazy(() => import("./pages/logistics/InventoryFixturePage"));
-const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(loadBuildQueuePage);
 const BuildQueueFixturePage = lazy(() => import("./pages/logistics/BuildQueueFixturePage"));
 const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/InventoryAddModalFixturePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
 const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
+const FittingV2Page = lazy(() => import("./pages/FittingV2Page"));
 const FittingFixturePage = import.meta.env.DEV
   ? lazy(() => import("./pages/FittingFixturePage"))
   : null;
-
-const AlphaThresholdToolPage = lazy(() =>
-  import("./tools/alpha-threshold").then((module) => ({
-    default: module.AlphaThresholdToolPage,
-  }))
-);
-
-const ComponentMappingPage = lazy(() =>
-  import("./tools/gunnery/ComponentMappingPage").then((module) => ({
-    default: module.ComponentMappingPage,
-  }))
-);
-
+const FittingV2PowerFixturePage = import.meta.env.DEV
+  ? lazy(() => import("./pages/FittingV2PowerFixturePage"))
+  : null;
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 const CraftingTargetSliderFixturePage = lazy(() => import("./pages/industry/CraftingTargetSliderFixturePage"));
@@ -49,8 +38,8 @@ const IndustryCraftingLayout = lazy(() =>
   import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
 );
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
-const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 const IndustryMissionBrowserPage = lazy(() => import("./pages/industry/MissionBrowserPage"));
+const WikeloPage = lazy(() => import("./pages/industry/WikeloPage"));
 const IndustryRefineryPlannerPage = lazy(() => import("./pages/industry/RefineryPlannerPage"));
 
 function RouteFallback() {
@@ -66,6 +55,11 @@ function RedirectToDashboard() {
   return <Navigate to={`/dashboard${location.search}`} replace />;
 }
 
+function RedirectToActivePage({ to }: { to: string }) {
+  const location = useLocation();
+  return <Navigate to={`${to}${location.search}`} replace />;
+}
+
 function RedirectToCrafting() {
   const location = useLocation();
   return <Navigate to={`/industry/crafting${location.search}`} replace />;
@@ -79,26 +73,19 @@ function RedirectCraftingDetailToBrowser() {
   return <Navigate to={`/industry/crafting?${search.toString()}`} replace />;
 }
 
-function RedirectToDashboardDoctrine() {
-  const location = useLocation();
-  return <Navigate to={`/dashboard/doctrine${location.search}`} replace />;
-}
-
-function RedirectToDashboardDoctrineLibrary() {
-  const location = useLocation();
-  return <Navigate to={`/dashboard/doctrine/library${location.search}`} replace />;
-}
-
-function RedirectLegacyDoctrineModule() {
-  const location = useLocation();
-  return <Navigate to={`/dashboard/doctrine/module/${location.pathname.split("/").pop() ?? ""}`} replace />;
-}
-
 function LegacyFittingRoute() {
   return (
-    <Suspense fallback={<RouteFallback />}>
+    <ShellRoute title="Fitting" fullBleed>
       <FittingPage />
-    </Suspense>
+    </ShellRoute>
+  );
+}
+
+function ShellRoute({ title, children, fullBleed = false }: { title: string; children: ReactNode; fullBleed?: boolean }) {
+  return (
+    <AppPageShell title={title} fullBleed={fullBleed}>
+      <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+    </AppPageShell>
   );
 }
 
@@ -109,95 +96,86 @@ export default function App() {
       <SignatureDockProvider>
         <SignatureDock />
         <Routes>
-        <Route path="/" element={<RedirectToCrafting />} />
+        <Route path="/" element={<RedirectToDashboard />} />
+        <Route path="dashboard" element={<BreakerHomePage />} />
         <Route path="home" element={<RedirectToDashboard />} />
         <Route path="index" element={<RedirectToDashboard />} />
         <Route path="framework" element={<RedirectToDashboard />} />
         <Route path="modules" element={<ModuleIndexPage />} />
-        <Route path="doctrine" element={<RedirectToDashboardDoctrine />} />
-        <Route path="doctrine/library" element={<RedirectToDashboardDoctrineLibrary />} />
-        <Route path="doctrine/armor-threshold" element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />} />
-        <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
-        <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
-        <Route path="framework-legacy" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+        <Route path="doctrine" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="doctrine/library" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="dashboard/doctrine" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="dashboard/doctrine/library" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="dashboard/doctrine/module/:id" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="doctrine/armor-threshold" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="module/:id" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="refs/:type/:id" element={<RedirectToActivePage to="/dashboard" />} />
+        <Route path="framework-legacy" element={<RedirectToActivePage to="/dashboard" />} />
         <Route path="auth/callback" element={<AuthCallbackPage />} />
         <Route
           path="systems/sub-targeting"
-          element={<Navigate to="/dashboard/doctrine/module/sub-targeting" replace />}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
         <Route
           path="systems/turret-keybinds"
-          element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
         <Route
           path="systems/turret-keybinds/additional"
-          element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
         <Route
           path="anti-cap/component-sniping"
-          element={<Navigate to="/dashboard/doctrine/module/component-sniping" replace />}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
 
-      {/* Dashboard shell — sidebar + topbar always visible */}
+      {/* Operational workspaces retain their existing shell. Home is a standalone gateway. */}
       <Route element={<DashboardShell />}>
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route
-          path="dashboard/doctrine"
-          element={<Suspense fallback={<RouteFallback />}><DoctrineLibraryPage /></Suspense>}
-        />
-        <Route
-          path="dashboard/doctrine/library"
-          element={<Suspense fallback={<RouteFallback />}><DoctrineLibraryPage /></Suspense>}
-        />
-        <Route
-          path="dashboard/doctrine/module/:id"
-          element={<Suspense fallback={<RouteFallback />}><DoctrineModulePage /></Suspense>}
-        />
+
+
+
         <Route
           path="dashboard/doctrine/armor-threshold"
-          element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
 
         {/* Logistics */}
         <Route
           path="logistics"
-          element={<Suspense fallback={<RouteFallback />}><LogisticsPage /></Suspense>}
+          element={<ShellRoute title="Logistics Hub"><LogisticsPage /></ShellRoute>}
         />
         <Route
           path="logistics/inventory"
-          element={<Suspense fallback={<RouteFallback />}><InventoryPage /></Suspense>}
+          element={<ShellRoute title="Inventory" fullBleed><InventoryPage /></ShellRoute>}
         />
         {import.meta.env.DEV ? (
           <Route
             path="logistics/inventory/__fixture/layout"
-            element={<Suspense fallback={<RouteFallback />}><InventoryFixturePage /></Suspense>}
+            element={<ShellRoute title="Inventory" fullBleed><InventoryFixturePage /></ShellRoute>}
           />
         ) : null}
-        <Route
-          path="logistics/inventory/refinery-import"
-          element={<Suspense fallback={<RouteFallback />}><RefineryImportPage /></Suspense>}
-        />
+        <Route path="logistics/inventory/refinery-import" element={<RedirectToActivePage to="/logistics/inventory" />} />
         <Route
           path="logistics/refinery-import"
-          element={<Navigate to="/logistics/inventory/refinery-import" replace />}
+          element={<RedirectToActivePage to="/logistics/inventory" />}
         />
         <Route
           path="logistics/carrier-logistics"
-          element={<Suspense fallback={<RouteFallback />}><CarrierLogisticsPage /></Suspense>}
+          element={<ShellRoute title="Carrier Logistics"><CarrierLogisticsPage /></ShellRoute>}
         />
         <Route
           path="logistics/build-queue"
-          element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
+          element={<ShellRoute title="Build Queue" fullBleed><BuildQueuePage /></ShellRoute>}
         />
-        {import.meta.env.DEV ? (
+        {(import.meta.env.DEV || (import.meta.env.MODE === 'fixtures' && import.meta.env.VITE_LOCAL_COMPILED_FIXTURE)) ? (
           <>
             <Route
               path="logistics/build-queue/__fixture/stats"
-              element={<Suspense fallback={<RouteFallback />}><BuildQueueFixturePage /></Suspense>}
+              element={<ShellRoute title="Build Queue" fullBleed><BuildQueueFixturePage /></ShellRoute>}
             />
             <Route
               path="logistics/build-queue/__fixture/add-inventory"
-              element={<Suspense fallback={<RouteFallback />}><InventoryAddModalFixturePage /></Suspense>}
+              element={<ShellRoute title="Build Queue" fullBleed><InventoryAddModalFixturePage /></ShellRoute>}
             />
           </>
         ) : null}
@@ -205,29 +183,39 @@ export default function App() {
         {/* Combat tools */}
         <Route
           path="tools/alpha-threshold"
-          element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />}
+          element={<RedirectToActivePage to="/dashboard" />}
         />
         <Route
           path="combat/component-mapping"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <ComponentMappingPage />
-            </Suspense>
-          }
+          element={<RedirectToActivePage to="/fitting" />}
         />
         <Route path="fitting-legacy" element={<LegacyFittingRoute />} />
         <Route path="fitting-legacy/:shipKey" element={<LegacyFittingRoute />} />
+        <Route
+          path="fitting-v2"
+          element={<ShellRoute title="Fitting" fullBleed><FittingV2Page /></ShellRoute>}
+        />
+        <Route
+          path="fitting-v2/:shipKey"
+          element={<ShellRoute title="Fitting" fullBleed><FittingV2Page /></ShellRoute>}
+        />
+        {FittingV2PowerFixturePage ? (
+          <Route
+            path="fitting-v2/__fixture/power"
+            element={<ShellRoute title="Fitting" fullBleed><FittingV2PowerFixturePage /></ShellRoute>}
+          />
+        ) : null}
         {/* Legacy redirect — preserve old gunnery URL */}
-        <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
-        <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />
+        <Route path="tools/gunnery" element={<RedirectToActivePage to="/fitting" />} />
+        <Route path="tools/component-mapping" element={<RedirectToActivePage to="/fitting" />} />
 
         {/* Industry */}
         <Route
           path="industry/crafting"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Crafting" fullBleed>
               <IndustryCraftingLayout />
-            </Suspense>
+            </ShellRoute>
           }
         >
           {import.meta.env.DEV ? (
@@ -260,81 +248,79 @@ export default function App() {
         <Route
           path="industry/mining"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Mining" fullBleed>
               <IndustryMiningPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
         <Route
           path="industry/blueprint-tracker"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <IndustryBlueprintTrackerPage />
-            </Suspense>
-          }
+          element={<RedirectToCrafting />}
         />
         <Route
           path="industry/missions"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Missions">
               <IndustryMissionBrowserPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
+        <Route path="industry/wikelo" element={<ShellRoute title="Wikelo"><WikeloPage /></ShellRoute>} />
+        {import.meta.env.DEV && <Route path="industry/wikelo/__fixture" element={<ShellRoute title="Wikelo"><WikeloPage fixture /></ShellRoute>} />}
         <Route
           path="industry/missions/:missionSlug"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Missions">
               <IndustryMissionBrowserPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
         <Route
           path="industry/refinery"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Refinery Planner" fullBleed>
               <IndustryRefineryPlannerPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
 
-      </Route>
-
-        {/* Full-viewport fitting mockup — outside dashboard shell */}
+        {/* Fitting shares the global Breaker shell and navigation. */}
         <Route
           path="fitting"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Fitting" fullBleed>
               <FittingMockupPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
         {FittingFixturePage ? (
           <Route
             path="fitting/__fixture/:scenario"
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <ShellRoute title="Fitting" fullBleed>
                 <FittingFixturePage />
-              </Suspense>
+              </ShellRoute>
             }
           />
         ) : null}
         <Route
           path="fitting/:shipKey"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Fitting" fullBleed>
               <FittingMockupPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
         <Route
           path="fitting-mockup"
           element={
-            <Suspense fallback={<RouteFallback />}>
+            <ShellRoute title="Fitting" fullBleed>
               <FittingMockupPage />
-            </Suspense>
+            </ShellRoute>
           }
         />
+
+      </Route>
 
         <Route path="*" element={<RedirectToDashboard />} />
 

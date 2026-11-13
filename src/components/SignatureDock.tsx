@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MINEABLE_SIGNATURES } from "../data/mineableSignatures";
 import {
@@ -10,7 +10,7 @@ import { loadStaticMiningIndex } from "../features/mining/staticMiningIndex";
 import { useSignatureDock } from "../lib/useSignatureDock";
 import {
   loadSignatureDockState,
-  saveSignatureDockState,
+  patchSignatureDockState,
   type SignatureDockPersistedState,
 } from "../lib/signatureDockState";
 import "./SignatureDock.css";
@@ -101,12 +101,10 @@ function signatureRowKey(index: number) {
 
 // ── component ─────────────────────────────────────────────────────────────────
 export default function SignatureDock() {
-  const { enabled } = useSignatureDock();
+  const { enabled, minimized, setEnabled, setMinimized } = useSignatureDock();
   const [init] = useState<SignatureDockPersistedState>(() => loadSignatureDockState());
   const isMobileViewport = useIsMobileSignatureViewport();
 
-  const [open, setOpen]           = useState(init.open);
-  const [minimized, setMinimized] = useState(init.minimized);
   const [fontWeight, setFontWeight] = useState(init.fontWeight ?? 800);
   const [fontSize, setFontSize]   = useState(init.fontSize ?? 12);
   const [activePresetId, setActivePresetId] = useState<string | null>(init.activePresetId ?? null);
@@ -126,11 +124,9 @@ export default function SignatureDock() {
   const miningIndexLoadedRef = useRef(false);
 
   // ── persist ──────────────────────────────────────────────────────────────────
+  // Visibility (enabled/open/minimized) is owned and persisted by SignatureDockProvider.
   useEffect(() => {
-    saveSignatureDockState({
-      enabled,
-      open,
-      minimized,
+    patchSignatureDockState({
       fontWeight,
       fontSize,
       pos,
@@ -141,19 +137,33 @@ export default function SignatureDock() {
       activeMaterialKeys: Array.from(activeMaterialKeys),
       isPresetModified,
     });
-  }, [enabled, open, minimized, fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, isPresetModified]);
+  }, [fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, isPresetModified]);
 
   // ── viewport clamp on resize ─────────────────────────────────────────────────
   useEffect(() => {
     function onResize() {
+      const elW = elRef.current?.offsetWidth ?? 44;
+      const elH = elRef.current?.offsetHeight ?? 44;
       setPos((p) => ({
-        x: clamp(p.x, 0, window.innerWidth - 44),
-        y: clamp(p.y, 0, window.innerHeight - 44),
+        x: clamp(p.x, 0, Math.max(0, window.innerWidth - elW)),
+        y: clamp(p.y, 0, Math.max(0, window.innerHeight - elH)),
       }));
     }
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  // Keep the whole panel or strip on screen whenever it appears or changes size;
+  // the saved anchor may come from the narrower strip or a larger viewport.
+  useLayoutEffect(() => {
+    const el = elRef.current;
+    if (!enabled || !el) return;
+    setPos((p) => {
+      const x = clamp(p.x, 0, Math.max(0, window.innerWidth - el.offsetWidth));
+      const y = clamp(p.y, 0, Math.max(0, window.innerHeight - el.offsetHeight));
+      return x === p.x && y === p.y ? p : { x, y };
+    });
+  }, [enabled, minimized, isMobileViewport]);
 
   useEffect(() => {
     if (!presetPickerOpen) return;
@@ -168,7 +178,7 @@ export default function SignatureDock() {
   }, [presetPickerOpen]);
 
   useEffect(() => {
-    if (!enabled || !open || miningIndexLoadedRef.current) return;
+    if (!enabled || miningIndexLoadedRef.current) return;
 
     let cancelled = false;
     loadStaticMiningIndex()
@@ -183,7 +193,7 @@ export default function SignatureDock() {
     return () => {
       cancelled = true;
     };
-  }, [enabled, open]);
+  }, [enabled]);
 
   // ── single shared drag handler ────────────────────────────────────────────────
   const onDrag = useCallback(
@@ -227,11 +237,11 @@ export default function SignatureDock() {
     setIsPresetModified(false);
     setPresetPickerOpen(false);
     setPresetSearch("");
-  }, [presetCatalog]);
+  }, [presetCatalog, setMinimized]);
 
-  const handleOpen     = useCallback(() => { setOpen(true); setMinimized(false); }, []);
-  const handleMinimize = useCallback(() => setMinimized(true), []);
-  const handleClose    = useCallback(() => { setOpen(false); setMinimized(false); }, []);
+  const handleOpen     = useCallback(() => setMinimized(false), [setMinimized]);
+  const handleMinimize = useCallback(() => setMinimized(true), [setMinimized]);
+  const handleClose    = useCallback(() => setEnabled(false), [setEnabled]);
   const resetPosition  = useCallback(() => setPos(defaultPos()), []);
   const clearSelectedMaterials = useCallback(() => {
     setActivePresetId(null);
@@ -397,15 +407,15 @@ export default function SignatureDock() {
     </button>
   );
 
-  const showStrip = !open || minimized;
-  const showPanel = open && !minimized;
+  const showStrip = minimized;
+  const showPanel = !minimized;
 
   if (!enabled || isMobileViewport) return null;
 
   // ── render ───────────────────────────────────────────────────────────────────
   const content = (
     <>
-      {/* ── Strip (always visible when panel is closed or minimized) ── */}
+      {/* ── Strip (minimized panel) ── */}
       {showStrip && (
         <div
           className="sdock-pinned-strip"
@@ -430,9 +440,9 @@ export default function SignatureDock() {
               {selectedRows.map((m) => (
                 <div key={m.name} className="sdock-pinned-row">
                   <span className="sdock-pinned-row-name">{m.name}</span>
-                  <div className="sdock-pinned-row-values">
+                  <div className="sdock-sig-badges">
                     {m.values.map((v, vi) => (
-                      <span key={vi} className="sdock-pinned-sig-muted">
+                      <span key={vi} className="sdock-sig-badge">
                         {formatVal(v)}
                       </span>
                     ))}
@@ -504,7 +514,7 @@ export default function SignatureDock() {
                   <thead>
                     <tr>
                       <th>Material</th>
-                      <th className="sdock-th-values">Signature Values</th>
+                      <th className="sdock-th-values">Signatures</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -515,6 +525,7 @@ export default function SignatureDock() {
                         <tr
                           key={idx}
                           className={isActive ? "sdock-row-active" : ""}
+                          aria-selected={isActive}
                           onClick={() => toggleRow(idx)}
                         >
                           <td className="sdock-td-name">
@@ -522,12 +533,9 @@ export default function SignatureDock() {
                             {m.name}
                           </td>
                           <td className="sdock-td-values">
-                            <div className="sdock-values-wrap">
+                            <div className="sdock-sig-badges">
                               {m.values.map((v, vi) => (
-                                <span
-                                  key={vi}
-                                  className={`sdock-val-chip${vi === 0 ? " sdock-val-chip-first" : ""}`}
-                                >
+                                <span key={vi} className="sdock-sig-badge">
                                   {formatVal(v)}
                                 </span>
                               ))}

@@ -106,9 +106,11 @@ function isSeedBuildQueueRow(row: typeof buildQueueItems.$inferSelect) {
 
 function getLocationMetadata(input: UnknownRecord) {
   const id = asString(input.id);
+  const source = asString(input.source) === "custom" ? "custom" : undefined;
   return {
     localId: id,
     category: asString(input.category),
+    source,
     original: input,
   };
 }
@@ -223,6 +225,7 @@ function mapLocationRow(row: typeof inventoryLocations.$inferSelect) {
   return {
     id: row.id,
     name: row.name,
+    source: asString(metadata.source) === "custom" ? "custom" as const : undefined,
     category: asString(metadata.category) ?? row.locationType ?? undefined,
     system: row.system ?? undefined,
     type: row.locationType ?? undefined,

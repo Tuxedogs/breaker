@@ -230,12 +230,15 @@ npm run crafting:blueprint-sources:verify
 
 ```powershell
 Set-Location D:\Moonbreaker
+$selector = Get-Content -Raw 'D:\scintel\out\LIVE\current.json' | ConvertFrom-Json
+$env:SCINTEL_ACCEPTED_BUILD_ID = $selector.activeBuildId
+$env:SCINTEL_SOURCE_BUILD_ID = $selector.sourceBuildId
 $env:SCINTEL_API_ROOT = $datasetRoot
 $env:SCINTEL_REF_INDEX = "$datasetRoot\ref_index.json"
 npm run mining:publish
 ```
 
-The environment variable name `SCINTEL_API_ROOT` is retained by this publisher for compatibility. Its value must be the accepted build's `datasets` directory, never `D:\scintel\api`. Supplying `SCINTEL_REF_INDEX` prevents accidental cross-build location generation.
+The environment variable name `SCINTEL_API_ROOT` is retained by this publisher for compatibility. Its value must be the accepted build's `datasets` directory, never `D:\scintel\api`. `SCINTEL_ACCEPTED_BUILD_ID` names the accepted immutable generation, while `SCINTEL_SOURCE_BUILD_ID` names its raw source build for generated-source metadata. Supplying `SCINTEL_REF_INDEX` prevents accidental cross-build location generation.
 
 Mining publication is fail-closed across the enriched source and its derived indexes. If `mining/material_sources_quality_enriched.json` contains trace-material details while `recommendations/location_material_index.json` contains none, `npm run mining:publish` rejects the snapshot instead of silently removing traces. Pyro location aliases are normalized during publication from their raw location keys, independently of provider XML discovery, so all six Pyro V moons remain addressable.
 

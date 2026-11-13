@@ -4,7 +4,7 @@ const fixturePath = "/logistics/build-queue/__fixture/stats";
 const port = 5175;
 const baseURL = `http://127.0.0.1:${port}`;
 
-const fixtureCommand = `vite --mode fixtures --host 127.0.0.1 --port ${port}`;
+const fixtureCommand = `vite --config vite.local-fixtures.config.ts --mode fixtures --host 127.0.0.1 --port ${port} --strictPort`;
 
 export default defineConfig({
   testDir: "./tests/ui",

@@ -15,9 +15,9 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: "vite --host 127.0.0.1 --port 5173",
+    command: "vite --config vite.local-fixtures.config.ts --mode fixtures --host 127.0.0.1 --port 5173 --strictPort",
     url: "http://127.0.0.1:5173/logistics/inventory/__fixture/layout",
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });

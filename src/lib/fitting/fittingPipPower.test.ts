@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import type { PortBreakdownRow } from "./fittingPortGrouping.ts";
-import { aggregatePipSystemDraws, mapRowToPipCategory, pipAssignmentFromDraws } from "./fittingPipPower.ts";
+import { aggregatePipSystemDraws, mapRowToPipCategory, pipAssignmentFromDraws, pipAssignmentFromDrawsUncapped } from "./fittingPipPower.ts";
 
 function shieldRow(): PortBreakdownRow {
   return {
@@ -42,4 +42,5 @@ test("maps extracted shield power demand into the shields allocation channel", (
   });
   assert.equal(draws.shields, 3);
   assert.equal(pipAssignmentFromDraws(draws).shields, 3);
+  assert.equal(pipAssignmentFromDrawsUncapped({ ...draws, weapons: 12 }).weapons, 12);
 });

@@ -5,7 +5,7 @@
   display: grid;
   place-items: center;
   padding: 27px 24px;
-  background: rgba(2, 7, 12, 0.82);
+  background: color-mix(in srgb, var(--mb-canvas) 82%, transparent);
   backdrop-filter: blur(7px);
 }
 
@@ -18,20 +18,20 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  border: 1px solid rgba(102, 133, 158, 0.34);
-  border-radius: 7px;
-  background: rgb(10, 17, 25);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 34%, transparent);
+  border-radius: var(--mb-radius-lg);
+  background: var(--mb-canvas);
   box-shadow:
-    0 22px 64px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
-  scrollbar-color: rgba(125, 211, 252, 0.22) transparent;
+    0 22px 64px color-mix(in srgb, var(--mb-canvas) 50%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--mb-text-1) 2.5%, transparent);
+  scrollbar-color: color-mix(in srgb, var(--mb-accent) 22%, transparent) transparent;
 }
 
 .mission-workspace-modal-backdrop .mission-dossier-modal-shell.ops-primary-card {
-  border-color: rgba(83, 111, 133, 0.38);
+  border-color: var(--mb-border);
   box-shadow:
-    0 22px 64px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.018);
+    0 22px 64px color-mix(in srgb, var(--mb-canvas) 50%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--mb-text-1) 1.8%, transparent);
 }
 
 .mission-workspace-modal-shell .mission-selected-workspace {
@@ -43,7 +43,7 @@
 }
 
 .mission-concept-dossier {
-  --mission-accent: var(--mb-teal);
+  --mission-accent: var(--mb-accent);
   min-width: 0;
   border: 0;
   background: transparent;
@@ -60,7 +60,7 @@
   padding: 24px 20px 15px;
   border-bottom: 0;
   background:
-    linear-gradient(180deg, rgba(15, 28, 41, 0.74), rgba(10, 17, 25, 0.2));
+    linear-gradient(180deg, color-mix(in srgb, var(--mb-canvas) 74%, transparent), color-mix(in srgb, var(--mb-canvas) 20%, transparent));
 }
 
 .mission-dossier-header__identity {
@@ -74,8 +74,8 @@
   width: 74px;
   height: 74px;
   margin-top: 1px;
-  border-color: rgba(114, 148, 178, 0.42);
-  background: rgba(5, 12, 19, 0.64);
+  border-color: color-mix(in srgb, var(--mb-accent) 42%, transparent);
+  background: color-mix(in srgb, var(--mb-canvas) 64%, transparent);
   font-size: 20px;
 }
 
@@ -85,7 +85,7 @@
 
 .mission-dossier-header__identity h2 {
   margin: 2px 0 0;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 28px;
   font-weight: 700;
   letter-spacing: 0.015em;
@@ -94,7 +94,7 @@
 
 .mission-dossier-header__identity p {
   margin: 7px 0 8px;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: 15px;
   letter-spacing: 0.025em;
 }
@@ -127,7 +127,7 @@
   grid-column: 1 / -1;
   grid-row: 2;
   margin: 21px 0 0;
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: 13px;
   letter-spacing: 0.02em;
   text-align: right;
@@ -141,10 +141,10 @@
   width: 42px;
   height: 42px;
   padding: 0;
-  border: 1px solid rgba(103, 136, 164, 0.35);
-  border-radius: 5px;
-  background: rgba(5, 13, 21, 0.66);
-  color: var(--mb-text-muted);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 35%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-canvas) 66%, transparent);
+  color: var(--mb-text-2);
   cursor: pointer;
 }
 
@@ -166,8 +166,8 @@
 
 .mission-dossier-bookmark:hover,
 .mission-dossier-bookmark.is-active {
-  border-color: rgba(255, 178, 26, 0.44);
-  color: var(--mb-amber);
+  border-color: color-mix(in srgb, var(--mb-warn) 44%, transparent);
+  color: var(--mb-warn);
 }
 
 .mission-dossier-close {
@@ -176,8 +176,8 @@
 }
 
 .mission-dossier-close:hover {
-  border-color: rgba(255, 113, 133, 0.42);
-  color: var(--mb-negative);
+  border-color: color-mix(in srgb, var(--mb-bad) 42%, transparent);
+  color: var(--mb-bad);
 }
 
 .mission-dossier-header__controls {
@@ -196,7 +196,7 @@
 }
 
 .mission-dossier-inline-control > span {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -217,8 +217,8 @@
   padding: 2px 8px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  background: var(--mb-surface-deep);
-  color: var(--mb-text-muted);
+  background: var(--mb-surface-2);
+  color: var(--mb-text-2);
   font-size: var(--app-text-chip);
   cursor: pointer;
 }
@@ -227,9 +227,9 @@
 .mission-dossier-location-badges button:hover,
 .mission-dossier-tabs button.is-active,
 .mission-dossier-location-badges button.is-active {
-  border-color: rgba(125, 211, 252, 0.42);
-  background: rgba(56, 189, 248, 0.08);
-  color: var(--mb-text);
+  border-color: color-mix(in srgb, var(--mb-accent) 42%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
+  color: var(--mb-text-1);
 }
 
 .mission-selected-hero__facts {
@@ -237,10 +237,10 @@
   grid-template-columns: repeat(5, minmax(0, 1fr));
   margin: 0 18px;
   overflow: hidden;
-  border: 1px solid rgba(75, 108, 135, 0.28);
-  border-radius: 6px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-lg);
   background:
-    linear-gradient(180deg, rgba(17, 32, 45, 0.74), rgba(11, 22, 32, 0.78));
+    linear-gradient(180deg, color-mix(in srgb, var(--mb-canvas) 74%, transparent), color-mix(in srgb, var(--mb-canvas) 78%, transparent));
 }
 
 .mission-selected-hero__facts > span {
@@ -251,8 +251,8 @@
   min-width: 0;
   min-height: 68px;
   padding: 10px 16px;
-  border-left: 1px solid rgba(86, 112, 134, 0.28);
-  color: var(--mb-text-dim);
+  border-left: 1px solid var(--mb-border-soft);
+  color: var(--mb-text-3);
 }
 
 .mission-selected-hero__facts > span:first-child {
@@ -263,7 +263,7 @@
   width: 27px;
   height: 27px;
   fill: none;
-  stroke: #91a5b9;
+  stroke: var(--mb-text-3);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.35;
@@ -277,7 +277,7 @@
 
 .mission-selected-hero__facts strong {
   overflow: hidden;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 18px;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
@@ -287,7 +287,7 @@
 }
 
 .mission-selected-hero__facts small {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: 13px;
   line-height: 1.2;
   white-space: nowrap;
@@ -304,7 +304,7 @@
   padding: 8px 10px;
   border: 1px solid var(--mb-border-soft);
   border-radius: var(--ops-radius-nested);
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
 }
 
@@ -323,10 +323,10 @@
 .mission-dossier-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgba(60, 91, 116, 0.28);
-  border-radius: 5px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
   background:
-    linear-gradient(145deg, rgba(14, 29, 41, 0.76), rgba(7, 17, 25, 0.88));
+    linear-gradient(145deg, color-mix(in srgb, var(--mb-canvas) 76%, transparent), color-mix(in srgb, var(--mb-canvas) 88%, transparent));
 }
 
 .mission-dossier-briefing-card {
@@ -356,7 +356,7 @@
 
 .mission-dossier-card__heading h3 {
   margin: 0;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.105em;
@@ -365,7 +365,7 @@
 }
 
 .mission-dossier-card__heading > span {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
@@ -378,7 +378,7 @@
   min-height: 72px;
   margin: 0;
   padding: 1px 16px 15px;
-  color: #aebdca;
+  color: var(--mb-text-2);
   font-size: 0.88rem;
   white-space: break-spaces;
 }
@@ -396,9 +396,9 @@
   gap: 10px;
   min-height: 54px;
   padding: 5px 8px;
-  border: 1px solid rgba(73, 102, 126, 0.28);
-  border-radius: 5px;
-  background: rgba(16, 30, 42, 0.68);
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-canvas) 68%, transparent);
 }
 
 .mission-required-item-icon {
@@ -407,9 +407,9 @@
   width: 34px;
   height: 34px;
   overflow: hidden;
-  border: 1px solid rgba(167, 139, 250, 0.24);
-  border-radius: 5px;
-  background: rgba(167, 139, 250, 0.07);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 24%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-accent) 7%, transparent);
 }
 
 .mission-required-item-icon img {
@@ -423,7 +423,7 @@
   width: 22px;
   height: 22px;
   fill: none;
-  stroke: #9aa9b8;
+  stroke: var(--mb-text-2);
   stroke-width: 1.3;
 }
 
@@ -434,7 +434,7 @@
 .mission-required-item-row strong {
   display: block;
   overflow: hidden;
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 14px;
   font-weight: 700;
   line-height: 1.15;
@@ -446,7 +446,7 @@
 .mission-required-item-row small {
   display: block;
   margin-top: 2px;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: 12px;
 }
 
@@ -460,7 +460,7 @@
 .mission-required-item-row > small {
   grid-column: 2 / -1;
   margin: -2px 0 2px;
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
 }
 
 .mission-dossier-rewards-card,
@@ -473,7 +473,7 @@
 .mission-dossier-reward-status {
   margin: 0 16px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(72, 101, 124, 0.25);
+  border-bottom: 1px solid var(--mb-border-soft);
 }
 
 .mission-dossier-reward-status:last-child,
@@ -485,7 +485,7 @@
 .mb-inline-heading {
   display: block;
   margin: 0 0 5px;
-  color: #a989f5;
+  color: var(--mb-accent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -493,23 +493,23 @@
 }
 
 .mission-dossier-reward-status > span {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
 }
 
 .mission-dossier-reward-status strong {
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
 
 .mission-dossier-reward-status.is-buy-in strong {
-  color: var(--mb-amber);
+  color: var(--mb-warn);
 }
 
 .mission-dossier-reward-muted,
 .mission-dossier-source-warning {
   margin: 3px 0 0;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: 12px;
   line-height: 1.35;
 }
@@ -517,9 +517,9 @@
 .mission-dossier-source-warning {
   margin: 8px 16px 0;
   padding: 7px;
-  border: 1px solid rgba(255, 178, 26, 0.2);
+  border: 1px solid color-mix(in srgb, var(--mb-warn) 20%, transparent);
   border-radius: var(--ops-radius-nested);
-  color: var(--mb-amber);
+  color: var(--mb-warn);
 }
 
 .mb-dossier-reputation,
@@ -530,7 +530,7 @@
 
 .mb-dossier-reputation__group,
 .mb-rep-summary-row {
-  --mission-accent: var(--mb-teal);
+  --mission-accent: var(--mb-accent);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -539,7 +539,7 @@
 
 .mb-dossier-reputation__group > strong,
 .mb-rep-summary-row > strong {
-  color: var(--mb-text);
+  color: var(--mb-text-1);
   font-size: 13px;
 }
 
@@ -551,21 +551,21 @@
 
 .mb-dossier-reputation__outcomes span {
   padding: 2px 6px;
-  border: 1px solid rgba(110, 231, 160, 0.28);
-  border-radius: 3px;
-  color: var(--mb-text-muted);
+  border: 1px solid color-mix(in srgb, var(--mb-good) 28%, transparent);
+  border-radius: var(--mb-radius-sm);
+  color: var(--mb-text-2);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
 
 .mb-dossier-reputation__outcomes .is-positive {
-  color: var(--mb-positive);
+  color: var(--mb-good);
 }
 
 .mb-dossier-reputation__outcomes .is-negative {
-  border-color: rgba(255, 113, 133, 0.28);
-  color: var(--mb-negative);
+  border-color: color-mix(in srgb, var(--mb-bad) 28%, transparent);
+  color: var(--mb-bad);
 }
 
 .mb-blueprint-groups {
@@ -586,7 +586,7 @@
 
 .mb-blueprint-group > header strong {
   overflow: hidden;
-  color: #87ddd2;
+  color: var(--mb-accent);
   font-size: var(--app-text-body);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -595,14 +595,14 @@
 .mb-blueprint-group > header span,
 .mb-blueprint-item small,
 .mb-blueprint-reward-detail small {
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: 0.85rem;
   line-height: 1.3;
   font-weight: 450;
 }
 
 .mb-blueprint-group.is-dossier-row {
-  border-bottom: 1px solid rgba(72, 101, 124, 0.24);
+  border-bottom: 1px solid var(--mb-border-soft);
 }
 
 .mb-blueprint-group.is-dossier-row:last-child {
@@ -627,16 +627,16 @@
   place-items: center;
   width: 27px;
   height: 27px;
-  border: 1px solid rgba(77, 184, 168, 0.4);
-  border-radius: 4px;
-  background: rgba(77, 184, 168, 0.08);
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 40%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
 }
 
 .mb-blueprint-pool-icon svg {
   width: 18px;
   height: 18px;
   fill: none;
-  stroke: #62d3bf;
+  stroke: var(--mb-accent);
   stroke-width: 1.35;
 }
 
@@ -649,7 +649,7 @@
 .mb-blueprint-pool-copy > span,
 .mb-blueprint-reward-detail > span {
   overflow: hidden;
-  color: #8edcf2;
+  color: var(--mb-accent);
   font-size: 1rem;
   font-weight: 700;
   text-overflow: ellipsis;
@@ -662,10 +662,10 @@
   gap: 5px;
   min-height: 25px;
   padding: 2px 8px;
-  border: 1px solid rgba(87, 132, 168, 0.3);
-  border-radius: 4px;
-  background: rgba(31, 54, 73, 0.38);
-  color: #a9c9df;
+  border: 1px solid color-mix(in srgb, var(--mb-accent) 30%, transparent);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-surface-2) 38%, transparent);
+  color: var(--mb-text-2);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -675,8 +675,8 @@
 }
 
 .mb-blueprint-pool-action:hover {
-  border-color: rgba(125, 211, 252, 0.48);
-  color: #d7f0ff;
+  border-color: color-mix(in srgb, var(--mb-accent) 48%, transparent);
+  color: var(--mb-text-1);
 }
 
 .mb-blueprint-list.is-expanded {
@@ -689,8 +689,8 @@
   display: grid;
   gap: 1px;
   padding: 5px 7px;
-  border-left: 1px solid rgba(77, 184, 168, 0.28);
-  background: rgba(77, 184, 168, 0.035);
+  border-left: 1px solid color-mix(in srgb, var(--mb-accent) 28%, transparent);
+  background: color-mix(in srgb, var(--mb-accent) 3.5%, transparent);
 }
 
 .mb-blueprint-more,
@@ -701,13 +701,13 @@
   border: 0;
   border-bottom: 1px solid var(--mb-border-soft);
   background: transparent;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   font-size: var(--app-text-meta);
   text-align: left;
 }
 
 .mb-blueprint-more:not(:disabled) {
-  color: #87ddd2;
+  color: var(--mb-accent);
   cursor: pointer;
 }
 
@@ -719,7 +719,7 @@
 
 .mission-dossier-variant-region__header {
   padding: 8px 0 4px;
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
   text-transform: uppercase;
 }
@@ -735,7 +735,7 @@
   border: 0;
   border-bottom: 1px solid var(--mb-border-soft);
   background: transparent;
-  color: var(--mb-text-muted);
+  color: var(--mb-text-2);
   text-align: left;
   cursor: pointer;
 }
@@ -745,12 +745,12 @@
 }
 
 .mission-dossier-variant-row.is-selected {
-  background: rgba(56, 189, 248, 0.08);
-  color: var(--mb-text);
+  background: color-mix(in srgb, var(--mb-accent) 8%, transparent);
+  color: var(--mb-text-1);
 }
 
 .mission-dossier-variant-row__index {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-variant-numeric: tabular-nums;
 }
 
@@ -767,7 +767,7 @@
 }
 
 .mission-dossier-variant-row__status {
-  color: var(--mb-text-dim);
+  color: var(--mb-text-3);
   font-size: var(--app-text-kicker);
 }
 
@@ -778,18 +778,18 @@
   min-height: 40px;
   margin: 10px 18px 20px;
   padding: 8px 12px;
-  border: 1px solid rgba(68, 98, 121, 0.3);
-  border-radius: 5px;
-  background: rgba(5, 14, 22, 0.56);
-  color: var(--mb-text-muted);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-md);
+  background: color-mix(in srgb, var(--mb-canvas) 56%, transparent);
+  color: var(--mb-text-2);
   font-size: 12px;
 }
 
 .mission-dossier-confidence {
-  color: var(--mb-amber);
+  color: var(--mb-warn);
   font-weight: 700;
 }
 
 .mission-dossier-confidence.is-high {
-  color: var(--mb-positive);
+  color: var(--mb-good);
 }

@@ -83,6 +83,15 @@ export type StaticLocationDistributionRow = {
   location?: string;
   locationKey?: string;
   locationDisplayName?: string;
+  locationDescriptionKey?: string | null;
+  locationShortDescription?: string | null;
+  /**
+   * Optional location-environment fields delivered by the canonical mining
+   * index. They deliberately remain nullable because coverage is incomplete.
+   */
+  breathable?: boolean | null;
+  temperatureClassification?: "optimal" | "hot" | "cold" | null;
+  temperatureCelsius?: number | null;
   resolvedMineableClass?: string;
   mineableClass?: string;
   miningMethod?: string;
@@ -142,13 +151,19 @@ export type StaticMiningIndex = {
   materialResources: StaticMiningMaterialResource[];
   rankingByRowKey: Map<string, StaticMaterialEncounterRankingRow>;
   encounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
-  materialEncounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
+  /** Range of {@link staticPoolShareSignal} per material across every indexed location. */
+  poolShareRangeByMaterialKey: Map<string, { min: number; max: number }>;
   distributionRows: StaticLocationDistributionRow[];
   distributionByLocationJoinKey: Map<string, StaticLocationDistributionRow[]>;
   qualityRows: StaticMaterialQualityRow[];
   qualityByRowKey: Map<string, StaticMaterialQualityRow>;
   locationHierarchy: StaticLocationHierarchyIndex | null;
 };
+
+export type StaticLocationEnvironment = Pick<
+  StaticLocationDistributionRow,
+  "breathable" | "temperatureClassification" | "temperatureCelsius"
+>;
 
 const LOCATION_INDEX_URL = "/api/mining/location-materials";
 const MATERIAL_RANKINGS_URL = "/api/mining/encounter-rankings";
@@ -351,11 +366,24 @@ export function formatStaticMethodBias(row: StaticLocationMaterialRow): string {
   return formatStaticMethodFit(row);
 }
 
+/**
+ * The material's delivered share of its own spawn pool (`materialBiasSignal`,
+ * the sum of its source `relativeProbability` values). This deliberately
+ * excludes `methodFit`: once a mining method is chosen, the share of a
+ * location's spawns that belong to *other* methods does not make this
+ * material any rarer within the chosen method's pool. Multiplying by it
+ * penalised planets (methodFit ≈ 0.33) against belts (methodFit = 1).
+ */
+export function staticPoolShareSignal(row: StaticLocationMaterialRow): number | null {
+  const value = row.materialBiasSignal ?? row.materialEncounterScore ?? row.encounterScore;
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
 export function getStaticDensityScore(row: StaticLocationMaterialRow, index: StaticMiningIndex | null | undefined): number | null {
   const key = getStaticMaterialKey(row);
-  const actualScore = row.materialEncounterScore ?? row.encounterScore;
-  if (!Number.isFinite(actualScore)) return null;
-  const range = index?.materialEncounterScoreRangeByMaterialKey.get(key)
+  const actualScore = staticPoolShareSignal(row);
+  if (actualScore === null) return null;
+  const range = index?.poolShareRangeByMaterialKey.get(key)
     ?? index?.encounterScoreRangeByMaterialKey.get(key);
   if (!range || !Number.isFinite(range.min) || !Number.isFinite(range.max)) return null;
   if (range.max <= range.min) return actualScore > 0 ? 100 : 0;
@@ -563,6 +591,24 @@ export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry, i
   return getEntryJoinKeys(entry, index);
 }
 
+/** Returns only canonical location-environment fields for a resolved location. */
+export function getStaticLocationEnvironment(
+  entry: PublicLocationEntry,
+  index: StaticMiningIndex | null | undefined,
+): StaticLocationEnvironment | null {
+  if (!index) return null;
+  for (const key of getEntryJoinKeys(entry, index)) {
+    const row = index.distributionByLocationJoinKey.get(key)?.[0];
+    if (!row) continue;
+    return {
+      breathable: row.breathable,
+      temperatureClassification: row.temperatureClassification,
+      temperatureCelsius: row.temperatureCelsius,
+    };
+  }
+  return null;
+}
+
 export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string {
   const extended = entry as PublicLocationEntry & { locationDisplayName?: string };
   const canonicalLocationName = normalizeExact(entry.locationName);
@@ -620,7 +666,7 @@ function getMethodBiasRecord(row: StaticLocationDistributionRow): Record<string,
     row.distribution,
   ];
   return records.find((record) =>
-    record && Object.values(record).some((share) => Number.isFinite(share) && share > 0)
+    record && Object.values(record).some((share) => Number.isFinite(share))
   );
 }
 
@@ -666,11 +712,12 @@ export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index
     addMethodBiasRow(items, row);
   }
 
-  const positiveItems = items.filter((item) => item.share > 0);
+  const finiteItems = items.filter((item) => Number.isFinite(item.share));
+  const positiveItems = finiteItems.filter((item) => item.share > 0);
   const totalShare = positiveItems.reduce((sum, item) => sum + item.share, 0);
   const normalizedItems = totalShare > 1
-    ? positiveItems.map((item) => ({ ...item, share: item.share / totalShare }))
-    : positiveItems;
+    ? finiteItems.map((item) => ({ ...item, share: item.share > 0 ? item.share / totalShare : 0 }))
+    : finiteItems;
 
   return normalizedItems
     .sort((left, right) => right.share - left.share);
@@ -949,7 +996,7 @@ function buildStaticMiningIndex(
   }
 
   const encounterScoreRangeByMaterialKey = new Map<string, { min: number; max: number }>();
-  const materialEncounterScoreRangeByMaterialKey = new Map<string, { min: number; max: number }>();
+  const poolShareRangeByMaterialKey = new Map<string, { min: number; max: number }>();
   const materialResources = new Map<string, StaticMiningMaterialResource>();
   for (const row of rows) {
     const canonical = canonicalMiningMaterial({
@@ -973,11 +1020,12 @@ function buildStaticMiningIndex(
         max: range ? Math.max(range.max, row.encounterScore) : row.encounterScore,
       });
     }
-    if (typeof row.materialEncounterScore === "number" && Number.isFinite(row.materialEncounterScore)) {
-      const range = materialEncounterScoreRangeByMaterialKey.get(canonical.key);
-      materialEncounterScoreRangeByMaterialKey.set(canonical.key, {
-        min: range ? Math.min(range.min, row.materialEncounterScore) : row.materialEncounterScore,
-        max: range ? Math.max(range.max, row.materialEncounterScore) : row.materialEncounterScore,
+    const poolShare = staticPoolShareSignal(row);
+    if (poolShare !== null) {
+      const range = poolShareRangeByMaterialKey.get(canonical.key);
+      poolShareRangeByMaterialKey.set(canonical.key, {
+        min: range ? Math.min(range.min, poolShare) : poolShare,
+        max: range ? Math.max(range.max, poolShare) : poolShare,
       });
     }
   }
@@ -991,7 +1039,7 @@ function buildStaticMiningIndex(
     materialResources: [...materialResources.values()].sort((left, right) => left.label.localeCompare(right.label)),
     rankingByRowKey,
     encounterScoreRangeByMaterialKey,
-    materialEncounterScoreRangeByMaterialKey,
+    poolShareRangeByMaterialKey,
     distributionRows,
     distributionByLocationJoinKey,
     qualityRows,

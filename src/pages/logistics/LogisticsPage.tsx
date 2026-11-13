@@ -20,16 +20,6 @@ export default function LogisticsPage() {
 
   return (
     <div className="logi-page">
-      <div className="logi-page-header">
-        <div>
-          <div className="logi-breadcrumb">
-            <span className="logi-breadcrumb-active">Logistics</span>
-          </div>
-          <h1 className="logi-page-title">Logistics Hub</h1>
-          <p className="logi-page-subtitle">Inventory and build operations.</p>
-        </div>
-      </div>
-
       {/* Stats */}
       <div className="logi-stats-row">
         <div className="logi-stat-card">

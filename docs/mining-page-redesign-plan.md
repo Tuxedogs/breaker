@@ -1,6 +1,12 @@
 # Mining Page Redesign Plan
 
-Status: Quiet Index materials, location filters, Balanced Row ranked locations, queue route strategy tooltips, the Balanced Strip location header with 20-pixel color-matched method icons, the Inline Ledger coverage summary, the Operational Ledger selected-material table, the Continuation Ledger other-materials index, and the combined detail workspace are approved. Both result ledgers use the existing shared raw-material icons; the always-visible material filter remains text-only. Repeated top-right covered/resource counts are removed from both table section headings. The full-page composition is the current final mockup review. No production Mining components, calculations, APIs, routes, or styles have been changed.
+Status: Quiet Index materials, location filters, Balanced Row ranked locations, queue route strategy tooltips, the Balanced Strip location header with 20-pixel color-matched method icons, the Inline Ledger coverage summary, the Operational Ledger selected-material table, the Continuation Ledger other-materials index, and the combined detail workspace are approved. Both result ledgers use the existing shared raw-material icons; the always-visible material filter remains text-only. Repeated top-right covered/resource counts are removed from both table section headings. The full-page composition is the current final mockup review.
+
+## Approved / Frozen Visual Baseline — 2026-10-14
+
+The implemented Mining Intelligence UI and the October 14, 2026 review screenshot are the accepted visual baseline. The current page geometry, spacing, typography, Quiet Index material selector, ranked locations, compact location header, direct-spawn competition presentation, and material ledgers are frozen.
+
+Do not make aesthetic redesigns, layout restructuring, or speculative presentation changes without explicit approval. Future Mining work should be limited to functionality, source/data correctness, defects, performance, accessibility, or specifically requested features. Preserve the existing Mining tests when changing the page and add focused regression coverage where behavior changes.
 
 ## Recommendation
 

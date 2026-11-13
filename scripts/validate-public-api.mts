@@ -2,6 +2,8 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { getMissionDataRoot } from "../server/config/missionDataRoot.ts";
+import { checkPublishedDatasetConsistency } from "./missions/publication/dataset-consistency.mts";
+import { checkVercelMissionBundle } from "./missions/publication/vercel-mission-bundle.mts";
 
 const publicApiRoot = path.resolve("public", "api");
 const missionSourceRoot = path.resolve("server-data", "missions", "source");
@@ -322,9 +324,34 @@ if (
   process.exit(1);
 }
 
+const consistency = checkPublishedDatasetConsistency({
+  serverDataRoot: path.resolve("server-data"),
+  missionCatalog,
+});
+if (!consistency.ok) {
+  console.error("Published dataset generations are inconsistent:");
+  for (const issue of consistency.errors) {
+    console.error(`- ${issue.code}: ${issue.message}${issue.count ? ` (${issue.count})` : ""}`);
+  }
+  console.error("Run `npm run data:generations:report` for the full report.");
+  process.exit(1);
+}
+
+const vercelBundleProblem = checkVercelMissionBundle(process.cwd());
+if (vercelBundleProblem) {
+  console.error(vercelBundleProblem);
+  process.exit(1);
+}
+
 console.log("public/api empty-directory guard passed.");
 console.log("public/api dependency and legacy static URL guard passed.");
 console.log("server-data/missions output size guard passed.");
 console.log("server-data/missions source check passed.");
 console.log("server-data/missions browser index check passed.");
 console.log("server-data/crafting/blueprint-sources index check passed.");
+console.log("vercel.json missions bundle matches the active generation.");
+console.log(
+  `published dataset generation consistency passed (mission generation ${consistency.datasets.missions.pointerGenerationId}, `
+  + `${consistency.links.blueprintSourceContractIds} contract and ${consistency.links.blueprintSourceOfferKeys} offer links resolved, `
+  + `${consistency.warnings.length} warning(s)).`,
+);

@@ -10,28 +10,6 @@ const navItems = [
     mobileActiveClassName: "site-toolbar-mobile-link--home-active",
     isActive: (pathname: string) => pathname === "/dashboard",
   },
-  {
-    to: "/doctrine",
-    label: "Doctrine",
-    desktopActiveClassName: "site-toolbar-link--doctrine-active",
-    mobileActiveClassName: "site-toolbar-mobile-link--doctrine-active",
-    isActive: (pathname: string) => pathname.startsWith("/module/"),
-    preserveModuleSearch: true,
-  },
-  {
-    to: "/tools/gunnery",
-    label: "Gunnery",
-    desktopActiveClassName: "site-toolbar-link--gunnery-active",
-    mobileActiveClassName: "site-toolbar-mobile-link--gunnery-active",
-    isActive: (pathname: string) => pathname.startsWith("/tools/gunnery"),
-  },
-  {
-    to: "/dashboard/doctrine/armor-threshold",
-    label: "Armor Threshold",
-    desktopActiveClassName: "site-toolbar-link--alpha-active",
-    mobileActiveClassName: "site-toolbar-mobile-link--alpha-active",
-    isActive: (pathname: string) => pathname.startsWith("/dashboard/doctrine/armor-threshold"),
-  },
 ];
 
 function HomeIcon() {
@@ -83,7 +61,7 @@ export default function AppNav() {
   const primaryNavItems = navItems.slice(1);
   const getNavHref = (item: (typeof navItems)[number]) =>
     "preserveModuleSearch" in item && item.preserveModuleSearch
-      ? getModuleIndexHref(location.pathname === "/doctrine" ? location.search : "")
+      ? getModuleIndexHref("")
       : item.to;
 
   function closeAllMenus() {

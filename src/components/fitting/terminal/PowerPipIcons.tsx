@@ -8,9 +8,10 @@ function pipCategoryToSystemIconKind(category: PipCategory): SystemIconKind {
 
 type PowerPipIconProps = {
   category: PipCategory;
+  kind?: SystemIconKind;
   className?: string;
 };
 
-export default function PowerPipIcon({ category, className }: PowerPipIconProps) {
-  return <SystemIcon kind={pipCategoryToSystemIconKind(category)} className={className} />;
+export default function PowerPipIcon({ category, kind, className }: PowerPipIconProps) {
+  return <SystemIcon kind={kind ?? pipCategoryToSystemIconKind(category)} className={className} />;
 }

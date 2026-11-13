@@ -6,6 +6,7 @@ import {
   transformPyroDistributionRows,
   transformPyroRows,
 } from "./update-pyro-location-indexes.mts";
+import { verifyAcceptedMiningSource } from "./miningPublicationProvenance.mts";
 
 type Publication = {
   source: string;
@@ -22,11 +23,16 @@ if (!configuredSourceRoot) {
 }
 const sourceBuildId = process.env.SCINTEL_SOURCE_BUILD_ID?.trim();
 if (!sourceBuildId) {
-  throw new Error("SCINTEL_SOURCE_BUILD_ID is required and must name the immutable accepted Scintel source build.");
+  throw new Error("SCINTEL_SOURCE_BUILD_ID is required and must name the immutable Scintel source build.");
+}
+const acceptedBuildId = process.env.SCINTEL_ACCEPTED_BUILD_ID?.trim();
+if (!acceptedBuildId) {
+  throw new Error("SCINTEL_ACCEPTED_BUILD_ID is required and must name the immutable accepted Scintel dataset generation.");
 }
 
 const sourceRoot = path.resolve(configuredSourceRoot);
 const targetRoot = path.resolve(process.env.MINING_DATA_ROOT ?? "server-data/mining");
+const acceptedSource = await verifyAcceptedMiningSource(sourceRoot, acceptedBuildId);
 
 const publications: Publication[] = [
   { source: "recommendations/location_material_index.json", target: "indexes/location-material.json", shape: "array" },
@@ -213,7 +219,15 @@ manifestFiles.push({
 
 await writeFile(
   path.join(targetRoot, "manifest.json"),
-  `${JSON.stringify({ schemaVersion: 1, source: "scintel-api", files: manifestFiles }, null, 2)}\n`,
+  `${JSON.stringify({
+    schemaVersion: 2,
+    source: "scintel-api",
+    acceptedSource: {
+      ...acceptedSource,
+      sourceBuildId,
+    },
+    files: manifestFiles,
+  }, null, 2)}\n`,
 );
 
 console.log(`Published ${manifestFiles.length} Mining server artifacts to ${targetRoot}.`);

@@ -6,6 +6,7 @@ import {
   resolveInventoryUnitType,
 } from '../../lib/logistics/inventory';
 import InventoryTransferLocationPicker from './InventoryTransferLocationPicker';
+import { getInventoryTransferPresentation } from './inventoryRecordPresentation';
 
 type MaterialSummaryLine = {
   id: string;
@@ -60,8 +61,8 @@ function buildMaterialSummaryLines(
 
 function formatTransferError(error: unknown): string {
   const detail = error instanceof Error ? error.message.trim() : String(error).trim();
-  if (!detail) return 'Transfer failed. Your inventory was not changed.';
-  return `Transfer failed. Your inventory was not changed. ${detail}`;
+  if (!detail) return 'Transfer could not be confirmed. Refresh inventory before retrying.';
+  return `Transfer could not be confirmed. Refresh inventory before retrying. ${detail}`;
 }
 
 export default function InventoryTransferDialog({
@@ -78,6 +79,11 @@ export default function InventoryTransferDialog({
   const [errorMessage, setErrorMessage] = useState('');
   const sourceName = locations.find((location) => location.id === sourceLocationId)?.name ?? 'Unknown Location';
   const selectedCount = selectedEntryIds.size;
+  const selectedEntries = useMemo(
+    () => entries.filter((entry) => selectedEntryIds.has(entry.id)),
+    [entries, selectedEntryIds],
+  );
+  const transferPresentation = getInventoryTransferPresentation(selectedEntries);
   const materialSummary = useMemo(
     () => buildMaterialSummaryLines(selectedEntryIds, entries, materials),
     [entries, materials, selectedEntryIds],
@@ -89,7 +95,7 @@ export default function InventoryTransferDialog({
   async function handleTransfer() {
     if (!targetLocationId || isPending) return;
     if (targetLocationId === sourceLocationId) {
-      setErrorMessage('Transfer failed. Your inventory was not changed. Source and target location must be different.');
+      setErrorMessage('Source and target location must be different.');
       return;
     }
 
@@ -120,11 +126,11 @@ export default function InventoryTransferDialog({
         aria-describedby="inv-transfer-desc"
       >
         <div className="logi-inv-modal-head">
-          <h2 id="inv-transfer-title">Transfer stacks</h2>
+          <h2 id="inv-transfer-title">{transferPresentation.title}</h2>
         </div>
         <div className="logi-inv-modal-body">
           <p id="inv-transfer-desc" className="logi-inv-transfer-lead">
-            {selectedCount} lot{selectedCount === 1 ? '' : 's'} selected from <strong>{sourceName}</strong>
+            {selectedCount} {transferPresentation.selectionNoun}{selectedCount === 1 ? '' : 's'} selected from <strong>{sourceName}</strong>
           </p>
 
           {visibleSummary.length > 0 ? (

@@ -11,6 +11,30 @@ export function getCraftingBrowserLayoutMode(width: number): CraftingBrowserLayo
   return "single";
 }
 
+/** Phone composition (list → detail, filters in a sheet). Matches the CSS breakpoint. */
+export const CRAFTING_PHONE_QUERY = "(max-width: 719px)";
+
+export function isCraftingPhoneViewport(): boolean {
+  return typeof window !== "undefined"
+    && typeof window.matchMedia === "function"
+    && window.matchMedia(CRAFTING_PHONE_QUERY).matches;
+}
+
+export function useCraftingPhoneLayout(): boolean {
+  const [isPhone, setIsPhone] = useState(isCraftingPhoneViewport);
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+    const query = window.matchMedia(CRAFTING_PHONE_QUERY);
+    const update = () => setIsPhone(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return isPhone;
+}
+
 export function useCraftingBrowserLayoutMode(): CraftingBrowserLayoutMode {
   const [layoutMode, setLayoutMode] = useState<CraftingBrowserLayoutMode>(() => (
     typeof window === "undefined" ? "single" : getCraftingBrowserLayoutMode(window.innerWidth)

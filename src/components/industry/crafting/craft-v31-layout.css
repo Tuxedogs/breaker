@@ -1,0 +1,1459 @@
+/* V31b Crafting's three distinct surfaces. Scoped to the routed production workspace.
+   Legacy table and detail routes retain their original presentation. */
+.component-browser-body > .craft-browser-v31-workspace {
+  display: grid;
+  grid-template-columns: 260px 325px minmax(0, 1fr);
+  gap: 1px;
+  min-height: 0;
+  border: 0;
+  background: var(--mb-border);
+  box-shadow: none;
+}
+.craft-browser-v31-workspace .craft-browser-spine { display: none; }
+.craft-browser-v31-workspace .craft-v31-filter-pane,
+.craft-browser-v31-workspace .craft-browser-production-pane,
+.craft-browser-v31-workspace .craft-browser-detail-pane {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  background: var(--mb-surface-2);
+}
+.craft-browser-v31-workspace .craft-v31-filter-pane {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--mb-ops-surface-quiet);
+}
+/* Crafting V31b sidebar is a distinct layout. No crb2 legacy sidebar classes apply. */
+.craft-browser-v31-workspace .craft-v31-material-filter-panel {
+  display:flex;flex-direction:column;flex:1 0 auto;min-width:0;
+  padding:16px 13px 24px;background:#091723;color:#dcedf4;
+  font:500 11px/1.4 "Segoe UI",sans-serif;
+}
+/* Crafting V31b primary facets and Mining-shared material disclosure.
+   Facet, category, match and material buttons all use resource-filter-chip.css. */
+.craft-browser-v31-workspace .craft-v31-primary-filters {
+  display:flex;flex-direction:column;gap:10px;min-width:0;
+}
+.craft-browser-v31-workspace .craft-v31-primary-heading {
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding-bottom:8px;border-bottom:1px solid #284454;
+}
+.craft-browser-v31-workspace .craft-v31-primary-heading strong {
+  color:#d8edf4;font:700 11px/1.3 "Segoe UI",sans-serif;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.craft-browser-v31-workspace .craft-v31-primary-heading .craft-v31-bookmark-chip {
+  display:inline-flex;align-items:center;gap:5px;
+}
+.craft-browser-v31-workspace .craft-v31-bookmark-chip svg {width:12px;height:12px;}
+.craft-browser-v31-workspace .craft-v31-facet-group {display:flex;flex-direction:column;gap:5px;min-width:0;}
+.craft-browser-v31-workspace .craft-v31-facet-group .craft-v31-filter-label {margin:0;}
+.craft-browser-v31-workspace .craft-v31-facet-chips {gap:5px;}
+.craft-browser-v31-workspace .craft-v31-filter-segments {display:flex;flex-wrap:wrap;gap:4px;}
+.craft-browser-v31-workspace .craft-v31-match-mode {flex-wrap:wrap;
+  display:flex;gap:6px;align-items:center;margin:11px 0 12px;color:#93b1c2;font-size:10px;}
+.craft-browser-v31-workspace .craft-v31-material-disclosure {
+  display:block;min-width:0;margin-top:15px;
+  padding-top:12px;border-top:1px solid #2a4657;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure > summary {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;list-style:none;cursor:pointer;
+  color:#c1d6e2;font:650 11px/1.3 "Segoe UI",sans-serif;
+  letter-spacing:.055em;text-transform:uppercase;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure > summary::-webkit-details-marker {display:none;}
+.craft-browser-v31-workspace .craft-v31-material-toggle-label {display:inline-flex;align-items:center;gap:6px;}
+.craft-browser-v31-workspace .craft-v31-material-toggle-label svg {
+  flex:0 0 auto;transform:rotate(0deg);transition:transform 120ms ease;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure[open] .craft-v31-material-toggle-label svg {transform:rotate(90deg);}
+.craft-browser-v31-workspace .craft-v31-material-toggle-count {
+  flex:0 0 auto;color:#82a8bb;font:500 9px/1.3 "Segoe UI",sans-serif;
+  text-transform:none;letter-spacing:0;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure > summary:focus-visible {
+  outline:1px solid #57bcd2;outline-offset:4px;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure-body {
+  display:flex;flex-direction:column;gap:8px;min-width:0;
+  margin-top:12px;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure-body .craft-v31-material-filter-heading {margin:0;}
+.craft-browser-v31-workspace .craft-v31-material-disclosure-body .craft-v31-match-mode {margin:3px 0 4px;}
+.craft-browser-v31-workspace .craft-v31-material-options {
+  display:flex;width:100%;min-width:0;
+  flex-wrap:wrap;align-items:flex-start;align-content:flex-start;
+  gap:5px;max-height:320px;overflow-y:auto;
+  padding:0 3px 0 0;scrollbar-width:thin;scrollbar-color:#42687b #0a1a27;
+}
+.craft-browser-v31-workspace .craft-v31-material-disclosure-body .craft-v31-filter-note {
+  margin:4px 0 0;
+}
+.craft-browser-v31-workspace .craft-v31-filter-footer {
+  display:flex;align-items:center;justify-content:space-between;gap:7px;
+  margin-top:12px;padding:11px 0 0;border-top:1px solid #263f50;
+  color:#83a7b8;font:500 10px "Segoe UI",sans-serif;}
+.craft-browser-v31-workspace .craft-v31-filter-search {display:block;width:100%;min-width:0;}
+.craft-browser-v31-workspace .craft-v31-filter-search input {
+  display:block;width:100%;min-width:0;height:35px;padding:7px 11px;
+  box-sizing:border-box;border:1px solid #315365;border-radius:0;
+  background:#0c2030;color:#e1f3f7;outline:0;font:400 11px "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-filter-search input::placeholder {color:#789bab;opacity:1;}
+.craft-browser-v31-workspace .craft-v31-filter-search input:focus-visible {border-color:#59c4d8;box-shadow:inset 2px 0 #59c4d8;}
+.craft-browser-v31-workspace .craft-v31-filter-category {margin:14px 0 19px;}
+.craft-browser-v31-workspace .craft-v31-filter-label {
+  display:block;margin:0 0 7px;color:#9ab6c5;text-transform:uppercase;
+  letter-spacing:.075em;font:650 10px/1.3 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-material-filter-heading {
+  display:flex;align-items:baseline;gap:6px;margin-bottom:10px;
+}
+.craft-browser-v31-workspace .craft-v31-material-filter-heading strong {
+  font:700 11px/1.3 "Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.055em;color:#d6ecf4;
+}
+.craft-browser-v31-workspace .craft-v31-material-filter-heading small {font-size:10px;color:#8ca9b7;}
+.craft-browser-v31-workspace .craft-v31-material-filter-heading button {
+  margin-left:auto;padding:2px;border:0;background:transparent;color:#64d5e9;
+  font:600 10px "Segoe UI",sans-serif;cursor:pointer;
+}
+.craft-browser-v31-workspace .craft-v31-material-filter-heading button:disabled {opacity:.37;cursor:default;}
+.craft-browser-v31-workspace .craft-v31-filter-note {
+  margin:13px 0 0;padding:12px 0 0;border-top:1px solid #294859;
+  color:#9cb6c4;font:400 10px/1.5 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-filter-empty {margin:0;padding:12px;border:1px dashed #365465;color:#98b3c1;}
+.craft-browser-v31-workspace .craft-v31-filter-footer button {
+  border:0;background:none;color:#71d9ec;cursor:pointer;font:600 10px "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-material-filter-panel :is(button,input):focus-visible {
+  outline:2px solid #5fcbdf;outline-offset:1px;
+}
+@media (max-width:719px) {
+  .craft-browser-v31-workspace .craft-v31-material-filter-panel {padding:14px 13px 25px;}
+}
+.craft-browser-v31-workspace .craft-browser-production-pane { overflow: hidden; }
+.craft-browser-v31-workspace .craft-browser-detail-pane {
+  position: relative;
+  z-index: 2;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  border: 0;
+  box-shadow: none;
+}
+.craft-browser-v31-workspace .craft-browser-production-pane::after,
+.craft-browser-v31-workspace .craft-browser-blueprint-artwork { display: none; }
+.craft-browser-v31-workspace .craft-browser-production-body,
+.craft-browser-v31-workspace .craft-v31-results,
+.craft-browser-v31-workspace .craft-v31-recipe-list {
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  flex-direction: column;
+}
+.craft-browser-v31-workspace .craft-browser-production-body { flex: 1 1 0; overflow: hidden; }
+.craft-browser-v31-workspace .craft-v31-results { flex: 1 1 0; height: 100%; padding: 0; }
+.craft-browser-v31-workspace .craft-v31-recipe-list {
+  flex: 1 1 0;
+  overflow-y: auto;
+  gap: 3px;
+  padding: 8px 5px 12px;
+  background: #091723;
+}
+/* V31b Recipe Index: 64px transparent thumbnails, one authoritative row owner. */
+.craft-browser-v31-workspace .craft-v31-recipe-row {
+ display:grid;grid-template-columns:64px minmax(0,1fr) 18px;align-items:start;gap:8px;
+ box-sizing:border-box;width:100%;min-height:82px;padding:8px 7px;
+ border:1px solid transparent;background:#0e202e;color:#cee1ea;cursor:pointer;
+ text-align:left;font:500 11px/1.25 "Segoe UI",sans-serif;
+ transition:background 120ms ease,border-color 120ms ease;
+}
+.craft-browser-v31-workspace .craft-v31-recipe-row:hover {background:#152b3a;border-color:#2d5264}
+.craft-browser-v31-workspace .craft-v31-recipe-row.is-active {background:#163245;border-color:#4bc9e5;box-shadow:inset 2px 0 #55d6e9}
+.craft-browser-v31-workspace .craft-v31-recipe-row:focus-visible {outline:2px solid #5bd6ed;outline-offset:-2px}
+/* Unavailable blueprints stay listed and selectable but recede; the text label
+   carries the state so it never depends on dimming alone. */
+.craft-browser-v31-workspace .craft-v31-recipe-row.is-unavailable .craft-v31-recipe-mark { opacity: .4; filter: grayscale(1); }
+.craft-browser-v31-workspace .craft-v31-recipe-row.is-unavailable .craft-v31-recipe-copy,
+.craft-browser-v31-workspace .craft-v31-recipe-row.is-unavailable .craft-v31-recipe-end { opacity: .55; }
+.craft-browser-v31-workspace .craft-v31-recipe-row.is-unavailable:is(:hover, .is-active) .craft-v31-recipe-copy { opacity: .8; }
+.craft-browser-v31-workspace .craft-v31-recipe-unavailable { color: var(--mb-warn); font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
+.craft-browser-v31-workspace .craft-v31-recipe-mark {
+ display:grid;place-items:center;box-sizing:border-box;width:64px;height:64px;overflow:hidden;
+ border:0;background:transparent;color:#93aebd;font:500 17px/1 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-recipe-mark img {
+ display:block;box-sizing:border-box;width:100%;height:100%;padding:0;
+ object-fit:contain;object-position:center;
+}
+.craft-browser-v31-workspace .craft-v31-recipe-symbol {display:grid;place-items:center;width:100%;height:100%}
+.craft-browser-v31-workspace .craft-v31-recipe-end {
+ align-self:start;justify-self:end;min-width:0;margin-top:4px;color:#8bb9c9;
+ white-space:nowrap;font:600 10px/1.3 "Segoe UI",sans-serif;
+}
+/* Restored pre-accent recipe badges from 7ebb57118; no Mining chips or new palette. */
+.craft-v31-material-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; }
+.craft-v31-material-chips span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 4px;
+  border: 1px solid var(--mb-border-soft);
+  color: var(--mb-text-2);
+  font: 500 9px/1.2 var(--mb-font-ui);
+}
+.craft-browser-v31-workspace .craft-v31-material-chips .is-matching {
+  border-color:#478ca0;
+  background:#184052;
+  color:#d1f8fe;
+}
+.craft-browser-v31-workspace .craft-v31-index-intro {
+  flex:0 0 auto;
+  margin:0;
+  padding:16px 13px 5px;
+  color:#9bb5c4;
+  background:#091724;
+  font:400 11px/1.45 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-index-note {
+  flex:0 0 auto;
+  margin:0 12px;
+  padding:12px 0 14px;
+  border-top:1px solid #294555;
+  color:#96afbf;
+  font:400 10px/1.5 "Segoe UI",sans-serif;
+}
+.craft-v31-recipe-copy { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
+.craft-v31-recipe-copy strong { overflow: hidden; text-overflow: ellipsis; font-size: 12px; font-weight: 700; }
+.craft-v31-recipe-copy > small { color: var(--mb-text-2); font: 400 10px/1.35 var(--mb-font-ui); }
+.craft-browser-v31-workspace .craft-browser-detail-pane > .craft-inspection-bay { flex: 1 0 500px; }
+.craft-browser-v31-workspace .craft-browser-detail-pane > .craft-detail-page {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 1399px) {
+  .component-browser-body > .craft-browser-v31-workspace {
+    grid-template-columns: minmax(210px, 240px) minmax(250px, 270px) minmax(0, 1fr);
+  }
+  .component-browser-body > .craft-browser-v31-workspace.is-selected .craft-browser-production-pane { display: flex; }
+  .component-browser-body > .craft-browser-v31-workspace.is-empty .craft-browser-detail-pane { display: flex; }
+}
+/* At laptop widths the laboratory gets a full readable row, as in V31b. */
+@media (min-width: 1100px) and (max-width: 1249px) {
+  .component-browser-body > .craft-browser-v31-workspace {
+    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-rows: minmax(380px, 70vh) max-content;
+    align-content: start;
+    overflow-y: auto;
+  }
+  .craft-browser-v31-workspace .craft-v31-filter-pane {
+    grid-column: 1; grid-row: 1;
+  }
+  .component-browser-body > .craft-browser-v31-workspace .craft-browser-production-pane {
+    grid-column: 2; grid-row: 1;
+  }
+  /* The workspace is the single scroller here; the laboratory row takes its
+     content height so its surface never ends before its content. */
+  .component-browser-body > .craft-browser-v31-workspace .craft-browser-detail-pane {
+    grid-column: 1 / -1; grid-row: 2; min-height: 690px;
+    height: auto;
+    overflow: visible;
+  }
+}
+@media (max-width: 1099px) {
+  /* Same row model as the laptop band: browse row keeps a usable height, the
+     laboratory row takes its content height, the workspace is the scroller. */
+  .component-browser-body > .craft-browser-v31-workspace {
+    grid-template-columns: minmax(230px,35%) minmax(0,1fr);
+    grid-template-rows: minmax(380px, 70vh) max-content;
+    align-content: start;
+    overflow-y: auto;
+  }
+  .craft-browser-v31-workspace .craft-v31-filter-pane { grid-column: 1; grid-row: 1; }
+  .component-browser-body > .craft-browser-v31-workspace .craft-browser-production-pane { grid-column: 2; grid-row: 1; display: flex; }
+  .component-browser-body > .craft-browser-v31-workspace .craft-browser-detail-pane {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 660px;
+    height: auto;
+    overflow: visible;
+    display: flex;
+  }
+}
+/* Phone: one screen at a time (CraftingBrowserWorkspace sets data-phone-screen).
+   "list" = search/filter bar over the blueprint index; "detail" = the selected
+   blueprint's laboratory over the whole workspace. Hidden screens stay mounted
+   (scroll position survives the round trip) and are inert. Each visible
+   screen owns its own scroller; the page itself never scrolls. */
+@media (max-width: 719px) {
+  .component-browser-body > .craft-browser-v31-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+  .component-browser-body > .craft-browser-v31-workspace > :is(.craft-v31-filter-pane, .craft-browser-production-pane, .craft-browser-detail-pane) {
+    grid-column: 1;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .component-browser-body > .craft-browser-v31-workspace > .craft-v31-filter-pane {
+    grid-row: 1;
+    display: block;
+    padding: 0;
+    overflow: visible;
+  }
+  .component-browser-body > .craft-browser-v31-workspace > .craft-browser-production-pane {
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .component-browser-body > .craft-browser-v31-workspace > .craft-browser-detail-pane {
+    grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: auto;
+  }
+  .component-browser-body > .craft-browser-v31-workspace > .craft-browser-spine { display: none; }
+  .craft-browser-v31-workspace[data-phone-screen="list"] > .craft-browser-detail-pane,
+  .craft-browser-v31-workspace[data-phone-screen="detail"] > :is(.craft-v31-filter-pane, .craft-browser-production-pane) {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* Source-backed blueprint availability: recipes remain inspectable,
+   while unverified obtainable blueprints cannot enter Build Queue. */
+.craft-blueprint-availability {
+  display:block;
+  width:100%;
+  padding:9px 11px;
+  margin:10px 0;
+  border:1px solid color-mix(in srgb, var(--mb-bad,#ff8090) 35%, transparent);
+  border-left:3px solid var(--mb-bad,#ff8090);
+  color:var(--mb-text-1,var(--mb-ops-text-primary));
+  background:color-mix(in srgb,var(--mb-bad,#ff8090) 8%,transparent);
+  font:500 11px/1.45 var(--mb-font-ui,"Segoe UI",sans-serif);
+}
+.craft-summary-queue-btn:disabled {
+  cursor:not-allowed;
+  opacity:.65;
+  border-color:var(--mb-border,#394c60);
+  color:var(--mb-text-2,#a9bbca);
+}
+
+/* ==========================================================================
+   V31 Quality Laboratory (drawer presentation). Single styling owner for the
+   markup in ComponentRecipeTable (drawer branch), CraftQualityLab.tsx and the
+   lab variant of MissionSourcePanel. One cohesive card:
+   hero â†’ four stat cards â†’ material quality â†’ performance â†’ acquisition â†’
+   collapsed technical details.
+   ========================================================================== */
+.craft-browser-v31-workspace .craft-detail-drawer-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  min-height: 100%;
+  height: auto;
+  overflow: visible;
+  padding: 14px 15px 28px;
+  background: var(--mb-ops-surface-quiet);
+}
+.craft-browser-v31-workspace .craft-v31-lab {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--mb-ops-surface-separator);
+  border-radius: var(--mb-radius-lg);
+  background: var(--mb-ops-surface-raised);
+  color: var(--mb-ops-text-primary);
+}
+.craft-browser-v31-workspace .craft-v31-icon { flex: none; width: 14px; height: 14px; color: var(--mb-ops-text-secondary); }
+.craft-browser-v31-workspace .craft-v31-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Component artwork is the hero surface, not a small product-thumbnail tile.
+   Identity and actions live on the left; the right is reserved for the product. */
+.craft-browser-v31-workspace .craft-v31-lab-hero {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  grid-template-areas: "identity close" "actions actions";
+  justify-items: start;
+  align-content: end;
+  gap: 14px 12px;
+  width: 100%;
+  min-height: 210px;
+  overflow: hidden;
+  padding: 28px 22px 18px;
+  border-bottom: 1px solid var(--mb-ops-surface-separator);
+  background: #0a1c2b;
+}
+.craft-browser-v31-workspace .craft-v31-lab-back { display: none; }
+.craft-browser-v31-workspace .craft-v31-phone-detail-bar { display: none; }
+.craft-browser-v31-workspace .craft-v31-lab-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  border: 0;
+  background: none;
+  pointer-events: none;
+}
+.craft-browser-v31-workspace .craft-v31-lab-art img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  padding: 0;
+}
+.craft-browser-v31-workspace .craft-v31-lab-art .craft-v31-lab-art-feature {
+  top: -14%;
+  right: -4%;
+  width: 88%;
+  height: 130%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 9px 15px rgba(0,0,0,.22));
+}
+.craft-browser-v31-workspace .craft-v31-lab-art[data-hero-layout="weapon"] .craft-v31-lab-art-feature {
+  top: -9%;
+  right: -7%;
+  width: 95%;
+  height: 121%;
+}
+.craft-browser-v31-workspace .craft-v31-lab-identity {
+  position: relative;
+  z-index: 2;
+  grid-area: identity;
+  display: grid;
+  align-content: end;
+  gap: 8px;
+  width: min(55%, 610px);
+  min-width: 0;
+}
+.craft-browser-v31-workspace .craft-v31-lab-kicker {
+  margin: 0;
+  color: #acd1df;
+  font: 650 10px/1.45 "Segoe UI",sans-serif;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+.craft-browser-v31-workspace .craft-v31-lab-title {
+  margin: 0;
+  color: #f4fbff;
+  font: 700 clamp(25px, 2.1vw, 34px)/1.1 "Segoe UI",sans-serif;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 10px rgba(0,0,0,.28);
+}
+.craft-browser-v31-workspace .craft-v31-lab-subtitle {
+  margin: 0;
+  color: #b5d0dd;
+  font: 400 12px/1.45 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-actions {
+  position: relative;
+  z-index: 2;
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: start;
+  gap: 8px;
+  max-width: min(57%, 640px);
+}
+.craft-browser-v31-workspace :is(.craft-v31-lab-save,.craft-v31-lab-queue,.craft-v31-lab-close) {
+  min-height: 31px;
+  padding: 6px 11px;
+  border: 1px solid #3b6577;
+  border-radius: var(--mb-radius-sm);
+  background: rgba(9,28,41,.86);
+  color: #cae1eb;
+  cursor: pointer;
+  font: 550 11px/1.2 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.craft-browser-v31-workspace .craft-v31-lab-save svg { width: 12px; height: 12px; }
+.craft-browser-v31-workspace .craft-v31-lab-save.is-active { border-color: var(--mb-ops-border-active); color: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-lab-queue {
+  border-color: var(--mb-accent);
+  background: var(--mb-accent);
+  color: var(--mb-ops-surface-quiet);
+  font-weight: 700;
+}
+.craft-browser-v31-workspace .craft-v31-lab-queue:disabled { opacity: .55; cursor: not-allowed; }
+.craft-browser-v31-workspace .craft-v31-lab-quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #c5dce6;
+  font: 500 11px/1.2 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-quantity input {
+  box-sizing: border-box;
+  width: 50px;
+  height: 31px;
+  padding: 4px 6px;
+  border: 1px solid #3b6577;
+  border-radius: var(--mb-radius-sm);
+  background: rgba(9,28,41,.9);
+  color: #f4fbff;
+  font: 600 12px/1 "Segoe UI",sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-close {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  min-height: 28px;
+  padding: 0;
+  font-size: 16px;
+}
+.craft-browser-v31-workspace :is(.craft-v31-lab-save,.craft-v31-lab-close):hover {
+  border-color: var(--mb-ops-border-active);
+  color: #f4fbff;
+}
+.craft-browser-v31-workspace .craft-v31-lab :is(button,input,summary):focus-visible {
+  outline: 2px solid var(--mb-ops-border-active);
+  outline-offset: 1px;
+}
+
+/* Drawer tabs exist for the legacy tab model; the laboratory shows every
+   section in one column, so they stay hidden. */
+.craft-browser-v31-workspace .craft-detail-drawer-tabs { display: none; }
+.craft-browser-v31-workspace .craft-v31-workbench-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 16px 6px;
+}
+/* Sections are separated by hairlines, not boxes. */
+.craft-browser-v31-workspace .craft-v31-workbench-content > :is(.craft-detail-drawer-materials, .craft-detail-drawer-stats, .craft-detail-drawer-sources, .craft-detail-drawer-overview) {
+  min-width: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--mb-ops-surface-separator);
+}
+.craft-browser-v31-workspace .craft-v31-workbench-content > .craft-detail-drawer-sources { border-top: 0; padding-top: 4px; }
+.craft-browser-v31-workspace .craft-v31-workbench-content > .craft-detail-drawer-overview { padding: 8px 0; }
+
+/* Four distinct statistic cards. */
+.craft-browser-v31-workspace .craft-v31-lab-snapshot {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.craft-browser-v31-workspace .craft-v31-lab-snapshot > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 11px 12px;
+  border-radius: var(--mb-radius-lg);
+  background: var(--mb-ops-surface-quiet);
+}
+.craft-browser-v31-workspace .craft-v31-lab-snapshot span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--mb-ops-text-secondary);
+  font: 500 10.5px/1.3 "Segoe UI", sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-snapshot strong {
+  color: var(--mb-ops-text-primary);
+  font: 700 16px/1.2 "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.craft-browser-v31-workspace .craft-v31-lab-snapshot small {
+  color: var(--mb-ops-text-secondary);
+  font: 500 10px/1.3 "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.craft-browser-v31-workspace .craft-v31-lab-snapshot > [data-metric="quality"] small { text-transform: capitalize; }
+.craft-browser-v31-workspace .craft-v31-lab-snapshot small.craft-ok { color: var(--mb-good); }
+.craft-browser-v31-workspace .craft-v31-lab-snapshot small.craft-shortage { color: var(--mb-bad); }
+
+/* Material quality. */
+/* Presets sit dead-center over the slider frame, not beside the title. */
+.craft-browser-v31-workspace .craft-v31-lab-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "heading meta" "presets presets";
+  align-items: center;
+  gap: 9px 12px;
+  margin: 0 0 9px;
+}
+.craft-browser-v31-workspace .craft-v31-lab-section-heading {
+  grid-area: heading;
+  margin: 0;
+  color: var(--mb-ops-text-primary);
+  font: 650 14px/1.3 "Segoe UI", sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-lab-heading-meta {
+  grid-area: meta;
+  justify-self: end;
+  color: var(--mb-ops-text-secondary);
+  font: 400 11px/1.3 "Segoe UI", sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-scenario-presets {
+  grid-area: presets;
+  display: inline-flex;
+  justify-self: center;
+  align-items: stretch;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #345467;
+  border-radius: 5px;
+  background: #0b202d;
+}
+.craft-browser-v31-workspace .craft-v31-scenario-presets > button {
+  min-width: 67px;
+  min-height: 28px;
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #a8cad8;
+  cursor: pointer;
+  font: 650 11px/1.2 "Segoe UI", sans-serif;
+  letter-spacing: .015em;
+  text-align: center;
+  transition: background-color 110ms ease, color 110ms ease, border-color 110ms ease;
+}
+.craft-browser-v31-workspace .craft-v31-scenario-presets > button + button {
+  box-shadow: -3px 0 0 -2px rgba(74, 117, 139, .6);
+}
+.craft-browser-v31-workspace .craft-v31-scenario-presets > button:hover {
+  background: #174054;
+  border-color: #356981;
+  color: #f1fbff;
+}
+.craft-browser-v31-workspace .craft-v31-scenario-presets > button:focus-visible {
+  outline: 2px solid var(--mb-accent);
+  outline-offset: 1px;
+}
+/* V31b Crafting reference: the full set of quality rails shares one dark frame. */
+.craft-browser-v31-workspace .craft-v31-material-list {
+  border: 1px solid #304d5d;
+  background: #0c1b28;
+}
+.craft-browser-v31-workspace .craft-v31-material { container-type: inline-size; padding: 12px 13px 11px; }
+.craft-browser-v31-workspace .craft-v31-material + .craft-v31-material { border-top: 1px solid var(--mb-ops-surface-separator); }
+.craft-browser-v31-workspace .craft-v31-material-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 9px; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-material-mark { flex: none; width: 15px; height: 15px; object-fit: contain; }
+.craft-browser-v31-workspace span.craft-v31-material-mark { border-radius: var(--mb-radius-sm); }
+.craft-browser-v31-workspace .craft-v31-material-title { display: flex; flex: 1 1 auto; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-material-title b { color: var(--mb-ops-text-primary); font: 650 13px/1.3 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-material-title > span { color: var(--mb-ops-text-secondary); font: 400 10px/1.3 "Segoe UI", sans-serif; text-transform: uppercase; letter-spacing: .04em; }
+/* Effects always sit on their own line under the name, so long modifier text
+   never pushes the exact-quality field around. 24px = mark width + head gap. */
+.craft-browser-v31-workspace .craft-v31-material-effect { display: flex; flex-wrap: wrap; order: 5; flex-basis: 100%; justify-content: start; gap: 3px 10px; min-width: 0; padding-left: 24px; }
+.craft-browser-v31-workspace .craft-v31-material-effect-item { display: inline-flex; align-items: baseline; gap: 5px; color: var(--mb-ops-text-secondary); font: 400 11px/1.3 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-material-effect strong { color: var(--mb-ops-text-secondary); font: 650 12px/1.3 "Segoe UI", sans-serif; font-variant-numeric: tabular-nums; }
+.craft-browser-v31-workspace .craft-v31-material-effect strong.craft-ok { color: var(--mb-good); }
+.craft-browser-v31-workspace .craft-v31-material-effect strong.craft-shortage { color: var(--mb-bad); }
+.craft-browser-v31-workspace .craft-v31-material-effect--none { color: var(--mb-ops-text-secondary); font: 400 11px/1.3 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-material-quality { display: flex; flex: none; align-items: center; }
+/* Exact quality reads as the row's value; it shows its input frame on hover/focus. */
+.craft-browser-v31-workspace .craft-v31-exact-quality {
+  box-sizing: border-box;
+  width: 54px;
+  height: 26px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: var(--mb-radius-sm);
+  background: transparent;
+  color: var(--mb-ops-text-primary);
+  font: 700 14px/1 "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  appearance: textfield;
+}
+.craft-browser-v31-workspace .craft-v31-exact-quality:hover { border-color: var(--mb-ops-border-strong); }
+.craft-browser-v31-workspace .craft-v31-exact-quality:focus { border-color: var(--mb-ops-border-active); background: var(--mb-ops-surface-quiet); outline: 0; }
+.craft-browser-v31-workspace .craft-v31-exact-quality::-webkit-outer-spin-button,
+.craft-browser-v31-workspace .craft-v31-exact-quality::-webkit-inner-spin-button { appearance: none; margin: 0; }
+
+/* Continuous quality slider. The track owns pointer/touch dragging (magnetic
+   markers); the native range input owns focus and keyboard steps. pan-y keeps
+   vertical page scrolling available on touch. */
+.craft-browser-v31-workspace .craft-v31-band-rail { position: relative; width: 100%; min-width: 0; margin-top: 2px; }
+.craft-browser-v31-workspace .craft-v31-quality-track { cursor: ew-resize; touch-action: pan-y; user-select: none; }
+.craft-browser-v31-workspace .craft-v31-band-range {
+  display: block;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+.craft-browser-v31-workspace .craft-v31-band-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--mb-radius-pill);
+  background: linear-gradient(90deg, var(--mb-accent) 0, var(--mb-accent) calc(8px + (100% - 16px) * var(--quality-progress)), var(--mb-ops-surface-separator) calc(8px + (100% - 16px) * var(--quality-progress)), var(--mb-ops-surface-separator) 100%);
+}
+.craft-browser-v31-workspace .craft-v31-band-range::-moz-range-track { height: 6px; border-radius: var(--mb-radius-pill); background: var(--mb-ops-surface-separator); }
+.craft-browser-v31-workspace .craft-v31-band-range::-moz-range-progress { height: 6px; border-radius: var(--mb-radius-pill); background: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-band-range::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border: 2px solid var(--mb-accent);
+  border-radius: 50%;
+  background: var(--mb-ops-text-primary);
+}
+.craft-browser-v31-workspace .craft-v31-band-range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--mb-accent);
+  border-radius: 50%;
+  background: var(--mb-ops-text-primary);
+}
+.craft-browser-v31-workspace .craft-v31-band-range:focus-visible { outline: 2px solid var(--mb-ops-border-active); outline-offset: 1px; }
+/* Quantization markers at each band's starting quality on the linear track;
+   8px inset = half the thumb, matching the pointer mapping. Label placement
+   (beside the tick or on a second row) comes from placeMarkerLabels. */
+.craft-browser-v31-workspace .craft-v31-band-ticks { position: relative; width: 100%; height: 22px; }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button {
+  position: absolute;
+  top: 0;
+  left: calc(8px + (100% - 16px) * var(--tick-progress));
+  width: 18px;
+  height: 22px;
+  margin-left: -9px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mb-ops-text-secondary);
+  cursor: pointer;
+  font: 500 9px/1.1 "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.craft-browser-v31-workspace .craft-v31-band-ticks i { position: absolute; top: 0; left: 50%; width: 1px; height: 6px; background: var(--mb-ops-border-strong); }
+.craft-browser-v31-workspace .craft-v31-band-ticks span { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button[data-anchor="end"] span { transform: translateX(calc(-100% + 3px)); }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button[data-anchor="start"] span { transform: translateX(-3px); }
+.craft-browser-v31-workspace .craft-v31-band-ticks.is-staggered,
+.craft-browser-v31-workspace .craft-v31-band-ticks.is-staggered > button { height: 32px; }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button[data-row="1"] span { top: 20px; }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button[data-row="1"] i { height: 18px; background: var(--mb-ops-surface-separator); }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button.is-active { color: var(--mb-ops-text-primary); font-weight: 650; }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button.is-active i { width: 2px; background: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-band-ticks > button:hover { color: var(--mb-ops-text-primary); }
+.craft-browser-v31-workspace .craft-v31-band-unavailable { margin: 6px 0; color: var(--mb-ops-text-secondary); font: 400 10px/1.4 "Segoe UI", sans-serif; }
+
+/* Compact summary rows: Performance changes and Blueprint acquisition. */
+.craft-browser-v31-workspace .craft-v31-lab-row {
+  display: grid;
+  grid-template-columns: 16px minmax(0, auto) minmax(0, 1fr);
+  align-items: start;
+  gap: 2px 12px;
+}
+.craft-browser-v31-workspace .craft-v31-lab-row > .craft-v31-icon { margin-top: 2px; color: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-lab-row-copy { display: grid; gap: 3px; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-lab-row-title { margin: 0; color: var(--mb-ops-text-primary); font: 650 14px/1.3 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-lab-row-copy > small { color: var(--mb-ops-text-secondary); font: 400 11px/1.3 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-lab-row-value { display: flex; flex-direction: column; align-items: end; gap: 3px; min-width: 0; text-align: right; }
+/* Compact horizontal spec bands. Deliberately no tabular grid or disclosure. */
+.craft-browser-v31-workspace .craft-v31-performance-panel { width: 100%; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-performance-heading { display: flex; flex-wrap: wrap; align-items: center; min-height: 30px; gap: 8px; padding: 0 1px 9px; }
+.craft-browser-v31-workspace .craft-v31-performance-heading > .craft-v31-icon { color: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-performance-heading h3 { margin: 0; color: var(--mb-ops-text-primary); font: 650 14px/1.25 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-performance-count { color: var(--mb-ops-text-secondary); font: 400 11px/1.25 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-table-state { margin: 6px 0; color: var(--mb-ops-text-secondary); font: 400 12px/1.4 "Segoe UI", sans-serif; }
+/* The performance group shares the mockup table frame rather than individual cards. */
+.craft-browser-v31-workspace .craft-v31-spec-bands {
+  display: grid;
+  gap: 0;
+  border: 1px solid #2c4656;
+  background: #0b1a27;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band:last-child { border-bottom: 0; }
+.craft-browser-v31-workspace .craft-v31-spec-band {
+  display: grid; grid-template-columns: 204px minmax(0,1fr); align-items: center;
+  min-height: 56px; gap: 6px 18px; padding: 11px 13px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--mb-ops-surface-separator);
+  border-radius: 0;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band.has-changes {
+  background: linear-gradient(90deg, rgba(16, 51, 67, .42), transparent 75%);
+  border-left: 2px solid var(--mb-accent); padding-left: 11px;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band-label { display: grid; gap: 4px; align-content: center; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-spec-band-label h4 {
+  margin: 0; color: var(--mb-ops-text-primary);
+  display: flex; align-items: center; gap: 8px;
+  font: 650 11.5px/1.35 "Segoe UI", sans-serif; letter-spacing: .025em; text-transform: uppercase;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band-icon {
+  width: 16px; height: 16px; flex: 0 0 16px; object-fit: contain; opacity: .83;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band-label > span { color: var(--mb-accent); font: 600 10px/1.25 "Segoe UI", sans-serif; }
+/* A light vertical rule separates sibling statistics; no boxes around metrics. */
+.craft-browser-v31-workspace .craft-v31-spec-band { container-type: inline-size; }
+.craft-browser-v31-workspace .craft-v31-spec-band-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: 10px;
+  column-gap: 0;
+  min-width: 0;
+}
+.craft-browser-v31-workspace .craft-v31-spec-metric {
+  display: grid; flex: 1 1 148px; max-width: 224px; min-width: 120px;
+  gap: 3px; align-content: center; min-height: 37px; font-variant-numeric: tabular-nums;
+}
+.craft-browser-v31-workspace .craft-v31-spec-band-values > .craft-v31-spec-metric {
+  min-width: 0;
+  max-width: none;
+  padding: 0 8px 0 11px;
+  border-left: 1px solid rgba(100, 142, 163, .28);
+}
+.craft-browser-v31-workspace .craft-v31-spec-band-values > .craft-v31-spec-metric:nth-child(3n + 1) {
+  padding-left: 0;
+  border-left: 0;
+}
+.craft-browser-v31-workspace .craft-v31-spec-metric-label {
+  color: var(--mb-ops-text-secondary); font: 400 11.5px/1.25 "Segoe UI", sans-serif;
+  min-height: 13px; overflow-wrap: anywhere;
+}
+.craft-browser-v31-workspace .craft-v31-spec-metric-label small { font-size: 10px; opacity: .77; }
+.craft-browser-v31-workspace .craft-v31-spec-metric-result { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px 9px; min-height: 17px; }
+.craft-browser-v31-workspace .craft-v31-spec-metric-result strong {
+  color: var(--mb-ops-text-primary); font: 650 15px/1.2 "Segoe UI", sans-serif; letter-spacing: .005em;
+}
+.craft-browser-v31-workspace .craft-v31-spec-metric.is-changed .craft-v31-spec-metric-result strong { color: #f6fbff; font-weight: 700; }
+.craft-browser-v31-workspace .craft-v31-spec-metric-delta {
+  color: var(--mb-ops-text-secondary); font: 650 10.5px/1.3 "Segoe UI", sans-serif; white-space: nowrap;
+}
+.craft-browser-v31-workspace .craft-v31-spec-metric-delta.craft-ok { color: var(--mb-good); }
+.craft-browser-v31-workspace .craft-v31-spec-metric-delta.craft-shortage { color: var(--mb-bad); }
+.craft-browser-v31-workspace .craft-v31-spec-metric-base { color: var(--mb-ops-text-secondary); font: 400 10px/1.2 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-comparison { position: static; display: inline-flex; align-items: center; gap: 8px; min-height: 24px; margin-left: auto; }
+.craft-browser-v31-workspace .craft-v31-comparison small { color: var(--mb-ops-text-secondary); font: 400 10px/1.3 "Segoe UI", sans-serif; font-variant-numeric: tabular-nums; }
+.craft-browser-v31-workspace .craft-v31-capture-button { min-height: 24px; padding: 3px 8px; font-size: 10.5px; }
+@media (max-width: 1100px) {
+  .craft-browser-v31-workspace .craft-v31-spec-band { grid-template-columns: 136px minmax(0,1fr); gap: 8px 12px; }
+  .craft-browser-v31-workspace .craft-v31-spec-metric { flex-basis: 130px; min-width: 105px; }
+}
+@media (max-width: 719px) {
+  .craft-browser-v31-workspace .craft-v31-spec-band { grid-template-columns: minmax(0,1fr); padding: 10px 12px; gap: 10px; }
+  .craft-browser-v31-workspace .craft-v31-spec-band.has-changes { padding-left: 11px; }
+  .craft-browser-v31-workspace .craft-v31-spec-band-label { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+  .craft-browser-v31-workspace .craft-v31-spec-metric { flex: 1 1 calc(50% - 8px); max-width: none; }
+  .craft-browser-v31-workspace .craft-v31-comparison { margin-left: 0; }
+}
+
+/* Acquisition: source name, type and verification state; details expand. */
+.craft-browser-v31-workspace .craft-v31-source-title {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mb-ops-text-secondary);
+  cursor: pointer;
+  font: 400 11px/1.3 "Segoe UI", sans-serif;
+  text-align: left;
+}
+.craft-browser-v31-workspace .craft-v31-source-title:hover { color: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-source-list .craft-v31-source-title { color: var(--mb-ops-text-primary); font-weight: 600; font-size: 12px; }
+.craft-browser-v31-workspace .craft-v31-source-disabled { margin-right: 6px; color: var(--mb-warn); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; }
+.craft-browser-v31-workspace .craft-v31-source-state { color: var(--mb-ops-text-secondary); font: 400 11px/1.3 "Segoe UI", sans-serif; }
+/* Verification: the text carries the state; colour only reinforces it. */
+.craft-browser-v31-workspace .craft-v31-source-status { font: 600 9.5px/1.3 "Segoe UI", sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+.craft-browser-v31-workspace .craft-v31-source-status.is-verified { color: var(--mb-good); }
+.craft-browser-v31-workspace .craft-v31-source-status.is-missing { color: var(--mb-warn); }
+.craft-browser-v31-workspace .craft-v31-acquisition-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 6px 0 4px; }
+.craft-browser-v31-workspace .craft-v31-acquisition-columns > section { min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-acquisition-columns p { margin: 0; color: var(--mb-ops-text-secondary); font: 400 11px/1.45 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-source-label { margin: 0 0 6px; color: var(--mb-ops-text-secondary); font: 600 9.5px/1.2 "Segoe UI", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.craft-browser-v31-workspace .craft-v31-source-list { display: grid; margin: 0; padding: 0; list-style: none; }
+.craft-browser-v31-workspace .craft-v31-source { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: start; padding: 6px 0; }
+.craft-browser-v31-workspace .craft-v31-source + .craft-v31-source { border-top: 1px solid var(--mb-ops-surface-separator); }
+.craft-browser-v31-workspace .craft-v31-source.is-disabled { opacity: .62; }
+.craft-browser-v31-workspace .craft-v31-source-save {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--mb-radius-sm);
+  background: transparent;
+  color: var(--mb-ops-text-secondary);
+  cursor: pointer;
+}
+.craft-browser-v31-workspace .craft-v31-source-save svg { width: 12px; height: 12px; }
+.craft-browser-v31-workspace .craft-v31-source-save:hover { border-color: var(--mb-ops-border-strong); color: var(--mb-ops-text-primary); }
+.craft-browser-v31-workspace .craft-v31-source-save.is-active { color: var(--mb-accent); }
+.craft-browser-v31-workspace .craft-v31-source-copy { display: grid; gap: 4px; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-source-meta { display: flex; flex-wrap: wrap; gap: 3px 14px; margin: 0; }
+.craft-browser-v31-workspace .craft-v31-source-meta > div { display: flex; gap: 5px; min-width: 0; }
+.craft-browser-v31-workspace .craft-v31-source-meta dt { color: var(--mb-ops-text-secondary); font: 600 9px/1.5 "Segoe UI", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.craft-browser-v31-workspace .craft-v31-source-meta dd { margin: 0; color: var(--mb-ops-text-primary); font: 500 10.5px/1.4 "Segoe UI", sans-serif; overflow-wrap: anywhere; }
+.craft-browser-v31-workspace .craft-v31-source-meta > div.is-missing dd { color: var(--mb-ops-text-secondary); font-style: italic; }
+.craft-browser-v31-workspace .craft-v31-source-toggle { margin-top: 6px; padding: 2px 0; border: 0; background: transparent; color: var(--mb-accent); cursor: pointer; font: 600 10.5px/1.25 "Segoe UI", sans-serif; }
+
+/* Shared quiet disclosure: all statistics, source, modifier and description details. */
+.craft-browser-v31-workspace .craft-v31-disclosure > summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  color: var(--mb-accent);
+  cursor: pointer;
+  font: 600 11px/1.3 "Segoe UI", sans-serif;
+  list-style: none;
+}
+.craft-browser-v31-workspace .craft-v31-disclosure > summary::-webkit-details-marker { display: none; }
+.craft-browser-v31-workspace .craft-v31-disclosure > summary .craft-v31-icon { color: currentColor; }
+.craft-browser-v31-workspace .craft-v31-disclosure > summary > small { color: var(--mb-ops-text-secondary); font-weight: 400; }
+.craft-browser-v31-workspace .craft-v31-disclosure > summary:hover > span { text-decoration: underline; }
+.craft-browser-v31-workspace .craft-v31-disclosure[open] > summary { margin-bottom: 6px; }
+
+/* Modifier details table (inside its disclosure). */
+.craft-browser-v31-workspace .craft-v31-table-wrap { width: 100%; min-width: 0; overflow-x: auto; border: 1px solid var(--mb-ops-surface-separator); border-radius: var(--mb-radius-md); }
+.craft-browser-v31-workspace .craft-v31-data-table { width: 100%; border-collapse: collapse; table-layout: fixed; font: 400 12px/1.45 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-data-table :is(th, td) {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--mb-ops-surface-separator);
+  color: var(--mb-ops-text-primary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.craft-browser-v31-workspace .craft-v31-data-table tbody tr:last-child > * { border-bottom: 0; }
+.craft-browser-v31-workspace .craft-v31-data-table :is(th, td):first-child { width: 36%; text-align: left; }
+.craft-browser-v31-workspace .craft-v31-data-table thead th { background: var(--mb-ops-surface-quiet); color: var(--mb-ops-text-secondary); font-size: 10.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; overflow-wrap: normal; }
+.craft-browser-v31-workspace .craft-v31-data-table tbody th { font-weight: 550; }
+.craft-browser-v31-workspace .craft-v31-data-table tbody th small { color: var(--mb-ops-text-secondary); font-size: 10px; font-weight: 400; }
+.craft-browser-v31-workspace .craft-v31-modifier-table tbody td { color: var(--mb-ops-text-secondary); }
+.craft-browser-v31-workspace .craft-v31-modifier-material { display: inline-flex; align-items: center; gap: 7px; }
+.craft-browser-v31-workspace .craft-v31-modifier-table tbody th small { display: block; margin: 2px 0 0 22px; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+/* Component description: item text and the quality-response effects table. */
+.craft-browser-v31-workspace .craft-v31-description-details .craft-item-description { margin: 0 0 10px; color: var(--mb-ops-text-secondary); font: 400 12px/1.55 "Segoe UI", sans-serif; }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effects-panel { margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effects-panel > .craft-summary-section-label { margin: 0 0 6px; color: var(--mb-ops-text-secondary); font: 600 10.5px/1.3 "Segoe UI", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effects-list { border: 1px solid var(--mb-ops-surface-separator); border-radius: var(--mb-radius-md); }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effects-head { min-height: 0; padding: 7px 10px; border-bottom: 1px solid var(--mb-ops-surface-separator); background: var(--mb-ops-surface-quiet); }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effect-row { min-height: 0; padding: 7px 10px; border-bottom: 1px solid var(--mb-ops-surface-separator); background: transparent; }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effect-row:last-child { border-bottom: 0; }
+.craft-browser-v31-workspace .craft-v31-description-details .craft-detail-effect-row :is(.craft-detail-effect-stat, .craft-detail-effect-base, .craft-detail-effect-total, .craft-detail-effect-delta, .craft-detail-effect-sources, .craft-detail-effect-sources *) { font-size: 11px; font-variant-numeric: tabular-nums; }
+
+/* At narrower widths the large object remains background artwork. */
+@media (max-width: 1249px) {
+  .craft-browser-v31-workspace .craft-v31-lab-hero { min-height: 195px; padding: 24px 20px 16px; }
+  .craft-browser-v31-workspace .craft-v31-lab-identity { width: min(65%, 520px); }
+  .craft-browser-v31-workspace .craft-v31-lab-actions { max-width: 66%; }
+  .craft-browser-v31-workspace .craft-v31-lab-art .craft-v31-lab-art-feature { right: -6%; width: 90%; }
+}
+@media (max-width: 719px) {
+  .craft-browser-v31-workspace .craft-detail-drawer-shell { padding: 8px 8px 20px; background: transparent; }
+  .craft-browser-v31-workspace .craft-v31-lab-hero {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "back" "identity" "actions";
+    align-content: end;
+    justify-items: start;
+    gap: 10px;
+    min-height: 190px;
+    padding: 12px 14px 14px;
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-identity { width: min(92%, 530px); }
+  .craft-browser-v31-workspace .craft-v31-lab-actions { max-width: 100%; }
+  .craft-browser-v31-workspace .craft-v31-lab-art .craft-v31-lab-art-feature {
+    top: -4%; right: -22%; width: 112%; height: 115%; opacity: .72;
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-back {
+    grid-area: back;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    justify-self: start;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--mb-accent);
+    cursor: pointer;
+    font: 500 13px/1 "Segoe UI", sans-serif;
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-close { display: none; }
+  .craft-browser-v31-workspace .craft-v31-lab-title { font-size: 22px; white-space: normal; }
+  .craft-browser-v31-workspace .craft-v31-workbench-content { padding: 0 12px 4px; }
+  .craft-browser-v31-workspace .craft-v31-lab-snapshot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .craft-browser-v31-workspace .craft-v31-lab-row { grid-template-columns: 16px minmax(0, 1fr); }
+  .craft-browser-v31-workspace .craft-v31-lab-row-value { grid-column: 2; align-items: start; text-align: left; }
+  .craft-browser-v31-workspace .craft-v31-acquisition-columns { grid-template-columns: minmax(0, 1fr); }
+  .craft-browser-v31-workspace .craft-v31-comparison { position: static; margin-top: 4px; }
+}
+/* Dual-column crafting laboratory.
+   Quality is an input; performance is its live output. Both remain visible. */
+@media (min-width: 1536px) {
+  .craft-browser-v31-workspace .craft-v31-workbench-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 24px;
+    align-items: start;
+  }
+  .craft-browser-v31-workspace .craft-v31-workbench-content > .craft-v31-lab-snapshot {
+    grid-column: 1 / -1;
+  }
+  .craft-browser-v31-workspace .craft-v31-workbench-content > .craft-detail-drawer-materials {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+  }
+  .craft-browser-v31-workspace .craft-v31-workbench-content > .craft-detail-drawer-stats {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+  .craft-browser-v31-workspace .craft-v31-workbench-content > :is(.craft-detail-drawer-sources, .craft-detail-drawer-overview) {
+    grid-column: 1 / -1;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-materials .craft-v31-lab-heading-row {
+    column-gap: 8px;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-materials .craft-v31-lab-section-heading {
+    flex-basis: 100%;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-performance-heading {
+    padding-bottom: 11px;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-band {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    gap: 7px;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-band-label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-band-values {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 0;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-metric {
+    min-width: 0;
+    max-width: none;
+    min-height: 32px;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-metric-label {
+    font-size: 10.5px;
+    min-height: 0;
+  }
+  .craft-browser-v31-workspace .craft-detail-drawer-stats .craft-v31-spec-metric-result strong {
+    font-size: 14px;
+  }
+}
+
+@container (max-width: 520px) {
+  .craft-browser-v31-workspace .craft-v31-spec-band-values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .craft-browser-v31-workspace .craft-v31-spec-band-values > .craft-v31-spec-metric:nth-child(n) {
+    padding-left: 11px;
+    border-left: 1px solid rgba(100, 142, 163, .28);
+  }
+  .craft-browser-v31-workspace .craft-v31-spec-band-values > .craft-v31-spec-metric:nth-child(2n + 1) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* One mission in the fourth header tile. More linked missions appear in a dialog. */
+.craft-browser-v31-workspace .craft-v31-blueprint-source {
+  min-width: 0;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-source-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-see-all {
+  flex: none;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--mb-accent);
+  cursor: pointer;
+  font: 650 10.5px/1.25 "Segoe UI", sans-serif;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-see-all:hover {
+  color: #dffaff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-see-all:focus-visible {
+  outline: 2px solid var(--mb-accent);
+  outline-offset: 2px;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-source > strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.craft-browser-v31-workspace .craft-v31-blueprint-source > small {
+  display: block;
+  color: var(--mb-ops-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.craft-v31-blueprint-disabled { color: #dab381; font-size: 10px; font-weight: 650; }
+
+.craft-v31-blueprint-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(2, 9, 15, .80);
+}
+.craft-v31-blueprint-modal {
+  box-sizing: border-box;
+  width: min(680px, 100%);
+  max-height: min(76vh, 740px);
+  overflow-y: auto;
+  border: 1px solid #3b6172;
+  border-radius: 8px;
+  background: #0b1b28;
+  box-shadow: 0 18px 70px rgba(0, 0, 0, .5);
+  color: #e7f3f8;
+  font: 400 12px/1.4 "Segoe UI", sans-serif;
+}
+.craft-v31-blueprint-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  padding: 18px 20px 15px;
+  border-bottom: 1px solid #2b4a5b;
+}
+.craft-v31-blueprint-modal-kicker { color: #81bdcd; text-transform: uppercase; letter-spacing: .08em; font-size: 10px; font-weight: 650; }
+.craft-v31-blueprint-modal-header h2 { margin: 4px 0; font-size: 18px; line-height: 1.25; }
+.craft-v31-blueprint-modal-header p { margin: 0; color: #9dbbc9; font-size: 11px; }
+.craft-v31-blueprint-modal-close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  padding: 0;
+  border: 1px solid #355568;
+  background: #102838;
+  color: #d3eaf3;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 22px;
+}
+.craft-v31-blueprint-modal-close:hover { background: #20445a; }
+.craft-v31-blueprint-modal-list { display: grid; }
+.craft-v31-blueprint-modal-mission { padding: 14px 20px; border-bottom: 1px solid #244252; }
+.craft-v31-blueprint-modal-mission:last-child { border-bottom: 0; }
+.craft-v31-blueprint-modal-mission-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+.craft-v31-blueprint-modal-mission-heading > strong { flex: 1; min-width: 0; font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.craft-v31-blueprint-bookmark {
+  display: grid; place-items: center;
+  width: 28px; height: 28px;
+  padding: 0;
+  border: 1px solid #315367;
+  background: transparent;
+  color: #8ebccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.craft-v31-blueprint-bookmark.is-active { color: #58d4ed; background: #133b4d; }
+.craft-v31-blueprint-bookmark svg { width: 14px; height: 14px; }
+.craft-v31-blueprint-modal-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+.craft-v31-blueprint-modal-meta > div { display: grid; align-content: start; gap: 5px; min-width: 0; }
+.craft-v31-blueprint-modal-meta dt { color: #92acbb; font-size: 10px; font-weight: 550; text-transform: uppercase; letter-spacing: .045em; }
+.craft-v31-blueprint-modal-meta dd { margin: 0; color: #e3f2f7; overflow-wrap: anywhere; }
+@media (max-width: 500px) {
+  .craft-v31-blueprint-modal-meta { grid-template-columns: 1fr; gap: 9px; }
+  .craft-v31-blueprint-modal-meta > div { grid-template-columns: 100px minmax(0, 1fr); }
+}
+
+/* Phone list → detail controls. Touch targets are at least 40px; inputs use
+   16px text so mobile browsers do not zoom on focus. */
+@media (max-width: 719px) {
+  /* Search + Filters trigger + removable active filters (sheet holds the rest). */
+  .craft-browser-v31-workspace .craft-v31-phone-filterbar {
+    display: grid;
+    gap: 8px;
+    padding: 8px 8px 8px;
+    border-bottom: 1px solid var(--mb-ops-surface-separator);
+    background: var(--mb-ops-surface-panel);
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-search-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-search-row .craft-v31-filter-search input {
+    box-sizing: border-box;
+    height: 44px;
+    font-size: 16px;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-filter-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--mb-ops-border-strong);
+    border-radius: var(--mb-radius-sm);
+    background: var(--mb-ws-control);
+    color: var(--mb-ops-text-primary);
+    font: 600 14px/1 var(--mb-font-ui);
+    cursor: pointer;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-filter-trigger.is-active { border-color: var(--mb-ops-border-active); }
+  .craft-browser-v31-workspace .craft-v31-phone-filter-trigger:focus-visible { outline: 2px solid var(--mb-focus-ring); outline-offset: 1px; }
+  .craft-browser-v31-workspace .craft-v31-phone-filter-count {
+    min-width: 20px;
+    padding: 3px 5px;
+    border-radius: var(--mb-radius-sm);
+    background: var(--mb-accent);
+    color: var(--mb-canvas);
+    font: 600 12px/1 var(--mb-font-numeric);
+    text-align: center;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-active-filters {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+    scrollbar-width: none;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-active-filters li { flex: none; }
+  .craft-browser-v31-workspace .craft-v31-phone-active-filters button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--mb-ops-border-active);
+    border-radius: var(--mb-radius-sm);
+    background: var(--mb-ops-surface-selected);
+    color: var(--mb-ops-text-primary);
+    font: 500 13px/1 var(--mb-font-ui);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-active-filters button > span:last-child { color: var(--mb-ops-text-secondary); font-size: 16px; }
+
+  /* The existing filter controls inside the sheet, at touch size. */
+  .craft-browser-v31-workspace .craft-v31-material-filter-panel--sheet { padding: 0; border: 0; background: transparent; }
+  .craft-browser-v31-workspace .craft-v31-material-filter-panel--sheet .mining-filter-chip.mining-filter-chip--material.source-index-chip {
+    min-height: 40px;
+    min-width: 44px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .craft-browser-v31-workspace .craft-v31-material-filter-panel--sheet .craft-v31-material-disclosure > summary { min-height: 44px; }
+  .craft-browser-v31-workspace .craft-v31-material-filter-panel--sheet .craft-v31-filter-search input { height: 44px; font-size: 16px; }
+
+  /* Compact blueprint rows: thumbnail, name, specification, materials as text. */
+  .craft-browser-v31-workspace .craft-v31-index-intro { display: none; }
+  .craft-browser-v31-workspace .craft-v31-recipe-list { gap: 0; padding: 0; }
+  .craft-browser-v31-workspace .craft-v31-recipe-row {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 68px;
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--mb-ops-surface-separator);
+    font-size: 13px;
+  }
+  .craft-browser-v31-workspace .craft-v31-recipe-row.is-active { border-color: var(--mb-ops-surface-separator); box-shadow: inset 2px 0 var(--mb-accent); }
+  .craft-browser-v31-workspace .craft-v31-recipe-mark { width: 44px; height: 44px; font-size: 14px; }
+  .craft-browser-v31-workspace .craft-v31-recipe-copy { gap: 3px; }
+  .craft-browser-v31-workspace .craft-v31-recipe-copy strong { font-size: 14px; white-space: nowrap; }
+  .craft-browser-v31-workspace .craft-v31-recipe-copy > small { overflow: hidden; font-size: 12px; white-space: nowrap; text-overflow: ellipsis; }
+  .craft-browser-v31-workspace .craft-v31-material-chips {
+    display: block;
+    overflow: hidden;
+    color: var(--mb-ops-text-secondary);
+    font: 400 12px/1.35 var(--mb-font-ui);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .craft-browser-v31-workspace .craft-v31-material-chips span,
+  .craft-browser-v31-workspace .craft-v31-material-chips .is-matching {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-transform: capitalize;
+  }
+  .craft-browser-v31-workspace .craft-v31-material-chips .is-matching { color: var(--mb-accent); }
+  .craft-browser-v31-workspace .craft-v31-material-chips span + span::before { content: ", "; color: var(--mb-ops-text-secondary); }
+  .craft-browser-v31-workspace .craft-v31-recipe-end { align-self: center; margin: 0; font-size: 11px; }
+
+  /* Detail: full-bleed laboratory, compact identity, one row of summary tiles. */
+  .craft-browser-v31-workspace .craft-detail-drawer-shell {
+    padding: 0 0 calc(var(--mb-shell-dock-height) + 12px);
+  }
+  /* The header no longer isolates a stacking context on phones, so the fixed
+     action bar below layers above the scrolling sliders (the detail pane
+     remains the enclosing stacking context). */
+  .craft-browser-v31-workspace .craft-v31-lab-hero { isolation: auto; min-height: 132px; gap: 6px; padding: 12px 12px 14px; }
+  .craft-browser-v31-workspace .craft-v31-lab-hero > .craft-v31-lab-back { display: none; }
+
+  /* Sticky back bar at the top of the detail scroller. */
+  .craft-browser-v31-workspace .craft-v31-phone-detail-bar {
+    position: sticky;
+    top: 0;
+    z-index: 75;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-column: 1 / -1;
+    align-self: start;
+    justify-self: stretch;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 48px;
+    padding: 2px 12px 2px 4px;
+    border-bottom: 1px solid var(--mb-ops-surface-separator);
+    background: var(--mb-ops-surface-panel);
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 44px;
+    padding: 0 10px 0 6px;
+    border: 0;
+    border-radius: var(--mb-radius-sm);
+    background: transparent;
+    color: var(--mb-accent);
+    font: 600 15px/1 var(--mb-font-ui);
+    cursor: pointer;
+  }
+  .craft-browser-v31-workspace .craft-v31-phone-detail-back:focus-visible { outline: 2px solid var(--mb-focus-ring); outline-offset: -2px; }
+  .craft-browser-v31-workspace .craft-v31-phone-detail-name {
+    overflow: hidden;
+    color: var(--mb-ops-text-secondary);
+    font: 500 13px/1.2 var(--mb-font-ui);
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-subtitle { display: none; }
+  .craft-browser-v31-workspace .craft-v31-lab-back { font-size: 14px; }
+  .craft-browser-v31-workspace .craft-v31-lab-snapshot {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-snapshot > div { padding: 9px 10px; }
+  .craft-browser-v31-workspace .craft-v31-lab-snapshot > [data-metric="source"] { grid-column: 1 / -1; order: 1; }
+  .craft-browser-v31-workspace .craft-v31-lab-snapshot > [data-metric="source"] * { white-space: normal; }
+
+  /* The enter animation must not leave a retained transform: it would become
+     the containing block for the fixed action bar below. */
+  .craft-browser-v31-workspace .craft-detail-drawer-region--ready > .craft-detail-page { animation-fill-mode: backwards; }
+
+  /* Quantity, save and Add to build queue stay reachable above the app dock. */
+  .craft-browser-v31-workspace .craft-v31-lab-actions {
+    position: fixed;
+    right: 0;
+    bottom: calc(var(--mb-shell-dock-height) + env(safe-area-inset-bottom, 0px));
+    left: 0;
+    z-index: 70;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    max-width: none;
+    margin: 0;
+    padding: 8px max(8px, env(safe-area-inset-right, 0px)) 8px max(8px, env(safe-area-inset-left, 0px));
+    border-top: 1px solid var(--mb-ops-border-strong);
+    background: var(--mb-ops-surface-panel);
+  }
+  .craft-browser-v31-workspace .craft-v31-lab-actions :is(.craft-v31-lab-save, .craft-v31-lab-queue) { min-height: 44px; }
+  .craft-browser-v31-workspace .craft-v31-lab-queue { width: 100%; font-size: 14px; }
+  .craft-browser-v31-workspace .craft-v31-lab-quantity input { box-sizing: border-box; height: 44px; width: 56px; font-size: 16px; }
+
+  /* Band markers stay tappable; only the first, last and current band print a
+     number so labels never collide on a phone-width track. */
+  .craft-browser-v31-workspace .craft-v31-band-ticks > button:not(:first-child, :last-child, .is-active) span { visibility: hidden; }
+}

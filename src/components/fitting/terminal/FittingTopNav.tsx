@@ -50,7 +50,7 @@ export default function FittingTopNav({
           </span>
           <div className="fit-term-ship-identity-text">
             <span className="fit-term-manufacturer">{manufacturer ?? "Unknown Manufacturer"}</span>
-            <h1>{shipName}</h1>
+            <h2>{shipName}</h2>
             {role && <span className="fit-term-ship-role">{role}</span>}
           </div>
         </div>
@@ -69,14 +69,6 @@ export default function FittingTopNav({
         </nav>
 
         <div className="fit-term-head-actions">
-          <div className="fit-term-wallet" title="Prototype — wallet not connected">
-            <span className="fit-term-wallet-item fit-term-wallet-item--uec">
-              <i aria-hidden>◆</i> — UEC
-            </span>
-            <span className="fit-term-wallet-item fit-term-wallet-item--auec">
-              <i aria-hidden>◇</i> — aUEC
-            </span>
-          </div>
           <label className="fit-term-ship-select">
             <select
               value={selectedShipKey ?? ""}

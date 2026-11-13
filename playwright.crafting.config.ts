@@ -11,6 +11,7 @@ export default defineConfig({
     "crafting-design-preview.spec.ts",
     "crafting-browser-migration.spec.ts",
     "crafting-mobile.spec.ts",
+    "crafting-results-view.spec.ts",
   ],
   fullyParallel: false,
   reporter: [["list"]],
@@ -24,9 +25,9 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: `vite --mode fixtures --host 127.0.0.1 --port ${port}`,
+    command: `vite --config vite.local-fixtures.config.ts --mode fixtures --host 127.0.0.1 --port ${port} --strictPort`,
     url: `${baseURL}${fixturePath}`,
-    reuseExistingServer: process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",
+    reuseExistingServer: false,
     timeout: 180_000,
   },
 });

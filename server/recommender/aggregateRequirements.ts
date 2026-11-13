@@ -50,10 +50,13 @@ export function aggregateRequirements(
 
     const selectedQuality = requirement.selectedQuality ?? requirement.usedBy?.find((entry) => entry.selectedQuality !== undefined)?.selectedQuality;
     const unitType = requirement.unitType ?? requirement.usedBy?.find((entry) => entry.unitType)?.unitType;
-    const requirementPolicyKey = [materialKey, selectedQuality ?? "any-quality", unitType ?? "unit"].join("|");
+    // Mining eligibility and coverage are material-first. Queue quality is informational.
+    const requirementPolicyKey = [materialKey, unitType ?? "unit"].join("|");
     const existing = byRequirementPolicy.get(requirementPolicyKey);
     if (existing) {
       existing.requiredQuantity += requirement.requiredQuantity;
+      // Do not expose one arbitrary queue target when the material has mixed targets.
+      if (existing.selectedQuality !== selectedQuality) existing.selectedQuality = undefined;
       continue;
     }
     byRequirementPolicy.set(requirementPolicyKey, {
