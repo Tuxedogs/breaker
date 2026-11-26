@@ -99,8 +99,9 @@ test("published mining index preserves trace materials without refined primary a
   const goldAtArcL5 = rows.find((row) =>
     row.systemKey === "Stanton" && row.locationKey === "ARC-L5" && row.materialName === "Gold"
   );
-  assert.deepEqual(goldAtArcL5?.traceMaterials, ["Borase"]);
-  assert.deepEqual(goldAtArcL5?.traceMaterialDetails?.map((trace) => trace.materialName), ["Borase"]);
+  // Gold rocks also carry a Bexalite band (Scintel composition parts for Bexalite were dropped before the 4.10.201 fix).
+  assert.deepEqual(goldAtArcL5?.traceMaterials, ["Bexalite", "Borase"]);
+  assert.deepEqual(goldAtArcL5?.traceMaterialDetails?.map((trace) => trace.materialName), ["Bexalite", "Borase"]);
 
   const rawIceRows = rows.filter((row) => row.materialName === "Raw Ice");
   assert.ok(rawIceRows.length > 0);
